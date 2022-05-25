@@ -7,7 +7,6 @@ import InputPasswordToggle from '@components/input-password-toggle';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 // ** Styles
-import '@styles/react/pages/page-authentication.scss';
 
 import {
   Alert,
@@ -28,7 +27,6 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Facebook, GitHub, HelpCircle, Mail, Twitter } from 'react-feather';
-import { useSkin } from '@src/hooks/useSkin';
 import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
 import { LoginModelSchema, ILoginModel } from '@src/models/input/authentication/ILoginModel';
 import useHttpRequest from '@src/hooks/useHttpRequest';
@@ -36,7 +34,7 @@ import { APIURL_LOGIN } from '@src/configs/apiConfig/apiUrls';
 import { useToast } from '@src/hooks/useToast';
 import { useDispatch } from 'react-redux';
 import { handleLogin } from '@src/redux/reducers/authenticationReducer';
-import logo from '@src/assets/images/logo/solico_logo.png';
+import logo from '@src/assets/images/ath.png';
 import themeConfig from '@src/configs/theme/themeConfig';
 import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
 import { IOutputResult } from '@src/models/output/IOutputResult';
@@ -46,12 +44,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   const tokenAuthentication = useTokenAuthentication();
   const dispatch = useDispatch();
 
-  const { skin } = useSkin();
-
-  const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login_main.svg';
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const source = require(`@src/assets/images/pages/${illustration}`);
   const httpRequest = useHttpRequest();
   const toast = useToast();
 
@@ -84,7 +77,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
       <Row className="auth-inner m-0 d-flex ">
         <Col className="d-none d-lg-flex align-items-center p-5" lg="8" sm="12">
           <div className="w-100 d-lg-flex align-items-center justify-content-center px-5">
-            <img className="img-fluid" src={source} alt="Login Cover" />
+            {/* <img className="img-fluid" src={'source'} alt="Login Cover" /> */}
           </div>
         </Col>
         <Col className="d-flex align-items-center auth-bg px-2 p-lg-5" lg="4" sm="12">

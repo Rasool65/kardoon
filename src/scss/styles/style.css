@@ -120,19 +120,19 @@ body {
 }
 
 .theme-light .header .header-logo {
-  background-image: url(../images/preload-logo.png);
+  background-image: url(/src/assets/images/preload-logo.png);
 }
 
 .theme-dark .header .header-logo {
-  background-image: url(../images/preload-logo.png);
+  background-image: url(/src/assets/images/preload-logo.png);
 }
 
 .theme-light .footer .footer-logo {
-  background-image: url(../images/preload-logo.png);
+  background-image: url(/src/assets/images/preload-logo.png);
 }
 
 .theme-dark .footer .footer-logo {
-  background-image: url(../images/preload-logo.png);
+  background-image: url(/src/assets/images/preload-logo.png);
 }
 
 /* Generating Color Pack*/
@@ -3957,7 +3957,7 @@ button {
   animation: infiniteBG 600s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
-  background-image: url(images/mountain.jpg);
+  /* background-image: url(images/mountain.jpg); */
   background-size: cover;
   background-repeat: repeat;
   background-position: left center;
@@ -4163,7 +4163,7 @@ button {
   height: 10000px;
   background-repeat: repeat-y;
   background-position: center;
-  background-image: url("../images/walk.jpg");
+  /* background-image: url("../images/walk.jpg"); */
   animation: infibg 700s infinite;
 }
 

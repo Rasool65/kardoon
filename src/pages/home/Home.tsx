@@ -17,14 +17,11 @@ import {
 } from 'reactstrap';
 import IPageProps from '../../configs/routerConfig/IPageProps';
 import { RootStateType } from '../../redux/Store';
-import { createRoutineMachineLayer } from '@src/components/map/RoutingMachine';
-import { setRoutingControl } from '@src/redux/reducers/mapReducer';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { ICustomerResultModel } from '@src/models/output/customer/ICustomerResultModel';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { CheckSquare, Grid, Mail, MessageSquare, List, Check, X, Circle, Map, MapPin, Navigation } from 'react-feather';
 import { Calendar } from 'react-modern-calendar-datepicker';
-import Toggle from '@src/components/Toggle';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
 import { setActualRoute, setDriverRoute, setPlannedRoute } from '@src/redux/reducers/routeReducer';
 
@@ -34,7 +31,6 @@ const Home: FunctionComponent<IPageProps> = (props: any) => {
   const httpRequest = useHttpRequest();
   const localStorage = useLocalStorage();
 
-  const mapState = useSelector((state: RootStateType) => state.map);
   const getBoolean = (value: any) => (value === 'true' ? true : false);
 
   const [mapOptionsModal, setMapOptionsModal] = useState<boolean>(false);
@@ -108,40 +104,28 @@ const Home: FunctionComponent<IPageProps> = (props: any) => {
           <>
             <Row>
               <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <img
-                  src={require('@src/assets/images/markers/marker-status-0.png')}
-                  style={{ marginRight: '10px', width: '22px' }}
-                />
+                <img src={require('@src/assets/images/ath.png')} style={{ marginRight: '10px', width: '22px' }} />
                 Not Visited
               </Col>
               <Col lg={7} sm={7} xs={6}></Col>
             </Row>
             <Row>
               <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <img
-                  src={require('@src/assets/images/markers/marker-status-1.png')}
-                  style={{ marginRight: '10px', width: '22px' }}
-                />
+                <img src={require('@src/assets/images/ath.png')} style={{ marginRight: '10px', width: '22px' }} />
                 Completed
               </Col>
               <Col lg={7} sm={7} xs={6}></Col>
             </Row>
             <Row>
               <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <img
-                  src={require('@src/assets/images/markers/marker-status-3.png')}
-                  style={{ marginRight: '10px', width: '22px' }}
-                />
+                <img src={require('@src/assets/images/ath.png')} style={{ marginRight: '10px', width: '22px' }} />
                 Canceled
               </Col>
               <Col lg={7} sm={7} xs={6}></Col>
             </Row>
             <Row>
               <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <img
-                  src={require('@src/assets/images/markers/marker-driver.svg')}
-                  style={{ marginRight: '10px', width: '22px' }}
-                />
+                <img src={require('@src/assets/images/svg/menu.svg')} style={{ marginRight: '10px', width: '22px' }} />
                 Driver Location
               </Col>
               <Col lg={7} sm={7} xs={6}></Col>
@@ -177,18 +161,14 @@ const Home: FunctionComponent<IPageProps> = (props: any) => {
                 <Map color="#3593ff" size={20} style={{ marginRight: '10px' }} />
                 Driver Route
               </Col>
-              <Col lg={7} sm={7} xs={6} className="p-1">
-                <Toggle checked={driver} onChange={driverChange} offstyle="btn-secondary" onstyle="btn-primary" />
-              </Col>
+              <Col lg={7} sm={7} xs={6} className="p-1"></Col>
             </Row>
             <Row>
               <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
                 <Map color="#b711e0" size={20} style={{ marginRight: '10px' }} />
                 Actual Route
               </Col>
-              <Col lg={7} sm={7} xs={6} className="p-1">
-                <Toggle checked={actual} onChange={actualChange} offstyle="btn-secondary" onstyle="btn-primary" />
-              </Col>
+              <Col lg={7} sm={7} xs={6} className="p-1"></Col>
             </Row>
           </>
         </ModalBody>

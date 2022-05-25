@@ -4,7 +4,7 @@
 const themeConfig = {
   app: {
     appName: 'Kardoon',
-    appLogoImage: require('@src/assets/images/logo/kardoon_logo.png'),
+    appLogoImage: require('@src/assets/images/ath.png'),
     useRefreshToken: false,
     autoServerMessageOnError: true,
     showSystemError: false,

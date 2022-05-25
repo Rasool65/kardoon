@@ -3,32 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { Provider } from 'react-redux';
 import Store from './redux/Store';
-import { AbilityContext } from './utility/context/Can';
-import ability from './configs/acl/ability';
-import { ThemeContext } from './utility/context/ThemeColors';
 import { ToastContainer } from 'react-toastify';
-import './assets/fonts/feather/iconfont.css';
 import './scss/core.scss';
-import './assets/scss/style.scss';
-import Spinner from './components/spinner/Fallback-spinner';
-import './configs/i18n';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import '@styles/react/libs/toastify/toastify.scss';
-
 // ** i18n
 import './configs/i18n';
+import { Spinner } from 'reactstrap';
 
 const LazyApp = lazy(() => import('./App'));
 
 ReactDOM.render(
   <Provider store={Store}>
     <Suspense fallback={<Spinner />}>
-      <AbilityContext.Provider value={ability}>
-        <ThemeContext>
-          <LazyApp />
-          <ToastContainer newestOnTop />
-        </ThemeContext>
-      </AbilityContext.Provider>
+      {/* <AbilityContext.Provider > */}
+      <LazyApp />
+      <ToastContainer newestOnTop />
+      {/* </AbilityContext.Provider> */}
     </Suspense>
   </Provider>,
   document.getElementById('root')
