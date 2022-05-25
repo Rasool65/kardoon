@@ -25,7 +25,7 @@ import { Calendar } from 'react-modern-calendar-datepicker';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
 import { setActualRoute, setDriverRoute, setPlannedRoute } from '@src/redux/reducers/routeReducer';
 
-const Home: FunctionComponent<IPageProps> = (props: any) => {
+const Main: FunctionComponent<IPageProps> = (props: any) => {
   useEffect(() => {
     document.title = props.title;
   }, [props.title]);
@@ -470,4 +470,4 @@ const Home: FunctionComponent<IPageProps> = (props: any) => {
   );
 };
 
-export default Home;
+export default Main;

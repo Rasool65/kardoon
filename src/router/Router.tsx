@@ -16,7 +16,7 @@ const Routers: FunctionComponent = () => {
                 path={route.path}
                 element={
                   <>
-                    <Home title={''} />
+                    <Home title={'salam'} />
                   </>
                 }
               />
