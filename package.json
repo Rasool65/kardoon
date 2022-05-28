@@ -6,6 +6,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@hookform/resolvers": "^2.8.5",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/i18next": "^13.0.0",
     "@types/i18next-browser-languagedetector": "^3.0.0",
