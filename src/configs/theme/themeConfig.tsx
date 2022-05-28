@@ -3,33 +3,31 @@
 //Template config options
 const themeConfig = {
   app: {
-    appName: 'Kardoon',
+    appName: 'kardoon',
     appLogoImage: require('@src/assets/images/ath.png'),
     useRefreshToken: false,
-    autoServerMessageOnError: true,
-    showSystemError: false,
   },
-  // layout: {
-  //   isRTL: false,
-  //   skin: 'light', // light, dark, bordered, semi-dark
-  //   routerTransition: 'fadeIn', // fadeIn, fadeInLeft, zoomIn, none or check this for more transition https://animate.style/
-  //   type: 'vertical', // vertical, horizontal
-  //   contentWidth: 'boxed', // full, boxed
-  //   menu: {
-  //     isHidden: false,
-  //     isCollapsed: false,
-  //   },
-  //   navbar: {
-  //     // ? For horizontal menu, navbar type will work for navMenu type
-  //     type: 'floating', // static , sticky , floating, hidden
-  //     backgroundColor: 'white', // BS color options [primary, success, etc]
-  //   },
-  //   footer: {
-  //     type: 'hidden', // static, sticky, hidden
-  //   },
-  //   customizer: false,
-  //   scrollTop: false, // Enable scroll to top button
-  // },
+  layout: {
+    isRTL: true,
+    skin: 'light', // light, dark, bordered, semi-dark
+    routerTransition: 'fadeIn', // fadeIn, fadeInLeft, zoomIn, none or check this for more transition https://animate.style/
+    type: 'vertical', // vertical, horizontal
+    contentWidth: 'boxed', // full, boxed
+    menu: {
+      isHidden: false,
+      isCollapsed: false,
+    },
+    navbar: {
+      // ? For horizontal menu, navbar type will work for navMenu type
+      type: 'floating', // static , sticky , floating, hidden
+      backgroundColor: 'white', // BS color options [primary, success, etc]
+    },
+    footer: {
+      type: 'hidden', // static, sticky, hidden
+    },
+    customizer: false,
+    scrollTop: false, // Enable scroll to top button
+  },
 };
 
 export default themeConfig;

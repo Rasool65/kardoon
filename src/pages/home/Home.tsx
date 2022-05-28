@@ -1,189 +1,147 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import {
-  Button,
-  ButtonGroup,
-  Col,
-  Container,
-  Input,
-  Label,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Row,
-  UncontrolledButtonDropdown,
-} from 'reactstrap';
+import { useNavigate } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
-import { RootStateType } from '../../redux/Store';
-import useHttpRequest from '@src/hooks/useHttpRequest';
-import { ICustomerResultModel } from '@src/models/output/customer/ICustomerResultModel';
-import { IOutputResult } from '@src/models/output/IOutputResult';
-import { CheckSquare, Grid, Mail, MessageSquare, List, Check, X, Circle, Map, MapPin, Navigation } from 'react-feather';
-import { Calendar } from 'react-modern-calendar-datepicker';
-import { useLocalStorage } from '@src/hooks/useLocalStorage';
-import { setActualRoute, setDriverRoute, setPlannedRoute } from '@src/redux/reducers/routeReducer';
+// import OwlCarousel from 'react-owl-carousel';
+// import 'owl.carousel/dist/assets/owl.carousel.css';
+// import 'owl.carousel/dist/assets/owl.theme.default.css';
+// import useHttpRequest from '@src/hooks/useHttpRequest';
+// import About from './About';
+// import { Link } from 'react-router-dom';
+// import { URL_DASHBOARD, URL_LOGIN } from '@src/configs/urls';
+// import { RootStateType } from '@src/redux/Store';
+import { Col, Container, Row } from 'reactstrap';
 
-const Home: FunctionComponent<IPageProps> = (props: any) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const httpRequest = useHttpRequest();
-  const localStorage = useLocalStorage();
-
-  const getBoolean = (value: any) => (value === 'true' ? true : false);
-
-  const [mapOptionsModal, setMapOptionsModal] = useState<boolean>(false);
-  const [planned, setPlanned] = useState<string>('');
-  const [driver, setDriver] = useState<boolean>(false);
-  const [actual, setActual] = useState<boolean>(false);
-
-  const [selected, setSelected] = useState<Number>(0);
-
-  // const plannedChange = (value: any) => {
-  //   debugger;
-  //   planned ? setPlanned(false) : setPlanned(true);
-  //   localStorage.set('planned', JSON.stringify(!planned));
-  //   dispatch(setPlannedRoute(!planned));
-  // };
-  const getselectValue = (value: string) => {
-    switch (value) {
-      case 'off':
-        setSelected(0);
-        break;
-      case 'pin':
-        setSelected(1);
-        break;
-      case 'route':
-        setSelected(2);
-        break;
-      default:
-        setSelected(0);
-        break;
-    }
-  };
-  const selectOff = () => {
-    setSelected(0);
-    localStorage.set('planned', 'off');
-    dispatch(setPlannedRoute('off'));
-  };
-  const selectPin = () => {
-    setSelected(1);
-    localStorage.set('planned', 'pin');
-    dispatch(setPlannedRoute('pin'));
-  };
-  const selectRoute = () => {
-    setSelected(2);
-    localStorage.set('planned', 'route');
-    dispatch(setPlannedRoute('route'));
-  };
-
-  const driverChange = () => {
-    driver ? setDriver(false) : setDriver(true);
-    localStorage.set('driver', JSON.stringify(!driver));
-    dispatch(setDriverRoute(!driver));
-  };
-  const actualChange = () => {
-    actual ? setActual(false) : setActual(true);
-    localStorage.set('actual', JSON.stringify(!actual));
-    dispatch(setActualRoute(!actual));
-  };
-
+const Home: FunctionComponent<IPageProps> = (props) => {
   useEffect(() => {
-    setActual(getBoolean(localStorage.get('actual')));
-    setDriver(getBoolean(localStorage.get('driver')));
-    getselectValue(localStorage.get('planned') ?? 'off');
     document.title = props.title;
   }, [props.title]);
 
   return (
     <>
-      <Modal isOpen={mapOptionsModal} toggle={() => setMapOptionsModal(!mapOptionsModal)} className="modal-dialog-centered">
-        <ModalHeader toggle={() => setMapOptionsModal(!mapOptionsModal)}>Legend</ModalHeader>
-        <ModalBody>
-          <>
-            <Row>
-              <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <img src={require('@src/assets/images/ath.png')} style={{ marginRight: '10px', width: '22px' }} />
-                Not Visited
-              </Col>
-              <Col lg={7} sm={7} xs={6}></Col>
-            </Row>
-            <Row>
-              <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <img src={require('@src/assets/images/ath.png')} style={{ marginRight: '10px', width: '22px' }} />
-                Completed
-              </Col>
-              <Col lg={7} sm={7} xs={6}></Col>
-            </Row>
-            <Row>
-              <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <img src={require('@src/assets/images/ath.png')} style={{ marginRight: '10px', width: '22px' }} />
-                Canceled
-              </Col>
-              <Col lg={7} sm={7} xs={6}></Col>
-            </Row>
-            <Row>
-              <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <img src={require('@src/assets/images/svg/menu.svg')} style={{ marginRight: '10px', width: '22px' }} />
-                Driver Location
-              </Col>
-              <Col lg={7} sm={7} xs={6}></Col>
-            </Row>
-            {/* <Row>
-              <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <Navigation color="orange" size={20} style={{ marginRight: '10px' }} />
-                GPS Disabled
-              </Col>
-              <Col lg={7} sm={7} xs={6}></Col>
-            </Row> */}
-            <Row>
-              <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <Map color="#13b92a" size={20} style={{ marginRight: '10px' }} />
-                Planned Route
-              </Col>
-              <Col lg={7} sm={7} xs={6} className="p-1">
-                <ButtonGroup>
-                  <Button color="primary" onClick={selectOff} size="sm" active={selected === 0}>
-                    Off
-                  </Button>
-                  <Button color="primary" onClick={selectPin} size="sm" active={selected === 1}>
-                    Pin
-                  </Button>
-                  <Button color="primary" onClick={selectRoute} size="sm" active={selected === 2}>
-                    Route
-                  </Button>
-                </ButtonGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <Map color="#3593ff" size={20} style={{ marginRight: '10px' }} />
-                Driver Route
-              </Col>
-              <Col lg={7} sm={7} xs={6} className="p-1"></Col>
-            </Row>
-            <Row>
-              <Col lg={5} sm={5} xs={6} className="p-1 ps-5">
-                <Map color="#b711e0" size={20} style={{ marginRight: '10px' }} />
-                Actual Route
-              </Col>
-              <Col lg={7} sm={7} xs={6} className="p-1"></Col>
-            </Row>
-          </>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={() => setMapOptionsModal(!mapOptionsModal)}>
-            Close
-          </Button>
-        </ModalFooter>
-      </Modal>
-      <div className="map-options-btn">
-        <UncontrolledButtonDropdown>
-          <Button color="primary" size="md" onClick={() => setMapOptionsModal(true)} className="btn-icon btn-round">
-            <Grid size={14} />
-          </Button>
-        </UncontrolledButtonDropdown>
+      <div className="card card-style">
+        <div className="content">
+          Packed with powerful built pages that are highly customizable and blazing fast to load. We've categorized our pages by
+          purpose to make it easier for you to find them.
+        </div>
+      </div>
+      <div className="row text-center mb-0">
+        <a href="pages-list.html" className="col-6 pe-2">
+          <div className="card card-style me-0 mb-3">
+            <h1 className="center-text pt-4 mt-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                className="feather feather-file"
+                data-feather-line="1"
+                data-feather-size="50"
+                data-feather-color="blue-dark"
+                data-feather-bg="blue-fade-light"
+                style={{ strokeWidth: 1, width: '50px', height: '50px' }}
+              >
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                <polyline points="13 2 13 9 20 9"></polyline>
+              </svg>
+            </h1>
+            <h4 className="color-theme font-600">General</h4>
+            <p className="mt-n2 font-11 color-highlight">Multi Purpose Pages</p>
+            <p className="font-10 opacity-30 mb-1">Tap to View</p>
+          </div>
+        </a>
+        <a href="pages-appstyled-list.html" className="col-6 ps-2">
+          <div className="card card-style ms-0 mb-3">
+            <h1 className="center-text pt-4 mt-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                className="feather feather-smartphone"
+                data-feather-line="1"
+                data-feather-size="50"
+                data-feather-color="green-dark"
+                data-feather-bg="green-fade-light"
+                style={{ strokeWidth: 1, width: '50px', height: '50px' }}
+              >
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+              </svg>
+            </h1>
+            <h4 className="color-theme font-600">App Styled</h4>
+            <p className="mt-n2 font-11 color-highlight">Designed like Apps</p>
+            <p className="font-10 opacity-30 mb-1">Tap to View</p>
+          </div>
+        </a>
+        <a href="pages-starters.html" className="col-6 pe-2">
+          <div className="card card-style me-0 mb-3">
+            <h1 className="center-text pt-4 mt-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                className="feather feather-box"
+                data-feather-line="1"
+                data-feather-size="50"
+                data-feather-color="magenta-dark"
+                data-feather-bg="magenta-fade-light"
+                style={{ strokeWidth: 1, width: '50px', height: '50px' }}
+              >
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </h1>
+            <h4 className="color-theme font-600">Starters</h4>
+            <p className="mt-n2 font-11 color-highlight">Walkthrough &amp; Splash</p>
+            <p className="font-10 opacity-30 mb-1">Tap to View</p>
+          </div>
+        </a>
+        <a href="component-action-sheets.html" className="col-6 ps-2">
+          <div className="card card-style ms-0 mb-3">
+            <h1 className="center-text pt-4 mt-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                className="feather feather-zap"
+                data-feather-line="1"
+                data-feather-size="50"
+                data-feather-color="yellow-dark"
+                data-feather-bg="yellow-fade-light"
+                style={{ strokeWidth: 1, width: '50px', height: '50px' }}
+              >
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </h1>
+            <h4 className="color-theme font-600">Actions</h4>
+            <p className="mt-n2 font-11 color-highlight">Modal Menus &amp; Actions</p>
+            <p className="font-10 opacity-30 mb-1">Tap to View</p>
+          </div>
+        </a>
       </div>
     </>
   );

@@ -1,27 +1,23 @@
+import { URL_MAIN, URL_LOGIN } from './../urls';
 import IRoute from './IRoute';
 import RouteType from './RouteType';
-import { URL_MAIN, URL_LOGIN } from '../urls';
+// import Contact from '../../views/contact/Contact';
+import Home from '../../pages/home/Home';
+// import Dashboard from '@src/pages/dashboard/Dashboard';
+// import LoginLayout from '@src/pages/authentication/LoginLayout';
+// import History from '@src/pages/aboutUs/History';
+// import Profile from '@src/pages/profile/Profile';
 
-import Home from '@src/pages/home/Home';
-import Login from '@src/pages/authentication/Login';
-import { URL_HOME } from './../urls';
-import Main from '@src/pages/main/Home';
+// import AppChat from '@src/pages/chat';
+// import Request from '@src/pages/requisition';
 
 const routes: IRoute[] = [
   {
-    path: URL_LOGIN,
-    component: Login,
+    path: URL_MAIN,
+    component: Home,
     type: RouteType.public,
     props: {
-      title: 'Goldiran Kardoon Login',
-    },
-  },
-  {
-    path: URL_HOME,
-    component: Main,
-    type: RouteType.public,
-    props: {
-      title: 'home',
+      title: 'Home',
     },
   },
 ];

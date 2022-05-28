@@ -50,7 +50,7 @@ module.exports = {
     },
   },
   devServer: {
-    port: 1500,
+    port: 2000,
     historyApiFallback: true,
   },
   module: {
