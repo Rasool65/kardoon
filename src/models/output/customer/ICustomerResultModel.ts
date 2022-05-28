@@ -1,5 +1,5 @@
 export interface ICustomerResultModel {
-  tourId: number;
+  Id: number;
   customerNumber: number;
   customerName: string;
   customerAddress: string;

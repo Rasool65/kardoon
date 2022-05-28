@@ -1,6 +1,7 @@
-import Footer from './Footer';
 import Header from './Header';
+import Footer from './Footer';
 import { FunctionComponent } from 'react';
+import IPageProps from '@src/configs/routerConfig/IPageProps';
 
 const Layout = (props: any) => {
   const { children, title } = props;
