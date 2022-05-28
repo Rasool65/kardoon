@@ -23,10 +23,7 @@
       "@configs/*": ["./src/configs/*"],
       "@store/*": ["./src/redux/*"],
       "@components/*": ["./src/components/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@utils/*": ["./src/utility/Utils"],
-      "@scripts/*": ["./src/utility/scripts/*"],
-
+      "@assets/*": ["./src/assets/*"]
     }
   },
   "include": ["src"]

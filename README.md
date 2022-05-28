@@ -1,4 +1,4 @@
-# Goldiran front Kardoon with react and typescript
+# kardoon Front End with react and typescript
 
 This project uses this programming languegs, framework and tools.
 

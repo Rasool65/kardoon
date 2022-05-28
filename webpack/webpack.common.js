@@ -35,7 +35,6 @@ module.exports = {
       '@layouts': path.resolve(__dirname, '../src/layouts'),
       '@store': path.resolve(__dirname, '../src/redux'),
       '@components': path.resolve(__dirname, '../src/components'),
-      '@utils': path.resolve(__dirname, '../src/utility/Utils'),
     },
     fallback: {
       fs: false,
