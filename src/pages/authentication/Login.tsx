@@ -26,7 +26,6 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Facebook, GitHub, HelpCircle, Mail, Twitter } from 'react-feather';
 import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
 import { LoginModelSchema, ILoginModel } from '@src/models/input/authentication/ILoginModel';
 import useHttpRequest from '@src/hooks/useHttpRequest';
