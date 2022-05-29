@@ -29,9 +29,8 @@ const Login: FunctionComponent<IPageProps> = (props) => {
     formState: { errors },
   } = useForm<ILoginModel>({ mode: 'onChange', resolver: yupResolver(LoginModelSchema) });
 
-  {
-    /* //todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
-  }
+  //todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
+
   // const onSubmit = (data: ILoginModel) => {
   //   if (data && !isLoading) {
   //     setIsLoading(true);
