@@ -82,7 +82,7 @@ const Loginn: FunctionComponent<IPageProps> = (props) => {
         <Col className="d-flex align-items-center auth-bg px-2 p-lg-5" lg="4" sm="12">
           <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
             <div className="w-100 justify-content-center text-center">
-              <img className="img-fluid" src={logo} alt="Solico" />
+              <img className="img-fluid" src={logo} alt="logo" />
             </div>
             <CardTitle tag="h4" className="fw-bold mb-1 mt-2 text-center text-primary">
               {themeConfig.app.appName}

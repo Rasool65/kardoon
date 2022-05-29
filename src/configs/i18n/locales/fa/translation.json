@@ -3,5 +3,6 @@
   "PasswordRequired":"رمز عبور اجباریست",
   "UserRequired" : "نام کاربری اجباریست",
   "UserName":"نام کاربری",
-  "EnterUserName":"لطفأ نام کاربری را وارد نمایید"
+  "EnterUserName":"لطفأ نام کاربری را وارد نمایید",
+  "EnterPassword":"لطفأ رمز عبور را وارد نمایید"
 }
