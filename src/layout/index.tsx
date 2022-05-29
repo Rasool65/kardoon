@@ -28,7 +28,7 @@ const Layout = (props: any) => {
             style={{ backgroundImage: 'url("images/avatars/5s.png")' }}
           ></a>
         </div>
-        <div className="card header-card shape-rounded" data-card-height="210" style={{ height: '210px' }}>
+        <div className="card header-card shape-rounded" data-card-height="150" style={{ height: '150px' }}>
           <div className="card-overlay bg-highlight opacity-95"></div>
           <div className="card-overlay dark-mode-tint"></div>
           <div

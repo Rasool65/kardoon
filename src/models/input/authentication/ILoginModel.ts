@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import * as yup from 'yup';
 
 export interface ILoginModel {
@@ -6,6 +7,6 @@ export interface ILoginModel {
 }
 
 export const LoginModelSchema: yup.SchemaOf<ILoginModel> = yup.object({
-  userName: yup.string().required('Username is required'),
-  password: yup.string().required('Password is required'),
+  userName: yup.string().required(t('UserRequired')),
+  password: yup.string().required(t('PasswordRequired')),
 });

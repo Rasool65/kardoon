@@ -119,7 +119,7 @@ const Loginn: FunctionComponent<IPageProps> = (props) => {
                       <Input
                         autoFocus
                         type="text"
-                        placeholder="Please enter your username"
+                        placeholder="نام کاربری را وار نمایید"
                         autoComplete="off"
                         invalid={errors.userName && true}
                         {...field}

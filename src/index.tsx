@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Store from './redux/Store';
 import './scss/style.scss';
+import './configs/i18n/config';
 // import { AbilityContext } from './utility/context/Can';
 // import ability from './configs/acl/ability';
 // import { ThemeContext } from './utility/context/ThemeColors';
@@ -12,11 +13,8 @@ import './scss/style.scss';
 // import './assets/fonts/feather/iconfont.css';
 // import './scss/core.scss';
 // import './scss/react/app-loader.scss';
-// /import './configs/i18n';
 // import 'react-perfect-scrollbar/dist/css/styles.css';
 // import '@styles/react/libs/toastify/toastify.scss';
-// ** i18n
-// import './configs/i18n';
 
 const LazyApp = lazy(() => import('./App'));
 
