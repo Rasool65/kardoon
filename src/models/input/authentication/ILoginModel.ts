@@ -18,7 +18,7 @@ export const LoginModelSchema: yup.SchemaOf<ILoginModel> = yup.object({
   client_id: yup.string().required(),
   client_secret: yup.string().required(),
   grant_type: yup.string().required(),
-  userName: yup.string().required(t('MobileRequired')).matches(mobileRegExp, t('InvalidMobile')),
+  username: yup.string().required(t('MobileRequired')).matches(mobileRegExp, t('InvalidMobile')),
   password: yup.string().required(t('PasswordRequired')),
   //.min(6, t('PasswordLength6')),
 });
