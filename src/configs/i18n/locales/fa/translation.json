@@ -2,7 +2,17 @@
   "Dashboards": "داشبورد",
   "PasswordRequired":"رمز عبور اجباریست",
   "UserRequired" : "نام کاربری اجباریست",
+  "MobileRequired" : "شماره همراه اجباریست",
   "UserName":"نام کاربری",
   "EnterUserName":"لطفأ نام کاربری را وارد نمایید",
-  "EnterPassword":"لطفأ رمز عبور را وارد نمایید"
+  "EnterPassword":"لطفأ رمز عبور را وارد نمایید",
+  "EnterMobile":"لطفأ شماره همراه خود را وارد نمایید",
+  "InvalidMobile":"شماره همراه وارد شده نامعتبر می باشد",
+  "Signup":"ثبت نام",
+  "ForgotPassword":"بازنشانی رمز عبور",
+  "PasswordLength6":"حداقل طول رمز عبور میبایست 6 کاراکتر باشد",
+  "Login":"ورود",
+  "Register":"ساخت حساب کاربری",
+  "TermsAndConditions":"قوانین و مقررات کاردون",
+  "Services":"نصب، تعمیر و گارانتی لوازم خانگی"
 }

@@ -1,4 +1,3 @@
-import themeConfig from '@src/configs/theme/themeConfig';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useAxios } from './useAxios';
 import { useToast } from './useToast';
@@ -21,18 +20,19 @@ const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
       try {
         const res: AxiosResponse = await get<T>(url, {
           validateStatus: (status: number): boolean => {
-            return status >= 200 && status <= 204;
+            if (status == 500) return false;
+            return true;
           },
           ...config,
         });
-        if (res.status >= 200 && res.status <= 204) {
-          if (themeConfig.app.autoServerMessageOnError && res.data && res.data.message && !res.data.succeeded)
-            toast.showWarning(res.data.message);
+        if (res.status >= 200 && res.status <= 204) resolve(res);
+        else {
+          toast.showError(res.data.message);
+          if (onError) onError(res);
+          reject(res);
         }
-        resolve(res);
       } catch (error: any) {
-        if (onError) onError();
-        else if (themeConfig.app.showSystemError) toast.showError(error.message);
+        toast.showError(error.message);
         reject(error);
       }
     });
@@ -48,18 +48,19 @@ const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
       try {
         const res: AxiosResponse = await post<T>(url, body, {
           validateStatus: (status: number): boolean => {
-            return status >= 200 && status <= 204;
+            if (status == 500) return false;
+            return true;
           },
           ...config,
         });
-        if (res.status >= 200 && res.status <= 204) {
-          if (themeConfig.app.autoServerMessageOnError && res.data && res.data.message && !res.data.succeeded)
-            toast.showWarning(res.data.message);
+        if (res.status >= 200 && res.status <= 204) resolve(res);
+        else {
+          toast.showError(res.data.message);
+          if (onError) onError(res);
+          reject(res);
         }
-        resolve(res);
       } catch (error: any) {
-        if (onError) onError();
-        else if (themeConfig.app.showSystemError) toast.showError(error.message);
+        toast.showError(error.message);
         reject(error);
       }
     });
@@ -70,18 +71,19 @@ const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
       try {
         const res: AxiosResponse = await remove<T>(url, {
           validateStatus: (status: number): boolean => {
-            return status >= 200 && status <= 204;
+            if (status == 500) return false;
+            return true;
           },
           data: body,
         });
-        if (res.status >= 200 && res.status <= 204) {
-          if (themeConfig.app.autoServerMessageOnError && res.data && res.data.message && !res.data.succeeded)
-            toast.showWarning(res.data.message);
+        if (res.status >= 200 && res.status <= 204) resolve(res);
+        else {
+          toast.showError(res.data.message);
+          if (onError) onError(res);
+          reject(res);
         }
-        resolve(res);
       } catch (error: any) {
-        if (onError) onError();
-        else if (themeConfig.app.showSystemError) toast.showError(error.message);
+        toast.showError(error.message);
         reject(error);
       }
     });
@@ -92,17 +94,18 @@ const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
       try {
         const res: AxiosResponse = await put<T>(url, body, {
           validateStatus: (status: number): boolean => {
-            return status >= 200 && status <= 204;
+            if (status == 500) return false;
+            return true;
           },
         });
-        if (res.status >= 200 && res.status <= 204) {
-          if (themeConfig.app.autoServerMessageOnError && res.data && res.data.message && !res.data.succeeded)
-            toast.showWarning(res.data.message);
+        if (res.status >= 200 && res.status <= 204) resolve(res);
+        else {
+          toast.showError(res.data.message);
+          if (onError) onError(res);
+          reject(res);
         }
-        resolve(res);
       } catch (error: any) {
-        if (onError) onError();
-        else if (themeConfig.app.showSystemError) toast.showError(error.message);
+        toast.showError(error.message);
         reject(error);
       }
     });

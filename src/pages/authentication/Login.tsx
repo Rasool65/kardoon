@@ -2,21 +2,33 @@ import { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
-// import useHttpRequest from '@src/hooks/useHttpRequest';
+import useHttpRequest from '@src/hooks/useHttpRequest';
 // import { Link } from 'react-router-dom';
 // import { URL_DASHBOARD, URL_LOGIN } from '@src/configs/urls';
 // import { RootStateType } from '@src/redux/Store';
-import { Col, Container, FormFeedback, Input, Row } from 'reactstrap';
+import { Button, Col, Container, Form, FormFeedback, Input, Row } from 'reactstrap';
 import { ILoginModel, LoginModelSchema } from '@src/models/input/authentication/ILoginModel';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { IOutputResult } from '@src/models/output/IOutputResult';
+import { APIURL_LOGIN, APIURL_TOKEN } from '@src/configs/apiConfig/apiUrls';
+import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
+import { handleLogin } from '@src/redux/reducers/authenticationReducer';
+import { URL_HOME } from './../../configs/urls';
+import LoginFooter from './LoginFooter';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
+  const navigate = useNavigate();
+  const httpRequest = useHttpRequest();
+  // const tokenAuthentication = useTokenAuthentication();
+  const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
   useEffect(() => {
     document.title = props.title;
   }, [props.title]);
+
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
 
   const {
     control,
@@ -27,90 +39,154 @@ const Login: FunctionComponent<IPageProps> = (props) => {
 
   //todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
 
-  // const onSubmit = (data: ILoginModel) => {
-  //   if (data && !isLoading) {
-  //     setIsLoading(true);
-  //     httpRequest
-  //       .postRequest<IOutputResult<ILoginResultModel>>(APIURL_LOGIN, { username: data.userName, password: data.password })
-  //       .then((result) => {
-  //         dispatch(handleLogin({ token: result.data.data.token, username: data.userName }));
-  //         navigate(URL_MAIN);
-  //       })
-  //       .finally(() => setIsLoading(false));
-  //   }
-  // };
+  const onSubmit = (data: ILoginModel) => {
+    debugger;
+    if (data && !isLoading) {
+      setIsLoading(true);
+      httpRequest
+        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, { mobile: data.mobile, password: data.password })
+        .then((result: any) => {
+          debugger;
+          dispatch(handleLogin({ token: result.data.data.token, mobile: data.mobile }));
+          navigate(URL_HOME);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  };
 
   return (
     <>
-      <div className="card card-style">
-        <div className="content mt-2 mb-0">
-          <div className="input-style no-borders has-icon validate-field mb-4">
-            <i className="fa fa-user"></i>
-            <input type="name" className="form-control validate-name" id="form1a" placeholder="نام" />
-            <label className="color-blue-dark font-10 mt-1">{t('UserName')}</label>
-            {/* <Controller
-              name="userName"
-              control={control}
-              render={({ field }) => (
-                <>
-                  <Input
-                    className="form-control validate-name"
-                    autoFocus
-                    type="text"
-                    placeholder={t('EnterUserName')}
-                    autoComplete="off"
-                    invalid={errors.userName && true}
-                    {...field}
-                  />
-                  <FormFeedback>{errors.userName?.message}</FormFeedback>
-                </>
-              )}
-            /> */}
-            <i className="fa fa-times disabled invalid color-red-dark"></i>
-            <i className="fa fa-check disabled valid color-green-dark"></i>
-            <em>(اجباری)</em>
-          </div>
-
-          <div className="input-style no-borders has-icon validate-field mb-4">
-            <i className="fa fa-lock"></i>
-            <input type="password" className="form-control validate-password" id="form3a" placeholder="رمز عبور" />
-            <label className="color-blue-dark font-10 mt-1">رمز عبور</label>
-            <i className="fa fa-times disabled invalid color-red-dark"></i>
-            <i className="fa fa-check disabled valid color-green-dark"></i>
-            <em>(اجباری)</em>
-          </div>
-
-          <a href="#" className="btn btn-m mt-4 mb-4 btn-full bg-green-dark rounded-sm text-uppercase font-900">
-            ورود
-          </a>
-
-          <div className="divider"></div>
-
-          <a href="#" className="btn btn-icon btn-m rounded-sm btn-full shadow-l bg-facebook text-uppercase font-700 text-start">
-            <i className="fab fa-facebook-f text-center"></i>Login with Facebook
-          </a>
-          <a
-            href="#"
-            className="btn btn-icon btn-m rounded-sm mt-2 btn-full shadow-l bg-twitter text-uppercase font-700 text-start"
+      <div id="page">
+        <div className="page-content">
+          <div
+            // onClick={(e) => this.loginWithoutUsername(e)}
+            className="page-title page-title-small pointer"
+            style={{ color: '#FFF', width: 'fit-content', fontSize: '16px' }}
           >
-            <i className="fab fa-twitter text-center"></i>Login with Twitter
-          </a>
+            ورود بدون حساب کاربری
+          </div>
 
-          <div className="divider mt-4 mb-3"></div>
+          <div className="card header-card shape-rounded" data-card-height="150">
+            <div className="card-overlay bg-highlight opacity-95" />
+            <div className="card-overlay dark-mode-tint" />
+            <div className="card-bg bg-20" />
+          </div>
 
-          <div className="d-flex">
-            <div className="w-50 font-11 pb-2 color-theme opacity-60 pb-3 text-start">
-              <a href="system-signup-1.html" className="color-theme">
-                ثبت نام
-              </a>
-            </div>
-            <div className="w-50 font-11 pb-2 color-theme opacity-60 pb-3 text-end">
-              <a href="system-forgot-1.html" className="color-theme">
-                فراموشی رمز عبور
-              </a>
+          <div className="card card-style p-2">
+            <div className="content mt-2 mb-0">
+              <Form onSubmit={handleSubmit(onSubmit)}>
+                <div className="input-style no-borders has-icon validate-field mb-4">
+                  <i className="fa fa-user"></i>
+                  {/* <input type="name" className="form-control validate-name" id="form1a" placeholder="نام" />
+            <label className="color-blue-dark font-10 mt-1">{t('UserName')}</label> */}
+                  <Controller
+                    name="mobile"
+                    control={control}
+                    render={({ field }) => (
+                      <>
+                        <Input
+                          className="form-control validate-name"
+                          autoFocus
+                          type="text"
+                          placeholder={t('EnterMobile')}
+                          autoComplete="off"
+                          invalid={errors.mobile && true}
+                          {...field}
+                        />
+                        <FormFeedback>{errors.mobile?.message}</FormFeedback>
+                      </>
+                    )}
+                  />
+                  <i className="fa fa-times disabled invalid color-red-dark"></i>
+                  <i className="fa fa-check disabled valid color-green-dark"></i>
+                  <em>(اجباری)</em>
+                </div>
+                <div className="input-style no-borders has-icon validate-field mb-4">
+                  <i className="fa fa-lock"></i>
+                  {/* <input type="password" className="form-control validate-password" id="form3a" placeholder="رمز عبور" />
+            <label className="color-blue-dark font-10 mt-1">رمز عبور</label> */}
+                  <Controller
+                    name="password"
+                    control={control}
+                    render={({ field }) => (
+                      <>
+                        <Input
+                          className="form-control validate-password"
+                          autoFocus
+                          type="password"
+                          placeholder={t('EnterPassword')}
+                          autoComplete="off"
+                          invalid={errors.password && true}
+                          {...field}
+                        />
+                        <FormFeedback>{errors.password?.message}</FormFeedback>
+                      </>
+                    )}
+                  />
+                  <i className="fa fa-times disabled invalid color-red-dark"></i>
+                  <i className="fa fa-check disabled valid color-green-dark"></i>
+                  <em>(اجباری)</em>
+                </div>
+                <Button
+                  style={{ width: '100%', marginTop: '30px' }}
+                  type="submit"
+                  className="btn btn-m mt-4 mb-0 btn-full bg-blue-dark rounded-sm text-uppercase font-900"
+                >
+                  {t('Login')}
+                </Button>
+
+                <div
+                  className="color-theme pointer"
+                  style={{ marginTop: '15px', maxWidth: 'fit-content' }}
+                  // onClick={(e) => this.showRegisterModal(e)}
+                >
+                  {t('Register')}
+                </div>
+                <div
+                  className="color-theme pointer"
+                  style={{ marginTop: '5px', maxWidth: 'fit-content' }}
+                  // onClick={(e) => this.showForgetPasswordModal(e)}
+                >
+                  {t('ForgotPassword')}
+                </div>
+                <div className="divider mt-4 mb-3" />
+                <div className="footer-title pointer" style={{ fontSize: '14px' }}>
+                  {t('TermsAndConditions')}
+                </div>
+              </Form>
             </div>
           </div>
+
+          <LoginFooter />
         </div>
+
+        {/* <RegisterModal
+          registerModalVisible={this.state.registerModalVisible}
+          hideRegisterModal={(e) => this.hideRegisterModal(e)}
+        />
+        <ForgetPasswordModal
+          forgetPasswordModalVisible={this.state.forgetPasswordModalVisible}
+          showEnterCodeModal={(e) => this.showEnterCodeModal(e)}
+        />
+        <EnterCodeModal
+          enterCodeModalVisible={this.state.enterCodeModalVisible}
+          mobileNumber={this.state.mobileNumber}
+          editMobileNo={(e) => this.editMobileNo(e)}
+          resend={(e) => this.resend(e)}
+        /> */}
+
+        {/* <div
+          onClick={
+            this.state.forgetPasswordModalVisible
+              ? (e) => this.hideForgetPasswordModal(e)
+              : this.state.registerModalVisible
+              ? (e) => this.hideRegisterModal(e)
+              : this.state.enterCodeModalVisible
+              ? (e) => this.hideEnterCodeModal(e)
+              : null
+          }
+          className={this.state.viewBgVisible ? 'menu-hider menu-active' : ''}
+        /> */}
       </div>
     </>
   );

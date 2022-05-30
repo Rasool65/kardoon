@@ -6,11 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../configs/apiConfig/apiBaseUrl';
 import { URL_LOGIN } from '../configs/urls';
 import { RequestDataType } from './useHttpRequest';
-import { useToast } from './useToast';
 import { useTokenAuthentication } from './useTokenAuthentication';
-
-let delayBetweenErrors: number;
-let lastErrorTime: number = 0;
 
 export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
   const navigate = useNavigate();
@@ -18,7 +14,6 @@ export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
   const jwtConfig: IJwtConfig = { ...jwtDefaultConfig };
 
   const authToken = useTokenAuthentication();
-  const toast = useToast();
 
   let instance: AxiosInstance;
   const token = authToken.getToken();
@@ -48,19 +43,14 @@ export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
     headers,
   });
 
-  instance.interceptors.response.use(
+  axios.interceptors.response.use(
     (response) => response,
     (error) => {
       const { config, response } = error;
       const originalRequest = config;
 
-      delayBetweenErrors = Date.now() - lastErrorTime;
-      lastErrorTime = Date.now();
-
-      if (response && response.status === 401 && delayBetweenErrors > 500) {
+      if (response && response.status === 401) {
         if (!themeConfig.app.useRefreshToken) {
-          toast.showError('لطفا مجدد وارد حساب کاربری خود شوید');
-          authToken.deleteLogoutToken();
           navigate(URL_LOGIN);
         }
         if (!isAlreadyFetchingAccessToken) {
@@ -73,8 +63,6 @@ export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
             subscribers = subscribers.filter((callback) => callback(r.data.accessToken));
           });
         } else {
-          toast.showError('لطفا مجدد وارد حساب کاربری خود شوید');
-          authToken.deleteLogoutToken();
           navigate(URL_LOGIN);
         }
         const retryOriginalRequest = new Promise((resolve) => {
@@ -84,14 +72,6 @@ export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
           });
         });
         return retryOriginalRequest;
-      }
-
-      if (response && response.status === 400 && delayBetweenErrors > 500) {
-        if (response.data.message && themeConfig.app.autoServerMessageOnError) toast.showError(response.data.message);
-      }
-
-      if (response && response.status === 500 && delayBetweenErrors > 500) {
-        toast.showError('در ارتباط با سرور مشکلی روی داده است');
       }
       return Promise.reject(error);
     }
