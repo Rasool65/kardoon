@@ -2,7 +2,8 @@ import { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
-import useHttpRequest from '@src/hooks/useHttpRequest';
+import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
+import qs from 'qs';
 // import { Link } from 'react-router-dom';
 // import { URL_DASHBOARD, URL_LOGIN } from '@src/configs/urls';
 // import { RootStateType } from '@src/redux/Store';
@@ -18,10 +19,11 @@ import { handleLogin } from '@src/redux/reducers/authenticationReducer';
 import { URL_HOME } from './../../configs/urls';
 import LoginFooter from './LoginFooter';
 import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
+import axios from 'axios';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
-  const httpRequest = useHttpRequest();
+  const httpRequest = useHttpRequest(RequestDataType.urlencoded);
   const tokenAuthentication = useTokenAuthentication();
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
@@ -41,21 +43,35 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   //todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
 
   const onSubmit = (data: ILoginModel) => {
-    debugger;
     if (data && !isLoading) {
+      // var formData = new FormData();
+      // formData.append('client_id', 'Kardoon_Technician');
+      // formData.append('client_secret', 'p@ssword@123'),
+      //   formData.append('grant_type', 'password'),
+      //   formData.append('username', '09123456789'),
+      //   formData.append('password', '1234'),
+      // const body = {
+      //   client_id: 'Kardoon_Technician',
+      //   client_secret: 'p@ssword@123',
+      //   grant_type: 'password',
+      //   username: data.username,
+      //   password: data.password,
+      // };
       setIsLoading(true);
+      const body = {
+        client_id: 'Kardoon_Technician',
+        client_secret: 'p@ssword@123',
+        grant_type: 'password',
+        username: data.username,
+        password: data.password,
+      };
+
       httpRequest
-        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, {
-          client_id: 'Kardoon_Technician',
-          client_secret: 'p@ssword@123',
-          grant_type: 'password',
-          username: data.username,
-          password: data.password,
-        })
+        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, qs.stringify(body))
         .then((result) => {
           debugger;
-          // dispatch(handleLogin({ token: result.data.data.token, username: data.username }));
-          // navigate(URL_HOME);
+          dispatch(handleLogin({ token: result.data.data.access_token, username: data.username }));
+          navigate(URL_HOME);
         })
         .finally(() => setIsLoading(false));
     }

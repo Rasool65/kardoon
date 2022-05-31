@@ -32,6 +32,11 @@ export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
     headers = {
       'Content-Type': 'multipart/form-data',
     };
+  } else if (dataType == RequestDataType.urlencoded) {
+    headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
   }
 
   if (token && token != '') {

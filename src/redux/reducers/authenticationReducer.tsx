@@ -22,8 +22,10 @@ export const authSlice = createSlice({
   } as IAuthenticationReducerState,
   reducers: {
     handleLogin: (state, action) => {
+      debugger;
       var result = action.payload;
       tokenAuthentication.saveLoginToken(result.data.data.auth.accessToken, result.data.data.auth.refreshToken);
+      // todo Save to http only cookie
       localStorage.setItem('userData', JSON.stringify(result.data.data.user));
       state.userData = result.data.data.user;
       state.isAuthenticate = true;

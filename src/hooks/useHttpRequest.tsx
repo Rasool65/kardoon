@@ -5,6 +5,7 @@ import { useToast } from './useToast';
 export enum RequestDataType {
   json,
   formData,
+  urlencoded,
 }
 
 const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
