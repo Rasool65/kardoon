@@ -2,12 +2,9 @@ import { t } from 'i18next';
 import * as yup from 'yup';
 
 export interface ILoginModel {
-  client_id: string;
-  // 'Kardoon_Technician'
-  client_secret: string;
-  // 'p@ssword@123'
-  grant_type: string;
-  // 'password'
+  client_id?: string;
+  client_secret?: string;
+  grant_type?: string;
   username: string;
   password: string;
 }
@@ -15,10 +12,9 @@ export interface ILoginModel {
 const mobileRegExp = /^09-?[0-9]{9}$/;
 
 export const LoginModelSchema: yup.SchemaOf<ILoginModel> = yup.object({
-  client_id: yup.string().required(),
-  client_secret: yup.string().required(),
-  grant_type: yup.string().required(),
+  client_id: yup.string(),
+  client_secret: yup.string(),
+  grant_type: yup.string(),
   username: yup.string().required(t('MobileRequired')).matches(mobileRegExp, t('InvalidMobile')),
   password: yup.string().required(t('PasswordRequired')),
-  //.min(6, t('PasswordLength6')),
 });

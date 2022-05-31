@@ -17,11 +17,12 @@ import { ILoginResultModel } from '@src/models/output/authentication/ILoginResul
 import { handleLogin } from '@src/redux/reducers/authenticationReducer';
 import { URL_HOME } from './../../configs/urls';
 import LoginFooter from './LoginFooter';
+import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
   const httpRequest = useHttpRequest();
-  // const tokenAuthentication = useTokenAuthentication();
+  const tokenAuthentication = useTokenAuthentication();
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
   useEffect(() => {
@@ -44,11 +45,17 @@ const Login: FunctionComponent<IPageProps> = (props) => {
     if (data && !isLoading) {
       setIsLoading(true);
       httpRequest
-        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, { mobile: data.mobile, password: data.password })
-        .then((result: any) => {
+        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, {
+          client_id: 'Kardoon_Technician',
+          client_secret: 'p@ssword@123',
+          grant_type: 'password',
+          username: data.username,
+          password: data.password,
+        })
+        .then((result) => {
           debugger;
-          dispatch(handleLogin({ token: result.data.data.token, mobile: data.mobile }));
-          navigate(URL_HOME);
+          // dispatch(handleLogin({ token: result.data.data.token, username: data.username }));
+          // navigate(URL_HOME);
         })
         .finally(() => setIsLoading(false));
     }
@@ -80,7 +87,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   {/* <input type="name" className="form-control validate-name" id="form1a" placeholder="نام" />
             <label className="color-blue-dark font-10 mt-1">{t('UserName')}</label> */}
                   <Controller
-                    name="mobile"
+                    name="username"
                     control={control}
                     render={({ field }) => (
                       <>
@@ -90,10 +97,10 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                           type="text"
                           placeholder={t('EnterMobile')}
                           autoComplete="off"
-                          invalid={errors.mobile && true}
+                          invalid={errors.username && true}
                           {...field}
                         />
-                        <FormFeedback>{errors.mobile?.message}</FormFeedback>
+                        <FormFeedback>{errors.username?.message}</FormFeedback>
                       </>
                     )}
                   />
