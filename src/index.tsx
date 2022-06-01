@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Store from './redux/Store';
 import './scss/style.scss';
 import './configs/i18n/config';
+import './assets/scss/style.scss';
 // import { AbilityContext } from './utility/context/Can';
 // import ability from './configs/acl/ability';
 // import { ThemeContext } from './utility/context/ThemeColors';
