@@ -7,7 +7,7 @@ import qs from 'qs';
 // import { Link } from 'react-router-dom';
 // import { URL_DASHBOARD, URL_LOGIN } from '@src/configs/urls';
 // import { RootStateType } from '@src/redux/Store';
-import { Button, Col, Container, Form, FormFeedback, Input, Row } from 'reactstrap';
+import { Button, Col, Container, Form, FormFeedback, Input, Row, Spinner } from 'reactstrap';
 import { ILoginModel, LoginModelSchema } from '@src/models/input/authentication/ILoginModel';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
@@ -16,22 +16,23 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import { APIURL_LOGIN, APIURL_TOKEN } from '@src/configs/apiConfig/apiUrls';
 import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
 import { handleLogin } from '@src/redux/reducers/authenticationReducer';
-import { URL_HOME } from './../../configs/urls';
-import LoginFooter from './LoginFooter';
+import { URL_HOME, URL_MAIN } from './../../configs/urls';
 import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
-import axios from 'axios';
+
+import FooterCard from '@src/layout/FooterCard';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
-  const httpRequest = useHttpRequest(RequestDataType.urlencoded);
+  const httpRequest = useHttpRequest();
   const tokenAuthentication = useTokenAuthentication();
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
+
   useEffect(() => {
     document.title = props.title;
   }, [props.title]);
 
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
     control,
@@ -44,34 +45,25 @@ const Login: FunctionComponent<IPageProps> = (props) => {
 
   const onSubmit = (data: ILoginModel) => {
     if (data && !isLoading) {
-      // var formData = new FormData();
-      // formData.append('client_id', 'Kardoon_Technician');
-      // formData.append('client_secret', 'p@ssword@123'),
-      //   formData.append('grant_type', 'password'),
-      //   formData.append('username', '09123456789'),
-      //   formData.append('password', '1234'),
-      // const body = {
-      //   client_id: 'Kardoon_Technician',
-      //   client_secret: 'p@ssword@123',
-      //   grant_type: 'password',
-      //   username: data.username,
-      //   password: data.password,
-      // };
       setIsLoading(true);
       const body = {
-        client_id: 'Kardoon_Technician',
-        client_secret: 'p@ssword@123',
-        grant_type: 'password',
-        username: data.username,
-        password: data.password,
+        ClientId: 'Kardoon_Technician',
+        ClientSecret: 'p@ssword@123',
+        UserName: data.username,
+        Password: data.password,
       };
 
       httpRequest
-        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, qs.stringify(body))
+        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, body)
         .then((result) => {
-          debugger;
-          dispatch(handleLogin({ token: result.data.data.access_token, username: data.username }));
-          navigate(URL_HOME);
+          // dispatch(
+          //   handleLogin({
+          //     token: result.data.data.access_token,
+          //     refreshToken: result.data.data.refresh_token,
+          //     username: data.username,
+          //   })
+          // );
+          navigate('/');
         })
         .finally(() => setIsLoading(false));
     }
@@ -86,7 +78,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
             className="page-title page-title-small pointer"
             style={{ color: '#FFF', width: 'fit-content', fontSize: '16px' }}
           >
-            ورود بدون حساب کاربری
+            {t('LoginWithoutAccount')}
           </div>
 
           <div className="card header-card shape-rounded" data-card-height="150">
@@ -154,8 +146,9 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   style={{ width: '100%', marginTop: '30px' }}
                   type="submit"
                   className="btn btn-m mt-4 mb-0 btn-full bg-blue-dark rounded-sm text-uppercase font-900"
+                  // disabled={isLoading}
                 >
-                  {t('Login')}
+                  {isLoading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : t('Login')}
                 </Button>
 
                 <div
@@ -180,7 +173,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
             </div>
           </div>
 
-          <LoginFooter />
+          <FooterCard />
         </div>
 
         {/* <RegisterModal

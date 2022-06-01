@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useTokenAuthentication } from '../../hooks/useTokenAuthentication';
-
 import { IAuthenticationReducerState } from '../states/IAuthenticationReducerState';
 
 const tokenAuthentication = useTokenAuthentication();
@@ -22,12 +21,10 @@ export const authSlice = createSlice({
   } as IAuthenticationReducerState,
   reducers: {
     handleLogin: (state, action) => {
-      debugger;
       var result = action.payload;
-      tokenAuthentication.saveLoginToken(result.data.data.auth.accessToken, result.data.data.auth.refreshToken);
-      // todo Save to http only cookie
-      localStorage.setItem('userData', JSON.stringify(result.data.data.user));
-      state.userData = result.data.data.user;
+      tokenAuthentication.saveLoginToken(result.token, result.refreshToken);
+      localStorage.setItem('userData', JSON.stringify(result.username));
+      state.userData = result.username;
       state.isAuthenticate = true;
     },
     handleLogout: (state) => {
@@ -38,8 +35,8 @@ export const authSlice = createSlice({
     },
     reloadUserData: (state, action) => {
       var result = action.payload;
-      localStorage.setItem('userData', JSON.stringify(result.data.data));
-      state.userData = result.data.data;
+      localStorage.setItem('userData', JSON.stringify(result.data));
+      state.userData = result.data;
     },
   },
 });

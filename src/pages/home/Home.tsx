@@ -8,6 +8,7 @@ import IPageProps from '../../configs/routerConfig/IPageProps';
 // import { URL_DASHBOARD, URL_LOGIN } from '@src/configs/urls';
 // import { RootStateType } from '@src/redux/Store';
 import { Col, Container, Row } from 'reactstrap';
+import FooterCard from '@src/layout/FooterCard';
 
 const Home: FunctionComponent<IPageProps> = (props) => {
   useEffect(() => {
@@ -16,129 +17,290 @@ const Home: FunctionComponent<IPageProps> = (props) => {
 
   return (
     <>
-      <div className="card card-style">
-        <div className="content">
-          Packed with powerful built pages that are highly customizable and blazing fast to load. We've categorized our pages by
-          purpose to make it easier for you to find them.
+      <div id="page">
+        {/* <Footer footerMenuVisible={props.footerMenuVisible} activePage={1}/> */}
+
+        <div className="page-content">
+          {/* <HomeHeader showMainMenu={(e) => props.showMainMenu(true)} headerTitle={"خوش آمدید"}/> */}
+
+          <div className="single-slider-boxed text-center owl-no-dots owl-carousel" style={{ marginTop: '50px' }}>
+            <div className="card rounded-l shadow-l" data-card-height="120">
+              <div className="card-overlay" />
+              <div className="card-bg owl-lazy" data-src={require('/public/forTest/005.jpg')} />
+            </div>
+            <div className="card rounded-l shadow-l" data-card-height="120">
+              <div className="card-overlay" />
+              <div className="card-bg owl-lazy" data-src={require('/public/forTest/006.jpg')} />
+            </div>
+            <div className="card rounded-l shadow-l" data-card-height="120">
+              <div className="card-overlay" />
+              <div className="card-bg owl-lazy" data-src={require('/public/forTest/007.jpg')} />
+            </div>
+          </div>
+
+          <div className="single-slider-boxed text-center owl-no-dots owl-carousel">
+            <div className="card rounded-l shadow-l" data-card-height="120">
+              <div className="card-overlay" />
+              <div className="card-bg owl-lazy" data-src={require('/public/forTest/006.jpg')} />
+            </div>
+            <div className="card rounded-l shadow-l" data-card-height="120">
+              <div className="card-overlay" />
+              <div className="card-bg owl-lazy" data-src={require('/public/forTest/005.jpg')} />
+            </div>
+            <div className="card rounded-l shadow-l" data-card-height="120">
+              <div className="card-overlay" />
+              <div className="card-bg owl-lazy" data-src={require('/public/forTest/006.jpg')} />
+            </div>
+          </div>
+
+          <div
+            className="card card-style card-blur pointer"
+            data-card-height="155"
+            //  onClick={(e) => onClickHandle(e)}
+          >
+            <img src="images/pictures/1.jpg" className="card-image" alt="" />
+            <div className="card-top">{/*<i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/>*/}</div>
+            <div className="card-bottom">
+              <div className="float-end me-3">
+                <h1 className="color-white font-700 text-end mb-n1">نصب و راه اندازی</h1>
+                <p className="color-white text-end opacity-50 mb-2">نصب و راه اندازی</p>
+              </div>
+            </div>
+            <div className="card-overlay bg-black opacity-30" />
+          </div>
+
+          <div
+            className="card card-style card-blur pointer"
+            data-card-height="155"
+            //  onClick={(e) => onClickHandle(e)}
+          >
+            <img src="images/pictures/2.jpg" className="card-image" alt="" />
+            <div className="card-top">{/*<i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/>*/}</div>
+            <div className="card-bottom">
+              <div className="float-end me-3">
+                <h1 className="color-white font-700 text-end mb-n1">تعمیرات</h1>
+                <p className="color-white text-end opacity-50 mb-2">تعمیرات</p>
+              </div>
+            </div>
+            <div className="card-overlay bg-black opacity-30" />
+          </div>
+
+          <div
+            className="card card-style card-blur pointer"
+            data-card-height="155"
+            //  onClick={(e) => onClickHandle(e)}
+          >
+            <img src="images/pictures/3.jpg" className="card-image" alt="" />
+            <div className="card-top">{/*<i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/>*/}</div>
+            <div className="card-bottom">
+              <div className="float-end me-3">
+                <h1 className="color-white font-700 text-end mb-n1">سرویس دوره ای</h1>
+                <p className="color-white text-end opacity-50 mb-2">سرویس دوره ای</p>
+              </div>
+            </div>
+            <div className="card-overlay bg-black opacity-30" />
+          </div>
+
+          <div
+            className="card card-style card-blur pointer"
+            data-card-height="155"
+            //  onClick={(e) => onClickHandle(e)}
+          >
+            <img src="images/pictures/4.jpg" className="card-image" alt="" />
+            <div className="card-top">{/*<i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/>*/}</div>
+            <div className="card-bottom">
+              <div className="float-end me-3">
+                <h1 className="color-white font-700 text-end mb-n1">گارانتی</h1>
+                <p className="color-white text-end opacity-50 mb-2">گارانتی</p>
+              </div>
+            </div>
+            <div className="card-overlay bg-black opacity-30" />
+          </div>
+
+          <div
+            className="card card-style card-blur pointer"
+            data-card-height="155"
+            //  onClick={(e) => onClickHandle(e)}
+          >
+            <img src="images/pictures/5.jpg" className="card-image" alt="" />
+            <div className="card-top">{/*<i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/>*/}</div>
+            <div className="card-bottom">
+              <div className="float-end me-3">
+                <h1 className="color-white font-700 text-end mb-n1">تعمیرات</h1>
+                <p className="color-white text-end opacity-50 mb-2">تعمیرات</p>
+              </div>
+            </div>
+            <div className="card-overlay bg-black opacity-30" />
+          </div>
+
+          <div className="card card-style  me-0 ms-0 rounded-0 gradient-blue">
+            <div className="content pt-5 pb-5">
+              <h1 className="mb-1 color-white font-700 text-center">گارانتی کاردون</h1>
+              <p className="boxed-text-xl color-white opacity-80">
+                کاردون برای تمامی برندهای معتبر ایرانی و خارجی گارانتی ارائه می‌دهد. از لوازم خانگی‌تان با هزینه‌ای به صرفه در
+                برابر خرابی‌ها و حوادث احتمالی حفاظت کنید. برندهای سامسونگ، ال جی، سونی، بوش، دوو، AEG، کنوود و هر برند معتبر
+                ایرانی و خارجی دیگری را می‌توانید با کاردون گارانتی کنید.
+              </p>
+              <a href="#" className="btn btn-s bg-white color-black font-700 btn-center-m">
+                ثبت گارانتی محصول
+              </a>
+            </div>
+          </div>
+
+          <div
+            className="card card-style card-blur pointer"
+            data-card-height="155"
+            //  onClick={(e) => onClickHandle(e)}
+          >
+            <img src="images/pictures/6.jpg" className="card-image" alt="" />
+            <div className="card-top">{/*<i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/>*/}</div>
+            <div className="card-bottom">
+              <div className="float-end me-3">
+                <h1 className="color-white font-700 text-end mb-n1">تعمیرات</h1>
+                <p className="color-white text-end opacity-50 mb-2">تعمیرات</p>
+              </div>
+            </div>
+            <div className="card-overlay bg-black opacity-30" />
+          </div>
+
+          <div
+            className="card card-style card-blur pointer"
+            data-card-height="155"
+            //  onClick={(e) => onClickHandle(e)}
+          >
+            <img src="images/pictures/7.jpg" className="card-image" alt="" />
+            <div className="card-top">{/*<i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/>*/}</div>
+            <div className="card-bottom">
+              <div className="float-end me-3">
+                <h1 className="color-white font-700 text-end mb-n1">تعمیرات</h1>
+                <p className="color-white text-end opacity-50 mb-2">تعمیرات</p>
+              </div>
+            </div>
+            <div className="card-overlay bg-black opacity-30" />
+          </div>
+
+          <div
+            className="card card-style card-blur pointer"
+            data-card-height="155"
+            //  onClick={(e) => onClickHandle(e)}
+          >
+            <img src="images/pictures/8.jpg" className="card-image" alt="" />
+            <div className="card-top">{/*<i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/>*/}</div>
+            <div className="card-bottom">
+              <div className="float-end me-3">
+                <h1 className="color-white font-700 text-end mb-n1">تعمیرات</h1>
+                <p className="color-white text-end opacity-50 mb-2">تعمیرات</p>
+              </div>
+            </div>
+            <div className="card-overlay bg-black opacity-30" />
+          </div>
+
+          <div
+            className="card card-style card-blur pointer"
+            data-card-height="155"
+            //  onClick={(e) => onClickHandle(e)}
+          >
+            <img src="images/pictures/9.jpg" className="card-image" alt="" />
+            <div className="card-top">{/*<i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/>*/}</div>
+            <div className="card-bottom">
+              <div className="float-end me-3">
+                <h1 className="color-white font-700 text-end mb-n1">تعمیرات</h1>
+                <p className="color-white text-end opacity-50 mb-2">تعمیرات</p>
+              </div>
+            </div>
+            <div className="card-overlay bg-black opacity-30" />
+          </div>
+
+          <div
+            className="card card-style card-blur pointer"
+            data-card-height="155"
+            //  onClick={(e) => onClickHandle(e)}
+          >
+            <img src="images/pictures/10.jpg" className="card-image" alt="" />
+            <div className="card-top">{/*<i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/>*/}</div>
+            <div className="card-bottom">
+              <div className="float-end me-3">
+                <h1 className="color-white font-700 text-end mb-n1">تعمیرات</h1>
+                <p className="color-white text-end opacity-50 mb-2">تعمیرات</p>
+              </div>
+            </div>
+            <div className="card-overlay bg-black opacity-30" />
+          </div>
+
+          {/*<div className="card service-card-style" onClick={(e) => onClickHandle(e)}>*/}
+          {/*    <Container>*/}
+          {/*        <Row style={{alignItems: 'center', textAlign: 'center', marginBottom: '0'}}>*/}
+          {/*            <Col style={{height: '100%'}}>*/}
+          {/*                <span style={{marginLeft: '10px', color: '#000'}}>نصب و راه اندازی</span>*/}
+          {/*            </Col>*/}
+          {/*            <Col style={{textAlign: 'left', margin: '10px'}}>*/}
+          {/*                <img*/}
+          {/*                    src="images/forTest/install.jpg"*/}
+          {/*                    style={{width: '120px', height: '100px', margin: '1px'}} alt=""/>*/}
+          {/*            </Col>*/}
+          {/*        </Row>*/}
+          {/*    </Container>*/}
+          {/*</div>*/}
+          {/*<div className="card service-card-style" onClick={(e) => onClickHandle(e)}>*/}
+          {/*    <Container>*/}
+          {/*        <Row style={{alignItems: 'center', textAlign: 'center', marginBottom: '0'}}>*/}
+          {/*            <Col style={{height: '100%'}}>*/}
+          {/*                <span style={{marginLeft: '10px', color: '#000'}}>تعمیرات</span>*/}
+          {/*            </Col>*/}
+          {/*            <Col style={{textAlign: 'left', margin: '10px'}}>*/}
+          {/*                <img*/}
+          {/*                    src="images/forTest/install.jpg"*/}
+          {/*                    style={{width: '120px', height: '100px', margin: '1px'}} alt=""/>*/}
+          {/*            </Col>*/}
+          {/*        </Row>*/}
+          {/*    </Container>*/}
+          {/*</div>*/}
+          {/*<div className="card service-card-style" onClick={(e) => onClickHandle(e)}>*/}
+          {/*    <Container>*/}
+          {/*        <Row style={{alignItems: 'center', textAlign: 'center', marginBottom: '0'}}>*/}
+          {/*            <Col style={{height: '100%'}}>*/}
+          {/*                <span style={{marginLeft: '10px', color: '#000'}}>سرویس دوره ای</span>*/}
+          {/*            </Col>*/}
+          {/*            <Col style={{textAlign: 'left', margin: '10px'}}>*/}
+          {/*                <img*/}
+          {/*                    src="images/forTest/install.jpg"*/}
+          {/*                    style={{width: '120px', height: '100px', margin: '1px'}} alt=""/>*/}
+          {/*            </Col>*/}
+          {/*        </Row>*/}
+          {/*    </Container>*/}
+          {/*</div>*/}
+          {/*<div className="card service-card-style" onClick={(e) => onClickHandle(e)}>*/}
+          {/*    <Container>*/}
+          {/*        <Row style={{alignItems: 'center', textAlign: 'center', marginBottom: '0'}}>*/}
+          {/*            <Col style={{height: '100%'}}>*/}
+          {/*                <span style={{marginLeft: '10px', color: '#000'}}>گارانتی</span>*/}
+          {/*            </Col>*/}
+          {/*            <Col style={{textAlign: 'left', margin: '10px'}}>*/}
+          {/*                <img*/}
+          {/*                    src="images/forTest/install.jpg"*/}
+          {/*                    style={{width: '120px', height: '100px', margin: '1px'}} alt=""/>*/}
+          {/*            </Col>*/}
+          {/*        </Row>*/}
+          {/*    </Container>*/}
+          {/*</div>*/}
+          {/*<div style={{marginBottom: '30px'}}*/}
+          {/*     className="card service-card-style" onClick={(e) => onClickHandle(e)}>*/}
+          {/*    <Container>*/}
+          {/*        <Row style={{alignItems: 'center', textAlign: 'center', marginBottom: '0'}}>*/}
+          {/*            <Col style={{height: '100%'}}>*/}
+          {/*                <span style={{marginLeft: '10px', color: '#000'}}>نصب و راه اندازی</span>*/}
+          {/*            </Col>*/}
+          {/*            <Col style={{textAlign: 'left', margin: '10px'}}>*/}
+          {/*                <img*/}
+          {/*                    src="images/forTest/install.jpg"*/}
+          {/*                    style={{width: '120px', height: '100px', margin: '1px'}} alt=""/>*/}
+          {/*            </Col>*/}
+          {/*        </Row>*/}
+          {/*    </Container>*/}
+          {/*</div>*/}
+
+          <FooterCard />
         </div>
-      </div>
-      <div className="row text-center mb-0">
-        <a href="pages-list.html" className="col-6 pe-2">
-          <div className="card card-style me-0 mb-3">
-            <h1 className="center-text pt-4 mt-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="feather feather-file"
-                data-feather-line="1"
-                data-feather-size="50"
-                data-feather-color="blue-dark"
-                data-feather-bg="blue-fade-light"
-                style={{ strokeWidth: 1, width: '50px', height: '50px' }}
-              >
-                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                <polyline points="13 2 13 9 20 9"></polyline>
-              </svg>
-            </h1>
-            <h4 className="color-theme font-600">General</h4>
-            <p className="mt-n2 font-11 color-highlight">Multi Purpose Pages</p>
-            <p className="font-10 opacity-30 mb-1">Tap to View</p>
-          </div>
-        </a>
-        <a href="pages-appstyled-list.html" className="col-6 ps-2">
-          <div className="card card-style ms-0 mb-3">
-            <h1 className="center-text pt-4 mt-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="feather feather-smartphone"
-                data-feather-line="1"
-                data-feather-size="50"
-                data-feather-color="green-dark"
-                data-feather-bg="green-fade-light"
-                style={{ strokeWidth: 1, width: '50px', height: '50px' }}
-              >
-                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                <line x1="12" y1="18" x2="12.01" y2="18"></line>
-              </svg>
-            </h1>
-            <h4 className="color-theme font-600">App Styled</h4>
-            <p className="mt-n2 font-11 color-highlight">Designed like Apps</p>
-            <p className="font-10 opacity-30 mb-1">Tap to View</p>
-          </div>
-        </a>
-        <a href="pages-starters.html" className="col-6 pe-2">
-          <div className="card card-style me-0 mb-3">
-            <h1 className="center-text pt-4 mt-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="feather feather-box"
-                data-feather-line="1"
-                data-feather-size="50"
-                data-feather-color="magenta-dark"
-                data-feather-bg="magenta-fade-light"
-                style={{ strokeWidth: 1, width: '50px', height: '50px' }}
-              >
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-              </svg>
-            </h1>
-            <h4 className="color-theme font-600">Starters</h4>
-            <p className="mt-n2 font-11 color-highlight">Walkthrough &amp; Splash</p>
-            <p className="font-10 opacity-30 mb-1">Tap to View</p>
-          </div>
-        </a>
-        <a href="component-action-sheets.html" className="col-6 ps-2">
-          <div className="card card-style ms-0 mb-3">
-            <h1 className="center-text pt-4 mt-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="feather feather-zap"
-                data-feather-line="1"
-                data-feather-size="50"
-                data-feather-color="yellow-dark"
-                data-feather-bg="yellow-fade-light"
-                style={{ strokeWidth: 1, width: '50px', height: '50px' }}
-              >
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-              </svg>
-            </h1>
-            <h4 className="color-theme font-600">Actions</h4>
-            <p className="mt-n2 font-11 color-highlight">Modal Menus &amp; Actions</p>
-            <p className="font-10 opacity-30 mb-1">Tap to View</p>
-          </div>
-        </a>
       </div>
     </>
   );

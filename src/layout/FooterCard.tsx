@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const LoginFooter: FunctionComponent = () => {
+const FooterCard: FunctionComponent = () => {
   const { t } = useTranslation();
 
   return (
@@ -45,4 +45,4 @@ const LoginFooter: FunctionComponent = () => {
   );
 };
 
-export default LoginFooter;
+export default FooterCard;

@@ -11,12 +11,13 @@ import Home from '../../pages/home/Home';
 // import AppChat from '@src/pages/chat';
 // import Request from '@src/pages/requisition';
 import Login from './../../pages/authentication/Login';
+import Home2 from '@src/pages/home/Home2';
 
 const routes: IRoute[] = [
   {
     path: URL_MAIN,
     component: Home,
-    type: RouteType.public,
+    type: RouteType.private,
     props: {
       title: 'Home',
     },
@@ -29,7 +30,14 @@ const routes: IRoute[] = [
       title: 'login',
     },
   },
-
+  {
+    path: '/home2',
+    component: Home2,
+    type: RouteType.private,
+    props: {
+      title: 'home 2',
+    },
+  },
 ];
 
 export default routes;
