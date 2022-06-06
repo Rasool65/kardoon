@@ -2,7 +2,7 @@ import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const FooterCard: FunctionComponent = () => {
-  const { t } = useTranslation();
+  const { t }: any = useTranslation();
 
   return (
     <div className="footer">

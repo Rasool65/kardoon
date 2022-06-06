@@ -3,10 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
 import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
-import qs from 'qs';
-// import { Link } from 'react-router-dom';
-// import { URL_DASHBOARD, URL_LOGIN } from '@src/configs/urls';
-// import { RootStateType } from '@src/redux/Store';
 import { Button, Col, Container, Form, FormFeedback, Input, Row, Spinner } from 'reactstrap';
 import { ILoginModel, LoginModelSchema } from '@src/models/input/authentication/ILoginModel';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -26,7 +22,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   const httpRequest = useHttpRequest();
   const tokenAuthentication = useTokenAuthentication();
   const dispatch = useDispatch();
-  const { i18n, t } = useTranslation();
+  const { i18n, t }: any = useTranslation();
 
   useEffect(() => {
     document.title = props.title;

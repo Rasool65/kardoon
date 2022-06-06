@@ -17,7 +17,7 @@ const routes: IRoute[] = [
   {
     path: URL_MAIN,
     component: Home,
-    type: RouteType.private,
+    type: RouteType.public,
     props: {
       title: 'Home',
     },
@@ -33,7 +33,7 @@ const routes: IRoute[] = [
   {
     path: '/home2',
     component: Home2,
-    type: RouteType.private,
+    type: RouteType.public,
     props: {
       title: 'home 2',
     },
