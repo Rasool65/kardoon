@@ -5,10 +5,9 @@ import RouteType from '../configs/routerConfig/RouteType';
 import PrivateRoute from './PrivateRoute';
 import { URL_LOGIN, URL_MAIN } from '@src/configs/urls';
 import { useSelector } from 'react-redux';
-
 import { RootStateType } from '@src/redux/Store';
-import MainLayout from '@src/layout/mainLayout';
-import LoginLayout from '@src/layout/loginLayout';
+import PrivateLayout from '@src/layout/PrivateLayout';
+import PublicLayout from '@src/layout/publicLayout';
 
 const Routers: FunctionComponent = () => {
   const authenticationStore = useSelector((state: RootStateType) => state.authentication);
@@ -24,9 +23,9 @@ const Routers: FunctionComponent = () => {
                 key={index}
                 path={route.path}
                 element={
-                  <MainLayout {...route.props}>
+                  <PrivateLayout {...route.props}>
                     <route.component name={route.name} />
-                  </MainLayout>
+                  </PrivateLayout>
                 }
               />
             </Route>
@@ -39,13 +38,13 @@ const Routers: FunctionComponent = () => {
                 authenticationStore.isAuthenticate && route.path == URL_MAIN ? (
                   <Navigate to={URL_MAIN} />
                 ) : route.path == URL_LOGIN ? (
-                  <LoginLayout>
+                  <PrivateLayout>
                     <route.component name={route.name} {...route.props} />
-                  </LoginLayout>
+                  </PrivateLayout>
                 ) : (
-                  <MainLayout>
+                  <PublicLayout>
                     <route.component name={route.name} {...route.props} />
-                  </MainLayout>
+                  </PublicLayout>
                 )
               }
             />

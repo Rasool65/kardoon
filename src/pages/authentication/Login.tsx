@@ -41,27 +41,28 @@ const Login: FunctionComponent<IPageProps> = (props) => {
 
   const onSubmit = (data: ILoginModel) => {
     if (data && !isLoading) {
-      setIsLoading(true);
-      const body = {
-        ClientId: 'Kardoon_Technician',
-        ClientSecret: 'p@ssword@123',
-        UserName: data.username,
-        Password: data.password,
-      };
+      navigate(URL_MAIN);
+      // setIsLoading(true);
+      // const body = {
+      //   ClientId: 'Kardoon_Technician',
+      //   ClientSecret: 'p@ssword@123',
+      //   UserName: data.username,
+      //   Password: data.password,
+      // };
 
-      httpRequest
-        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, body)
-        .then((result) => {
-          // dispatch(
-          //   handleLogin({
-          //     token: result.data.data.access_token,
-          //     refreshToken: result.data.data.refresh_token,
-          //     username: data.username,
-          //   })
-          // );
-          navigate('/');
-        })
-        .finally(() => setIsLoading(false));
+      // httpRequest
+      //   .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, body)
+      //   .then((result) => {
+      //     dispatch(
+      //       handleLogin({
+      //         token: result.data.data.access_token,
+      //         refreshToken: result.data.data.refresh_token,
+      //         username: data.username,
+      //       })
+      //     );
+      //     navigate('/home');
+      //   })
+      //   .finally(() => setIsLoading(false));
     }
   };
 
@@ -96,6 +97,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                     render={({ field }) => (
                       <>
                         <Input
+                          id="form1a"
                           className="form-control validate-name"
                           autoFocus
                           type="text"
@@ -166,6 +168,23 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   {t('TermsAndConditions')}
                 </div>
               </Form>
+              <div className="text-center mb-3" style={{ direction: 'ltr', marginTop: '30px' }}>
+                <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-facebook pointer">
+                  <i className="fab fa-facebook-f" />
+                </div>
+                <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-twitter pointer">
+                  <i className="fab fa-twitter" />
+                </div>
+                <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-phone pointer">
+                  <i className="fa fa-phone" />
+                </div>
+                <div data-menu="menu-share" className="icon icon-xs rounded-sm mr-1 shadow-l bg-red2-dark pointer">
+                  <i className="fa fa-share-alt" />
+                </div>
+                <div className="back-to-top icon icon-xs rounded-sm shadow-l bg-highlight color-white pointer">
+                  <i className="fa fa-arrow-up" />
+                </div>
+              </div>
             </div>
           </div>
 
