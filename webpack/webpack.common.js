@@ -93,9 +93,9 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: 'public/robots.txt', to: 'robots.txt' },
+        // { from: 'public/robots.txt', to: 'robots.txt' },
         { from: 'public/favicon.ico', to: 'favicon.ico' },
-        { from: 'public/manifest.json', to: 'manifest.json' },
+        // { from: 'public/manifest.json', to: 'manifest.json' },
         { from: 'public/assets', to: 'assets' },
       ],
     }),

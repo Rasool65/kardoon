@@ -14,14 +14,14 @@ import Login from './../../pages/authentication/Login';
 import Home2 from '@src/pages/home/Home2';
 
 const routes: IRoute[] = [
-  // {
-  //   path: URL_MAIN,
-  //   component: Home,
-  //   type: RouteType.public,
-  //   props: {
-  //     title: 'Home',
-  //   },
-  // },
+  {
+    path: URL_MAIN,
+    component: Home,
+    type: RouteType.public,
+    props: {
+      title: 'Home',
+    },
+  },
   {
     path: URL_LOGIN,
     component: Login,
@@ -30,14 +30,14 @@ const routes: IRoute[] = [
       title: 'login',
     },
   },
-  // {
-  //   path: '/home2',
-  //   component: Home2,
-  //   type: RouteType.public,
-  //   props: {
-  //     title: 'home 2',
-  //   },
-  // },
+  {
+    path: '/home2',
+    component: Home2,
+    type: RouteType.public,
+    props: {
+      title: 'home 2',
+    },
+  },
 ];
 
 export default routes;
