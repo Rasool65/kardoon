@@ -16,6 +16,7 @@ import { URL_HOME, URL_MAIN } from './../../configs/urls';
 import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
 
 import FooterCard from '@src/layout/FooterCard';
+import RegisterModal from './RegisterModal';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   }, [props.title]);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [registerModalVisible, setRegisterModalVisible] = useState<boolean>(false);
 
   const {
     control,
@@ -151,14 +153,14 @@ const Login: FunctionComponent<IPageProps> = (props) => {
 
                 <div
                   className="color-theme pointer"
-                  style={{ marginTop: '15px', maxWidth: 'fit-content' }}
-                  // onClick={(e) => this.showRegisterModal(e)}
+                  style={{ marginTop: '15px', maxWidth: 'fit-content', cursor: 'pointer' }}
+                  onClick={() => setRegisterModalVisible(!registerModalVisible)}
                 >
                   {t('Register')}
                 </div>
                 <div
                   className="color-theme pointer"
-                  style={{ marginTop: '5px', maxWidth: 'fit-content' }}
+                  style={{ marginTop: '5px', maxWidth: 'fit-content', cursor: 'pointer' }}
                   // onClick={(e) => this.showForgetPasswordModal(e)}
                 >
                   {t('ForgotPassword')}
@@ -174,10 +176,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
           <FooterCard />
         </div>
 
-        {/* <RegisterModal
-          registerModalVisible={this.state.registerModalVisible}
-          hideRegisterModal={(e) => this.hideRegisterModal(e)}
-        /> */}
         {/* <ForgetPasswordModal
           forgetPasswordModalVisible={this.state.forgetPasswordModalVisible}
           showEnterCodeModal={(e) => this.showEnterCodeModal(e)}
@@ -202,6 +200,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
           className={this.state.viewBgVisible ? 'menu-hider menu-active' : ''}
         /> */}
       </div>
+      <RegisterModal showModal={registerModalVisible} />
     </>
   );
 };

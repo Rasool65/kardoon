@@ -1,8 +1,3 @@
 {
-  "Dashboards": "dashboard",
-  "PasswordRequired":"password is required",
-  "UserRequired" : "user namne is required",
-  "UserName":"user name",
-  "EnterUserName":"please enter your user name",
-  "EnterPassword":"please enter your password"
+  "Dashboards": "dashboard"
 }
