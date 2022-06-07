@@ -3,9 +3,7 @@ export default {
   registerEndpoint: '/jwt/register',
   refreshEndpoint: '/jwt/refresh-token',
   logoutEndpoint: '/jwt/logout',
-
-  tokenType: '',
-
+  tokenType: 'Bearer',
   storageTokenKeyName: 'AccessToken',
   storageRefreshTokenKeyName: 'RefreshToken',
   storageUUIDKeyName: 'UUID',

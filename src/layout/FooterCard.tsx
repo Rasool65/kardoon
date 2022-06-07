@@ -26,9 +26,9 @@ const FooterCard: FunctionComponent = () => {
           <div data-menu="menu-share" className="icon icon-xs rounded-sm mr-1 shadow-l bg-red2-dark pointer">
             <i className="fa fa-share-alt" />
           </div>
-          <div className="back-to-top icon icon-xs rounded-sm shadow-l bg-highlight color-white pointer">
+          {/* <div className="back-to-top icon icon-xs rounded-sm shadow-l bg-highlight color-white pointer">
             <i className="fa fa-arrow-up" />
-          </div>
+          </div> */}
         </div>
         <div
           onClick={() => window.open('tel:02147100')}

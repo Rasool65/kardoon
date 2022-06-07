@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
 import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
-import { Button, Col, Container, Form, FormFeedback, Input, Row, Spinner } from 'reactstrap';
+import { Alert, Button, Col, Container, Form, FormFeedback, Input, Row, Spinner } from 'reactstrap';
 import { ILoginModel, LoginModelSchema } from '@src/models/input/authentication/ILoginModel';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
@@ -17,6 +17,7 @@ import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
 
 import FooterCard from '@src/layout/FooterCard';
 import RegisterModal from './RegisterModal';
+import axios from 'axios';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   useEffect(() => {
     document.title = props.title;
   }, [props.title]);
-
+  const [inputs, setInputs] = useState([{ it: false }, { it: false }]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [registerModalVisible, setRegisterModalVisible] = useState<boolean>(false);
 
@@ -42,32 +43,38 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   //todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
 
   const onSubmit = (data: ILoginModel) => {
+    setIsLoading(true);
+    const body = {
+      ClientId: 'Kardoon_Technician',
+      ClientSecret: 'p@ssword@123',
+      UserName: data.username,
+      Password: data.password,
+    };
+    debugger;
     if (data && !isLoading) {
-      navigate(URL_MAIN);
-      // setIsLoading(true);
-      // const body = {
-      //   ClientId: 'Kardoon_Technician',
-      //   ClientSecret: 'p@ssword@123',
-      //   UserName: data.username,
-      //   Password: data.password,
-      // };
-
-      // httpRequest
-      //   .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, body)
-      //   .then((result) => {
-      //     dispatch(
-      //       handleLogin({
-      //         token: result.data.data.access_token,
-      //         refreshToken: result.data.data.refresh_token,
-      //         username: data.username,
-      //       })
-      //     );
-      //     navigate('/home');
-      //   })
-      //   .finally(() => setIsLoading(false));
+      httpRequest
+        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, body)
+        .then((result) => {
+          dispatch(
+            handleLogin({
+              token: result.data.data.access_token,
+              refreshToken: result.data.data.refresh_token,
+              username: data.username,
+            })
+          );
+        })
+        .finally(() => setIsLoading(false));
     }
   };
-
+  function isTypingToggle(e: any, index: any, isFirst: any) {
+    if (e.target.value.length === 0 || (e.target.value.length > 0 && isFirst)) {
+      let inputsTemp = [...inputs];
+      let temp_element = { ...inputsTemp[index] };
+      temp_element.it = !temp_element.it;
+      inputsTemp[index] = temp_element;
+      setInputs(inputsTemp);
+    }
+  }
   return (
     <>
       <div id="page">
@@ -86,11 +93,10 @@ const Login: FunctionComponent<IPageProps> = (props) => {
             <div className="card-bg bg-20" />
           </div>
 
-          <div className="card card-style p-2">
-            <div className="content mt-2 mb-0">
-              <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <div className="card card-style p-2">
+              <div className="content mt-2 mb-0">
                 <div className="input-style no-borders has-icon validate-field mb-4">
-                  <i className="fa fa-user"></i>
                   {/* <input type="name" className="form-control validate-name" id="form1a" placeholder="نام" />
             <label className="color-blue-dark font-10 mt-1">{t('UserName')}</label> */}
                   <Controller
@@ -98,8 +104,10 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                     control={control}
                     render={({ field }) => (
                       <>
+                        <i className="fa fa-user" />
                         <Input
                           id="form1a"
+                          style={{ backgroundPosition: 'left' }}
                           className="form-control validate-name"
                           autoFocus
                           type="text"
@@ -117,7 +125,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   <em>(اجباری)</em>
                 </div>
                 <div className="input-style no-borders has-icon validate-field mb-4">
-                  <i className="fa fa-lock"></i>
                   {/* <input type="password" className="form-control validate-password" id="form3a" placeholder="رمز عبور" />
             <label className="color-blue-dark font-10 mt-1">رمز عبور</label> */}
                   <Controller
@@ -125,8 +132,10 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                     control={control}
                     render={({ field }) => (
                       <>
+                        <i className="fa fa-lock" />
                         <Input
                           className="form-control validate-password"
+                          style={{ backgroundPosition: 'left' }}
                           autoFocus
                           type="password"
                           placeholder={t('EnterPassword')}
@@ -153,14 +162,14 @@ const Login: FunctionComponent<IPageProps> = (props) => {
 
                 <div
                   className="color-theme pointer"
-                  style={{ marginTop: '15px', maxWidth: 'fit-content', cursor: 'pointer' }}
+                  style={{ marginTop: '15px', maxWidth: 'fit-content' }}
                   onClick={() => setRegisterModalVisible(!registerModalVisible)}
                 >
                   {t('Register')}
                 </div>
                 <div
                   className="color-theme pointer"
-                  style={{ marginTop: '5px', maxWidth: 'fit-content', cursor: 'pointer' }}
+                  style={{ marginTop: '5px', maxWidth: 'fit-content' }}
                   // onClick={(e) => this.showForgetPasswordModal(e)}
                 >
                   {t('ForgotPassword')}
@@ -169,13 +178,14 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                 <div className="footer-title pointer" style={{ fontSize: '14px' }}>
                   {t('TermsAndConditions')}
                 </div>
-              </Form>
+              </div>
             </div>
-          </div>
+          </Form>
 
           <FooterCard />
         </div>
 
+        <RegisterModal showModal={registerModalVisible} />
         {/* <ForgetPasswordModal
           forgetPasswordModalVisible={this.state.forgetPasswordModalVisible}
           showEnterCodeModal={(e) => this.showEnterCodeModal(e)}
@@ -186,8 +196,9 @@ const Login: FunctionComponent<IPageProps> = (props) => {
           editMobileNo={(e) => this.editMobileNo(e)}
           resend={(e) => this.resend(e)}
         /> */}
-
-        {/* <div
+      </div>
+      <div className={registerModalVisible ? 'menu-hider menu-active' : ''} />
+      {/* <div
           onClick={
             this.state.forgetPasswordModalVisible
               ? (e) => this.hideForgetPasswordModal(e)
@@ -198,9 +209,8 @@ const Login: FunctionComponent<IPageProps> = (props) => {
               : null
           }
           className={this.state.viewBgVisible ? 'menu-hider menu-active' : ''}
-        /> */}
-      </div>
-      <RegisterModal showModal={registerModalVisible} />
+        />
+      </div> */}
     </>
   );
 };

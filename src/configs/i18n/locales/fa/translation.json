@@ -15,5 +15,7 @@
   "Register":"ساخت حساب کاربری",
   "TermsAndConditions":"قوانین و مقررات کاردون",
   "Services":"نصب، تعمیر و گارانتی لوازم خانگی",
-  "LoginWithoutAccount":"ورود بدون حساب کاربری"
+  "LoginWithoutAccount":"ورود بدون حساب کاربری",
+  "ConfirmPasswordRequired":"لطفأ تکرار رمز عبور را وارد نمایید",
+  "InvalidConfirmPassword":"تکرار رمز عبور با رمز عبور همخوانی ندارد"
 }

@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Col, Container, Row } from 'reactstrap';
-import { IModalModel } from './Modal';
+import { IModalModel } from './ModalModel';
 
 const RegisterModal: FunctionComponent<IModalModel> = ({ showModal }) => {
   const [inputs, setInputs] = useState([{ it: false }, { it: false }, { it: false }, { it: false }, { it: false }]);
@@ -20,7 +20,7 @@ const RegisterModal: FunctionComponent<IModalModel> = ({ showModal }) => {
       <div
         className={`menu menu-box-bottom menu-box-detached rounded-m ${showModal ? 'menu-active' : ''}`}
         data-menu-height="485"
-        style={{ display: 'inherit' }}
+        style={{ display: 'inherit', height: 'auto', direction: 'rtl' }}
         data-menu-effect="menu-over"
       >
         <div className="card p-4" style={{ marginBottom: '0px' }}>
