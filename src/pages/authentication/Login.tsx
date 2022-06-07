@@ -69,7 +69,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   return (
     <>
       <div id="page">
-        <div className="page-content">
+        <div className="page-content" style={{ direction: 'rtl' }}>
           <div
             // onClick={(e) => this.loginWithoutUsername(e)}
             className="page-title page-title-small pointer"
@@ -168,23 +168,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   {t('TermsAndConditions')}
                 </div>
               </Form>
-              <div className="text-center mb-3" style={{ direction: 'ltr', marginTop: '30px' }}>
-                <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-facebook pointer">
-                  <i className="fab fa-facebook-f" />
-                </div>
-                <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-twitter pointer">
-                  <i className="fab fa-twitter" />
-                </div>
-                <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-phone pointer">
-                  <i className="fa fa-phone" />
-                </div>
-                <div data-menu="menu-share" className="icon icon-xs rounded-sm mr-1 shadow-l bg-red2-dark pointer">
-                  <i className="fa fa-share-alt" />
-                </div>
-                <div className="back-to-top icon icon-xs rounded-sm shadow-l bg-highlight color-white pointer">
-                  <i className="fa fa-arrow-up" />
-                </div>
-              </div>
             </div>
           </div>
 
@@ -194,12 +177,12 @@ const Login: FunctionComponent<IPageProps> = (props) => {
         {/* <RegisterModal
           registerModalVisible={this.state.registerModalVisible}
           hideRegisterModal={(e) => this.hideRegisterModal(e)}
-        />
-        <ForgetPasswordModal
+        /> */}
+        {/* <ForgetPasswordModal
           forgetPasswordModalVisible={this.state.forgetPasswordModalVisible}
           showEnterCodeModal={(e) => this.showEnterCodeModal(e)}
-        />
-        <EnterCodeModal
+        /> */}
+        {/* <EnterCodeModal
           enterCodeModalVisible={this.state.enterCodeModalVisible}
           mobileNumber={this.state.mobileNumber}
           editMobileNo={(e) => this.editMobileNo(e)}
