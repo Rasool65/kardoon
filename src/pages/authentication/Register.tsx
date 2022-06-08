@@ -21,6 +21,7 @@ const Register: FunctionComponent<IModalModel> = ({ showModal }) => {
   const httpRequest = useHttpRequest();
 
   const {
+    register,
     control,
     setError,
     handleSubmit,
@@ -28,6 +29,7 @@ const Register: FunctionComponent<IModalModel> = ({ showModal }) => {
   } = useForm<IRegisterModel>({ mode: 'onChange', resolver: yupResolver(RegisterModelSchema) });
 
   const onSubmit = (data: IRegisterModel) => {
+    debugger;
     setIsLoading(true);
     const body = {
       firstName: data.firstName,
@@ -96,69 +98,38 @@ const Register: FunctionComponent<IModalModel> = ({ showModal }) => {
               >
                 <Col style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
                   <div className="form-check icon-check">
-                    {/* <input
+                    <input
+                      {...register('gender', { required: true })}
                       className="form-check-input"
                       type="radio"
-                      name="inlineRadioOptions"
-                      checked
-                      id="radio1"
-                    /> */}
-                    <label className="form-check-label" htmlFor="radio1">
+                      name="gender"
+                      value="1"
+                      id="radio2"
+                    />
+                    <label className="form-check-label" htmlFor="radio2">
                       {t('Male')}
                     </label>
                     <i className="icon-check-1 far fa-circle color-gray-dark font-16" />
                     <i className="icon-check-2 far fa-check-circle font-16 color-highlight" />
+                    <FormFeedback>{errors.gender?.message}</FormFeedback>
                   </div>
                 </Col>
                 <Col style={{ textAlign: 'right', padding: '0 2px 0 12px' }}>
                   <div className="form-check icon-check">
-                    <Controller
-                      render={({ field }) => (
-                        <FormGroup aria-label="gender" {...field} name="gender1">
-                          <FormGroup value="female" control={<input />} label="Female" />
-                          <FormGroup value="male" control={<input />} label="Male" />
-                        </FormGroup>
-                      )}
-                      rules={{ required: true }}
-                      name="gender"
-                      control={control}
-                    />
-                    <FormFeedback>{errors.gender?.message}</FormFeedback>
-                    {/* <Controller
-                      name="gender"
-                      control={control}
-                      render={({ field: { onChange, value } }) => (
-                        <>
-                         
-                          <Input
-                          id="form1a"
-                          onFocus={(e) => isTypingToggle(e, 1, !inputs[1].it)}
-                          style={{ backgroundPosition: 'left' }}
-                          className="form-control validate-name"
-                          autoFocus
-                          type="text"
-                          placeholder={t('EnterMobile')}
-                          autoComplete="off"
-                          invalid={errors.username && true}
-                          {...field}
-                        />
-
-                          <label className="form-check-label" htmlFor="radio2">
-                            {t('Female')}
-                          </label>
-                          <i className="icon-check-1 far fa-circle color-gray-dark font-16" />
-                          <i className="icon-check-2 far fa-check-circle font-16 color-highlight" />
-
-                          <FormFeedback>{errors.gender?.message}</FormFeedback>
-                        </>
-                      )}
-                    /> */}
-                    {/* <input
+                    <input
+                      {...register('gender', { required: true })}
                       className="form-check-input"
                       type="radio"
-                      name="inlineRadioOptions"
-                      id="radio2"
-                    /> */}
+                      name="gender"
+                      value="0"
+                      id="radio1"
+                    />
+                    <label className="form-check-label" htmlFor="radio1">
+                      {t('Female')}
+                    </label>
+                    <i className="icon-check-1 far fa-circle color-gray-dark font-16" />
+                    <i className="icon-check-2 far fa-check-circle font-16 color-highlight" />
+                    <FormFeedback>{errors.gender?.message}</FormFeedback>
                   </div>
                 </Col>
               </Row>
