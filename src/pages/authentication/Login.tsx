@@ -16,15 +16,15 @@ import { URL_HOME, URL_MAIN } from './../../configs/urls';
 import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
 
 import FooterCard from '@src/layout/FooterCard';
-import RegisterModal from './RegisterModal';
-import axios from 'axios';
+import Register from './Register';
+import ForgetPassword from './ForgetPassword';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
   const httpRequest = useHttpRequest();
   const tokenAuthentication = useTokenAuthentication();
   const dispatch = useDispatch();
-  const { i18n, t }: any = useTranslation();
+  const { t }: any = useTranslation();
 
   useEffect(() => {
     document.title = props.title;
@@ -32,6 +32,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   const [inputs, setInputs] = useState([{ it: false }, { it: false }]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [registerModalVisible, setRegisterModalVisible] = useState<boolean>(false);
+  const [forgetPasswordModalVisible, setForgetPasswordModalVisible] = useState<boolean>(false);
 
   const {
     control,
@@ -107,6 +108,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                         <i className="fa fa-user" />
                         <Input
                           id="form1a"
+                          onFocus={(e) => isTypingToggle(e, 1, !inputs[1].it)}
                           style={{ backgroundPosition: 'left' }}
                           className="form-control validate-name"
                           autoFocus
@@ -116,6 +118,9 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                           invalid={errors.username && true}
                           {...field}
                         />
+                        {/* <label htmlFor="form4" className="color-highlight">
+                          {t('UserName')}
+                        </label> */}
                         <FormFeedback>{errors.username?.message}</FormFeedback>
                       </>
                     )}
@@ -155,7 +160,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   style={{ width: '100%', marginTop: '30px' }}
                   type="submit"
                   className="btn btn-m mt-4 mb-0 btn-full bg-blue-dark rounded-sm text-uppercase font-900"
-                  // disabled={isLoading}
                 >
                   {isLoading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : t('Login')}
                 </Button>
@@ -170,9 +174,9 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                 <div
                   className="color-theme pointer"
                   style={{ marginTop: '5px', maxWidth: 'fit-content' }}
-                  // onClick={(e) => this.showForgetPasswordModal(e)}
+                  onClick={() => setForgetPasswordModalVisible(!forgetPasswordModalVisible)}
                 >
-                  {t('ForgotPassword')}
+                  {t('ForgetPassword')}
                 </div>
                 <div className="divider mt-4 mb-3" />
                 <div className="footer-title pointer" style={{ fontSize: '14px' }}>
@@ -185,11 +189,8 @@ const Login: FunctionComponent<IPageProps> = (props) => {
           <FooterCard />
         </div>
 
-        <RegisterModal showModal={registerModalVisible} />
-        {/* <ForgetPasswordModal
-          forgetPasswordModalVisible={this.state.forgetPasswordModalVisible}
-          showEnterCodeModal={(e) => this.showEnterCodeModal(e)}
-        /> */}
+        <Register showModal={registerModalVisible} />
+        <ForgetPassword showModal={forgetPasswordModalVisible} />
         {/* <EnterCodeModal
           enterCodeModalVisible={this.state.enterCodeModalVisible}
           mobileNumber={this.state.mobileNumber}
@@ -197,20 +198,13 @@ const Login: FunctionComponent<IPageProps> = (props) => {
           resend={(e) => this.resend(e)}
         /> */}
       </div>
-      <div className={registerModalVisible ? 'menu-hider menu-active' : ''} />
-      {/* <div
-          onClick={
-            this.state.forgetPasswordModalVisible
-              ? (e) => this.hideForgetPasswordModal(e)
-              : this.state.registerModalVisible
-              ? (e) => this.hideRegisterModal(e)
-              : this.state.enterCodeModalVisible
-              ? (e) => this.hideEnterCodeModal(e)
-              : null
-          }
-          className={this.state.viewBgVisible ? 'menu-hider menu-active' : ''}
-        />
-      </div> */}
+      <div
+        onClick={() => {
+          setForgetPasswordModalVisible(false);
+          setRegisterModalVisible(false);
+        }}
+        className={registerModalVisible || forgetPasswordModalVisible ? 'menu-hider menu-active' : ''}
+      />
     </>
   );
 };
