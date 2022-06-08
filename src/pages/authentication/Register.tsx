@@ -4,7 +4,7 @@ import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IRegisterModel, RegisterModelSchema } from '@src/models/input/authentication/IRegisterModel';
 import { IRegisterResultModel } from '@src/models/output/authentication/IRegisterResultModel';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import React, { FunctionComponent, useMemo, useState } from 'react';
+import { FunctionComponent, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Container, Form, FormFeedback, FormGroup, Input, Row } from 'reactstrap';
@@ -29,7 +29,6 @@ const Register: FunctionComponent<IModalModel> = ({ showModal }) => {
   } = useForm<IRegisterModel>({ mode: 'onChange', resolver: yupResolver(RegisterModelSchema) });
 
   const onSubmit = (data: IRegisterModel) => {
-    debugger;
     setIsLoading(true);
     const body = {
       firstName: data.firstName,
