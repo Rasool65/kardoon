@@ -1,5 +1,7 @@
 export interface IModalModel {
-  showModal: boolean;
+  showRegisterModal?: boolean;
+  showForgetPasswordModal?: boolean;
+  showEnterCodeModal?: boolean;
   mobileNumber?: string;
   editMobileNo?: any;
   resend?: any;

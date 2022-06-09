@@ -1,1 +1,3 @@
-export interface IForgetPasswordResultModel {}
+export interface IForgetPasswordResultModel {
+  mobileNumber?: string;
+}

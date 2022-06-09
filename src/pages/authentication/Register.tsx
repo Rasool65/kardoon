@@ -7,10 +7,10 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import { FunctionComponent, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Container, Form, FormFeedback, FormGroup, Input, Row } from 'reactstrap';
+import { Button, Col, Container, Form, FormFeedback, FormGroup, Input, Row, Spinner } from 'reactstrap';
 import { IModalModel } from './ModalModel';
 
-const Register: FunctionComponent<IModalModel> = ({ showModal }) => {
+const Register: FunctionComponent<IModalModel> = ({ showRegisterModal }) => {
   const { t }: any = useTranslation();
   const [input, setInput] = useState<any>({
     mobile: false,
@@ -36,7 +36,6 @@ const Register: FunctionComponent<IModalModel> = ({ showModal }) => {
       mobile: data.mobile,
       gender: data.gender,
     };
-    debugger;
     if (data && !isLoading) {
       httpRequest
         .postRequest<IOutputResult<IRegisterResultModel>>(APIURL_REGISTER, body)
@@ -50,7 +49,7 @@ const Register: FunctionComponent<IModalModel> = ({ showModal }) => {
   return (
     <>
       <div
-        className={`menu menu-box-bottom menu-box-detached rounded-m ${showModal ? 'menu-active' : ''}`}
+        className={`menu menu-box-bottom menu-box-detached rounded-m ${showRegisterModal ? 'menu-active' : ''}`}
         data-menu-height="485"
         style={{ display: 'inherit', height: 'auto', direction: 'rtl' }}
         data-menu-effect="menu-over"
@@ -197,7 +196,7 @@ const Register: FunctionComponent<IModalModel> = ({ showModal }) => {
               type="submit"
               className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0"
             >
-              {t('Signup')}
+              {isLoading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : t('Signup')}
             </Button>
           </div>
         </Form>

@@ -9,7 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import { APIURL_LOGIN, APIURL_TOKEN } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_IDP_TOKEN, APIURL_LOGIN } from '@src/configs/apiConfig/apiUrls';
 import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
 import { handleLogin } from '@src/redux/reducers/authenticationReducer';
 import { URL_HOME, URL_MAIN } from './../../configs/urls';
@@ -33,6 +33,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [registerModalVisible, setRegisterModalVisible] = useState<boolean>(false);
   const [forgetPasswordModalVisible, setForgetPasswordModalVisible] = useState<boolean>(false);
+  const [enterCodeModalVisible, setEnterCodeModalVisible] = useState<boolean>(false);
 
   const {
     control,
@@ -54,7 +55,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
     debugger;
     if (data && !isLoading) {
       httpRequest
-        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_TOKEN, body)
+        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_IDP_TOKEN, body)
         .then((result) => {
           dispatch(
             handleLogin({
@@ -185,12 +186,11 @@ const Login: FunctionComponent<IPageProps> = (props) => {
               </div>
             </div>
           </Form>
-
           <FooterCard />
         </div>
 
-        <Register showModal={registerModalVisible} />
-        <ForgetPassword showModal={forgetPasswordModalVisible} />
+        <Register showRegisterModal={registerModalVisible} />
+        <ForgetPassword showForgetPasswordModal={forgetPasswordModalVisible} showEnterCodeModal={enterCodeModalVisible} />
         {/* <EnterCodeModal
           enterCodeModalVisible={this.state.enterCodeModalVisible}
           mobileNumber={this.state.mobileNumber}
@@ -200,8 +200,10 @@ const Login: FunctionComponent<IPageProps> = (props) => {
       </div>
       <div
         onClick={() => {
+          debugger;
           setForgetPasswordModalVisible(false);
           setRegisterModalVisible(false);
+          setEnterCodeModalVisible(false);
         }}
         className={registerModalVisible || forgetPasswordModalVisible ? 'menu-hider menu-active' : ''}
       />

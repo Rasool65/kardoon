@@ -25,7 +25,7 @@ export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
 
   if (dataType == RequestDataType.json) {
     headers = {
-      Accept: 'application/json',
+      Accept: 'application/json , */*',
       'Content-Type': 'application/json',
     };
   } else if (dataType == RequestDataType.formData) {
@@ -40,7 +40,6 @@ export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
   }
 
   if (token && token != '') {
-    //todo decode Token
     headers['Authorization'] = `${jwtConfig.tokenType} ${token}`.trim();
   }
 

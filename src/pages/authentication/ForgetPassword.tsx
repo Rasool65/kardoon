@@ -2,20 +2,21 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React, { FunctionComponent, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Form, FormFeedback, Input } from 'reactstrap';
+import { Button, Form, FormFeedback, Input } from 'reactstrap';
 import EnterCode from './EnterCode';
 import { IModalModel } from './ModalModel';
 import { ForgetPasswordModelSchema, IForgetPasswordModel } from './../../models/input/authentication/IForgetPasswordModel';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IForgetPasswordResultModel } from '@src/models/output/authentication/IForgetPasswordResultModel';
-import useHttpRequest from '@src/hooks/useHttpRequest';
+import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
+import { APIURL_SEND_PASSWORD } from '@src/configs/apiConfig/apiUrls';
 
-const ForgetPassword: FunctionComponent<IModalModel> = ({ showModal }) => {
+const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModal, showEnterCodeModal }) => {
   const { t }: any = useTranslation();
-  const httpRequest = useHttpRequest();
+  const httpRequest = useHttpRequest(RequestDataType.json);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [inputs, setInputs] = useState([{ it: false }, { it: false }, { it: false }, { it: false }, { it: false }]);
   const [show, setShow] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [mobileNumber, setMobileNumber] = useState<string>();
   const [input, setInput] = useState<any>({
     mobile: false,
@@ -27,17 +28,21 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showModal }) => {
     formState: { errors },
   } = useForm<IForgetPasswordModel>({ mode: 'onChange', resolver: yupResolver(ForgetPasswordModelSchema) });
 
-  //todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
+  // todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
 
   const onSubmit = (data: IForgetPasswordModel) => {
     setIsLoading(true);
-
-    debugger;
+    setShow(true);
+    setMobileNumber(data.mobileNumber);
+    const body = {
+      mobileNumber: data.mobileNumber,
+    };
     if (data && !isLoading) {
       httpRequest
-        .postRequest<IOutputResult<IForgetPasswordResultModel>>('APIURL_FORGET_PASSWORD', data.mobileNumber)
+        .postRequest<IOutputResult<IForgetPasswordResultModel>>(APIURL_SEND_PASSWORD, body)
         .then((result) => {
           debugger;
+          setShow(true);
           let a = result.data.message;
         })
         .finally(() => setIsLoading(false));
@@ -46,7 +51,7 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showModal }) => {
   return (
     <>
       <div
-        className={`menu menu-box-bottom menu-box-detached rounded-m ${showModal ? 'menu-active' : ''}`}
+        className={`menu menu-box-bottom menu-box-detached rounded-m ${showForgetPasswordModal ? 'menu-active' : ''}`}
         data-menu-height="220"
         style={{ display: 'inherit' }}
         data-menu-effect="menu-over"
@@ -85,21 +90,21 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showModal }) => {
                 )}
               />
             </div>
-            <div
-              onClick={(e) => setShow(!show)}
+            <Button
+              type="submit"
               style={{ marginTop: '15px' }}
               className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0"
             >
               {t('ForgetPassword')}
-            </div>
+            </Button>
           </div>
         </Form>
-        <EnterCode showModal={show} mobileNumber={mobileNumber} />
+        <EnterCode showEnterCodeModal={show} mobileNumber={mobileNumber} />
       </div>
       {/* <div
         onClick={() => {
-          setForgetPasswordModalVisible(false);
-          setRegisterModalVisible(false);
+          debugger;
+          setShow(false);
         }}
         className={registerModalVisible || forgetPasswordModalVisible ? 'menu-hider menu-active' : ''}
       /> */}
