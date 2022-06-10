@@ -27,7 +27,7 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModa
     formState: { errors },
   } = useForm<IForgetPasswordModel>({ mode: 'onChange', resolver: yupResolver(ForgetPasswordModelSchema) });
 
-  // todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
+  const handleEditmobileNo = () => setShow(false);;
 
   const onSubmit = (data: IForgetPasswordModel) => {
     setLoading(true);
@@ -98,7 +98,7 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModa
             </Button>
           </div>
         </Form>
-        <EnterCode showEnterCodeModal={show} mobileNumber={mobileNumber} />
+        <EnterCode showEnterCodeModal={show} mobileNumber={mobileNumber} handleEditmobileNo={handleEditmobileNo}/>
       </div>
       {/* <div
         onClick={() => {

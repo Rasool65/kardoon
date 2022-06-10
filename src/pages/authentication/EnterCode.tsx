@@ -9,7 +9,7 @@ import { Button, Col, Container, Row } from 'reactstrap';
 import { IModalModel } from './ModalModel';
 import PinField from 'react-pin-field';
 
-const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileNumber, editMobileNo }) => {
+const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileNumber, handleEditmobileNo }) => {
   const { t }: any = useTranslation();
   const Ref1 = React.useRef(null);
   const [timer, setTimer] = useState<string>('00:00');
@@ -54,7 +54,6 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
   };
 
   const clearTimer = (e: any) => {
-    debugger;
     setTimer('00:59');
     if (Ref1.current) clearInterval(Ref1.current);
     const id = setInterval(() => {
@@ -89,14 +88,20 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
             <PinField
               className="pin-field"
               validate={/^[0-9]$/}
-              //  onComplete={(e) => onPinFieldCompleted(e)}
+              //*  onComplete={(e) => onPinFieldCompleted(e)}
             />
           </div>
           <div className="divider" style={{ marginTop: '10px' }} />
           <Button onClick={Resent} className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0">
             {loading ? `${t('PleaseWait')}(${timer})` : t('Resent')}
           </Button>
-          <div className="color-theme pointer" style={{ marginTop: '15px' }} onClick={() => editMobileNo}>
+          <div
+            className="color-theme pointer"
+            style={{ marginTop: '15px' }}
+            onClick={
+              handleEditmobileNo
+            }
+          >
             {t('EditMobileNumber')}
           </div>
         </div>

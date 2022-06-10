@@ -5,6 +5,6 @@ export interface IModalModel {
   showForgetPasswordModal?: boolean;
   showEnterCodeModal?: boolean;
   mobileNumber?: string;
-  editMobileNo?: MouseEventHandler<HTMLButtonElement>;
+  handleEditmobileNo?: any;
   resend?: any;
 }
