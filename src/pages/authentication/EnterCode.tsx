@@ -13,18 +13,17 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
   const { t }: any = useTranslation();
   const Ref1 = React.useRef(null);
   const [timer, setTimer] = useState<string>('00:00');
-  const [resendVisible, setResendVisible] = useState<boolean>(false);
   const httpRequest = useHttpRequest();
   const [loading, setLoading] = useState<boolean>(false);
 
   const Resent = () => {
     debugger;
-    if (timer == '00:00') {
-      setLoading(true);
+    if (!loading) {
       httpRequest
         .postRequest<IOutputResult<IForgetPasswordResultModel>>(APIURL_SEND_PASSWORD, mobileNumber)
         .then((result) => {
           debugger;
+          setLoading(true);
           let a = result.data.message;
           clearTimer(getDeadTime());
         })
@@ -48,7 +47,8 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
     if (total >= 0) {
       setTimer((minutes > 9 ? minutes : '0' + minutes) + ':' + (seconds > 9 ? seconds : '0' + seconds));
     } else {
-      setResendVisible(true);
+      debugger;
+      setLoading(false);
       if (Ref1.current) clearInterval(Ref1.current);
     }
   };
@@ -95,13 +95,7 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
           <Button onClick={Resent} className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0">
             {loading ? `${t('PleaseWait')}(${timer})` : t('Resent')}
           </Button>
-          <div
-            className="color-theme pointer"
-            style={{ marginTop: '15px' }}
-            onClick={
-              handleEditmobileNo
-            }
-          >
+          <div className="color-theme pointer" style={{ marginTop: '15px' }} onClick={handleEditmobileNo}>
             {t('EditMobileNumber')}
           </div>
         </div>
