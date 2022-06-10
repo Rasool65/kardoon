@@ -30,7 +30,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
     document.title = props.title;
   }, [props.title]);
   const [inputs, setInputs] = useState([{ it: false }, { it: false }]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [registerModalVisible, setRegisterModalVisible] = useState<boolean>(false);
   const [forgetPasswordModalVisible, setForgetPasswordModalVisible] = useState<boolean>(false);
   const [enterCodeModalVisible, setEnterCodeModalVisible] = useState<boolean>(false);
@@ -45,7 +45,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   //todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
 
   const onSubmit = (data: ILoginModel) => {
-    setIsLoading(true);
+    setLoading(true);
     const body = {
       ClientId: 'Kardoon_Technician',
       ClientSecret: 'p@ssword@123',
@@ -53,7 +53,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
       Password: data.password,
     };
     debugger;
-    if (data && !isLoading) {
+    if (data && !loading) {
       httpRequest
         .postRequest<IOutputResult<ILoginResultModel>>(APIURL_IDP_TOKEN, body)
         .then((result) => {
@@ -65,7 +65,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
             })
           );
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => setLoading(false));
     }
   };
   function isTypingToggle(e: any, index: any, isFirst: any) {
@@ -162,7 +162,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   type="submit"
                   className="btn btn-m mt-4 mb-0 btn-full bg-blue-dark rounded-sm text-uppercase font-900"
                 >
-                  {isLoading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : t('Login')}
+                  {loading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : t('Login')}
                 </Button>
 
                 <div
@@ -191,6 +191,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
 
         <Register showRegisterModal={registerModalVisible} />
         <ForgetPassword showForgetPasswordModal={forgetPasswordModalVisible} showEnterCodeModal={enterCodeModalVisible} />
+        
         {/* <EnterCodeModal
           enterCodeModalVisible={this.state.enterCodeModalVisible}
           mobileNumber={this.state.mobileNumber}
@@ -200,7 +201,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
       </div>
       <div
         onClick={() => {
-          debugger;
           setForgetPasswordModalVisible(false);
           setRegisterModalVisible(false);
           setEnterCodeModalVisible(false);

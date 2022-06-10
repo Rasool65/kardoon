@@ -32,6 +32,9 @@
   "Required":"اجباری",
   "NoRequired":"اختیاری",
   "LastNameRequired":"نام خانوادگی اجباریست",
-  "FirstNameRequired":"نام اجباریست"
+  "FirstNameRequired":"نام اجباریست",
+  "Resent":"ارسال مجدد",
+  "PleaseWait":"لطفأ صبر کنید ...",
+  "EditMobileNumber":"ویرایش شماره موبایل"
 
 }

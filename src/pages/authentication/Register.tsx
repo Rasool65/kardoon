@@ -17,7 +17,7 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal }) => {
     firstName: false,
     lastName: false,
   });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const httpRequest = useHttpRequest();
 
   const {
@@ -29,21 +29,21 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal }) => {
   } = useForm<IRegisterModel>({ mode: 'onChange', resolver: yupResolver(RegisterModelSchema) });
 
   const onSubmit = (data: IRegisterModel) => {
-    setIsLoading(true);
+    setLoading(true);
     const body = {
       firstName: data.firstName,
       lastName: data.lastName,
       mobile: data.mobile,
       gender: data.gender,
     };
-    if (data && !isLoading) {
+    if (data && !loading) {
       httpRequest
         .postRequest<IOutputResult<IRegisterResultModel>>(APIURL_REGISTER, body)
         .then((result) => {
           debugger;
           let a = result.data.message;
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => setLoading(false));
     }
   };
   return (
@@ -196,7 +196,7 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal }) => {
               type="submit"
               className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0"
             >
-              {isLoading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : t('Signup')}
+              {loading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : t('Signup')}
             </Button>
           </div>
         </Form>

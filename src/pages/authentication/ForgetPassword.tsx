@@ -11,11 +11,10 @@ import { IForgetPasswordResultModel } from '@src/models/output/authentication/IF
 import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
 import { APIURL_SEND_PASSWORD } from '@src/configs/apiConfig/apiUrls';
 
-const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModal, showEnterCodeModal }) => {
+const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModal }) => {
   const { t }: any = useTranslation();
   const httpRequest = useHttpRequest(RequestDataType.json);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [inputs, setInputs] = useState([{ it: false }, { it: false }, { it: false }, { it: false }, { it: false }]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
   const [mobileNumber, setMobileNumber] = useState<string>();
   const [input, setInput] = useState<any>({
@@ -31,13 +30,13 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModa
   // todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
 
   const onSubmit = (data: IForgetPasswordModel) => {
-    setIsLoading(true);
+    setLoading(true);
     setShow(true);
     setMobileNumber(data.mobileNumber);
     const body = {
       mobileNumber: data.mobileNumber,
     };
-    if (data && !isLoading) {
+    if (data && !loading) {
       httpRequest
         .postRequest<IOutputResult<IForgetPasswordResultModel>>(APIURL_SEND_PASSWORD, body)
         .then((result) => {
@@ -45,7 +44,7 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModa
           setShow(true);
           let a = result.data.message;
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => setLoading(false));
     }
   };
   return (

@@ -1,8 +1,10 @@
+import React, { MouseEventHandler } from "react";
+
 export interface IModalModel {
   showRegisterModal?: boolean;
   showForgetPasswordModal?: boolean;
   showEnterCodeModal?: boolean;
   mobileNumber?: string;
-  editMobileNo?: any;
+  editMobileNo?: MouseEventHandler<HTMLButtonElement>;
   resend?: any;
 }
