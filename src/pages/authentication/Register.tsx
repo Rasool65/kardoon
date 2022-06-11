@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { APIURL_REGISTER } from '@src/configs/apiConfig/apiUrls';
 import useHttpRequest from '@src/hooks/useHttpRequest';
+import { useToast } from '@src/hooks/useToast';
 import { IRegisterModel, RegisterModelSchema } from '@src/models/input/authentication/IRegisterModel';
 import { IRegisterResultModel } from '@src/models/output/authentication/IRegisterResultModel';
 import { IOutputResult } from '@src/models/output/IOutputResult';
@@ -12,6 +13,7 @@ import { IModalModel } from './ModalModel';
 
 const Register: FunctionComponent<IModalModel> = ({ showRegisterModal }) => {
   const { t }: any = useTranslation();
+  const toast = useToast();
   const [input, setInput] = useState<any>({
     mobile: false,
     firstName: false,
@@ -40,8 +42,7 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal }) => {
       httpRequest
         .postRequest<IOutputResult<IRegisterResultModel>>(APIURL_REGISTER, body)
         .then((result) => {
-          debugger;
-          let a = result.data.message;
+          toast.showInfo(result.data.message);
         })
         .finally(() => setLoading(false));
     }

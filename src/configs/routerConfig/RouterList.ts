@@ -1,4 +1,4 @@
-import { URL_MAIN, URL_LOGIN } from './../urls';
+import { URL_MAIN, URL_LOGIN, URL_USER_PROFILE } from './../urls';
 import IRoute from './IRoute';
 import RouteType from './RouteType';
 import Home from '../../pages/home/Home';
@@ -10,6 +10,7 @@ import Home from '../../pages/home/Home';
 // import Request from '@src/pages/requisition';
 import Login from './../../pages/authentication/Login';
 import Home2 from '@src/pages/home/Home2';
+import Profile from '@src/pages/profile';
 
 const routes: IRoute[] = [
   {
@@ -34,6 +35,14 @@ const routes: IRoute[] = [
     type: RouteType.public,
     props: {
       title: 'home 2',
+    },
+  },
+  {
+    path: URL_USER_PROFILE,
+    component: Profile,
+    type: RouteType.private,
+    props: {
+      title: 'حساب کاربری',
     },
   },
 ];

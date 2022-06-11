@@ -12,9 +12,9 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import { APIURL_IDP_TOKEN, APIURL_LOGIN } from '@src/configs/apiConfig/apiUrls';
 import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
 import { handleLogin } from '@src/redux/reducers/authenticationReducer';
-import { URL_HOME, URL_MAIN } from './../../configs/urls';
+import { URL_HOME, URL_MAIN, URL_USER_PROFILE } from './../../configs/urls';
 import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
-
+import { useToast } from '@src/hooks/useToast';
 import FooterCard from '@src/layout/FooterCard';
 import Register from './Register';
 import ForgetPassword from './ForgetPassword';
@@ -25,6 +25,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   const tokenAuthentication = useTokenAuthentication();
   const dispatch = useDispatch();
   const { t }: any = useTranslation();
+  const toast = useToast();
 
   useEffect(() => {
     document.title = props.title;
@@ -45,6 +46,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   //todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
 
   const onSubmit = (data: ILoginModel) => {
+    debugger;
     setLoading(true);
     const body = {
       ClientId: 'Kardoon_Technician',
@@ -57,26 +59,22 @@ const Login: FunctionComponent<IPageProps> = (props) => {
       httpRequest
         .postRequest<IOutputResult<ILoginResultModel>>(APIURL_IDP_TOKEN, body)
         .then((result) => {
-          dispatch(
-            handleLogin({
-              token: result.data.data.access_token,
-              refreshToken: result.data.data.refresh_token,
-              username: data.username,
-            })
-          );
+          dispatch(handleLogin(result));
+          // dispatch(
+          //   handleLogin({
+          //     token: result.data.data.access_token,
+          //     refreshToken: result.data.data.refresh_token,
+          //     username: data.username,
+          //   })
+          // );
+          navigate(URL_USER_PROFILE);
+          toast.showSuccess(result.data.message);
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
-  function isTypingToggle(e: any, index: any, isFirst: any) {
-    if (e.target.value.length === 0 || (e.target.value.length > 0 && isFirst)) {
-      let inputsTemp = [...inputs];
-      let temp_element = { ...inputsTemp[index] };
-      temp_element.it = !temp_element.it;
-      inputsTemp[index] = temp_element;
-      setInputs(inputsTemp);
-    }
-  }
   return (
     <>
       <div id="page">
@@ -109,7 +107,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                         <i className="fa fa-user" />
                         <Input
                           id="form1a"
-                          onFocus={(e) => isTypingToggle(e, 1, !inputs[1].it)}
                           style={{ backgroundPosition: 'left' }}
                           className="form-control validate-name"
                           autoFocus
@@ -127,8 +124,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                     )}
                   />
                   <i className="fa fa-times disabled invalid color-red-dark"></i>
-                  <i className="fa fa-check disabled valid color-green-dark"></i>
-                  <em>(اجباری)</em>
+                  <i className="fa fa-check disabled valid color-green-dark"></i> <em>({t('Required')})</em>
                 </div>
                 <div className="input-style no-borders has-icon validate-field mb-4">
                   {/* <input type="password" className="form-control validate-password" id="form3a" placeholder="رمز عبور" />
@@ -155,7 +151,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   />
                   <i className="fa fa-times disabled invalid color-red-dark"></i>
                   <i className="fa fa-check disabled valid color-green-dark"></i>
-                  <em>(اجباری)</em>
+                  <em>({t('Required')})</em>
                 </div>
                 <Button
                   style={{ width: '100%', marginTop: '30px' }}
@@ -191,7 +187,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
 
         <Register showRegisterModal={registerModalVisible} />
         <ForgetPassword showForgetPasswordModal={forgetPasswordModalVisible} showEnterCodeModal={enterCodeModalVisible} />
-        
+
         {/* <EnterCodeModal
           enterCodeModalVisible={this.state.enterCodeModalVisible}
           mobileNumber={this.state.mobileNumber}

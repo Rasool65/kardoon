@@ -25,7 +25,7 @@ export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
 
   if (dataType == RequestDataType.json) {
     headers = {
-      Accept: 'application/json , */*',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     };
   } else if (dataType == RequestDataType.formData) {

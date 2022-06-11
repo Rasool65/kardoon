@@ -35,6 +35,16 @@
   "FirstNameRequired":"نام اجباریست",
   "Resent":"ارسال مجدد",
   "PleaseWait":"لطفأ صبر کنید ...",
-  "EditMobileNumber":"ویرایش شماره موبایل"
+  "EditMobileNumber":"ویرایش شماره موبایل",
+  "Gender":"جنسیت",
+  "EnterEmail":"لطفأ ایمیل خود را وارد نمایید",
+  "Email":"پست الکترونیکی",
+  "SaveChanges":"ذخیره تغییرات",
+  "EmailRequired":"پست الکترونیکی الزامیست",
+  "EmailNotMatch":"پست الکترونیکی نامعتبر می باشد",
+  "PublicEmail":"نمایش ایمیل ",
+  "Public":"عمومی",
+  "Private":"خصوصی",
+  "BirthDate":"تاریخ تولد"
 
 }

@@ -3,28 +3,28 @@ import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IForgetPasswordResultModel } from '@src/models/output/authentication/IForgetPasswordResultModel';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { GeneralHelpers } from '@src/utils/GeneralHelpers';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Container, Row } from 'reactstrap';
 import { IModalModel } from './ModalModel';
 import PinField from 'react-pin-field';
+import { useToast } from '@src/hooks/useToast';
 
 const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileNumber, handleEditmobileNo }) => {
+  const toast = useToast();
   const { t }: any = useTranslation();
-  const Ref1 = React.useRef(null);
+  const Ref1 = useRef(null);
   const [timer, setTimer] = useState<string>('00:00');
   const httpRequest = useHttpRequest();
   const [loading, setLoading] = useState<boolean>(false);
 
   const Resent = () => {
-    debugger;
     if (!loading) {
       httpRequest
         .postRequest<IOutputResult<IForgetPasswordResultModel>>(APIURL_SEND_PASSWORD, mobileNumber)
         .then((result) => {
-          debugger;
           setLoading(true);
-          let a = result.data.message;
+          toast.showSuccess(result.data.message);
           clearTimer(getDeadTime());
         })
         .finally(() => setLoading(false));
@@ -87,8 +87,9 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
           <div style={{ direction: 'ltr', alignSelf: 'center' }}>
             <PinField
               className="pin-field"
+              length={6}
               validate={/^[0-9]$/}
-              //*  onComplete={(e) => onPinFieldCompleted(e)}
+              // todo  onComplete={(e) => onPinFieldCompleted(e)}
             />
           </div>
           <div className="divider" style={{ marginTop: '10px' }} />

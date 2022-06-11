@@ -4,3 +4,4 @@ export const APIURL_IDP_TOKEN = 'https://krdnv07.kardoon.local:8008/TokenProvide
 export const APIURL_GET_COUNTRY_DIVISION = '/CountryDivision/GetCountryDivision';
 export const APIURL_REGISTER = '/Account/RegisterUser';
 export const APIURL_SEND_PASSWORD = '/Account/SendPassword';
+export const APIURL_UPDATE_PROFILE = '/UserManagement/UpdateUserProfile';

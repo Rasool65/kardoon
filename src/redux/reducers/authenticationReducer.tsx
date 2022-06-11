@@ -21,9 +21,10 @@ export const authSlice = createSlice({
   } as IAuthenticationReducerState,
   reducers: {
     handleLogin: (state, action) => {
+      debugger;
       var result = action.payload;
-      tokenAuthentication.saveLoginToken(result.token, result.refreshToken);
-      localStorage.setItem('userData', JSON.stringify(result.username));
+      tokenAuthentication.saveLoginToken(result.data.data.access_token, result.data.data.refresh_token);
+      localStorage.setItem('userData', JSON.stringify(result.data.data.user_name));
       state.userData = result.username;
       state.isAuthenticate = true;
     },

@@ -10,6 +10,7 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IForgetPasswordResultModel } from '@src/models/output/authentication/IForgetPasswordResultModel';
 import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
 import { APIURL_SEND_PASSWORD } from '@src/configs/apiConfig/apiUrls';
+import { useToast } from '@src/hooks/useToast';
 
 const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModal }) => {
   const { t }: any = useTranslation();
@@ -17,6 +18,7 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModa
   const [loading, setLoading] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
   const [mobileNumber, setMobileNumber] = useState<string>();
+  const toast = useToast();
   const [input, setInput] = useState<any>({
     mobile: false,
   });
@@ -27,22 +29,17 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModa
     formState: { errors },
   } = useForm<IForgetPasswordModel>({ mode: 'onChange', resolver: yupResolver(ForgetPasswordModelSchema) });
 
-  const handleEditmobileNo = () => setShow(false);;
+  const handleEditmobileNo = () => setShow(false);
 
   const onSubmit = (data: IForgetPasswordModel) => {
     setLoading(true);
-    setShow(true);
     setMobileNumber(data.mobileNumber);
-    const body = {
-      mobileNumber: data.mobileNumber,
-    };
     if (data && !loading) {
       httpRequest
-        .postRequest<IOutputResult<IForgetPasswordResultModel>>(APIURL_SEND_PASSWORD, body)
+        .postRequest<IOutputResult<IForgetPasswordResultModel>>(APIURL_SEND_PASSWORD, data)
         .then((result) => {
-          debugger;
+          toast.showSuccess(result.data.message);
           setShow(true);
-          let a = result.data.message;
         })
         .finally(() => setLoading(false));
     }
@@ -98,7 +95,7 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModa
             </Button>
           </div>
         </Form>
-        <EnterCode showEnterCodeModal={show} mobileNumber={mobileNumber} handleEditmobileNo={handleEditmobileNo}/>
+        <EnterCode showEnterCodeModal={show} mobileNumber={mobileNumber} handleEditmobileNo={handleEditmobileNo} />
       </div>
       {/* <div
         onClick={() => {
