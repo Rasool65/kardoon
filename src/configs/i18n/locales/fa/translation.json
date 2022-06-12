@@ -45,6 +45,7 @@
   "PublicEmail":"نمایش ایمیل ",
   "Public":"عمومی",
   "Private":"خصوصی",
-  "BirthDate":"تاریخ تولد"
+  "BirthDate":"تاریخ تولد",
+  "BirthDateIsRequired":"تاریخ تولد اجباریست"
 
 }
