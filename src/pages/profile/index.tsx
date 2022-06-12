@@ -1,16 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import Toggle from '@src/components/toggle';
-import { APIURL_REGISTER, APIURL_UPDATE_PROFILE } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_UPDATE_PROFILE } from '@src/configs/apiConfig/apiUrls';
 import IPageProps from '@src/configs/routerConfig/IPageProps';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { useToast } from '@src/hooks/useToast';
 import Footer from '@src/layout/Footer';
 import FooterCard from '@src/layout/FooterCard';
-import { IRegisterModel, RegisterModelSchema } from '@src/models/input/authentication/IRegisterModel';
 import { IUpdateProfileModel, UpdateProfileModelSchema } from '@src/models/input/profile/IUpdateProfileModel';
-import { IRegisterResultModel } from '@src/models/output/authentication/IRegisterResultModel';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import { IUpdateProfileResultModel } from '@src/models/output/profile/IUpdateProfileModel';
+import { IUpdateProfileResultModel } from '@src/models/output/profile/IUpdateProfileResultModel';
 import { FunctionComponent, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -19,8 +16,12 @@ import InputIcon from 'react-multi-date-picker/components/input_icon';
 import DatePicker from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootStateType } from '@src/redux/Store';
 
 const Profile: FunctionComponent<IPageProps> = (props) => {
+  const userData = useSelector((state: RootStateType) => state.authentication.userData);
+  const dispatch = useDispatch();
   const { t }: any = useTranslation();
   const toast = useToast();
   const [input, setInput] = useState<any>({
@@ -44,7 +45,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
   const onSubmit = (data: IUpdateProfileModel) => {
     setLoading(true);
     const body = {
-      userName: data.userName,
+      userName: userData?.userName,
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
@@ -56,6 +57,8 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
       httpRequest
         .postRequest<IOutputResult<IUpdateProfileResultModel>>(APIURL_UPDATE_PROFILE, body)
         .then((result) => {
+          //! update Redux UserData Profile here
+          // dispatch(updateUserData(result.data.data));
           toast.showInfo(result.data.message);
         })
         .finally(() => setLoading(false));
@@ -94,6 +97,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                 <Controller
                   name="firstName"
                   control={control}
+                  defaultValue={userData?.profile.firstName}
                   render={({ field }) => (
                     <>
                       <Input
@@ -108,7 +112,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         {...field}
                       />
                       <label htmlFor="form4" className="color-highlight">
-                        نام
+                        {t('Name')}{' '}
                       </label>
                       <i className={`fa fa-times disabled invalid color-red-dark ${input.firstName ? 'disabled' : ''}`} />
                       <em className={`${input.firstName ? 'disabled' : ''}`}>({t('Required')})</em>
@@ -123,6 +127,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                 <Controller
                   name="lastName"
                   control={control}
+                  defaultValue={userData?.profile.lastName}
                   render={({ field }) => (
                     <>
                       <Input
@@ -150,6 +155,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                 <Controller
                   name="email"
                   control={control}
+                  defaultValue={userData?.profile.email}
                   render={({ field }) => (
                     <>
                       <Input
@@ -178,6 +184,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                 <Controller
                   name="birthDate"
                   control={control}
+                  defaultValue={userData?.profile.birthDate}
                   render={({ field: { onChange, name, value } }) => (
                     <>
                       <DatePicker
@@ -200,6 +207,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         locale={persian_fa}
                         calendarPosition="bottom-right"
                       />
+                      <FormFeedback className="d-block">{errors.birthDate?.message}</FormFeedback>
                     </>
                   )}
                 />
@@ -214,6 +222,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         className="form-check-input"
                         type="radio"
                         name="isPublicEmail"
+                        defaultChecked={userData?.profile.isPublicEmail == true}
                         value="true"
                         id="radio3"
                       />
@@ -232,6 +241,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         className="form-check-input"
                         type="radio"
                         name="isPublicEmail"
+                        defaultChecked={userData?.profile.isPublicEmail == false}
                         value="false"
                         id="radio4"
                       />
@@ -262,6 +272,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         className="form-check-input"
                         type="radio"
                         name="gender"
+                        defaultChecked={userData?.profile.gender == 1}
                         value="1"
                         id="radio2"
                       />
@@ -280,6 +291,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         className="form-check-input"
                         type="radio"
                         name="gender"
+                        defaultChecked={userData?.profile.gender == 0}
                         value="0"
                         id="radio1"
                       />

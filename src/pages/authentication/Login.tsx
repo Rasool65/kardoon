@@ -46,7 +46,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   //todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
 
   const onSubmit = (data: ILoginModel) => {
-    debugger;
     setLoading(true);
     const body = {
       ClientId: 'Kardoon_Technician',
@@ -54,19 +53,15 @@ const Login: FunctionComponent<IPageProps> = (props) => {
       UserName: data.username,
       Password: data.password,
     };
-    debugger;
     if (data && !loading) {
       httpRequest
-        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_IDP_TOKEN, body)
+        .postRequest<IOutputResult<ILoginResultModel>>(
+          APIURL_LOGIN,
+          // 'http://127.0.0.1:2500/login',
+          body
+        )
         .then((result) => {
           dispatch(handleLogin(result));
-          // dispatch(
-          //   handleLogin({
-          //     token: result.data.data.access_token,
-          //     refreshToken: result.data.data.refresh_token,
-          //     username: data.username,
-          //   })
-          // );
           navigate(URL_USER_PROFILE);
           toast.showSuccess(result.data.message);
         })
