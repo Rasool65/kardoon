@@ -18,6 +18,7 @@ import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
+import { reloadUserData } from '@src/redux/reducers/authenticationReducer';
 
 const Profile: FunctionComponent<IPageProps> = (props) => {
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
@@ -57,8 +58,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
       httpRequest
         .postRequest<IOutputResult<IUpdateProfileResultModel>>(APIURL_UPDATE_PROFILE, body)
         .then((result) => {
-          //! update Redux UserData Profile here
-          // dispatch(updateUserData(result.data.data));
+          dispatch(reloadUserData(result));
           toast.showInfo(result.data.message);
         })
         .finally(() => setLoading(false));

@@ -38,8 +38,8 @@ export const authSlice = createSlice({
     },
     reloadUserData: (state, action) => {
       var result = action.payload;
-      localStorage.setItem('userData', JSON.stringify(result.data));
-      state.userData = result.data;
+      localStorage.setItem('userData', JSON.stringify(result.data.data.user));
+      state.userData = result.data.data.user;
     },
   },
 });
