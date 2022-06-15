@@ -5,3 +5,4 @@ export const APIURL_GET_COUNTRY_DIVISION = '/CountryDivision/GetCountryDivision'
 export const APIURL_REGISTER = '/Account/RegisterUser';
 export const APIURL_SEND_PASSWORD = '/Account/SendPassword';
 export const APIURL_UPDATE_PROFILE = '/UserManagement/UpdateUserProfile';
+export const APIURL_GET_SERVICES = '/ServiceType/GetServieTypes';

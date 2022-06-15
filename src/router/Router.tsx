@@ -42,9 +42,9 @@ const Routers: FunctionComponent = () => {
                     <route.component name={route.name} {...route.props} />
                   </PrivateLayout>
                 ) : (
-                  <PublicLayout>
-                    <route.component name={route.name} {...route.props} />
-                  </PublicLayout>
+                  // <PublicLayout>
+                  <route.component name={route.name} {...route.props} />
+                  // </PublicLayout>
                 )
               }
             />

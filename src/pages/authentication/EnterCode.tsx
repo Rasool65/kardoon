@@ -1,14 +1,19 @@
-import { APIURL_SEND_PASSWORD } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_LOGIN, APIURL_SEND_PASSWORD } from '@src/configs/apiConfig/apiUrls';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IForgetPasswordResultModel } from '@src/models/output/authentication/IForgetPasswordResultModel';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { GeneralHelpers } from '@src/utils/GeneralHelpers';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Container, Row } from 'reactstrap';
+import { Button, Col, Container, Row, Spinner } from 'reactstrap';
 import { IModalModel } from './ModalModel';
 import PinField from 'react-pin-field';
 import { useToast } from '@src/hooks/useToast';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { handleLogin } from '@src/redux/reducers/authenticationReducer';
+import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
+import { URL_USER_PROFILE } from '@src/configs/urls';
 
 const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileNumber, handleEditmobileNo }) => {
   const toast = useToast();
@@ -17,7 +22,9 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
   const [timer, setTimer] = useState<string>('00:00');
   const httpRequest = useHttpRequest();
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [pinLoading, setPinLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const Resent = () => {
     if (!loading) {
       httpRequest
@@ -30,6 +37,30 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
         .finally(() => setLoading(false));
     }
   };
+
+  const LoginWithSMS = (e: string) => {
+    debugger;
+    setPinLoading(true);
+    const body = {
+      ClientId: 'Kardoon_Technician',
+      ClientSecret: 'p@ssword@123',
+      UserName: mobileNumber,
+      Password: e,
+    };
+    httpRequest
+      .postRequest<IOutputResult<ILoginResultModel>>(APIURL_LOGIN, body)
+      .then((result) => {
+        debugger;
+        dispatch(handleLogin(result));
+        navigate(URL_USER_PROFILE);
+        toast.showSuccess(result.data.message);
+        setPinLoading(false);
+      })
+      .finally(() => {
+        setPinLoading(false);
+      });
+  };
+
   const getTimeRemaining = (e: any) => {
     const total = Date.parse(e) - Date.parse(new Date().toString());
     const seconds = Math.floor((total / 1000) % 60);
@@ -85,12 +116,11 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
           کد پیامک شده به شماره موبایل {GeneralHelpers.toPersianNumber(mobileNumber?.toString())} را وارد نمایید.
           <div className="divider" style={{ marginTop: '10px' }} />
           <div style={{ direction: 'ltr', alignSelf: 'center' }}>
-            <PinField
-              className="pin-field"
-              length={6}
-              validate={/^[0-9]$/}
-              // todo  onComplete={(e) => onPinFieldCompleted(e)}
-            />
+            {pinLoading ? (
+              <Spinner style={{ width: '1rem', height: '1rem' }} />
+            ) : (
+              <PinField className="pin-field" length={6} validate={/^[0-9]$/} onComplete={(e) => LoginWithSMS(e)} />
+            )}
           </div>
           <div className="divider" style={{ marginTop: '10px' }} />
           <Button onClick={Resent} className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0">

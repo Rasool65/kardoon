@@ -17,7 +17,7 @@ import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
 import { useToast } from '@src/hooks/useToast';
 import FooterCard from '@src/layout/FooterCard';
 import Register from './Register';
-import ForgetPassword from './ForgetPassword';
+import PasswordMessage from './PasswordMessage';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -55,11 +55,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
     };
     if (data && !loading) {
       httpRequest
-        .postRequest<IOutputResult<ILoginResultModel>>(
-          APIURL_LOGIN,
-          // 'http://127.0.0.1:2500/login',
-          body
-        )
+        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_LOGIN, body)
         .then((result) => {
           dispatch(handleLogin(result));
           navigate(URL_USER_PROFILE);
@@ -70,10 +66,14 @@ const Login: FunctionComponent<IPageProps> = (props) => {
         });
     }
   };
+
+  const handleModal = () => {
+    setRegisterModalVisible(!registerModalVisible);
+  };
   return (
     <>
       <div id="page">
-        <div className="page-content" style={{ direction: 'rtl' }}>
+        <div className="page-content">
           <div
             // onClick={(e) => this.loginWithoutUsername(e)}
             className="page-title page-title-small pointer"
@@ -99,7 +99,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                     control={control}
                     render={({ field }) => (
                       <>
-                        <i className="fa fa-user" />
+                        <i className="fa fa-user" style={{ marginTop: '15px', top: '0' }} />
                         <Input
                           id="form1a"
                           style={{ backgroundPosition: 'left' }}
@@ -129,7 +129,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                     control={control}
                     render={({ field }) => (
                       <>
-                        <i className="fa fa-lock" />
+                        <i className="fa fa-lock" style={{ marginTop: '15px', top: '0' }} />
                         <Input
                           className="form-control validate-password"
                           style={{ backgroundPosition: 'left' }}
@@ -168,7 +168,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   style={{ marginTop: '5px', maxWidth: 'fit-content' }}
                   onClick={() => setForgetPasswordModalVisible(!forgetPasswordModalVisible)}
                 >
-                  {t('ForgetPassword')}
+                  {t('LoginWithSMS')}
                 </div>
                 <div className="divider mt-4 mb-3" />
                 <div className="footer-title pointer" style={{ fontSize: '14px' }}>
@@ -180,8 +180,8 @@ const Login: FunctionComponent<IPageProps> = (props) => {
           <FooterCard />
         </div>
 
-        <Register showRegisterModal={registerModalVisible} />
-        <ForgetPassword showForgetPasswordModal={forgetPasswordModalVisible} showEnterCodeModal={enterCodeModalVisible} />
+        <Register showRegisterModal={registerModalVisible} handleRegisterModal={handleModal} />
+        <PasswordMessage showForgetPasswordModal={forgetPasswordModalVisible} showEnterCodeModal={enterCodeModalVisible} />
 
         {/* <EnterCodeModal
           enterCodeModalVisible={this.state.enterCodeModalVisible}

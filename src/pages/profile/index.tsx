@@ -76,15 +76,15 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
               <img
                 className="rounded-circle bg-highlight pointer"
                 width="130"
-                // src={require('../images/avatars/5s.png')}
+                src={require('/public/images/avatars/5s.png')}
                 //   onClick={(e) => this.showSelectAvatarModal(e)}
                 style={{ border: '2px solid #FFFFFF', padding: '8px' }}
                 alt="menu-logo"
               />
               <img
-                src="images/forTest/edit_logo.svg"
+                src={require('/public/images/forTest/edit_logo.svg')}
                 className="pointer"
-                //   onClick={(e) => this.showSelectAvatarModal(e)}
+                // onClick={(e) => this.showSelectAvatarModal(e)}
                 style={{ width: '28px', height: '28px', position: 'relative', top: '45px', left: '30px' }}
                 alt="edit-logo"
               />
@@ -97,7 +97,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                 <Controller
                   name="firstName"
                   control={control}
-                  defaultValue={userData?.profile.firstName}
+                  defaultValue={userData?.profile?.firstName || ''}
                   render={({ field }) => (
                     <>
                       <Input
@@ -127,7 +127,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                 <Controller
                   name="lastName"
                   control={control}
-                  defaultValue={userData?.profile.lastName}
+                  defaultValue={userData?.profile?.lastName || ''}
                   render={({ field }) => (
                     <>
                       <Input
@@ -155,7 +155,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                 <Controller
                   name="email"
                   control={control}
-                  defaultValue={userData?.profile.email}
+                  defaultValue={userData?.profile?.email || ''}
                   render={({ field }) => (
                     <>
                       <Input
@@ -184,7 +184,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                 <Controller
                   name="birthDate"
                   control={control}
-                  defaultValue={userData?.profile.birthDate}
+                  defaultValue={userData?.profile?.birthDate || ''}
                   render={({ field: { onChange, name, value } }) => (
                     <>
                       <DatePicker
@@ -222,7 +222,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         className="form-check-input"
                         type="radio"
                         name="isPublicEmail"
-                        defaultChecked={userData?.profile.isPublicEmail == true}
+                        defaultChecked={userData?.profile?.isPublicEmail == true}
                         value="true"
                         id="radio3"
                       />
@@ -241,7 +241,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         className="form-check-input"
                         type="radio"
                         name="isPublicEmail"
-                        defaultChecked={userData?.profile.isPublicEmail == false}
+                        defaultChecked={userData?.profile?.isPublicEmail == false}
                         value="false"
                         id="radio4"
                       />
@@ -272,7 +272,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         className="form-check-input"
                         type="radio"
                         name="gender"
-                        defaultChecked={userData?.profile.gender == 1}
+                        defaultChecked={userData?.profile?.gender == 1}
                         value="1"
                         id="radio2"
                       />
@@ -291,7 +291,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         className="form-check-input"
                         type="radio"
                         name="gender"
-                        defaultChecked={userData?.profile.gender == 0}
+                        defaultChecked={userData?.profile?.gender == 0}
                         value="0"
                         id="radio1"
                       />

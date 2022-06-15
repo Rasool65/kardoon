@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Col, Container, Form, FormFeedback, FormGroup, Input, Row, Spinner } from 'reactstrap';
 import { IModalModel } from './ModalModel';
 
-const Register: FunctionComponent<IModalModel> = ({ showRegisterModal }) => {
+const Register: FunctionComponent<IModalModel> = ({ showRegisterModal, handleRegisterModal }) => {
   const { t }: any = useTranslation();
   const toast = useToast();
   const [input, setInput] = useState<any>({
@@ -42,7 +42,8 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal }) => {
       httpRequest
         .postRequest<IOutputResult<IRegisterResultModel>>(APIURL_REGISTER, body)
         .then((result) => {
-          toast.showInfo(result.data.message);
+          toast.showSuccess(result.data.message);
+          handleRegisterModal();
         })
         .finally(() => setLoading(false));
     }
@@ -66,7 +67,7 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal }) => {
                     <Input
                       id="form1a"
                       onFocus={() => setInput({ mobile: true })}
-                      style={{ backgroundPosition: 'left' }}
+                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px'}}
                       className="form-control validate-text"
                       type="text"
                       placeholder={t('EnterMobile')}
@@ -143,7 +144,7 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal }) => {
                     <Input
                       id="form1a"
                       onFocus={() => setInput({ firstName: true })}
-                      style={{ backgroundPosition: 'left' }}
+                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px'}}
                       className="form-control validate-name"
                       type="text"
                       placeholder={t('EnterName')}
@@ -172,7 +173,7 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal }) => {
                     <Input
                       id="form1a"
                       onFocus={() => setInput({ lastName: true })}
-                      style={{ backgroundPosition: 'left' }}
+                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px'}}
                       className="form-control validate-name"
                       type="text"
                       placeholder={t('EnterFamily')}

@@ -46,6 +46,7 @@
   "Public":"عمومی",
   "Private":"خصوصی",
   "BirthDate":"تاریخ تولد",
-  "BirthDateIsRequired":"تاریخ تولد اجباریست"
-
+  "BirthDateIsRequired":"تاریخ تولد اجباریست",
+  "ReceivePassword":"دریافت رمز",
+  "LoginWithSMS":"ورود با رمز یکبارمصرف"
 }

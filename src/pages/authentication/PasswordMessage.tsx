@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React, { FunctionComponent, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Button, Form, FormFeedback, Input } from 'reactstrap';
+import { Button, Form, FormFeedback, Input, Spinner } from 'reactstrap';
 import EnterCode from './EnterCode';
 import { IModalModel } from './ModalModel';
 import { ForgetPasswordModelSchema, IForgetPasswordModel } from './../../models/input/authentication/IForgetPasswordModel';
@@ -12,7 +12,7 @@ import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
 import { APIURL_SEND_PASSWORD } from '@src/configs/apiConfig/apiUrls';
 import { useToast } from '@src/hooks/useToast';
 
-const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModal }) => {
+const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordModal }) => {
   const { t }: any = useTranslation();
   const httpRequest = useHttpRequest(RequestDataType.json);
   const [loading, setLoading] = useState<boolean>(false);
@@ -54,7 +54,7 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModa
       >
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="card p-4" style={{ marginBottom: '0px' }}>
-            {t('ForgotPassword?')}
+            {t('LoginWithSMS')}
             <div
               style={{ marginTop: '15px' }}
               className={`input-style has-borders no-icon validate-field mb-4 ${input.mobile ? 'input-style-active' : ''}`}
@@ -67,7 +67,7 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModa
                     <Input
                       id="form1a"
                       onFocus={() => setInput({ mobile: true })}
-                      style={{ backgroundPosition: 'left' }}
+                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px'}}
                       className="form-control validate-text"
                       type="text"
                       placeholder={t('EnterMobile')}
@@ -91,7 +91,7 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModa
               style={{ marginTop: '15px' }}
               className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0"
             >
-              {t('ForgetPassword')}
+              {loading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : t('ReceivePassword')}
             </Button>
           </div>
         </Form>
@@ -107,4 +107,4 @@ const ForgetPassword: FunctionComponent<IModalModel> = ({ showForgetPasswordModa
     </>
   );
 };
-export default ForgetPassword;
+export default PasswordMessage;
