@@ -1,24 +1,22 @@
-import React, { StrictMode, Suspense, lazy } from 'react';
-import ReactDOM from 'react-dom';
+import React, { Suspense, lazy } from 'react';
+import { Spinner } from 'reactstrap';
+import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import Store from './redux/Store';
 import { ToastContainer } from 'react-toastify';
 import './configs/i18n/config';
-import './scss/styles/bootstrap.css';
-import './scss/styles/style.css';
-import './scss/fonts/css/fontawesome-all.min.css';
+import './scss/core.scss';
 import 'react-toastify/dist/ReactToastify.css';
 
 const LazyApp = lazy(() => import('./App'));
-
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+root.render(
   <Provider store={Store}>
-    <Suspense fallback={<></>}>
+     <Suspense fallback={<Spinner />}>
       <LazyApp />
       <ToastContainer newestOnTop />
     </Suspense>
   </Provider>,
-  document.getElementById('root')
 );
 
 if ('serviceWorker' in navigator) {
