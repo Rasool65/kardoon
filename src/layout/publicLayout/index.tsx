@@ -96,7 +96,7 @@ const PublicLayout = (props: any) => {
           <div className="card header-card shape-rounded" data-card-height="210">
             <div className="card-overlay bg-highlight opacity-95"></div>
             <div className="card-overlay dark-mode-tint"></div>
-            <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
+            <div className="card-bg preload-img" data-src={require('src/scss/images/pictures/20s.jpg')}></div>
           </div>
 
           {/* Homepage Slider */}
@@ -239,7 +239,7 @@ const PublicLayout = (props: any) => {
             </div>
           </div>
 
-          <div className="card preload-img" data-src="images/pictures/20s.jpg">
+          <div className="card preload-img" data-src={require('src/scss/images/pictures/20s.jpg')}>
             <div className="card-body">
               <h4 className="color-white">Built For You</h4>
               <p className="color-white">
@@ -354,7 +354,11 @@ const PublicLayout = (props: any) => {
             </div>
           </div>
 
-          <div className="card card-style preload-img" data-src="images/pictures/20s.jpg" data-card-height="350">
+          <div
+            className="card card-style preload-img"
+            data-src={require('src/scss/images/pictures/20s.jpg')}
+            data-card-height="350"
+          >
             <div className="card-center text-center">
               <p className="line-height-xl font-19 font-300 color-white ps-3 pe-3 mb-2">
                 This is a great product! Many components that we can use, and I really appreciate the support from Enabled. Very

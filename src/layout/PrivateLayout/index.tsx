@@ -13,9 +13,9 @@ const PrivateLayout = (props: any) => {
           <div className="card-overlay dark-mode-tint"></div>
           <div
             className="card-bg preload-img entered loaded"
-            data-src="images/pictures/20s.jpg"
+            // data-src={require('src/scss/images/pictures/20s.jpg')}
             data-ll-status="loaded"
-            style={{ backgroundImage: 'url("images/pictures/20s.jpg")' }}
+            style={{ backgroundImage: 'url("src/scss/images/pictures/20s.jpg")' }}
           ></div>
         </div>
         {children}

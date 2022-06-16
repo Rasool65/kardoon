@@ -4,10 +4,9 @@ import { Provider } from 'react-redux';
 import Store from './redux/Store';
 import { ToastContainer } from 'react-toastify';
 import './configs/i18n/config';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './scss/style.scss';
-import './scss/style.css';
-import './scss/rrc_style.scss';
+import './scss/styles/bootstrap.css';
+import './scss/styles/style.css';
+import './scss/fonts/css/fontawesome-all.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const LazyApp = lazy(() => import('./App'));
@@ -22,15 +21,15 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// if ('serviceWorker' in navigator) {
-//   window.addEventListener('load', () => {
-//     navigator.serviceWorker
-//       .register('/service-worker.js')
-//       .then((registration) => {
-//         console.log('SW registered: ', registration);
-//       })
-//       .catch((registrationError) => {
-//         console.log('SW registration failed: ', registrationError);
-//       });
-//   });
-// }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .then((registration) => {
+        console.log('SW registered: ', registration);
+      })
+      .catch((registrationError) => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}

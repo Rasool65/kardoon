@@ -38,10 +38,10 @@ const Routers: FunctionComponent = () => {
                 authenticationStore.isAuthenticate && route.path == URL_MAIN ? (
                   <Navigate to={URL_MAIN} />
                 ) : route.path == URL_LOGIN ? (
-                  <PrivateLayout>
-                    <route.component name={route.name} {...route.props} />
-                  </PrivateLayout>
+                  // <PrivateLayout>
+                  <route.component name={route.name} {...route.props} />
                 ) : (
+                  //  </PrivateLayout>
                   // <PublicLayout>
                   <route.component name={route.name} {...route.props} />
                   // </PublicLayout>

@@ -58,29 +58,29 @@ const Home: FunctionComponent<IPageProps> = (props) => {
           <div className="single-slider-boxed text-center owl-no-dots owl-carousel" style={{ marginTop: '50px' }}>
             <div className="card rounded-l shadow-l" data-card-height="120">
               <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/public/images/forTest/005.jpg')} />
+              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/005.jpg')} />
             </div>
             <div className="card rounded-l shadow-l" data-card-height="120">
               <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/public/images/forTest/006.jpg')} />
+              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/006.jpg')} />
             </div>
             <div className="card rounded-l shadow-l" data-card-height="120">
               <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/public/images/forTest/007.jpg')} />
+              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/007.jpg')} />
             </div>
           </div>
           <div className="single-slider-boxed text-center owl-no-dots owl-carousel">
             <div className="card rounded-l shadow-l" data-card-height="120">
               <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/public/images/forTest/006.jpg')} />
+              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/006.jpg')} />
             </div>
             <div className="card rounded-l shadow-l" data-card-height="120">
               <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/public/images/forTest/005.jpg')} />
+              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/005.jpg')} />
             </div>
             <div className="card rounded-l shadow-l" data-card-height="120">
               <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/public/images/forTest/006.jpg')} />
+              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/006.jpg')} />
             </div>
           </div>
           {/* //! End Adds */}

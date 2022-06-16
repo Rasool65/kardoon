@@ -8,7 +8,7 @@ const FooterCard: FunctionComponent = () => {
     <div className="footer">
       <div className="footer card card-style mx-0 mb-0" style={{ paddingBottom: '25px' }}>
         <div className="footer-title pt-4" style={{ marginTop: '10px' }}>
-          <img className="mb-3" src={require('/public/images/forTest/logo_png.png')} alt="logo_png" width="200" />
+          <img className="mb-3" src={require('/src/scss/images/forTest/logo_png.png')} alt="logo_png" width="200" />
         </div>
         <span className="icon-center" style={{ marginTop: '10px' }}>
           {t('Services')}

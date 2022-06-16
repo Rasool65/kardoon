@@ -13,7 +13,7 @@ const Header = (props: any) => {
           <Col xs={1} style={{ textAlign: 'right' }}>
             <img
               // onClick={(e) => showMainMenu(e)}
-              src={require('/public/images/menu.png')}
+              src={require('/src/scss/images/menu.png')}
               style={{ width: '20px', height: '20px', cursor: 'pointer' }}
               alt=""
             />
