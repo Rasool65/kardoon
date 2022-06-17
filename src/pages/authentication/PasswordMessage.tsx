@@ -1,7 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { FunctionComponent, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { Button, Form, FormFeedback, Input, Spinner } from 'reactstrap';
 import EnterCode from './EnterCode';
 import { IModalModel } from './ModalModel';
@@ -11,6 +9,8 @@ import { IForgetPasswordResultModel } from '@src/models/output/authentication/IF
 import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
 import { APIURL_SEND_PASSWORD } from '@src/configs/apiConfig/apiUrls';
 import { useToast } from '@src/hooks/useToast';
+import { useTranslation } from 'react-i18next';
+import { Controller, useForm } from 'react-hook-form';
 
 const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordModal }) => {
   const { t }: any = useTranslation();
@@ -62,7 +62,7 @@ const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordMod
               <Controller
                 name="mobileNumber"
                 control={control}
-                render={({ field }) => (
+                render={({ field }:any) => (
                   <>
                     <Input
                       id="form1a"

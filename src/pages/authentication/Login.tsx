@@ -6,8 +6,6 @@ import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
 import { Alert, Button, Col, Container, Form, FormFeedback, Input, Row, Spinner } from 'reactstrap';
 import { ILoginModel, LoginModelSchema } from '@src/models/input/authentication/ILoginModel';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Controller, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { APIURL_IDP_TOKEN, APIURL_LOGIN } from '@src/configs/apiConfig/apiUrls';
 import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
@@ -18,6 +16,8 @@ import { useToast } from '@src/hooks/useToast';
 import FooterCard from '@src/layout/FooterCard';
 import Register from './Register';
 import PasswordMessage from './PasswordMessage';
+import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   const dispatch = useDispatch();
   const { t }: any = useTranslation();
   const toast = useToast();
-
+ 
   useEffect(() => {
     document.title = props.title;
   }, [props.title]);
@@ -97,7 +97,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   <Controller
                     name="username"
                     control={control}
-                    render={({ field }) => (
+                    render={({ field }:any) => (
                       <>
                         <i className="fa fa-user" style={{ marginTop: '15px', top: '0' }} />
                         <Input
@@ -127,7 +127,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   <Controller
                     name="password"
                     control={control}
-                    render={({ field }) => (
+                    render={({ field }:any) => (
                       <>
                         <i className="fa fa-lock" style={{ marginTop: '15px', top: '0' }} />
                         <Input

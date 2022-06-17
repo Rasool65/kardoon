@@ -4,7 +4,6 @@ import { IForgetPasswordResultModel } from '@src/models/output/authentication/IF
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { GeneralHelpers } from '@src/utils/GeneralHelpers';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Button, Col, Container, Row, Spinner } from 'reactstrap';
 import { IModalModel } from './ModalModel';
 import PinField from 'react-pin-field';
@@ -14,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { handleLogin } from '@src/redux/reducers/authenticationReducer';
 import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
 import { URL_USER_PROFILE } from '@src/configs/urls';
+import { useTranslation } from 'react-i18next';
 
 const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileNumber, handleEditmobileNo }) => {
   const toast = useToast();

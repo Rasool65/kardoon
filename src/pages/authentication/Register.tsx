@@ -62,7 +62,7 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal, handleReg
               <Controller
                 name="mobile"
                 control={control}
-                render={({ field }) => (
+                render={({ field }:any) => (
                   <>
                     <Input
                       id="form1a"
@@ -139,7 +139,7 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal, handleReg
               <Controller
                 name="firstName"
                 control={control}
-                render={({ field }) => (
+                render={({ field }:any) => (
                   <>
                     <Input
                       id="form1a"
@@ -168,7 +168,7 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal, handleReg
               <Controller
                 name="lastName"
                 control={control}
-                render={({ field }) => (
+                render={({ field }:any) => (
                   <>
                     <Input
                       id="form1a"
