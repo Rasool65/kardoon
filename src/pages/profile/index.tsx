@@ -9,8 +9,8 @@ import { IUpdateProfileModel, UpdateProfileModelSchema } from '@src/models/input
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IUpdateProfileResultModel } from '@src/models/output/profile/IUpdateProfileResultModel';
 import { FunctionComponent, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+
+
 import { Button, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap';
 import InputIcon from 'react-multi-date-picker/components/input_icon';
 import DatePicker from 'react-multi-date-picker';
@@ -19,6 +19,7 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { reloadUserData } from '@src/redux/reducers/authenticationReducer';
+import { Controller, useForm } from 'react-hook-form';
 
 const Profile: FunctionComponent<IPageProps> = (props) => {
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
@@ -392,3 +393,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
   );
 };
 export default Profile;
+function useTranslation(): any {
+  throw new Error('Function not implemented.');
+}
+
