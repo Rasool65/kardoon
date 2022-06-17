@@ -1,4 +1,4 @@
-import { Fragment, FunctionComponent, lazy } from 'react';
+import { Fragment, FunctionComponent, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import routes from '../configs/routerConfig/RouterList';
 import RouteType from '../configs/routerConfig/RouteType';
