@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { reloadUserData } from '@src/redux/reducers/authenticationReducer';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 const Profile: FunctionComponent<IPageProps> = (props) => {
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
@@ -393,7 +394,3 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
   );
 };
 export default Profile;
-function useTranslation(): any {
-  throw new Error('Function not implemented.');
-}
-
