@@ -155,6 +155,7 @@
         //Image Sliders
         var splide = document.getElementsByClassName('splide');
         if(splide.length){
+            debugger
             var singleSlider = document.querySelectorAll('.single-slider');
             if(singleSlider.length){
                 singleSlider.forEach(function(e){

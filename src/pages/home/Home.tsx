@@ -18,15 +18,15 @@ import { APIURL_GET_ADVERTISE, APIURL_GET_SERVICES } from '@src/configs/apiConfi
 import { BASE_URL } from '@src/configs/apiConfig/baseUrl';
 import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseResultModel';
 import { useTranslation } from 'react-i18next';
-import { iteratorSymbol } from 'immer/dist/internal';
+
 
 const Home: FunctionComponent<IPageProps> = (props) => {
   const [services, setServices] = useState<any>();
   const [advertise, setAdvertise] = useState<any>([]);
-  const [advertiseItems, setAdvertiseItems] = useState<any>([]);
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
   const navigate = useNavigate();
+
   const GetServices = (cityId: number) => {
     const body = {
       cityId: cityId,
@@ -42,40 +42,43 @@ const Home: FunctionComponent<IPageProps> = (props) => {
         setServices(result.data.data);
       });
   };
+
   const GetAdvertise = () => {
-    debugger;
     httpRequest
       .getRequest<IOutputResult<IAdvertiseResultModel[]>>(
         // APIURL_GET_ADVERTISE
         'http://127.0.0.1:2500/GetAdvertise'
       )
       .then((result) => {
-        debugger;
         setAdvertise(result.data.data);
-        console.log(advertise);
-      });
-  };
-  const GetItemsAdvertise = () => {
-    debugger;
-    httpRequest
-      .getRequest<IOutputResult<IAdvertiseResultModel>>(
-        // APIURL_GET_ADVERTISE
-        'http://127.0.0.1:2500/GetItemsAdvertise'
-      )
-      .then((result) => {
-        debugger;
-        setAdvertiseItems(result.data.data);
-        console.log(advertise);
       });
   };
 
   useEffect(() => {
     GetServices(2);
-    // GetAdvertise();
-    GetItemsAdvertise();
+    GetAdvertise();
     document.title = props.title;
   }, [props.title]);
 
+  useEffect(() => {
+    var splide = document.getElementsByClassName('splide');
+    if (splide.length) {
+      debugger;
+      var doubleSlider = document.querySelectorAll('.double-slider');
+      if (doubleSlider.length) {
+        doubleSlider.forEach(function (e) {
+          var double = new Splide('#' + e.id, {
+            type: 'loop',
+            direction: 'rtl',
+            autoplay: true,
+            interval: 4000,
+            arrows: false,
+            perPage: 2,
+          }).mount();
+        });
+      }
+    }
+  }, [advertise]);
   return (
     <>
       <div id="page">
@@ -84,48 +87,50 @@ const Home: FunctionComponent<IPageProps> = (props) => {
         <div className="page-content" style={{ paddingBottom: '0' }}>
           <Header
             // showMainMenu={(e: any) => props.showMainMenu(true)}
-            headerTitle={'خوش آمدید'}
+            headerTitle={'Welcome'}
           />
-          {/* //! Start Ads */}
-          {/* {!!advertise &&
+   
+          {/* Start Ads */}
+          {!!advertise &&
             advertise.length > 0 &&
             advertise.map((items: IAdvertiseResultModel[]) => {
-              return ( */}
-          <div className="splide double-slider visible-slider slider-no-arrows slider-no-dots" id="double-slider-2">
-            <div className="splide__track">
-              <div className="splide__list">
-                {!!advertiseItems &&
-                  advertiseItems.map((item: IAdvertiseResultModel) => {
-                    debugger;
-                    return (
-                      <div className="splide__slide ps-3">
-                        <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
-                          <div
-                            data-card-height="150"
-                            className="card mb-2 bg-29"
-                            // style={{ backgroundImage: `${BASE_URL}/` + item.imageUrl }}
-                          >
-                            <h5 className="card-bottom color-white mb-2">{item.title}</h5>
-                            <div className="card-overlay bg-gradient"></div>
-                          </div>
-                          <p className="mb-3 ps-2 pe-2 pt-2 font-12">{item.description}</p>
-                          <a
-                            // onClick={() => navigate(`${BASE_URL}/${item.addressUrl}`)}
-                            href="#"
-                            className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700"
-                          >
-                            مشاهده
-                          </a>
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
-          </div>
-          {/* );
-            })} */}
-          {/* //! End Adds */}
+              debugger
+              return (
+                <div className="splide double-slider visible-slider slider-no-arrows slider-no-dots" id="double-slider-2">
+                  <div className="splide__track">
+                    <div className="splide__list">
+                      {!!items &&
+                        items.map((item: IAdvertiseResultModel) => {
+                          debugger;
+                          return (
+                            <div className="splide__slide ps-3">
+                              <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
+                                <div
+                                  data-card-height="150"
+                                  className="card mb-2 bg-29"
+                                  style={{ backgroundImage: `${BASE_URL}/` + item.imageUrl }}
+                                >
+                                  <h5 className="card-bottom color-white mb-2">{item.title}</h5>
+                                  <div className="card-overlay bg-gradient"></div>
+                                </div>
+                                <p className="mb-3 ps-2 pe-2 pt-2 font-12">{item.description}</p>
+                                <a
+                                  onClick={() => navigate(`${BASE_URL}/${item.addressUrl}`)}
+                                  href="#"
+                                  className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700"
+                                >
+                                  مشاهده
+                                </a>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          {/* End Adds */}
           {!!services &&
             services?.length > 0 &&
             services.map((item: IServicesResultModel, id: number) => {
@@ -241,7 +246,7 @@ const Home: FunctionComponent<IPageProps> = (props) => {
           {/*        </Row>*/}
           {/*    </Container>*/}
           {/*</div>*/}
-          <FooterCard footerMenuVisible={true}/>
+          <FooterCard footerMenuVisible={true} />
         </div>
       </div>
     </>
