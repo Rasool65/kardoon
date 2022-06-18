@@ -29,7 +29,7 @@ const Header = (props: any) => {
           >
             {props.headerTitle}
           </Col>
-          {/* <Col style={{ textAlign: 'left' }}>
+          <Col style={{ textAlign: 'left' }}>
             <span style={{ marginLeft: '10px', color: '#FFF' }}>شهر</span>
             <select defaultValue={'1'} style={{ cursor: 'pointer', width: '100px' }}>
               <option value="1">تهران</option>
@@ -38,7 +38,7 @@ const Header = (props: any) => {
               <option value="4">شیراز</option>
               <option value="5">اصفهان</option>
             </select>
-          </Col> */}
+          </Col>
         </Row>
       </Container>
 

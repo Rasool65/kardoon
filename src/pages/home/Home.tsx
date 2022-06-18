@@ -14,15 +14,16 @@ import Header from './Header';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IServicesResultModel } from '@src/models/output/services/IServicesResultModel';
-import { APIURL_GET_SERVICES } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_GET_ADVERTISE, APIURL_GET_SERVICES } from '@src/configs/apiConfig/apiUrls';
 import { BASE_URL } from '@src/configs/apiConfig/baseUrl';
+import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseResultModel';
 
 const Home: FunctionComponent<IPageProps> = (props) => {
   const [services, setServices] = useState<any>();
+  const [advertise, setAdvertise] = useState<any>([]);
   const httpRequest = useHttpRequest();
   const navigate = useNavigate();
   const GetServices = (cityId: number) => {
-    debugger;
     const body = {
       cityId: cityId,
     };
@@ -35,12 +36,25 @@ const Home: FunctionComponent<IPageProps> = (props) => {
       .then((result) => {
         debugger;
         setServices(result.data.data);
-        console.log(services);
+      });
+  };
+  const GetAdvertise = () => {
+    debugger;
+    httpRequest
+      .getRequest<IOutputResult<IAdvertiseResultModel[]>>(
+        // APIURL_GET_ADVERTISE
+        'http://127.0.0.1:2500/GetAdvertise'
+      )
+      .then((result) => {
+        debugger;
+        setAdvertise(result.data.data);
+        console.log(result.data.data);
       });
   };
 
   useEffect(() => {
-    GetServices(1);
+    GetServices(2);
+    GetAdvertise();
     document.title = props.title;
   }, [props.title]);
 
@@ -55,32 +69,54 @@ const Home: FunctionComponent<IPageProps> = (props) => {
             headerTitle={'خوش آمدید'}
           />
           {/* //! Start Ads */}
-          <div className="single-slider-boxed text-center owl-no-dots owl-carousel" style={{ marginTop: '50px' }}>
-            <div className="card rounded-l shadow-l" data-card-height="120">
-              <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/005.jpg')} />
-            </div>
-            <div className="card rounded-l shadow-l" data-card-height="120">
-              <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/006.jpg')} />
-            </div>
-            <div className="card rounded-l shadow-l" data-card-height="120">
-              <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/007.jpg')} />
-            </div>
+          <div className="content mb-3 mt-0">
+            <h5 className="float-start font-16 font-500">Products we Love</h5>
+            <a className="float-end font-12 color-highlight mt-n1" href="#">
+              View All
+            </a>
+            <div className="clearfix"></div>
           </div>
-          <div className="single-slider-boxed text-center owl-no-dots owl-carousel">
-            <div className="card rounded-l shadow-l" data-card-height="120">
-              <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/006.jpg')} />
-            </div>
-            <div className="card rounded-l shadow-l" data-card-height="120">
-              <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/005.jpg')} />
-            </div>
-            <div className="card rounded-l shadow-l" data-card-height="120">
-              <div className="card-overlay" />
-              <div className="card-bg owl-lazy" data-src={require('/src/scss/images/forTest/006.jpg')} />
+
+          <div className="splide double-slider visible-slider slider-no-arrows slider-no-dots" id="double-slider-2">
+            <div className="splide__track">
+              <div className="splide__list">
+                <div className="splide__slide ps-3">
+                  <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
+                    <div data-card-height="150" className="card mb-2 bg-29">
+                      <h5 className="card-bottom color-white mb-2">Sticky Mobile</h5>
+                      <div className="card-overlay bg-gradient"></div>
+                    </div>
+                    <p className="mb-3 ps-2 pe-2 pt-2 font-12">Classic, elegant and powerful. A best seller.</p>
+                    <a href="#" className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700">
+                      View
+                    </a>
+                  </div>
+                </div>
+                <div className="splide__slide ps-3">
+                  <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
+                    <div data-card-height="150" className="card mb-2 bg-18">
+                      <h5 className="card-bottom color-white mb-2">Eazy Mobile</h5>
+                      <div className="card-overlay bg-gradient"></div>
+                    </div>
+                    <p className="mb-3 ps-2 pe-2 pt-2 font-12">A best seller, elegant multi use design.</p>
+                    <a href="#" className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700">
+                      View
+                    </a>
+                  </div>
+                </div>
+                <div className="splide__slide ps-3">
+                  <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
+                    <div data-card-height="150" className="card mb-2 bg-11">
+                      <h5 className="card-bottom color-white mb-2">Bars Mobile</h5>
+                      <div className="card-overlay bg-gradient"></div>
+                    </div>
+                    <p className="mb-3 ps-2 pe-2 pt-2 font-12">Modern sidebars and a very intuitive interface.</p>
+                    <a href="#" className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700">
+                      View
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           {/* //! End Adds */}
@@ -96,7 +132,7 @@ const Home: FunctionComponent<IPageProps> = (props) => {
                 >
                   <img
                     key={id}
-                    src={`${BASE_URL}/${item.backgroundUrl}`}
+                    src={`${BASE_URL}/${item.backGroundUrl}`}
                     // src={require('/public/images/pictures/1.jpg')}
                     className="card-image"
                     alt={item.title}
