@@ -26,7 +26,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   const dispatch = useDispatch();
   const { t }: any = useTranslation();
   const toast = useToast();
- 
+
   useEffect(() => {
     document.title = props.title;
   }, [props.title]);
@@ -73,7 +73,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   return (
     <>
       <div id="page">
-        <div className="page-content">
+        <div className="page-content" style={{ paddingBottom: '0' }}>
           <div
             // onClick={(e) => this.loginWithoutUsername(e)}
             className="page-title page-title-small pointer"
@@ -118,8 +118,9 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                       </>
                     )}
                   />
-                  <i className="fa fa-times disabled invalid color-red-dark"></i>
-                  <i className="fa fa-check disabled valid color-green-dark"></i> <em>({t('Required')})</em>
+                  {/*<i className="fa fa-times disabled invalid color-red-dark"></i>*/}
+                  {/*<i className="fa fa-check disabled valid color-green-dark"></i>*/}
+                  <em>({t('Required')})</em>
                 </div>
                 <div className="input-style no-borders has-icon validate-field mb-4">
                   {/* <input type="password" className="form-control validate-password" id="form3a" placeholder="رمز عبور" />
@@ -144,8 +145,8 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                       </>
                     )}
                   />
-                  <i className="fa fa-times disabled invalid color-red-dark"></i>
-                  <i className="fa fa-check disabled valid color-green-dark"></i>
+                  {/*<i className="fa fa-times disabled invalid color-red-dark"></i>*/}
+                  {/*<i className="fa fa-check disabled valid color-green-dark"></i>*/}
                   <em>({t('Required')})</em>
                 </div>
                 <Button
@@ -177,7 +178,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
               </div>
             </div>
           </Form>
-          <FooterCard />
+          <FooterCard footerMenuVisible={false}/>
         </div>
 
         <Register showRegisterModal={registerModalVisible} handleRegisterModal={handleModal} />

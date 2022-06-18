@@ -52,8 +52,7 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal, handleReg
     <>
       <div
         className={`menu menu-box-bottom menu-box-detached rounded-m ${showRegisterModal ? 'menu-active' : ''}`}
-        data-menu-height="485"
-        style={{ display: 'inherit', height: 'auto', direction: 'rtl' }}
+        style={{ display: 'inherit', height: 'fit-content', direction: 'rtl' }}
         data-menu-effect="menu-over"
       >
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -78,8 +77,8 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal, handleReg
                     <label htmlFor="form4" className="color-highlight">
                       {t('UserName')}
                     </label>
-                    <i className={`fa fa-times disabled invalid color-red-dark ${input.mobile ? 'disabled' : ''}`} />
-                    <i className="fa fa-check disabled valid color-green-dark" />
+                    {/*<i className={`fa fa-times disabled invalid color-red-dark ${input.mobile ? 'disabled' : ''}`} />*/}
+                    {/*<i className="fa fa-check disabled valid color-green-dark" />*/}
                     <em className={`${input.mobile ? 'disabled' : ''}`}>({t('Required')})</em>
                     <FormFeedback>{errors.mobile?.message}</FormFeedback>
                   </>
@@ -155,8 +154,8 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal, handleReg
                     <label htmlFor="form4" className="color-highlight">
                       {t('Name')}
                     </label>
-                    <i className={`fa fa-times disabled invalid color-red-dark ${input.firstName ? 'disabled' : ''}`} />
-                    <i className="fa fa-check disabled valid color-green-dark" />
+                    {/*<i className={`fa fa-times disabled invalid color-red-dark ${input.firstName ? 'disabled' : ''}`} />*/}
+                    {/*<i className="fa fa-check disabled valid color-green-dark" />*/}
                     <em className={`${input.firstName ? 'disabled' : ''}`}>({t('Required')})</em>
                     <FormFeedback>{errors.firstName?.message}</FormFeedback>
                   </>
@@ -184,8 +183,8 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal, handleReg
                     <label htmlFor="form4" className="color-highlight">
                       {t('Family')}
                     </label>
-                    <i className={`fa fa-times disabled invalid color-red-dark ${input.lastName ? 'disabled' : ''}`} />
-                    <i className="fa fa-check disabled valid color-green-dark" />
+                    {/*<i className={`fa fa-times disabled invalid color-red-dark ${input.lastName ? 'disabled' : ''}`} />*/}
+                    {/*<i className="fa fa-check disabled valid color-green-dark" />*/}
                     <em className={`${input.lastName ? 'disabled' : ''}`}>({t('Required')})</em>
                     <FormFeedback>{errors.lastName?.message}</FormFeedback>
                   </>

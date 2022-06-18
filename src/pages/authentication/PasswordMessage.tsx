@@ -48,8 +48,7 @@ const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordMod
     <>
       <div
         className={`menu menu-box-bottom menu-box-detached rounded-m ${showForgetPasswordModal ? 'menu-active' : ''}`}
-        data-menu-height="220"
-        style={{ display: 'inherit' }}
+        style={{ display: 'inherit', height: 'fit-content' }}
         data-menu-effect="menu-over"
       >
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -78,8 +77,8 @@ const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordMod
                     <label htmlFor="form4" className="color-highlight">
                       {t('UserName')}
                     </label>
-                    <i className={`fa fa-times disabled invalid color-red-dark ${input.mobile ? 'disabled' : ''}`} />
-                    <i className="fa fa-check disabled valid color-green-dark" />
+                    {/*<i className={`fa fa-times disabled invalid color-red-dark ${input.mobile ? 'disabled' : ''}`} />*/}
+                    {/*<i className="fa fa-check disabled valid color-green-dark" />*/}
                     <em className={`${input.mobile ? 'disabled' : ''}`}>({t('Required')})</em>
                     <FormFeedback>{errors.mobileNumber?.message}</FormFeedback>
                   </>

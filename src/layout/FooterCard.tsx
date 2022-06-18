@@ -1,12 +1,13 @@
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
+import {IFooterCardModel} from "./FooterCardModel";
 
-const FooterCard: FunctionComponent = () => {
+const FooterCard: FunctionComponent<IFooterCardModel> = ({footerMenuVisible}) => {
   const { t }: any = useTranslation();
 
   return (
-    <div className="footer">
-      <div className="footer card card-style mx-0 mb-0" style={{ paddingBottom: '25px' }}>
+    <div className="footer" style={{ padding: `${footerMenuVisible? '0px 15px 90px 15px' : '0px 15px 30px 15px'}` }}>
+      <div className="footer card card-style mx-0 mb-0" style={{ paddingBottom: '25px', direction: 'ltr' }}>
         <div className="footer-title pt-4" style={{ marginTop: '10px' }}>
           <img className="mb-3" src={require('/src/scss/images/forTest/logo_png.png')} alt="logo_png" width="200" />
         </div>
@@ -14,16 +15,20 @@ const FooterCard: FunctionComponent = () => {
           {t('Services')}
         </span>
         <div className="text-center mb-3" style={{ marginTop: '30px' }}>
-          <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-facebook pointer">
+          <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-facebook pointer"
+               style={{ marginRight: '0.35rem' }}>
             <i className="fab fa-facebook-f" />
           </div>
-          <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-twitter pointer">
+          <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-twitter pointer"
+               style={{ marginRight: '0.35rem' }}>
             <i className="fab fa-twitter" />
           </div>
-          <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-phone pointer">
+          <div className="icon icon-xs rounded-sm shadow-l mr-1 bg-phone pointer"
+               style={{ marginRight: '0.35rem' }}>
             <i className="fa fa-phone" />
           </div>
-          <div data-menu="menu-share" className="icon icon-xs rounded-sm mr-1 shadow-l bg-red2-dark pointer">
+          <div data-menu="menu-share" className="icon icon-xs rounded-sm mr-1 shadow-l bg-red2-dark pointer"
+               style={{ backgroundColor: '#da4453', color: '#fff' }}>
             <i className="fa fa-share-alt" />
           </div>
           {/* <div className="back-to-top icon icon-xs rounded-sm shadow-l bg-highlight color-white pointer">
@@ -38,7 +43,8 @@ const FooterCard: FunctionComponent = () => {
           ۰۲۱ - ۴۷۱۰۰
         </div>
       </div>
-      <div className="footer-card card shape-rounded bg-20" style={{ height: '230px' }}>
+      <div className="footer-card card shape-rounded bg-20"
+           style={{ height: '230px', bottom: `${footerMenuVisible? '30px' : '0px'}` }}>
         <div className="card-overlay bg-highlight opacity-90" />
       </div>
     </div>

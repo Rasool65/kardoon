@@ -17,11 +17,15 @@ import { IServicesResultModel } from '@src/models/output/services/IServicesResul
 import { APIURL_GET_ADVERTISE, APIURL_GET_SERVICES } from '@src/configs/apiConfig/apiUrls';
 import { BASE_URL } from '@src/configs/apiConfig/baseUrl';
 import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseResultModel';
+import { useTranslation } from 'react-i18next';
+import { iteratorSymbol } from 'immer/dist/internal';
 
 const Home: FunctionComponent<IPageProps> = (props) => {
   const [services, setServices] = useState<any>();
   const [advertise, setAdvertise] = useState<any>([]);
+  const [advertiseItems, setAdvertiseItems] = useState<any>([]);
   const httpRequest = useHttpRequest();
+  const { t }: any = useTranslation();
   const navigate = useNavigate();
   const GetServices = (cityId: number) => {
     const body = {
@@ -48,13 +52,27 @@ const Home: FunctionComponent<IPageProps> = (props) => {
       .then((result) => {
         debugger;
         setAdvertise(result.data.data);
-        console.log(result.data.data);
+        console.log(advertise);
+      });
+  };
+  const GetItemsAdvertise = () => {
+    debugger;
+    httpRequest
+      .getRequest<IOutputResult<IAdvertiseResultModel>>(
+        // APIURL_GET_ADVERTISE
+        'http://127.0.0.1:2500/GetItemsAdvertise'
+      )
+      .then((result) => {
+        debugger;
+        setAdvertiseItems(result.data.data);
+        console.log(advertise);
       });
   };
 
   useEffect(() => {
     GetServices(2);
-    GetAdvertise();
+    // GetAdvertise();
+    GetItemsAdvertise();
     document.title = props.title;
   }, [props.title]);
 
@@ -63,62 +81,50 @@ const Home: FunctionComponent<IPageProps> = (props) => {
       <div id="page">
         <Footer footerMenuVisible={true} activePage={1} />
 
-        <div className="page-content">
+        <div className="page-content" style={{ paddingBottom: '0' }}>
           <Header
             // showMainMenu={(e: any) => props.showMainMenu(true)}
             headerTitle={'خوش آمدید'}
           />
           {/* //! Start Ads */}
-          <div className="content mb-3 mt-0">
-            <h5 className="float-start font-16 font-500">Products we Love</h5>
-            <a className="float-end font-12 color-highlight mt-n1" href="#">
-              View All
-            </a>
-            <div className="clearfix"></div>
-          </div>
-
+          {/* {!!advertise &&
+            advertise.length > 0 &&
+            advertise.map((items: IAdvertiseResultModel[]) => {
+              return ( */}
           <div className="splide double-slider visible-slider slider-no-arrows slider-no-dots" id="double-slider-2">
             <div className="splide__track">
               <div className="splide__list">
-                <div className="splide__slide ps-3">
-                  <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
-                    <div data-card-height="150" className="card mb-2 bg-29">
-                      <h5 className="card-bottom color-white mb-2">Sticky Mobile</h5>
-                      <div className="card-overlay bg-gradient"></div>
-                    </div>
-                    <p className="mb-3 ps-2 pe-2 pt-2 font-12">Classic, elegant and powerful. A best seller.</p>
-                    <a href="#" className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700">
-                      View
-                    </a>
-                  </div>
-                </div>
-                <div className="splide__slide ps-3">
-                  <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
-                    <div data-card-height="150" className="card mb-2 bg-18">
-                      <h5 className="card-bottom color-white mb-2">Eazy Mobile</h5>
-                      <div className="card-overlay bg-gradient"></div>
-                    </div>
-                    <p className="mb-3 ps-2 pe-2 pt-2 font-12">A best seller, elegant multi use design.</p>
-                    <a href="#" className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700">
-                      View
-                    </a>
-                  </div>
-                </div>
-                <div className="splide__slide ps-3">
-                  <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
-                    <div data-card-height="150" className="card mb-2 bg-11">
-                      <h5 className="card-bottom color-white mb-2">Bars Mobile</h5>
-                      <div className="card-overlay bg-gradient"></div>
-                    </div>
-                    <p className="mb-3 ps-2 pe-2 pt-2 font-12">Modern sidebars and a very intuitive interface.</p>
-                    <a href="#" className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700">
-                      View
-                    </a>
-                  </div>
-                </div>
+                {!!advertiseItems &&
+                  advertiseItems.map((item: IAdvertiseResultModel) => {
+                    debugger;
+                    return (
+                      <div className="splide__slide ps-3">
+                        <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
+                          <div
+                            data-card-height="150"
+                            className="card mb-2 bg-29"
+                            // style={{ backgroundImage: `${BASE_URL}/` + item.imageUrl }}
+                          >
+                            <h5 className="card-bottom color-white mb-2">{item.title}</h5>
+                            <div className="card-overlay bg-gradient"></div>
+                          </div>
+                          <p className="mb-3 ps-2 pe-2 pt-2 font-12">{item.description}</p>
+                          <a
+                            // onClick={() => navigate(`${BASE_URL}/${item.addressUrl}`)}
+                            href="#"
+                            className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700"
+                          >
+                            مشاهده
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </div>
+          {/* );
+            })} */}
           {/* //! End Adds */}
           {!!services &&
             services?.length > 0 &&
@@ -151,7 +157,6 @@ const Home: FunctionComponent<IPageProps> = (props) => {
                 </div>
               );
             })}
-
           <div className="card card-style  me-0 ms-0 rounded-0 gradient-blue">
             <div className="content pt-5 pb-5">
               <h1 className="mb-1 color-white font-700 text-center">گارانتی کاردون</h1>
@@ -236,7 +241,7 @@ const Home: FunctionComponent<IPageProps> = (props) => {
           {/*        </Row>*/}
           {/*    </Container>*/}
           {/*</div>*/}
-          <FooterCard />
+          <FooterCard footerMenuVisible={true}/>
         </div>
       </div>
     </>

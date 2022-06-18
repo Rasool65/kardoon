@@ -3,4 +3,5 @@ export interface IAdvertiseResultModel {
   subTitle?: string;
   imageUrl?: string;
   addressUrl?: string;
+  description?: string;
 }
