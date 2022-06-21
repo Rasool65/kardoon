@@ -8,6 +8,7 @@
   "dependencies": {
     "@hookform/resolvers": "^2.8.5",
     "@reduxjs/toolkit": "^1.7.1",
+    "@rjsf/core": "^4.2.0",
     "@types/i18next": "^13.0.0",
     "@types/i18next-browser-languagedetector": "^3.0.0",
     "@types/i18next-xhr-backend": "^1.4.2",
