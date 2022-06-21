@@ -48,5 +48,11 @@
   "BirthDate":"تاریخ تولد",
   "BirthDateIsRequired":"تاریخ تولد اجباریست",
   "ReceivePassword":"دریافت رمز",
-  "LoginWithSMS":"ورود با رمز یکبارمصرف"
+  "LoginWithSMS":"ورود با رمز یکبارمصرف",
+  "View":"مشاهده",
+  "Welcome":"خوش آمدید",
+  "SelectProduct":"انتخاب محصول",
+  "PleaseSelectProduct":"لطفا محصول مورد نظر خود را انتخاب کنید.",
+  "SelectCity":"انتخاب شهر",
+  "PleaseSelectCity":"لطفأ شهر محل سکونت خود را انتخاب نمایید"
 }

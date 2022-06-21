@@ -1,6 +1,9 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useAxios } from './useAxios';
 import { useToast } from './useToast';
+import { useNavigate } from 'react-router-dom';
+import { useTokenAuthentication } from './useTokenAuthentication';
+import { URL_LOGIN } from '@src/configs/urls';
 
 export enum RequestDataType {
   json,
@@ -9,6 +12,8 @@ export enum RequestDataType {
 }
 
 const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
+  const navigate = useNavigate();
+  const authToken = useTokenAuthentication();
   const { get, post, remove, put } = useAxios(dataType);
   const toast = useToast();
 
@@ -55,7 +60,11 @@ const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
           ...config,
         });
         if (res.status >= 200 && res.status <= 204) resolve(res);
-        else {
+        else if (res.status == 401) {
+          authToken.deleteLogoutToken();
+          navigate(URL_LOGIN);
+          toast.showError('لطفأ دوباره وارد شوید');
+        } else {
           toast.showError(res.data.message);
           if (onError) onError(res);
           reject(res);

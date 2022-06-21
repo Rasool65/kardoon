@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
@@ -18,6 +18,7 @@ import Register from './Register';
 import PasswordMessage from './PasswordMessage';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import EnterCode from "./EnterCode";
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -182,7 +183,8 @@ const Login: FunctionComponent<IPageProps> = (props) => {
         </div>
 
         <Register showRegisterModal={registerModalVisible} handleRegisterModal={handleModal} />
-        <PasswordMessage showForgetPasswordModal={forgetPasswordModalVisible} showEnterCodeModal={enterCodeModalVisible} />
+        <PasswordMessage showForgetPasswordModal={forgetPasswordModalVisible} setForgetPasswordModalVisible={setForgetPasswordModalVisible} />
+
 
         {/* <EnterCodeModal
           enterCodeModalVisible={this.state.enterCodeModalVisible}

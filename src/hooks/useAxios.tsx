@@ -10,10 +10,9 @@ import { useTokenAuthentication } from './useTokenAuthentication';
 
 export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
   const navigate = useNavigate();
+  const authToken = useTokenAuthentication();
 
   const jwtConfig: IJwtConfig = { ...jwtDefaultConfig };
-
-  const authToken = useTokenAuthentication();
 
   let instance: AxiosInstance;
   const token = authToken.getToken();

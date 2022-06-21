@@ -1,7 +1,9 @@
 export interface IAdvertiseResultModel {
-  title?: string;
+  id?: number;
   subTitle?: string;
+  title?: string;
   imageUrl?: string;
-  addressUrl?: string;
-  description?: string;
+  summary?: string;
+  hrefUrl?: string;
+  targetUrl?: '_blank' | '_self' | '_parent' | '_top';
 }

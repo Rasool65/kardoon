@@ -12,7 +12,7 @@ import { useToast } from '@src/hooks/useToast';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 
-const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordModal }) => {
+const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordModal, setForgetPasswordModalVisible }) => {
   const { t }: any = useTranslation();
   const httpRequest = useHttpRequest(RequestDataType.json);
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,11 +29,16 @@ const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordMod
     formState: { errors },
   } = useForm<IForgetPasswordModel>({ mode: 'onChange', resolver: yupResolver(ForgetPasswordModelSchema) });
 
-  const handleEditmobileNo = () => setShow(false);
+  const handleEditMobileNo = () => {
+      setShow(false);
+      setForgetPasswordModalVisible(true);
+  }
 
   const onSubmit = (data: IForgetPasswordModel) => {
     setLoading(true);
     setMobileNumber(data.mobileNumber);
+    setForgetPasswordModalVisible(false);
+      setShow(true);
     if (data && !loading) {
       httpRequest
         .postRequest<IOutputResult<IForgetPasswordResultModel>>(APIURL_SEND_PASSWORD, data)
@@ -94,9 +99,9 @@ const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordMod
             </Button>
           </div>
         </Form>
-        <EnterCode showEnterCodeModal={show} mobileNumber={mobileNumber} handleEditmobileNo={handleEditmobileNo} />
       </div>
-      {/* <div
+      <EnterCode showEnterCodeModal={show} mobileNumber={mobileNumber} handleEditMobileNo={handleEditMobileNo} />
+        {/* <div
         onClick={() => {
           debugger;
           setShow(false);

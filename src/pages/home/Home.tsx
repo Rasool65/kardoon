@@ -1,13 +1,6 @@
 import { FunctionComponent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
-// import useHttpRequest from '@src/hooks/useHttpRequest';
-// import About from './About';
-// import { Link } from 'react-router-dom';
-// import { URL_DASHBOARD, URL_LOGIN } from '@src/configs/urls';
-// import { RootStateType } from '@src/redux/Store';
-import { Col, Container, Row } from 'reactstrap';
 import FooterCard from '@src/layout/FooterCard';
 import Footer from '@src/layout/Footer';
 import Header from './Header';
@@ -18,7 +11,7 @@ import { APIURL_GET_ADVERTISE, APIURL_GET_SERVICES } from '@src/configs/apiConfi
 import { BASE_URL } from '@src/configs/apiConfig/baseUrl';
 import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseResultModel';
 import { useTranslation } from 'react-i18next';
-
+import { CustomFunctions } from '@src/utils/custom';
 
 const Home: FunctionComponent<IPageProps> = (props) => {
   const [services, setServices] = useState<any>();
@@ -26,19 +19,19 @@ const Home: FunctionComponent<IPageProps> = (props) => {
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
   const navigate = useNavigate();
-
+  const { state }: any = useLocation();
   const GetServices = (cityId: number) => {
     const body = {
-      cityId: cityId,
+      cityId: state.cityId,
     };
+    debugger;
     httpRequest
       .postRequest<IOutputResult<IServicesResultModel>>(
-        // APIURL_GET_SERVICES,
-        'http://127.0.0.1:2500/getService',
+        APIURL_GET_SERVICES,
+        // 'http://127.0.0.1:2500/getService',
         body
       )
       .then((result) => {
-        debugger;
         setServices(result.data.data);
       });
   };
@@ -46,8 +39,8 @@ const Home: FunctionComponent<IPageProps> = (props) => {
   const GetAdvertise = () => {
     httpRequest
       .getRequest<IOutputResult<IAdvertiseResultModel[]>>(
-        // APIURL_GET_ADVERTISE
-        'http://127.0.0.1:2500/GetAdvertise'
+        APIURL_GET_ADVERTISE
+        // 'http://127.0.0.1:2500/GetAdvertise'
       )
       .then((result) => {
         setAdvertise(result.data.data);
@@ -55,30 +48,15 @@ const Home: FunctionComponent<IPageProps> = (props) => {
   };
 
   useEffect(() => {
-    GetServices(2);
+    GetServices(state.value);
     GetAdvertise();
     document.title = props.title;
   }, [props.title]);
 
   useEffect(() => {
-    var splide = document.getElementsByClassName('splide');
-    if (splide.length) {
-      debugger;
-      var doubleSlider = document.querySelectorAll('.double-slider');
-      if (doubleSlider.length) {
-        doubleSlider.forEach(function (e) {
-          var double = new Splide('#' + e.id, {
-            type: 'loop',
-            direction: 'rtl',
-            autoplay: true,
-            interval: 4000,
-            arrows: false,
-            perPage: 2,
-          }).mount();
-        });
-      }
-    }
-  }, [advertise]);
+    CustomFunctions();
+  }, [advertise, services]);
+
   return (
     <>
       <div id="page">
@@ -86,17 +64,19 @@ const Home: FunctionComponent<IPageProps> = (props) => {
 
         <div className="page-content" style={{ paddingBottom: '0' }}>
           <Header
+            cityName={state.cityName}
             // showMainMenu={(e: any) => props.showMainMenu(true)}
-            headerTitle={'Welcome'}
+            headerTitle={'صفحه اصلی'}
           />
-   
-          {/* Start Ads */}
           {!!advertise &&
             advertise.length > 0 &&
-            advertise.map((items: IAdvertiseResultModel[]) => {
-              debugger
+            advertise.map((items: IAdvertiseResultModel[], index: number) => {
               return (
-                <div className="splide double-slider visible-slider slider-no-arrows slider-no-dots" id="double-slider-2">
+                <div
+                  style={{ marginTop: '30px' }}
+                  className="splide double-slider visible-slider slider-no-arrows slider-no-dots"
+                  id={`double-slider-${index}`}
+                >
                   <div className="splide__track">
                     <div className="splide__list">
                       {!!items &&
@@ -106,20 +86,21 @@ const Home: FunctionComponent<IPageProps> = (props) => {
                             <div className="splide__slide ps-3">
                               <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
                                 <div
+                                  style={{ backgroundImage: `url(${item.imageUrl})` }}
                                   data-card-height="150"
-                                  className="card mb-2 bg-29"
-                                  style={{ backgroundImage: `${BASE_URL}/` + item.imageUrl }}
+                                  className="card mb-2"
                                 >
                                   <h5 className="card-bottom color-white mb-2">{item.title}</h5>
                                   <div className="card-overlay bg-gradient"></div>
                                 </div>
-                                <p className="mb-3 ps-2 pe-2 pt-2 font-12">{item.description}</p>
+                                <p className="mb-3 ps-2 pe-2 pt-2 font-12">{item.summary}</p>
                                 <a
-                                  onClick={() => navigate(`${BASE_URL}/${item.addressUrl}`)}
-                                  href="#"
+                                  //  href={`${BASE_URL}${item.addressUrl}`}
+                                  href={item.hrefUrl}
+                                  target={item.targetUrl}
                                   className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700"
                                 >
-                                  مشاهده
+                                  {t('View')}
                                 </a>
                               </div>
                             </div>
@@ -130,26 +111,19 @@ const Home: FunctionComponent<IPageProps> = (props) => {
                 </div>
               );
             })}
-          {/* End Adds */}
           {!!services &&
             services?.length > 0 &&
             services.map((item: IServicesResultModel, id: number) => {
-              debugger;
               return (
                 <div
+                  style={{ marginTop: '30px' }}
                   className="card card-style card-blur pointer"
                   data-card-height="155"
                   onClick={(e) => navigate(`/${item.addressUrl}`)}
                 >
-                  <img
-                    key={id}
-                    src={`${BASE_URL}/${item.backGroundUrl}`}
-                    // src={require('/public/images/pictures/1.jpg')}
-                    className="card-image"
-                    alt={item.title}
-                  />
+                  <img key={id} src={item.backGroundUrl} className="card-image" alt={item.title} />
                   <div className="card-top">
-                    <img src={`${BASE_URL}/${item.logo}`} alt="logo" className="fa-3x float-start ms-3 mt-3" />
+                    <img src={item.iconUrl} alt="logo" className="fa-3x float-start ms-3 mt-3" />
                     {/* <i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/> */}
                   </div>
                   <div className="card-bottom">

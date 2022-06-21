@@ -18,7 +18,7 @@ const Header = (props: any) => {
                         alt=""/>
                 </div>
 
-                <div className="col-5"
+                <div className="col-11"
                      style={{
                          padding: '0 5px 0 0',
                          color: 'white',
@@ -26,18 +26,6 @@ const Header = (props: any) => {
                          textAlign: 'right'
                      }}>
                     {props.headerTitle}
-                </div>
-
-                <div className="col-6" style={{padding: '0 0 0 0', textAlign: 'left'}}>
-                    <span style={{marginLeft: '10px', color: '#FFF'}}>شهر</span>
-                    <select defaultValue={'1'} style={{cursor: 'pointer', width: 'fit-content'}}>
-                        <option value="1">تهران</option>
-                        <option value="2">سمنان</option>
-                        <option value="3">مشهد</option>
-                        <option value="4">شیراز</option>
-                        <option value="5">اصفهان</option>
-                        <option value="5">کهکیلویه و بویر احمد</option>
-                    </select>
                 </div>
             </div>
 

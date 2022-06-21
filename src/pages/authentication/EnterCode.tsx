@@ -15,7 +15,7 @@ import { ILoginResultModel } from '@src/models/output/authentication/ILoginResul
 import { URL_USER_PROFILE } from '@src/configs/urls';
 import { useTranslation } from 'react-i18next';
 
-const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileNumber, handleEditmobileNo }) => {
+const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileNumber, handleEditMobileNo }) => {
   const toast = useToast();
   const { t }: any = useTranslation();
   const Ref1 = useRef(null);
@@ -114,19 +114,23 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
       >
         <div className="card p-4" style={{ marginBottom: '0px' }}>
           کد پیامک شده به شماره موبایل {GeneralHelpers.toPersianNumber(mobileNumber?.toString())} را وارد نمایید.
-          <div className="divider" style={{ marginTop: '10px' }} />
+          <div className="divider" style={{ marginTop: '15px', marginBottom: '15px' }} />
           <div style={{ direction: 'ltr', alignSelf: 'center' }}>
             {pinLoading ? (
               <Spinner style={{ width: '1rem', height: '1rem' }} />
             ) : (
-              <PinField className="pin-field" length={6} validate={/^[0-9]$/} onComplete={(e) => LoginWithSMS(e)} />
+              <PinField className="pin-field"
+                        style={{height: '55px'}}
+                        length={6}
+                        validate={/^[0-9]$/}
+                        onComplete={(e) => LoginWithSMS(e)} />
             )}
           </div>
-          <div className="divider" style={{ marginTop: '10px' }} />
+          <div className="divider" style={{ marginTop: '15px', marginBottom: '15px' }} />
           <Button onClick={Resent} className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0">
             {loading ? `${t('PleaseWait')}(${timer})` : t('Resent')}
           </Button>
-          <div className="color-theme pointer" style={{ marginTop: '15px' }} onClick={handleEditmobileNo}>
+          <div className="color-theme pointer" style={{ marginTop: '25px' }} onClick={handleEditMobileNo}>
             {t('EditMobileNumber')}
           </div>
         </div>

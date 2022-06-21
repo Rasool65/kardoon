@@ -6,4 +6,6 @@ export const APIURL_REGISTER = '/Account/RegisterUser';
 export const APIURL_SEND_PASSWORD = '/Account/SendPassword';
 export const APIURL_UPDATE_PROFILE = '/UserManagement/UpdateUserProfile';
 export const APIURL_GET_SERVICES = '/ServiceType/GetServieTypes';
-export const APIURL_GET_ADVERTISE = '/Advertise/GetAdvertise';
+export const APIURL_GET_ADVERTISE = '/Slider/GetSliders';
+export const APIURL_GET_PRODUCTS = '/ProductCategory/GetProductCategoryInCity';
+export const APIURL_GET_Cities = '/CountryDivision/GetCountryDivision';

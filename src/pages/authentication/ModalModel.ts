@@ -1,9 +1,10 @@
 export interface IModalModel {
   handleRegisterModal?: any;
+  setForgetPasswordModalVisible?: any;
   showRegisterModal?: boolean;
   showForgetPasswordModal?: boolean;
   showEnterCodeModal?: boolean;
   mobileNumber?: string;
-  handleEditmobileNo?: any;
+  handleEditMobileNo?: any;
   resend?: any;
 }

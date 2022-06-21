@@ -1,12 +1,11 @@
-// @ts-nocheck
 import Routers from './router/Router';
 import { FunctionComponent, useEffect } from 'react';
+import { CustomFunctions } from './utils/custom';
 
 const App: FunctionComponent = () => {
-
   useEffect(() => {
-    require('./utils/custom');
-  }, [])
+    CustomFunctions();
+  }, []);
 
   return <Routers />;
 };
