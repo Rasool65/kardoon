@@ -1,9 +1,6 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
-import FooterCard from '@src/layout/FooterCard';
-import Footer from '@src/layout/Footer';
-import Header from './Header';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IServicesResultModel } from '@src/models/output/services/IServicesResultModel';
@@ -14,29 +11,49 @@ import { useTranslation } from 'react-i18next';
 import { CustomFunctions } from '@src/utils/custom';
 import { ICountryDivisionResultModel } from '@src/models/output/countryDivision/ICountryDivisionResultModel';
 import Select from 'react-select';
-import { URL_HOME } from './../../configs/urls';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootStateType } from '@src/redux/Store';
+import { useLocalStorage } from './../../hooks/useLocalStorage';
+import { IUserModel } from '@src/models/output/authentication/ILoginResultModel';
+import { APIURL_UPDATE_RESIDENCE_CITY } from './../../configs/apiConfig/apiUrls';
+import { reloadUserData } from '@src/redux/reducers/authenticationReducer';
+import { URL_MAIN } from '@src/configs/urls';
 
 const SelectCity: FunctionComponent<IPageProps> = (props) => {
+  const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const [countryDivision, setCountryDivision] = useState<any>();
   const httpRequest = useHttpRequest();
   let cities: any[] = [];
-
   const { t }: any = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const GetCities = () => {
-    debugger;
     httpRequest
       .getRequest<IOutputResult<ICountryDivisionResultModel>>(
         APIURL_GET_Cities
         // 'http://127.0.0.1:2500/GetAdvertise'
       )
       .then((result) => {
+        debugger;
         setCountryDivision(result.data.data);
       });
   };
 
-  const fillCities = () => {
+  const UpdateResidenceCity = (userId: number, cityId: number) => {
+    debugger;
+    const body = {
+      userId: userId,
+      cityId: cityId,
+    };
+    httpRequest.updateRequest<IOutputResult<IUserModel>>(APIURL_UPDATE_RESIDENCE_CITY, body).then((result) => {
+      debugger;
+      dispatch(reloadUserData);
+      navigate(URL_MAIN);
+    });
+  };
+
+  const Cities = () => {
     countryDivision
       ? countryDivision.forEach((d: any) => {
           cities.push({ value: d.id, label: d.persianTitle });
@@ -45,22 +62,17 @@ const SelectCity: FunctionComponent<IPageProps> = (props) => {
   };
 
   useEffect(() => {
-    fillCities();
+    Cities();
   }, [countryDivision]);
 
   useEffect(() => {
     GetCities();
-    document.title = props.title;
-  }, [props.title]);
+  }, []);
 
   //   useEffect(() => {
   //     CustomFunctions();
   //   }, [advertise, services]);
 
-  const handleChange = () => {
-    debugger;
-    // history.push("/Home", Home);
-  };
   return (
     <>
       <div id="page">
@@ -84,12 +96,8 @@ const SelectCity: FunctionComponent<IPageProps> = (props) => {
               placeholder={t('SelectCity')}
               //   onChange={(e: any) => handleChange()}
               onChange={(e) => {
-                navigate(URL_HOME, {
-                  state: {
-                    cityId: e.value,
-                    cityName: e.label,
-                  },
-                });
+                debugger;
+                UpdateResidenceCity(userData?.userId ? userData.userId : 0, e.value);
               }}
               options={cities}
               isSearchable={true}

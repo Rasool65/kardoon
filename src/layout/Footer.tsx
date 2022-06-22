@@ -2,13 +2,14 @@ import IFooterProps from '@src/configs/routerConfig/IFooterProps';
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { URL_HOME, URL_MY_ORDERS, URL_USER_PROFILE } from './../configs/urls';
+import { URL_MY_ORDERS, URL_USER_PROFILE } from './../configs/urls';
+import { URL_MAIN } from '@src/configs/urls';
 
 const FooterCard: FunctionComponent<IFooterProps> = ({ footerMenuVisible, activePage }) => {
   const { t }: any = useTranslation();
   const navigate = useNavigate();
   const goToHome = () => {
-    navigate(URL_HOME);
+    navigate(URL_MAIN);
   };
 
   const goToProfile = () => {

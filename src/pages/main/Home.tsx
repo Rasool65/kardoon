@@ -12,6 +12,9 @@ import { BASE_URL } from '@src/configs/apiConfig/baseUrl';
 import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseResultModel';
 import { useTranslation } from 'react-i18next';
 import { CustomFunctions } from '@src/utils/custom';
+import { URL_CITY } from '@src/configs/urls';
+import { useSelector } from 'react-redux';
+import { RootStateType } from '@src/redux/Store';
 
 const Home: FunctionComponent<IPageProps> = (props) => {
   const [services, setServices] = useState<any>();
@@ -19,21 +22,17 @@ const Home: FunctionComponent<IPageProps> = (props) => {
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
   const navigate = useNavigate();
-  const { state }: any = useLocation();
+
+  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
+
   const GetServices = (cityId: number) => {
-    const body = {
-      cityId: state.cityId,
-    };
     debugger;
-    httpRequest
-      .postRequest<IOutputResult<IServicesResultModel>>(
-        APIURL_GET_SERVICES,
-        // 'http://127.0.0.1:2500/getService',
-        body
-      )
-      .then((result) => {
-        setServices(result.data.data);
-      });
+    const body = {
+      cityId: cityId,
+    };
+    httpRequest.postRequest<IOutputResult<IServicesResultModel>>(APIURL_GET_SERVICES, body).then((result) => {
+      setServices(result.data.data);
+    });
   };
 
   const GetAdvertise = () => {
@@ -48,10 +47,11 @@ const Home: FunctionComponent<IPageProps> = (props) => {
   };
 
   useEffect(() => {
-    GetServices(state.value);
+    debugger;
+    GetServices(cityId ? cityId : 0);
     GetAdvertise();
     document.title = props.title;
-  }, [props.title]);
+  }, []);
 
   useEffect(() => {
     CustomFunctions();
@@ -64,7 +64,7 @@ const Home: FunctionComponent<IPageProps> = (props) => {
 
         <div className="page-content" style={{ paddingBottom: '0' }}>
           <Header
-            cityName={state.cityName}
+            // getServices={GetServices}
             // showMainMenu={(e: any) => props.showMainMenu(true)}
             headerTitle={'صفحه اصلی'}
           />

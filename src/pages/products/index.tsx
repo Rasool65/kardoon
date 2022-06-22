@@ -18,7 +18,6 @@ const Products: FunctionComponent<IPageProps> = (props) => {
   const { state }: any = useLocation();
 
   const GetProducts = () => {
-    debugger;
     const body = state;
     httpRequest
       .postRequest<IOutputResult<IProductsResultModel[]>>(

@@ -9,3 +9,4 @@ export const APIURL_GET_SERVICES = '/ServiceType/GetServieTypes';
 export const APIURL_GET_ADVERTISE = '/Slider/GetSliders';
 export const APIURL_GET_PRODUCTS = '/ProductCategory/GetProductCategoryInCity';
 export const APIURL_GET_Cities = '/CountryDivision/GetCountryDivision';
+export const APIURL_UPDATE_RESIDENCE_CITY = '/UserManagement/UserResidenceCity';

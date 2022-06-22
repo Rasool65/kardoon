@@ -22,6 +22,7 @@ export interface IProfileUser {
   addresses?: string[];
 }
 export interface IUserModel {
+  userId: number;
   userName: string;
   profile: IProfileUser;
   roles: string[];

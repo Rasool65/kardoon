@@ -1,14 +1,14 @@
-import { URL_MAIN, URL_LOGIN, URL_USER_PROFILE, URL_CATEGORIES, URL_PRODUCTS, URL_CITY } from './../urls';
+import { URL_MAIN, URL_LOGIN, URL_USER_PROFILE, URL_CATEGORIES, URL_PRODUCTS, URL_CITY, URL_HOME } from './../urls';
 import IRoute from './IRoute';
 import RouteType from './RouteType';
 
 import Login from '@src/pages/authentication/Login';
 import Profile from '@src/pages/profile';
-import Home from '@src/pages/home/Home';
 import test from '@src/pages/test';
 import Category from '@src/pages/category';
 import Products from '@src/pages/products';
-import SelectCity from '@src/pages/home/SelectCity';
+import MainPage from '@src/pages/main';
+import Home from '@src/pages/main/Home';
 
 const routes: IRoute[] = [
   // {
@@ -28,7 +28,7 @@ const routes: IRoute[] = [
     },
   },
   {
-    path: '/home',
+    path: URL_HOME,
     component: Home,
     type: RouteType.public,
     props: {
@@ -67,12 +67,20 @@ const routes: IRoute[] = [
       title: 'test',
     },
   },
+  // {
+  //   path: URL_CITY,
+  //   component: SelectCity,
+  //   type: RouteType.public,
+  //   props: {
+  //     title: 'انتخاب شهر',
+  //   },
+  // },
   {
-    path: URL_CITY,
-    component: SelectCity,
+    path: '/main',
+    component: MainPage,
     type: RouteType.public,
     props: {
-      title: 'انتخاب شهر',
+      title: 'صفحه اصلی',
     },
   },
 ];

@@ -10,7 +10,7 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import { APIURL_IDP_TOKEN, APIURL_LOGIN } from '@src/configs/apiConfig/apiUrls';
 import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
 import { handleLogin } from '@src/redux/reducers/authenticationReducer';
-import { URL_HOME, URL_MAIN, URL_USER_PROFILE } from './../../configs/urls';
+import { URL_MAIN, URL_USER_PROFILE } from './../../configs/urls';
 import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
 import { useToast } from '@src/hooks/useToast';
 import FooterCard from '@src/layout/FooterCard';
@@ -18,7 +18,7 @@ import Register from './Register';
 import PasswordMessage from './PasswordMessage';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import EnterCode from "./EnterCode";
+import EnterCode from './EnterCode';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   <Controller
                     name="username"
                     control={control}
-                    render={({ field }:any) => (
+                    render={({ field }: any) => (
                       <>
                         <i className="fa fa-user" style={{ marginTop: '15px', top: '0' }} />
                         <Input
@@ -129,7 +129,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   <Controller
                     name="password"
                     control={control}
-                    render={({ field }:any) => (
+                    render={({ field }: any) => (
                       <>
                         <i className="fa fa-lock" style={{ marginTop: '15px', top: '0' }} />
                         <Input
@@ -179,12 +179,14 @@ const Login: FunctionComponent<IPageProps> = (props) => {
               </div>
             </div>
           </Form>
-          <FooterCard footerMenuVisible={false}/>
+          <FooterCard footerMenuVisible={false} />
         </div>
 
         <Register showRegisterModal={registerModalVisible} handleRegisterModal={handleModal} />
-        <PasswordMessage showForgetPasswordModal={forgetPasswordModalVisible} setForgetPasswordModalVisible={setForgetPasswordModalVisible} />
-
+        <PasswordMessage
+          showForgetPasswordModal={forgetPasswordModalVisible}
+          setForgetPasswordModalVisible={setForgetPasswordModalVisible}
+        />
 
         {/* <EnterCodeModal
           enterCodeModalVisible={this.state.enterCodeModalVisible}
