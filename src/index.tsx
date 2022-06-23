@@ -4,19 +4,20 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import Store from './redux/Store';
 import { ToastContainer } from 'react-toastify';
+import './scss/scripts/bootstrap.min.js';
 import './configs/i18n/config';
 import './scss/core.scss';
 import 'react-toastify/dist/ReactToastify.css';
 
 const LazyApp = lazy(() => import('./App'));
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <Provider store={Store}>
-     <Suspense fallback={<Spinner />}>
+    <Suspense fallback={<Spinner />}>
       <LazyApp />
       <ToastContainer newestOnTop />
     </Suspense>
-  </Provider>,
+  </Provider>
 );
 
 if ('serviceWorker' in navigator) {
