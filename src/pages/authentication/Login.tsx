@@ -10,7 +10,7 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import { APIURL_IDP_TOKEN, APIURL_LOGIN } from '@src/configs/apiConfig/apiUrls';
 import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
 import { handleLogin } from '@src/redux/reducers/authenticationReducer';
-import { URL_MAIN, URL_USER_PROFILE } from './../../configs/urls';
+import { URL_MAIN, URL_USER_PROFILE, URL_CITY } from './../../configs/urls';
 import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
 import { useToast } from '@src/hooks/useToast';
 import FooterCard from '@src/layout/FooterCard';
@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import EnterCode from './EnterCode';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
+  debugger;
   const navigate = useNavigate();
   const httpRequest = useHttpRequest();
   const tokenAuthentication = useTokenAuthentication();
@@ -31,7 +32,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   useEffect(() => {
     document.title = props.title;
   }, [props.title]);
-  const [inputs, setInputs] = useState([{ it: false }, { it: false }]);
   const [loading, setLoading] = useState<boolean>(false);
   const [registerModalVisible, setRegisterModalVisible] = useState<boolean>(false);
   const [forgetPasswordModalVisible, setForgetPasswordModalVisible] = useState<boolean>(false);
@@ -59,8 +59,9 @@ const Login: FunctionComponent<IPageProps> = (props) => {
         .postRequest<IOutputResult<ILoginResultModel>>(APIURL_LOGIN, body)
         .then((result) => {
           dispatch(handleLogin(result));
-          navigate(URL_USER_PROFILE);
           toast.showSuccess(result.data.message);
+          result.data.data.user.profile.residenceCityId ? navigate(URL_MAIN) : navigate(URL_CITY);
+          // navigate(URL_USER_PROFILE);
         })
         .finally(() => {
           setLoading(false);
@@ -187,13 +188,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
           showForgetPasswordModal={forgetPasswordModalVisible}
           setForgetPasswordModalVisible={setForgetPasswordModalVisible}
         />
-
-        {/* <EnterCodeModal
-          enterCodeModalVisible={this.state.enterCodeModalVisible}
-          mobileNumber={this.state.mobileNumber}
-          editMobileNo={(e) => this.editMobileNo(e)}
-          resend={(e) => this.resend(e)}
-        /> */}
       </div>
       <div
         onClick={() => {
