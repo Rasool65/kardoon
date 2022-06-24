@@ -19,6 +19,7 @@ import PasswordMessage from './PasswordMessage';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import EnterCode from './EnterCode';
+import { CustomFunctions } from '@src/utils/custom';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   debugger;
@@ -29,9 +30,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   const { t }: any = useTranslation();
   const toast = useToast();
 
-  useEffect(() => {
-    document.title = props.title;
-  }, [props.title]);
   const [loading, setLoading] = useState<boolean>(false);
   const [registerModalVisible, setRegisterModalVisible] = useState<boolean>(false);
   const [forgetPasswordModalVisible, setForgetPasswordModalVisible] = useState<boolean>(false);
@@ -72,6 +70,12 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   const handleModal = () => {
     setRegisterModalVisible(!registerModalVisible);
   };
+  useEffect(() => {
+    document.title = props.title;
+  }, [props.title]);
+  useEffect(() => {
+    CustomFunctions();
+  }, []);
   return (
     <>
       <div id="page">

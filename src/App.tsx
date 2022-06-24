@@ -4,9 +4,9 @@ import { CustomFunctions } from './utils/custom';
 
 const App: FunctionComponent = () => {
   debugger;
-  useEffect(() => {
-    CustomFunctions();
-  }, []);
+  // useEffect(() => {
+  //   CustomFunctions();
+  // }, []);
 
   return <Routers />;
 };
