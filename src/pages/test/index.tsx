@@ -1,8 +1,12 @@
+import { CustomFunctions } from '@src/utils/custom';
 import { FunctionComponent, useEffect, useState } from 'react';
 
 import IPageProps from '../../configs/routerConfig/IPageProps';
 
 const test: FunctionComponent<IPageProps> = (props) => {
+  useEffect(() => {
+    CustomFunctions();
+  }, []);
   return (
     <>
       <div id="preloader">
@@ -79,7 +83,6 @@ const test: FunctionComponent<IPageProps> = (props) => {
             <span>Settings</span>
           </a>
         </div>
-
         <div className="page-content">
           <div className="page-title page-title-small">
             <h2>

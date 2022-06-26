@@ -26,7 +26,6 @@ export const authSlice = createSlice({
         result.data.data.accessTokenInfo.access_token,
         result.data.data.accessTokenInfo.refresh_token
       );
-      debugger;
       localStorage.setItem('userData', JSON.stringify(result.data.data.user));
       state.userData = result.data.data.user;
       state.isAuthenticate = true;

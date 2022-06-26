@@ -22,7 +22,6 @@ import EnterCode from './EnterCode';
 import { CustomFunctions } from '@src/utils/custom';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
-  debugger;
   const navigate = useNavigate();
   const httpRequest = useHttpRequest();
   const tokenAuthentication = useTokenAuthentication();
@@ -54,12 +53,15 @@ const Login: FunctionComponent<IPageProps> = (props) => {
     };
     if (data && !loading) {
       httpRequest
-        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_LOGIN, body)
+        .postRequest<IOutputResult<ILoginResultModel>>(
+          APIURL_LOGIN,
+          // 'http://127.0.0.1:2500/login',
+          body
+        )
         .then((result) => {
           dispatch(handleLogin(result));
           toast.showSuccess(result.data.message);
           result.data.data.user.profile.residenceCityId ? navigate(URL_MAIN) : navigate(URL_CITY);
-          // navigate(URL_USER_PROFILE);
         })
         .finally(() => {
           setLoading(false);
@@ -117,20 +119,13 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                           invalid={errors.username && true}
                           {...field}
                         />
-                        {/* <label htmlFor="form4" className="color-highlight">
-                          {t('UserName')}
-                        </label> */}
                         <FormFeedback>{errors.username?.message}</FormFeedback>
                       </>
                     )}
                   />
-                  {/*<i className="fa fa-times disabled invalid color-red-dark"></i>*/}
-                  {/*<i className="fa fa-check disabled valid color-green-dark"></i>*/}
                   <em>({t('Required')})</em>
                 </div>
                 <div className="input-style no-borders has-icon validate-field mb-4">
-                  {/* <input type="password" className="form-control validate-password" id="form3a" placeholder="رمز عبور" />
-            <label className="color-blue-dark font-10 mt-1">رمز عبور</label> */}
                   <Controller
                     name="password"
                     control={control}
@@ -151,8 +146,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                       </>
                     )}
                   />
-                  {/*<i className="fa fa-times disabled invalid color-red-dark"></i>*/}
-                  {/*<i className="fa fa-check disabled valid color-green-dark"></i>*/}
                   <em>({t('Required')})</em>
                 </div>
                 <Button

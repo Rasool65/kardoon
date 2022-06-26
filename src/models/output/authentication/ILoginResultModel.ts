@@ -19,6 +19,7 @@ export interface IProfileUser {
   birthDate: string;
   isPublicEmail: boolean;
   residenceCityId?: number;
+  residenceCityName?: string;
   addresses?: string[];
 }
 export interface IUserModel {

@@ -8,29 +8,22 @@ import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IServicesResultModel } from '@src/models/output/services/IServicesResultModel';
 import { APIURL_GET_ADVERTISE, APIURL_GET_SERVICES } from '@src/configs/apiConfig/apiUrls';
-import { BASE_URL } from '@src/configs/apiConfig/baseUrl';
 import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseResultModel';
 import { useTranslation } from 'react-i18next';
 import { CustomFunctions } from '@src/utils/custom';
-import { URL_CITY } from '@src/configs/urls';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
+import MainMenuModal from './MainMenuModal';
 
 const Main: FunctionComponent<IPageProps> = (props) => {
-  debugger;
   const [services, setServices] = useState<any>();
-  const [cityId, setCityId] = useState<any>();
   const [advertise, setAdvertise] = useState<any>([]);
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
   const navigate = useNavigate();
-  // const auth = useSelector((state: RootStateType) => state.authentication.isAuthenticate);
-  // auth
-  //   ? setCityId(useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId))
-  //   : navigate(URL_CITY);
+  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
 
   const GetServices = (cityId: number) => {
-    debugger;
     const body = {
       cityId: cityId,
     };
@@ -51,7 +44,6 @@ const Main: FunctionComponent<IPageProps> = (props) => {
   };
 
   useEffect(() => {
-    debugger;
     GetServices(cityId ? cityId : 0);
     GetAdvertise();
     document.title = props.title;
@@ -63,15 +55,21 @@ const Main: FunctionComponent<IPageProps> = (props) => {
 
   return (
     <>
+      <MainMenuModal />
       <div id="page">
+        {/* <div
+          id="menu-main"
+          className="menu menu-box-right menu-box-detached rounded-m"
+          data-menu-width="260"
+          data-menu-load="menu-main.html"
+          data-menu-active="nav-settings"
+          data-menu-effect="menu-over"
+        ></div> */}
         <Footer footerMenuVisible={true} activePage={1} />
 
         <div className="page-content" style={{ paddingBottom: '0' }}>
-          <Header
-            // getServices={GetServices}
-            // showMainMenu={(e: any) => props.showMainMenu(true)}
-            headerTitle={'صفحه اصلی'}
-          />
+          <Header headerTitle={'صفحه اصلی'} />
+
           {!!advertise &&
             advertise.length > 0 &&
             advertise.map((items: IAdvertiseResultModel[], index: number) => {
@@ -85,7 +83,6 @@ const Main: FunctionComponent<IPageProps> = (props) => {
                     <div className="splide__list">
                       {!!items &&
                         items.map((item: IAdvertiseResultModel) => {
-                          debugger;
                           return (
                             <div className="splide__slide ps-3">
                               <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
@@ -140,6 +137,7 @@ const Main: FunctionComponent<IPageProps> = (props) => {
                 </div>
               );
             })}
+
           <div className="card card-style  me-0 ms-0 rounded-0 gradient-blue">
             <div className="content pt-5 pb-5">
               <h1 className="mb-1 color-white font-700 text-center">گارانتی کاردون</h1>

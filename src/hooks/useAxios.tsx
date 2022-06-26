@@ -46,6 +46,7 @@ export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
   }
 
   instance = axios.create({
+    // withCredentials: true,
     baseURL: API_BASE_URL,
     headers,
   });

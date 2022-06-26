@@ -5,7 +5,6 @@ import authenticationReducer from './reducers/authenticationReducer';
 // import ticketSlice from './reducers/ticketReducer';
 export const RootReducer = {
   // layout: layoutReducer,
-  // navbar: navbarReducer,
   authentication: authenticationReducer,
   // generalInformation: generalInformationReducer,
   // ticket: ticketSlice,

@@ -18,7 +18,10 @@ const City: FunctionComponent<IPageProps> = (props) => {
             <div className="card-overlay dark-mode-tint" />
             <div className="card-bg bg-20" />
           </div>
-          <SelectCity />
+          <div className="card card-style p-4" style={{ height: '440px' }}>
+            {t('PleaseSelectCity')}
+            <SelectCity />
+          </div>
         </div>
       </div>
     </>

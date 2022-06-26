@@ -32,7 +32,12 @@ const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
           ...config,
         });
         if (res.status >= 200 && res.status <= 204) resolve(res);
-        else {
+        else if (res.status == 401) {
+          debugger;
+          authToken.deleteLogoutToken();
+          toast.showError('مجددأ وارد شوید');
+          navigate(URL_LOGIN);
+        } else {
           toast.showError(res.data.message);
           if (onError) onError(res);
           reject(res);
@@ -60,11 +65,7 @@ const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
           ...config,
         });
         if (res.status >= 200 && res.status <= 204) resolve(res);
-        else if (res.status == 401) {
-          authToken.deleteLogoutToken();
-          navigate(URL_LOGIN);
-          toast.showError('لطفأ دوباره وارد شوید');
-        } else {
+        else {
           toast.showError(res.data.message);
           if (onError) onError(res);
           reject(res);

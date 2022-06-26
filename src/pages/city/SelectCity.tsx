@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
@@ -19,6 +19,7 @@ const SelectCity: FunctionComponent = (props) => {
   const [countryDivision, setCountryDivision] = useState<any>();
   const httpRequest = useHttpRequest();
   let cities: any[] = [];
+  // const [cityName, setCityName] = useState<string>();
   const { t }: any = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,22 +30,29 @@ const SelectCity: FunctionComponent = (props) => {
         // 'http://127.0.0.1:2500/GetAdvertise'
       )
       .then((result) => {
-        debugger;
         setCountryDivision(result.data.data);
       });
   };
 
   const UpdateResidenceCity = (userId: number, cityId: number) => {
-    debugger;
     const body = {
       userId: userId,
       cityId: cityId,
     };
-    httpRequest.updateRequest<IOutputResult<IUserModel>>(APIURL_UPDATE_RESIDENCE_CITY, body).then((result) => {
-      debugger;
-      dispatch(reloadUserData);
-      navigate(URL_MAIN);
-    });
+    httpRequest
+      .updateRequest<IOutputResult<IUserModel>>(
+        APIURL_UPDATE_RESIDENCE_CITY,
+        // 'http://127.0.0.1:2500/UserResidenceCity',
+        body
+      )
+      .then((result) => {
+        dispatch(reloadUserData(result));
+        navigate(
+          URL_MAIN
+          // , {state: {cityId: cityId}}
+        );
+        history.go(0);
+      });
   };
 
   const Cities = () => {
@@ -56,30 +64,26 @@ const SelectCity: FunctionComponent = (props) => {
   };
 
   useEffect(() => {
-    Cities();
-  }, [countryDivision]);
-
-  useEffect(() => {
-    GetCities();
+    GetCities(); // call API
   }, []);
 
+  useEffect(() => {
+    Cities(); // for each City array
+  }, [countryDivision]);
   return (
     <>
-      <div className="card card-style p-4" style={{ height: '440px' }}>
-        {t('PleaseSelectCity')}
-        <Select
-          className="select-city"
-          placeholder={t('SelectCity')}
-          //   onChange={(e: any) => handleChange()}
-          onChange={(e) => {
-            debugger;
-            UpdateResidenceCity(userData?.userId ? userData.userId : 0, e.value);
-          }}
-          options={cities}
-          isSearchable={true}
-          value={null}
-        />
-      </div>
+      <Select
+        className="select-city"
+        onInputChange={() => GetCities()}
+        placeholder={t('SelectCity')}
+        onChange={(e: any) => {
+          UpdateResidenceCity(userData?.userId ? userData.userId : 0, e.value);
+        }}
+        options={cities}
+        isSearchable={true}
+        // defaultInputValue={cities[cities.findIndex((i) => i.value === userData?.profile.residenceCityId)]}
+        defaultInputValue={userData?.profile.residenceCityName}
+      />
     </>
   );
 };

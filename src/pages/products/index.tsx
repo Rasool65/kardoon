@@ -10,8 +10,11 @@ import { APIURL_GET_ADVERTISE, APIURL_GET_SERVICES } from '@src/configs/apiConfi
 import { useTranslation } from 'react-i18next';
 import { CustomFunctions } from '@src/utils/custom';
 import { IProductsResultModel } from './../../models/output/products/IProductsResultModel';
+import { useSelector } from 'react-redux';
+import { RootStateType } from '@src/redux/Store';
 
 const Products: FunctionComponent<IPageProps> = (props) => {
+  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const [products, setProducts] = useState<any>();
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
@@ -62,8 +65,9 @@ const Products: FunctionComponent<IPageProps> = (props) => {
                           data-bs-toggle="collapse"
                           data-bs-target={`#collapse${items.id}`}
                         >
-                          <i className={`fa ${items.icon} me-2`}></i>
-                          {items.title}
+                          {/*<img src={`${items.logoUrl}`} alt="logo" className="fa-3x float-start ms-3 mt-3" />*/}
+                          <img src={`${items.logoUrl}`} />
+                          {items.name}
                           <i className="fa fa-chevron-down font-10 accordion-icon"></i>
                         </button>
                         <div id={`collapse${items.id}`} className="collapse bg-theme" data-bs-parent="#accordion-2">
@@ -83,7 +87,6 @@ const Products: FunctionComponent<IPageProps> = (props) => {
                 })}
             </div>
           </div>
-
           {/* <FooterCard footerMenuVisible={true} /> */}
         </div>
       </div>

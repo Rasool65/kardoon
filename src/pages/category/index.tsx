@@ -11,13 +11,14 @@ import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseRe
 import { useTranslation } from 'react-i18next';
 import { ICategory } from '@src/models/output/productCategory/ICategory';
 import { CustomFunctions } from '@src/utils/custom';
-
 import { URL_PRODUCTS } from './../../configs/urls';
-import Products from './../products/index';
 
 import Header from './Header';
+import { useSelector } from 'react-redux';
+import { RootStateType } from '@src/redux/Store';
 
 const Category: FunctionComponent<IPageProps> = (props) => {
+  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const navigate = useNavigate();
   const [advertise, setAdvertise] = useState<any>([]);
   const [categories, setCategories] = useState<any>();
@@ -78,7 +79,6 @@ const Category: FunctionComponent<IPageProps> = (props) => {
                     <div className="splide__list">
                       {!!items &&
                         items.map((item: IAdvertiseResultModel) => {
-                          debugger;
                           return (
                             <div className="splide__slide ps-3">
                               <div className="bg-theme pb-3 rounded-m shadow-l text-center overflow-hidden">
@@ -116,13 +116,12 @@ const Category: FunctionComponent<IPageProps> = (props) => {
                 return (
                   <div className="col-6" style={{ padding: '0 0 0 0' }}>
                     <div
-                      style={{ backgroundImage: `url(${item.backGroundUrl})`, cursor: 'pointer', margin: '0 8px 16px 8px' }}
+                      style={{ backgroundImage: `url(${item.backgroundImageUrl})`, cursor: 'pointer', margin: '0 8px 16px 8px' }}
                       className="card card-style bg-10"
                       data-card-height="250"
                       onClick={() => {
                         navigate(URL_PRODUCTS, {
                           state: {
-                            cityId: 1,
                             id: item.id,
                           },
                         });
@@ -130,10 +129,10 @@ const Category: FunctionComponent<IPageProps> = (props) => {
                     >
                       <div className="card-center text-uppercase ps-3">
                         <h1 className="color-white fa-5x pb-3">{item.id}</h1>
-                        <h6 className="color-white pt-1">{item.title}</h6>
+                        <h6 className="color-white pt-1">{item.name}</h6>
                       </div>
                       <div className="card-bottom ps-3">
-                        <p className="color-white mb-0 pb-2 font-11">{item.title}</p>
+                        <p className="color-white mb-0 pb-2 font-11">{item.logoUrl}</p>
                       </div>
                       <div className="card-overlay bg-black opacity-90"></div>
                     </div>

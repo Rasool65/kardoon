@@ -1,5 +1,8 @@
 export interface IProductsResultModel {
   id?: number;
-  title?: string;
-  icon?: string;
+  name?: string;
+  description?: string;
+  logoUrl?: string;
+  backgroundImageUrl?: string;
+  sortOrder?: number;
 }
