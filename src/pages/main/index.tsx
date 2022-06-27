@@ -14,6 +14,7 @@ import { CustomFunctions } from '@src/utils/custom';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import MainMenuModal from './MainMenuModal';
+import { URL_CATEGORIES } from '@src/configs/urls';
 
 const Main: FunctionComponent<IPageProps> = (props) => {
   const [services, setServices] = useState<any>();
@@ -24,10 +25,7 @@ const Main: FunctionComponent<IPageProps> = (props) => {
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
 
   const GetServices = (cityId: number) => {
-    const body = {
-      cityId: cityId,
-    };
-    httpRequest.postRequest<IOutputResult<IServicesResultModel>>(APIURL_GET_SERVICES, body).then((result) => {
+    httpRequest.getRequest<IOutputResult<IServicesResultModel>>(`${APIURL_GET_SERVICES}?CityId=${cityId}`).then((result) => {
       setServices(result.data.data);
     });
   };
@@ -112,6 +110,7 @@ const Main: FunctionComponent<IPageProps> = (props) => {
                 </div>
               );
             })}
+
           {!!services &&
             services?.length > 0 &&
             services.map((item: IServicesResultModel, id: number) => {
@@ -120,17 +119,23 @@ const Main: FunctionComponent<IPageProps> = (props) => {
                   style={{ marginTop: '30px' }}
                   className="card card-style card-blur pointer"
                   data-card-height="155"
-                  onClick={(e) => navigate(`/${item.addressUrl}`)}
+                  onClick={(e) =>
+                    navigate(URL_CATEGORIES, {
+                      state: {
+                        ServiceTypeId: item.id,
+                      },
+                    })
+                  }
                 >
-                  <img key={id} src={item.backGroundUrl} className="card-image" alt={item.title} />
+                  <img key={id} src={item.backgroundUrl} className="card-image" alt={item.title} />
                   <div className="card-top">
-                    <img src={item.iconUrl} alt="logo" className="fa-3x float-start ms-3 mt-3" />
+                    <img src={item.icon} alt="logo" className="fa-3x float-start ms-3 mt-3" />
                     {/* <i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/> */}
                   </div>
                   <div className="card-bottom">
                     <div className="float-end me-3">
                       <h1 className="color-white font-700 text-end mb-n1">{item.title}</h1>
-                      <p className="color-white text-end opacity-50 mb-2">{item.subTitle}</p>
+                      <p className="color-white text-end opacity-50 mb-2">{item.shortDescription}</p>
                     </div>
                   </div>
                   <div className="card-overlay bg-black opacity-30" />

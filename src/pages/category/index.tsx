@@ -1,11 +1,11 @@
 import { FunctionComponent, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
 import FooterCard from '@src/layout/FooterCard';
 import Footer from '@src/layout/Footer';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import { APIURL_GET_ADVERTISE, APIURL_GET_SERVICES } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_GET_ADVERTISE, APIURL_GET_CATEGORIES, APIURL_GET_SERVICES } from '@src/configs/apiConfig/apiUrls';
 import { BASE_URL } from '@src/configs/apiConfig/baseUrl';
 import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseResultModel';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +24,7 @@ const Category: FunctionComponent<IPageProps> = (props) => {
   const [categories, setCategories] = useState<any>();
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
-
+  const { state }: any = useLocation();
   const GetAdvertise = () => {
     httpRequest
       .getRequest<IOutputResult<IAdvertiseResultModel[]>>(
@@ -35,11 +35,12 @@ const Category: FunctionComponent<IPageProps> = (props) => {
         setAdvertise(result.data.data);
       });
   };
+
   const GetCategories = () => {
     httpRequest
       .getRequest<IOutputResult<ICategory>>(
-        // APIURL_GET_ADVERTISE
-        'http://127.0.0.1:2500/getCategory'
+        `${APIURL_GET_CATEGORIES}/?CityId=${cityId}&ServiceTypeId=${state.ServiceTypeId}`
+        // 'http://127.0.0.1:2500/getCategory'
       )
       .then((result) => {
         setCategories(result.data.data);
@@ -122,7 +123,8 @@ const Category: FunctionComponent<IPageProps> = (props) => {
                       onClick={() => {
                         navigate(URL_PRODUCTS, {
                           state: {
-                            id: item.id,
+                            ProductCategoryId: item.id,
+                            ServiceTypeId: state.ServiceTypeId,
                           },
                         });
                       }}
