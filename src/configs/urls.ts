@@ -5,3 +5,4 @@ export const URL_MY_ORDERS = '/myOrders';
 export const URL_CATEGORIES = '/categories';
 export const URL_PRODUCTS = '/products';
 export const URL_CITY = '/city';
+export const URL_ORDER_DETAIL = '/order-detail';

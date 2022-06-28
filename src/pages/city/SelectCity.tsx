@@ -19,7 +19,6 @@ const SelectCity: FunctionComponent = (props) => {
   const [countryDivision, setCountryDivision] = useState<any>();
   const httpRequest = useHttpRequest();
   let cities: any[] = [];
-  // const [cityName, setCityName] = useState<string>();
   const { t }: any = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -47,10 +46,7 @@ const SelectCity: FunctionComponent = (props) => {
       )
       .then((result) => {
         dispatch(reloadUserData(result));
-        navigate(
-          URL_MAIN
-          // , {state: {cityId: cityId}}
-        );
+        navigate(URL_MAIN);
         history.go(0);
       });
   };
@@ -64,11 +60,11 @@ const SelectCity: FunctionComponent = (props) => {
   };
 
   useEffect(() => {
-    GetCities(); // call API
+    GetCities();
   }, []);
 
   useEffect(() => {
-    Cities(); // for each City array
+    Cities();
   }, [countryDivision]);
   return (
     <>

@@ -18,7 +18,7 @@ import { CustomFunctions } from '@src/utils/custom';
 import { IProductsResultModel } from './../../models/output/products/IProductsResultModel';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-import { URL_MAIN } from '@src/configs/urls';
+import { URL_MAIN, URL_ORDER_DETAIL } from '@src/configs/urls';
 import { IProductTypeResultModel } from '@src/models/output/products/IProductTypeResultModel';
 
 const Products: FunctionComponent<IPageProps> = (props) => {
@@ -43,14 +43,12 @@ const Products: FunctionComponent<IPageProps> = (props) => {
       : navigate(URL_MAIN);
   };
   const GetDeviceType = (ProductCategoryId: number) => {
-    debugger;
     httpRequest
       .getRequest<IOutputResult<IProductTypeResultModel[]>>(
         `${APIURL_GET_DEVICE_TYPE}?CityId=${cityId}&ProductCategoryId=${ProductCategoryId}&ServiceTypeId=${state.ServiceTypeId}`
         // 'http://127.0.0.1:2500/getProducts',
       )
       .then((result) => {
-        debugger;
         setDeviceType(result.data.data);
       });
   };
@@ -107,19 +105,21 @@ const Products: FunctionComponent<IPageProps> = (props) => {
                                 <button
                                   style={{ width: '100%', marginTop: '30px' }}
                                   className="btn btn-m mt-4 mb-0 btn-full bg-green-dark rounded-sm text-uppercase font-900"
-                                  onClick={() => {}}
+                                  onClick={() => {
+                                    navigate(URL_ORDER_DETAIL, {
+                                      state: {
+                                        ProductId: items.id,
+                                        ServiceTypeId: state.ServiceTypeId,
+                                      },
+                                    });
+                                  }}
                                 >
                                   {items.name}
                                 </button>
                               );
                             })
                           ) : (
-                            <button
-                              style={{ width: '100%', marginTop: '30px' }}
-                              className="btn btn-m mt-4 mb-0 btn-full bg-green-dark rounded-sm text-uppercase font-900"
-                            >
-                              شروع ثبت سفارش
-                            </button>
+                            <p>نوع محصول وجود ندارد</p>
                           )}
                         </div>
                       </div>

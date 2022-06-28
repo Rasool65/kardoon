@@ -1,4 +1,4 @@
-import { URL_MAIN, URL_LOGIN, URL_USER_PROFILE, URL_CATEGORIES, URL_PRODUCTS, URL_CITY } from './../urls';
+import { URL_MAIN, URL_LOGIN, URL_USER_PROFILE, URL_CATEGORIES, URL_PRODUCTS, URL_CITY, URL_ORDER_DETAIL } from './../urls';
 import IRoute from './IRoute';
 import RouteType from './RouteType';
 import Login from '@src/pages/authentication/Login';
@@ -8,6 +8,7 @@ import Category from '@src/pages/category';
 import Products from '@src/pages/products';
 import Main from '@src/pages/main';
 import City from '@src/pages/city';
+import OrderDetail from '@src/pages/orderDetail';
 
 const routes: IRoute[] = [
   {
@@ -64,6 +65,14 @@ const routes: IRoute[] = [
     type: RouteType.private,
     props: {
       title: 'انتخاب شهر',
+    },
+  },
+  {
+    path: URL_ORDER_DETAIL,
+    component: OrderDetail,
+    type: RouteType.private,
+    props: {
+      title: 'حزییات سفارش اولیه',
     },
   },
 ];
