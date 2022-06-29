@@ -1,5 +1,5 @@
 import React, { Component, FunctionComponent, useEffect, useState } from 'react';
-import Camera from 'react-html5-camera-photo';
+// import Camera from 'react-html5-camera-photo';
 import Select from 'react-select';
 import { Col, Container, Form, FormFeedback, Input, Row, Button, Label } from 'reactstrap';
 import useHttpRequest from '@src/hooks/useHttpRequest';
@@ -17,6 +17,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CustomFunctions } from '@src/utils/custom';
 import { IRequestDetail, RequestDetailModelSchema } from '@src/models/input/orderDetail/IRequestDetail';
 import { useRecorder } from '@src/hooks/useRecorder';
+import Webcam from 'react-webcam';
+import VideoModal from './VideoModal';
+import CaptureModal from './CaptureModal';
 
 const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClickNext }) => {
   let brands: any[] = [];
@@ -90,6 +93,10 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   useEffect(() => {
     // Brands();
   }, [brandList]);
+
+  // useEffect(() => {
+  //   CustomFunctions();
+  // }, []);
 
   const {
     register,
@@ -373,12 +380,26 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                       در صورت نیاز می توانید تصویری را بارگذاری نمایید
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
-                      {/* <Camera
-                        onTakePhoto={(dataUri) => {
-                          handleTakePhoto(dataUri);
-                        }}
-                      /> */}
-                      <img style={{cursor:"pointer"}} onClick={onImageFileChange} src="images/forTest/camera.png" width="46" height="46" alt="" />
+                    {/* <Webcam /> */}
+                      <img data-menu="capture-Modal" style={{cursor:"pointer"}}  src="images/forTest/camera.png" width="46" height="46" alt="" />
+                    </Col>
+                  </Row>
+                </Container>
+                <Container style={{ maxWidth: '100%', margin: '25px 0 20px 0', padding: '0 0 0 0' }}>
+                  <Row
+                    style={{
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      padding: '0 0 0 0',
+                      marginBottom: '0',
+                    }}
+                  >
+                    <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
+                      در صورت نیاز می توانید ویدیو را بارگذاری نمایید
+                    </Col>
+                    <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
+                    
+                      <img data-menu="video-Modal" style={{cursor:"pointer"}}  src="images/forTest/video.png" width="46" height="46" alt="" />
                     </Col>
                   </Row>
                 </Container>
@@ -394,6 +415,8 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
           </div>
         </div>
       </div>
+      <CaptureModal/>
+      <VideoModal/>
     </div>
   );
 };

@@ -27,9 +27,9 @@ const test: FunctionComponent<IPageProps> = (props) => {
           <a href="#" data-toggle-theme className="header-icon header-icon-2 show-on-theme-light">
             <i className="fas fa-moon"></i>
           </a>
-          <a href="#" data-menu="menu-highlights" className="header-icon header-icon-3">
+          {/* <a href="#" data-menu="menu-highlights" className="header-icon header-icon-3">
             <i className="fas fa-brush"></i>
-          </a>
+          </a> */}
         </div>
         <div id="footer-bar" className="footer-bar-5">
           <a href="index-components.html">

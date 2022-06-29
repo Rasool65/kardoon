@@ -3,43 +3,10 @@ import React, { FunctionComponent, useEffect } from 'react';
 import SelectCity from '../city/SelectCity';
 import { IModalModel } from './../authentication/ModalModel';
 
-// const options = [
-//   { label: 'تهران', value: '1' },
-//   { label: 'شیراز', value: '2' },
-//   { label: 'اصفهان', value: '3' },
-//   { label: 'اراک', value: '4' },
-//   { label: 'مشهد', value: '5' },
-//   { label: 'تبریز', value: '6' },
-//   { label: 'ایلام', value: '7' },
-//   { label: 'یزد', value: '8' },
-//   { label: 'سمنان', value: '9' },
-//   { label: 'کرمان', value: '10' },
-//   { label: 'رشت', value: '11' },
-//   { label: 'انزلی', value: '12' },
-//   { label: 'آستارا', value: '13' },
-// ];
+
 const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any) => {
   //   const dispatch = useDispatch();
-  //   const goToHome = () => {
-  //     history.push('/Home', Home);
-  //   };
-
-  //   const goToMyAddresses = () => {
-  //     history.push('/MyAddresses', MyAddresses);
-  //   };
-
-  //   const goToMyComplexList = () => {
-  //     history.push('/MyComplexList', MyComplexList);
-  //   };
-
-  //   const goToUserProfile = () => {
-  //     history.push('/UserProfile', UserProfile);
-  //   };
-
-  //   const goToMyOrders = () => {
-  //     history.push('/MyOrders', MyOrders);
-  //   };
-
+ 
   //   const handleChangeCity = (e) => {
   //     // console.log(e)
   //   };
