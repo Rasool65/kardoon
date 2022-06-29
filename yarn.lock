@@ -1444,6 +1444,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-html5-camera-photo@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@types/react-html5-camera-photo/-/react-html5-camera-photo-1.5.1.tgz#7585ca88a52a80035b743cd0df8a236530fe6e0a"
+  integrity sha512-5kJwACiD+fIErQiS6bVD7+d4b9lnECbfWqbDTTAcDyBDRAXDoBEqRCfRjlTYnhNIkkWJA1Ow3s8xCuLKvC1IkQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-i18next@^8.1.0":
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/@types/react-i18next/-/react-i18next-8.1.0.tgz#5faacbfe7dc0f24729c1df6914610bfe861a50de"
@@ -3918,6 +3925,11 @@ jsesc@~0.5.0:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha512-uZz5UnB7u4T9LvwmFqXii7pZSouaRPorGs5who1Ip7VO0wxanFvBL7GkM6dTHlgX+jhBApRetaWpnDabOeTcnA==
 
+jslib-html5-camera-photo@3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/jslib-html5-camera-photo/-/jslib-html5-camera-photo-3.3.3.tgz#76f7c0107a5f2e7c49b6adaeddef82dbfafec13d"
+  integrity sha512-kGmIesH3UIaTfwKnqYbolBlSGSiTtNI+l/Np0b+PDIz8VfNJwkN/xmV4mQxBzpTbWq1gF3rB/CmfIojcY4Jqow==
+
 json-parse-better-errors@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz#bb867cfb3450e69107c131d1c514bab3dc8bcaa9"
@@ -4751,6 +4763,13 @@ react-hook-form@^7.31.2:
   version "7.33.0"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.33.0.tgz#44a87ddd630f00ebeb0f15aa978f69ca74b8a77b"
   integrity sha512-h8XoeUHQs1Snx1s/sSvM+eVTSKkWQt8TcrbL+3/Rt5gugxpy4ueL5ZZkubffyNpUyyTz0qM0kwOi2c+JgGTjLA==
+
+react-html5-camera-photo@^1.5.9:
+  version "1.5.9"
+  resolved "https://registry.yarnpkg.com/react-html5-camera-photo/-/react-html5-camera-photo-1.5.9.tgz#063b3d5fd7800b32a2448c43aa922e4b36e37f3c"
+  integrity sha512-Lz6nddyaOHuC06FUjx5tAGS8ZWHaRka3RdDC7QDZdwfkepIDnT9gSIfV2JanpfTv8p9v0UbykQqUi/8xKkZpVQ==
+  dependencies:
+    jslib-html5-camera-photo "3.3.3"
 
 react-i18next@*:
   version "11.17.3"

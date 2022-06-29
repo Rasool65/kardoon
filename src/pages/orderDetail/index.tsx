@@ -17,6 +17,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { IBrandResultModel } from '@src/models/output/orderDetail/IBrandResultModel';
 import OrderDetailFirst from './OrderDetailFirst';
 import OrderDetailConfirm from './OrderDetailSecond';
+import { ICreateConsumerRequest } from '@src/models/input/orderDetail/ICreateConsumerRequest';
+import { IRequestDetail } from '@src/models/input/orderDetail/IRequestDetail';
 
 export type ISteps = {
   id: number;
@@ -40,15 +42,17 @@ const steps: ISteps[] = [
 const OrderDetail: FunctionComponent<IPageProps> = (prop) => {
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const navigate = useNavigate();
-  const [brandList, setBrandList] = useState<any>();
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
   const { state }: any = useLocation();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [CurrentStep, setCurrentStep] = useState(steps[activeStep]);
+  const [data, setData] = useState<ICreateConsumerRequest>();
 
-  const onClickNext = (body: any) => {
+  const onClickNext = (body: IRequestDetail) => {
     // save to state
+    debugger;
+    data?.requestDetail.push(body);
     setCurrentStep(steps[activeStep + 1]);
     setActiveStep(activeStep + 1);
   };

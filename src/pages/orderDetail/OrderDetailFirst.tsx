@@ -1,10 +1,7 @@
 import React, { Component, FunctionComponent, useEffect, useState } from 'react';
-// import 'bootstrap/dist/css/bootstrap.css';
-// import '../Style/style.css';
-// import '../Style/scss/style.scss';
+import Camera from 'react-html5-camera-photo';
 import Select from 'react-select';
-import { IPageProps } from './../../configs/routerConfig/IPageProps';
-import { Col, Container, Form, FormFeedback, Input, Row, Button } from 'reactstrap';
+import { Col, Container, Form, FormFeedback, Input, Row, Button, Label } from 'reactstrap';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -16,12 +13,14 @@ import { URL_MAIN } from '@src/configs/urls';
 import { Controller, useForm } from 'react-hook-form';
 import { IBrandResultModel } from '@src/models/output/orderDetail/IBrandResultModel';
 import { IOrderDetailPageProp } from './IOrderDetailProp';
-import { IOrderDetailFirstModel, OrderDetailFirstModelSchema } from './../../models/input/orderDetail/IOrderDetailModel';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CustomFunctions } from '@src/utils/custom';
+import { IRequestDetail, RequestDetailModelSchema } from '@src/models/input/orderDetail/IRequestDetail';
+import { useRecorder } from '@src/hooks/useRecorder';
 
 const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClickNext }) => {
   let brands: any[] = [];
+  let { audioURL, isRecording, startRecording, stopRecording } = useRecorder();
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const navigate = useNavigate();
   const [brandList, setBrandList] = useState<any>();
@@ -33,6 +32,35 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
     serial: false,
     requestDescription: false,
   });
+
+  const [imageFile, setImageFile] = useState<any>();
+  const [audioFile, setAudioFile] = useState<any>();
+
+  function handleTakePhoto(dataUri: any) {
+    debugger;
+    // Do stuff with the photo...
+    console.log('takePhoto');
+  }
+  const onStopRecordAudio = (e: any) => {
+    debugger;
+    const reader = new FileReader(),
+      files = e.target.files;
+    // reader.onload = function () {
+    //   setAudioFile(reader.result);
+    // };
+    setAudioFile(files[0]);
+    reader.readAsDataURL(files[0]);
+  };
+  const onImageFileChange = (e: any) => {
+    debugger;
+    const reader = new FileReader(),
+      files = e.target.files;
+    // reader.onload = function () {
+    //   setAudioFile(reader.result);
+    // };
+    setImageFile(files[0]);
+    reader.readAsDataURL(files[0]);
+  };
 
   const GetBrands = () => {
     !!state
@@ -68,18 +96,30 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<IOrderDetailFirstModel>({ mode: 'onChange', resolver: yupResolver(OrderDetailFirstModelSchema) });
+  } = useForm<IRequestDetail>({ mode: 'onChange', resolver: yupResolver(RequestDetailModelSchema) });
 
-  const onSubmit = (data: IOrderDetailFirstModel) => {
-    const body = {
-      serviceTypeId: state.ServiceTypeId,
-      productCategoryId: state.ProductId,
-      brand: data.brand,
-      model: data.model,
-      serial: data.serial,
-      requestDescription: data.requestDescription,
-    };
-    handleClickNext(body);
+  const onSubmit = (data: IRequestDetail) => {
+    var formData = new FormData();
+    formData.append('serviceTypeId', state.ServiceTypeId);
+    formData.append('productCategoryId', state.ProductId);
+    formData.append('brandId', data.brand.value.toString());
+    formData.append('model', data.model);
+    formData.append('serial', data.serial);
+    formData.append('requestDescription', data.requestDescription);
+    if (audioFile) formData.append('audioMessage', audioFile);
+    if (imageFile) formData.append('videoMessage', imageFile);
+
+    // const body: IRequestDetail = {
+    //   audioUrl: audioURL,
+    //   serviceTypeId: state.ServiceTypeId,
+    //   productCategoryId: state.ProductId,
+    //   brand: data.brand,
+    //   model: data.model,
+    //   serial: data.serial,
+    //   requestDescription: data.requestDescription,
+    // };
+
+    handleClickNext(formData);
   };
   useEffect(() => {
     CustomFunctions();
@@ -87,7 +127,6 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   return (
     <div id="page">
       {/* <Header/> */}
-
       <div
         className="page-content"
         style={{
@@ -224,14 +263,6 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                   className={`input-style has-borders no-icon mb-4 ${input.requestDescription ? 'input-style-active' : ''}`}
                   style={{ margin: '0 0 0 0', padding: '0 0 0 0' }}
                 >
-                  {/* <textarea
-                  // onChange={(e) => this.isTypingToggle(e, 2, !this.state.inputs[2].it)}
-                  id="form7"
-                  placeholder="شرح درخواست"
-                />
-                <label htmlFor="form7" className="color-highlight">
-                  شرح درخواست
-                </label> */}
                   <Controller
                     name="requestDescription"
                     control={control}
@@ -240,7 +271,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                         <Input
                           id="form7"
                           onFocus={() => setInput({ requestDescription: true })}
-                          style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
+                          style={{ backgroundPosition: 'left', marginTop: '0', height: '100px' }}
                           className="form-control validate-text"
                           type="textarea"
                           placeholder={t('EnterRequestDescription')}
@@ -274,9 +305,27 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                     <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
                       در صورت نیاز درخواست خود را به صورت صوتی ثبت کنید
                     </Col>
+
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
-                      <img src="images/forTest/voice.png" width="46" height="46" alt="" />
+                      <img
+                        // className="btn-danger"
+                        // disabled={isRecording}
+                        style={{ cursor: 'pointer' }}
+                        src="images/forTest/voice.png"
+                        onClick={() => {
+                          startRecording();
+                        }}
+                        width="46"
+                        height="46"
+                        alt=""
+                      />
                     </Col>
+                  </Row>
+                  <Row>
+                    <audio src={audioURL} controls />
+                    <Button className="btn-danger" onClick={stopRecording} disabled={!isRecording}>
+                      توقف
+                    </Button>
                   </Row>
                 </Container>
 
@@ -293,7 +342,12 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                       در صورت نیاز می توانید تصویری را بارگذاری نمایید
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
-                      <img src="images/forTest/camera.png" width="46" height="46" alt="" />
+                      <Camera
+                        onTakePhoto={(dataUri) => {
+                          handleTakePhoto(dataUri);
+                        }}
+                      />
+                      <img onClick={onImageFileChange} src="images/forTest/camera.png" width="46" height="46" alt="" />
                     </Col>
                   </Row>
                 </Container>
