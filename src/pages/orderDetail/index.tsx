@@ -1,7 +1,4 @@
 import React, { Component, ComponentType, FunctionComponent, useState } from 'react';
-// import 'bootstrap/dist/css/bootstrap.css';
-// import '../Style/style.css';
-// import '../Style/scss/style.scss';
 import Select from 'react-select';
 import { IPageProps } from './../../configs/routerConfig/IPageProps';
 import { Col, Container, Input, Row } from 'reactstrap';
@@ -40,7 +37,7 @@ const steps: ISteps[] = [
 ];
 
 const OrderDetail: FunctionComponent<IPageProps> = (prop) => {
-  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
+  // const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const navigate = useNavigate();
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();

@@ -70,7 +70,7 @@ const routes: IRoute[] = [
   {
     path: URL_ORDER_DETAIL,
     component: OrderDetail,
-    type: RouteType.private,
+    type: RouteType.public,
     props: {
       title: 'حزییات سفارش اولیه',
     },

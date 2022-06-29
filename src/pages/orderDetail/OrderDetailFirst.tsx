@@ -21,7 +21,8 @@ import { useRecorder } from '@src/hooks/useRecorder';
 const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClickNext }) => {
   let brands: any[] = [];
   let { audioURL, isRecording, startRecording, stopRecording } = useRecorder();
-  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
+  // const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
+  const cityId =6
   const navigate = useNavigate();
   const [brandList, setBrandList] = useState<any>();
   const httpRequest = useHttpRequest();
@@ -32,7 +33,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
     serial: false,
     requestDescription: false,
   });
-
+  const [audioDisplay,setAudioDisplay]= useState<string>('none')
   const [imageFile, setImageFile] = useState<any>();
   const [audioFile, setAudioFile] = useState<any>();
 
@@ -83,11 +84,11 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   };
 
   useEffect(() => {
-    GetBrands();
+    // GetBrands();
   }, []);
 
   useEffect(() => {
-    Brands();
+    // Brands();
   }, [brandList]);
 
   const {
@@ -158,10 +159,10 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                         noOptionsMessage={() => t('ListIsEmpty')}
                         onFocus={() => GetBrands()}
                         isClearable
-                        theme={(theme) => ({
-                          ...theme,
-                          borderRadius: 10,
-                        })}
+                        // theme={(theme) => ({
+                        //   ...theme,
+                        //   borderRadius: 10,
+                        // })}
                         className="select-city"
                         placeholder={t('SelectBrand')}
                         options={brands}
@@ -308,12 +309,23 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
 
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
                       <img
-                        // className="btn-danger"
-                        // disabled={isRecording}
+                        hidden={isRecording}
                         style={{ cursor: 'pointer' }}
                         src="images/forTest/voice.png"
                         onClick={() => {
                           startRecording();
+                          setAudioDisplay('flex');
+                        }}
+                        width="46"
+                        height="46"
+                        alt=""
+                      />
+                      <img
+                        hidden={!isRecording}
+                        style={{ cursor: 'pointer' }}
+                        src="images/forTest/stop.png"
+                        onClick={() => {
+                          stopRecording();
                         }}
                         width="46"
                         height="46"
@@ -321,11 +333,30 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                       />
                     </Col>
                   </Row>
-                  <Row>
-                    <audio src={audioURL} controls />
-                    <Button className="btn-danger" onClick={stopRecording} disabled={!isRecording}>
-                      توقف
-                    </Button>
+                  <Row  style={{
+                      display:`${audioDisplay}`,
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      padding: '0 0 0 0',
+                      marginBottom: '0',
+                    }}>
+                    <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
+                    <audio hidden={isRecording} src={audioURL} controls />
+                    </Col>
+                    <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
+                    <img
+                        hidden={isRecording}
+                        style={{ cursor: 'pointer' }}
+                        src="images/forTest/delete.png"
+                        onClick={() => {
+                          //todo remove voice record
+                          setAudioDisplay('none');
+                        }}
+                        width="46"
+                        height="46"
+                        alt=""
+                      />
+                    </Col>
                   </Row>
                 </Container>
 
@@ -342,12 +373,12 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                       در صورت نیاز می توانید تصویری را بارگذاری نمایید
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
-                      <Camera
+                      {/* <Camera
                         onTakePhoto={(dataUri) => {
                           handleTakePhoto(dataUri);
                         }}
-                      />
-                      <img onClick={onImageFileChange} src="images/forTest/camera.png" width="46" height="46" alt="" />
+                      /> */}
+                      <img style={{cursor:"pointer"}} onClick={onImageFileChange} src="images/forTest/camera.png" width="46" height="46" alt="" />
                     </Col>
                   </Row>
                 </Container>
