@@ -1,24 +1,20 @@
-import { CustomFunctions } from '@src/utils/custom';
-import React, { FunctionComponent, useEffect } from 'react';
-import Webcam from 'react-webcam';
-import { IModalModel } from './../authentication/ModalModel';
+import { FunctionComponent } from 'react';
+import { ICameraModal } from './IOrderDetailProp';
 
-
-const VideoModal: FunctionComponent<IModalModel> = ({ videoMenuVisible }: any) => {
- 
-  useEffect(() => {
-    CustomFunctions();
-  }, [videoMenuVisible]);
+const VideoModal: FunctionComponent<ICameraModal> = ({ WebcamStreamCapture }: any) => {
+  // useEffect(() => {
+  //   CustomFunctions();
+  // }, [WebcamStreamCapture]);
   return (
-        <div
-          id="video-Modal"
-          className={`menu menu-box-bottom menu-box-detached rounded-m ${videoMenuVisible ? 'menu-active' : ''}`}
-          style={{ display: 'inherit' }}
-          data-menu-height="600"
-          data-menu-effect="menu-over"
-        >
-        <Webcam />
-        </div>
+    <div
+      id="video-Modal"
+      className={`menu menu-box-bottom menu-box-detached rounded-m`}
+      style={{ display: 'inherit', textAlign: 'center' }}
+      data-menu-height="650"
+      data-menu-effect="menu-over"
+    >
+      <WebcamStreamCapture />
+    </div>
   );
 };
 export default VideoModal;

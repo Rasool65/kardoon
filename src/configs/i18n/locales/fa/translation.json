@@ -65,5 +65,6 @@
   "RequestDescription": "توضیحات  دستگاه",
   "EnterRequestDescription": "توضیحات دستگاه را وارد نمایید",
   "RequestDescriptionRequired": "توضیحات دستگاه اجباریست",
-  "SelectBrandRequired": "انتخاب برند اجباریست"
+  "SelectBrandRequired": "انتخاب برند اجباریست",
+  "ListIsEmpty": "لیست در حال بارگذاری یا خالی میباشد صبر کنید"
 }

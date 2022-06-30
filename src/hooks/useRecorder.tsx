@@ -39,7 +39,6 @@ export const useRecorder = () => {
   };
   return { audioURL, isRecording, startRecording, stopRecording };
 };
-
 async function requestRecorder() {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
   return new MediaRecorder(stream);

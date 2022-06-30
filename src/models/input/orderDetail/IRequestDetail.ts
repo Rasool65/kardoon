@@ -2,22 +2,21 @@ import { t } from 'i18next';
 import * as yup from 'yup';
 
 export interface IRequestDetail {
-  audioUrl?: string;
   serviceTypeId?: number;
   productCategoryId?: number;
-  brand: IBrandSelectModel;
+  brandId: IBrandSelectModel;
   model: string;
   serial: string;
   requestDescription: string;
-  audioMessage?: string;
-  videoMessage?: string;
+  // audioMessage?: BinaryData;
+  // videoMessage?: BinaryData;
+  // pictureMessage?: BinaryType;
 }
 
 export const RequestDetailModelSchema: yup.SchemaOf<IRequestDetail> = yup.object({
-  audioUrl: yup.string(),
   serviceTypeId: yup.number(),
   productCategoryId: yup.number(),
-  brand: yup
+  brandId: yup
     .object({
       value: yup.number().required(t('SelectBrandRequired')),
       label: yup.string().required(t('SelectBrandRequired')),

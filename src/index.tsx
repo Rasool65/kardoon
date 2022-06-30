@@ -8,7 +8,6 @@ import './configs/i18n/config';
 import './scss/core.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import './scss/scripts/bootstrap.min.js';
-import 'react-html5-camera-photo/build/css/index.css';
 
 const LazyApp = lazy(() => import('./App'));
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);

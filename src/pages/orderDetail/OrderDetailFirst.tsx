@@ -1,4 +1,4 @@
-import React, { Component, FunctionComponent, useEffect, useState } from 'react';
+import React, { Component, FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
 // import Camera from 'react-html5-camera-photo';
 import Select from 'react-select';
 import { Col, Container, Form, FormFeedback, Input, Row, Button, Label } from 'reactstrap';
@@ -24,8 +24,8 @@ import CaptureModal from './CaptureModal';
 const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClickNext }) => {
   let brands: any[] = [];
   let { audioURL, isRecording, startRecording, stopRecording } = useRecorder();
-  // const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
-  const cityId =6
+  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
+  // const cityId =6
   const navigate = useNavigate();
   const [brandList, setBrandList] = useState<any>();
   const httpRequest = useHttpRequest();
@@ -36,35 +36,11 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
     serial: false,
     requestDescription: false,
   });
-  const [audioDisplay,setAudioDisplay]= useState<string>('none')
+
+  const [audioDisplay, setAudioDisplay] = useState<string>('none');
   const [imageFile, setImageFile] = useState<any>();
   const [audioFile, setAudioFile] = useState<any>();
-
-  function handleTakePhoto(dataUri: any) {
-    debugger;
-    // Do stuff with the photo...
-    console.log('takePhoto');
-  }
-  const onStopRecordAudio = (e: any) => {
-    debugger;
-    const reader = new FileReader(),
-      files = e.target.files;
-    // reader.onload = function () {
-    //   setAudioFile(reader.result);
-    // };
-    setAudioFile(files[0]);
-    reader.readAsDataURL(files[0]);
-  };
-  const onImageFileChange = (e: any) => {
-    debugger;
-    const reader = new FileReader(),
-      files = e.target.files;
-    // reader.onload = function () {
-    //   setAudioFile(reader.result);
-    // };
-    setImageFile(files[0]);
-    reader.readAsDataURL(files[0]);
-  };
+  const [videoFile, setVideoFile] = useState<any>();
 
   const GetBrands = () => {
     !!state
@@ -87,11 +63,11 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   };
 
   useEffect(() => {
-    // GetBrands();
+    GetBrands();
   }, []);
 
   useEffect(() => {
-    // Brands();
+    Brands();
   }, [brandList]);
 
   // useEffect(() => {
@@ -110,18 +86,19 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
     var formData = new FormData();
     formData.append('serviceTypeId', state.ServiceTypeId);
     formData.append('productCategoryId', state.ProductId);
-    formData.append('brandId', data.brand.value.toString());
+    formData.append('brandId', data.brandId.value.toString());
     formData.append('model', data.model);
     formData.append('serial', data.serial);
     formData.append('requestDescription', data.requestDescription);
-    if (audioFile) formData.append('audioMessage', audioFile);
-    if (imageFile) formData.append('videoMessage', imageFile);
+    // if (audioFile) formData.append('audioMessage', audioFile);
+    // if (imageFile) formData.append('imageMessage', imageFile);
+    // if (videoFile) formData.append('videoMessage', videoFile);
 
     // const body: IRequestDetail = {
     //   audioUrl: audioURL,
     //   serviceTypeId: state.ServiceTypeId,
     //   productCategoryId: state.ProductId,
-    //   brand: data.brand,
+    //   brandId: data.brandId,
     //   model: data.model,
     //   serial: data.serial,
     //   requestDescription: data.requestDescription,
@@ -132,6 +109,93 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   useEffect(() => {
     CustomFunctions();
   }, []);
+
+  //* Take Picture
+  const videoConstraints = {
+    width: 800,
+    height: 600,
+    facingMode: 'forward',
+  };
+  const WebcamCapture = () => (
+    <Webcam audio={false} height={600} screenshotFormat="image/jpeg" width={800} videoConstraints={videoConstraints}>
+      {/* @ts-ignore */}
+      {({ getScreenshot }) => (
+        <Button
+          onClick={() => {
+            debugger;
+            const imageSrc = getScreenshot();
+          }}
+        >
+          ثبت تصویر
+        </Button>
+      )}
+    </Webcam>
+    //* Take Video
+  );
+
+  const WebcamStreamCapture = () => {
+    const webcamRef = useRef(null);
+    const mediaRecorderRef = useRef(null);
+    const [capturing, setCapturing] = useState(false);
+    const [recordedChunks, setRecordedChunks] = useState([]);
+
+    const handleStartCaptureClick = useCallback(() => {
+      setCapturing(true);
+      // @ts-ignore
+      mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
+        mimeType: 'video/webm',
+      });
+      // @ts-ignore
+      mediaRecorderRef.current.addEventListener('dataavailable', handleDataAvailable);
+      // @ts-ignore
+      mediaRecorderRef.current.start();
+    }, [webcamRef, setCapturing, mediaRecorderRef]);
+
+    const handleDataAvailable = React.useCallback(
+      ({ data }: any) => {
+        if (data.size > 0) {
+          setRecordedChunks((prev) => prev.concat(data));
+        }
+      },
+      [setRecordedChunks]
+    );
+
+    const handleStopCaptureClick = useCallback(() => {
+      // @ts-ignore
+      mediaRecorderRef.current.stop();
+      setCapturing(false);
+    }, [mediaRecorderRef, webcamRef, setCapturing]);
+
+    const handleDownload = useCallback(() => {
+      if (recordedChunks.length) {
+        const blob = new Blob(recordedChunks, {
+          type: 'video/webm',
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        document.body.appendChild(a);
+        // @ts-ignore
+        a.style = 'display: none';
+        a.href = url;
+        a.download = 'react-webcam-stream-capture.webm';
+        a.click();
+        window.URL.revokeObjectURL(url);
+        setRecordedChunks([]);
+      }
+    }, [recordedChunks]);
+
+    return (
+      <>
+        <Webcam audio={false} ref={webcamRef} />
+        {capturing ? (
+          <Button onClick={handleStopCaptureClick}>توقف</Button>
+        ) : (
+          <Button onClick={handleStartCaptureClick}>شروع ضبط</Button>
+        )}
+        {recordedChunks.length > 0 && <Button onClick={handleDownload}>ارسال ویدئو</Button>}
+      </>
+    );
+  };
   return (
     <div id="page">
       {/* <Header/> */}
@@ -158,7 +222,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
               لطفا جزئیات سفارش خود را مشخص کنید.
               <div>
                 <Controller
-                  name="brand"
+                  name="brandId"
                   control={control}
                   render={({ field }) => (
                     <>
@@ -176,7 +240,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                         isSearchable={true}
                         {...field}
                       />
-                      <FormFeedback className="d-block">{errors.brand?.value?.message}</FormFeedback>
+                      <FormFeedback className="d-block">{errors.brandId?.value?.message}</FormFeedback>
                     </>
                   )}
                 />
@@ -340,18 +404,20 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                       />
                     </Col>
                   </Row>
-                  <Row  style={{
-                      display:`${audioDisplay}`,
+                  <Row
+                    style={{
+                      display: `${audioDisplay}`,
                       alignItems: 'center',
                       textAlign: 'center',
                       padding: '0 0 0 0',
                       marginBottom: '0',
-                    }}>
+                    }}
+                  >
                     <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
-                    <audio hidden={isRecording} src={audioURL} controls />
+                      <audio hidden={isRecording} src={audioURL} controls />
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
-                    <img
+                      <img
                         hidden={isRecording}
                         style={{ cursor: 'pointer' }}
                         src="images/forTest/delete.png"
@@ -380,8 +446,15 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                       در صورت نیاز می توانید تصویری را بارگذاری نمایید
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
-                    {/* <Webcam /> */}
-                      <img data-menu="capture-Modal" style={{cursor:"pointer"}}  src="images/forTest/camera.png" width="46" height="46" alt="" />
+                      {/* <Webcam /> */}
+                      <img
+                        data-menu="capture-Modal"
+                        style={{ cursor: 'pointer' }}
+                        src="images/forTest/camera.png"
+                        width="46"
+                        height="46"
+                        alt=""
+                      />
                     </Col>
                   </Row>
                 </Container>
@@ -398,8 +471,14 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                       در صورت نیاز می توانید ویدیو را بارگذاری نمایید
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
-                    
-                      <img data-menu="video-Modal" style={{cursor:"pointer"}}  src="images/forTest/video.png" width="46" height="46" alt="" />
+                      <img
+                        data-menu="video-Modal"
+                        style={{ cursor: 'pointer' }}
+                        src="images/forTest/video.png"
+                        width="46"
+                        height="46"
+                        alt=""
+                      />
                     </Col>
                   </Row>
                 </Container>
@@ -415,8 +494,8 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
           </div>
         </div>
       </div>
-      <CaptureModal/>
-      <VideoModal/>
+      <CaptureModal WebcamCapture={WebcamCapture} />
+      <VideoModal WebcamStreamCapture={WebcamStreamCapture} />
     </div>
   );
 };
