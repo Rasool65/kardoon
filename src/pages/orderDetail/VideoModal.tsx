@@ -1,10 +1,11 @@
-import { FunctionComponent } from 'react';
+import { CustomFunctions } from '@src/utils/custom';
+import { FunctionComponent, useEffect } from 'react';
 import { ICameraModal } from './IOrderDetailProp';
 
 const VideoModal: FunctionComponent<ICameraModal> = ({ WebcamStreamCapture }: any) => {
-  // useEffect(() => {
-  //   CustomFunctions();
-  // }, [WebcamStreamCapture]);
+  useEffect(() => {
+    CustomFunctions();
+  }, []);
   return (
     <div
       id="video-Modal"

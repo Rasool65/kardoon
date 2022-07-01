@@ -1,5 +1,4 @@
 import React, { Component, FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
-// import Camera from 'react-html5-camera-photo';
 import Select from 'react-select';
 import { Col, Container, Form, FormFeedback, Input, Row, Button, Label } from 'reactstrap';
 import useHttpRequest from '@src/hooks/useHttpRequest';
@@ -23,9 +22,9 @@ import CaptureModal from './CaptureModal';
 
 const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClickNext }) => {
   let brands: any[] = [];
-  let { audioURL, isRecording, startRecording, stopRecording } = useRecorder();
-  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
-  // const cityId =6
+  let { audioData, audioURL, isRecording, startRecording, stopRecording } = useRecorder();
+  // const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
+  const cityId =6
   const navigate = useNavigate();
   const [brandList, setBrandList] = useState<any>();
   const httpRequest = useHttpRequest();
@@ -63,16 +62,12 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   };
 
   useEffect(() => {
-    GetBrands();
+    // GetBrands();
   }, []);
 
   useEffect(() => {
     Brands();
   }, [brandList]);
-
-  // useEffect(() => {
-  //   CustomFunctions();
-  // }, []);
 
   const {
     register,
@@ -83,56 +78,68 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   } = useForm<IRequestDetail>({ mode: 'onChange', resolver: yupResolver(RequestDetailModelSchema) });
 
   const onSubmit = (data: IRequestDetail) => {
-    var formData = new FormData();
-    formData.append('serviceTypeId', state.ServiceTypeId);
-    formData.append('productCategoryId', state.ProductId);
-    formData.append('brandId', data.brandId.value.toString());
-    formData.append('model', data.model);
-    formData.append('serial', data.serial);
-    formData.append('requestDescription', data.requestDescription);
+    // var formData = new FormData();
+    // formData.append('serviceTypeId', state.ServiceTypeId);
+    // formData.append('productCategoryId', state.ProductId);
+    // formData.append('brandId', data.brandId.value.toString());
+    // formData.append('model', data.model);
+    // formData.append('serial', data.serial);
+    // formData.append('requestDescription', data.requestDescription);
     // if (audioFile) formData.append('audioMessage', audioFile);
     // if (imageFile) formData.append('imageMessage', imageFile);
     // if (videoFile) formData.append('videoMessage', videoFile);
+    debugger;
 
-    // const body: IRequestDetail = {
-    //   audioUrl: audioURL,
-    //   serviceTypeId: state.ServiceTypeId,
-    //   productCategoryId: state.ProductId,
-    //   brandId: data.brandId,
-    //   model: data.model,
-    //   serial: data.serial,
-    //   requestDescription: data.requestDescription,
-    // };
+    const body: IRequestDetail = {
+      // serviceTypeId: state.ServiceTypeId,
+      // productCategoryId: state.ProductId,
+      // brandId: data.brandId,
+      model: data.model,
+      serial: data.serial,
+      requestDescription: data.requestDescription,
+      audioMessage: audioFile,
+      imageMessage:imageFile,
+      videoMessage:videoFile,
+    };
 
-    handleClickNext(formData);
+    handleClickNext(body);
   };
   useEffect(() => {
     CustomFunctions();
   }, []);
 
+useEffect(()=>{
+  setAudioFile(audioData)
+},[audioData])
+
   //* Take Picture
   const videoConstraints = {
     width: 800,
     height: 600,
-    facingMode: 'forward',
+    facingMode: 'environment',
   };
+
   const WebcamCapture = () => (
     <Webcam audio={false} height={600} screenshotFormat="image/jpeg" width={800} videoConstraints={videoConstraints}>
       {/* @ts-ignore */}
       {({ getScreenshot }) => (
-        <Button
+        <Button className='close-menu'
           onClick={() => {
             debugger;
             const imageSrc = getScreenshot();
+            setImageFile(imageSrc);
           }}
         >
           ثبت تصویر
         </Button>
       )}
     </Webcam>
-    //* Take Video
   );
 
+
+
+
+  //* Video
   const WebcamStreamCapture = () => {
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
@@ -171,6 +178,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
         const blob = new Blob(recordedChunks, {
           type: 'video/webm',
         });
+        setVideoFile(blob);
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         document.body.appendChild(a);
@@ -221,7 +229,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
               {' '}
               لطفا جزئیات سفارش خود را مشخص کنید.
               <div>
-                <Controller
+                {/* <Controller
                   name="brandId"
                   control={control}
                   render={({ field }) => (
@@ -243,7 +251,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                       <FormFeedback className="d-block">{errors.brandId?.value?.message}</FormFeedback>
                     </>
                   )}
-                />
+                /> */}
                 <Container style={{ maxWidth: '100%', marginTop: '15px', padding: '0 0 0 0' }}>
                   <Row
                     style={{
@@ -422,7 +430,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                         style={{ cursor: 'pointer' }}
                         src="images/forTest/delete.png"
                         onClick={() => {
-                          //todo remove voice record
+                          setAudioFile(null);
                           setAudioDisplay('none');
                         }}
                         width="46"

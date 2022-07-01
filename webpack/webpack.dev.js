@@ -6,6 +6,7 @@ module.exports = {
   mode: 'development',
   devtool: 'source-map',
   devServer: {
+    https: true,
     hot: true,
     open: true,
   },
