@@ -37,9 +37,9 @@ const steps: ISteps[] = [
 ];
 
 const OrderDetail: FunctionComponent<IPageProps> = (prop) => {
-  // const userData = useSelector((state: RootStateType) => state.authentication.userData);
-  // const cityId = userData?.profile.residenceCityId;
-  // const userId = userData?.userId;
+  const userData = useSelector((state: RootStateType) => state.authentication.userData);
+  const cityId = userData?.profile.residenceCityId;
+  const userId = userData?.userId;
   const navigate = useNavigate();
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();

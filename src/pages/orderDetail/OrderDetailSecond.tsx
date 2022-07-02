@@ -33,7 +33,7 @@ const options = [
 ];
 
 const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleClickPrevious }) => {
-  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
+  // const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const [dateTime, setDateTime] = useState<any>({
     viewBgVisible: false,
     addAddressModalVisible: false,

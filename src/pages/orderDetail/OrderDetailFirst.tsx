@@ -23,8 +23,7 @@ import CaptureModal from './CaptureModal';
 const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClickNext }) => {
   let brands: any[] = [];
   let { audioData, audioURL, isRecording, startRecording, stopRecording } = useRecorder();
-  // const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
-  const cityId =6
+  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const navigate = useNavigate();
   const [brandList, setBrandList] = useState<any>();
   const httpRequest = useHttpRequest();
@@ -35,7 +34,6 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
     serial: false,
     requestDescription: false,
   });
-
   const [audioDisplay, setAudioDisplay] = useState<string>('none');
   const [imageFile, setImageFile] = useState<any>();
   const [audioFile, setAudioFile] = useState<any>();
@@ -62,7 +60,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   };
 
   useEffect(() => {
-    // GetBrands();
+    GetBrands();
   }, []);
 
   useEffect(() => {
@@ -91,9 +89,9 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
     debugger;
 
     const body: IRequestDetail = {
-      // serviceTypeId: state.ServiceTypeId,
-      // productCategoryId: state.ProductId,
-      // brandId: data.brandId,
+      serviceTypeId: state.ServiceTypeId,
+      productCategoryId: state.ProductId,
+      brandId: data.brandId,
       model: data.model,
       serial: data.serial,
       requestDescription: data.requestDescription,
@@ -200,7 +198,7 @@ useEffect(()=>{
         ) : (
           <Button onClick={handleStartCaptureClick}>شروع ضبط</Button>
         )}
-        {recordedChunks.length > 0 && <Button onClick={handleDownload}>ارسال ویدئو</Button>}
+        {recordedChunks.length > 0 && <Button className='close-menu' onClick={handleDownload}>ارسال ویدئو</Button>}
       </>
     );
   };
@@ -229,7 +227,7 @@ useEffect(()=>{
               {' '}
               لطفا جزئیات سفارش خود را مشخص کنید.
               <div>
-                {/* <Controller
+                <Controller
                   name="brandId"
                   control={control}
                   render={({ field }) => (
@@ -251,7 +249,7 @@ useEffect(()=>{
                       <FormFeedback className="d-block">{errors.brandId?.value?.message}</FormFeedback>
                     </>
                   )}
-                /> */}
+                />
                 <Container style={{ maxWidth: '100%', marginTop: '15px', padding: '0 0 0 0' }}>
                   <Row
                     style={{
