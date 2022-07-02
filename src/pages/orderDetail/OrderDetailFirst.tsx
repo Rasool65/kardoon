@@ -76,18 +76,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   } = useForm<IRequestDetail>({ mode: 'onChange', resolver: yupResolver(RequestDetailModelSchema) });
 
   const onSubmit = (data: IRequestDetail) => {
-    // var formData = new FormData();
-    // formData.append('serviceTypeId', state.ServiceTypeId);
-    // formData.append('productCategoryId', state.ProductId);
-    // formData.append('brandId', data.brandId.value.toString());
-    // formData.append('model', data.model);
-    // formData.append('serial', data.serial);
-    // formData.append('requestDescription', data.requestDescription);
-    // if (audioFile) formData.append('audioMessage', audioFile);
-    // if (imageFile) formData.append('imageMessage', imageFile);
-    // if (videoFile) formData.append('videoMessage', videoFile);
     debugger;
-
     const body: IRequestDetail = {
       serviceTypeId: state.ServiceTypeId,
       productCategoryId: state.ProductId,
@@ -96,8 +85,8 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
       serial: data.serial,
       requestDescription: data.requestDescription,
       audioMessage: audioFile,
-      imageMessage:imageFile,
-      videoMessage:videoFile,
+      imageMessage: imageFile,
+      videoMessage: videoFile,
     };
 
     handleClickNext(body);
@@ -106,9 +95,9 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
     CustomFunctions();
   }, []);
 
-useEffect(()=>{
-  setAudioFile(audioData)
-},[audioData])
+  useEffect(() => {
+    setAudioFile(audioData);
+  }, [audioData]);
 
   //* Take Picture
   const videoConstraints = {
@@ -121,7 +110,8 @@ useEffect(()=>{
     <Webcam audio={false} height={600} screenshotFormat="image/jpeg" width={800} videoConstraints={videoConstraints}>
       {/* @ts-ignore */}
       {({ getScreenshot }) => (
-        <Button className='close-menu'
+        <Button
+          className="close-menu"
           onClick={() => {
             debugger;
             const imageSrc = getScreenshot();
@@ -133,9 +123,6 @@ useEffect(()=>{
       )}
     </Webcam>
   );
-
-
-
 
   //* Video
   const WebcamStreamCapture = () => {
@@ -198,7 +185,11 @@ useEffect(()=>{
         ) : (
           <Button onClick={handleStartCaptureClick}>شروع ضبط</Button>
         )}
-        {recordedChunks.length > 0 && <Button className='close-menu' onClick={handleDownload}>ارسال ویدئو</Button>}
+        {recordedChunks.length > 0 && (
+          <Button className="close-menu" onClick={handleDownload}>
+            ارسال ویدئو
+          </Button>
+        )}
       </>
     );
   };

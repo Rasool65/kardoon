@@ -1,21 +1,26 @@
-import React, { Component, FunctionComponent, useState } from 'react';
+import React, { Component, FunctionComponent, useEffect, useState } from 'react';
 // import 'bootstrap/dist/css/bootstrap.css';
 // import '../Style/style.css';
 // import '../Style/scss/style.scss';
-import Picker from 'react-mobile-picker';
+
 import { Col, Container, Input, Row } from 'reactstrap';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-import { APIURL_GET_BRANDS } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_GET_ADDRESSES, APIURL_GET_BRANDS } from '@src/configs/apiConfig/apiUrls';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { URL_MAIN } from '@src/configs/urls';
 import { Controller, useForm } from 'react-hook-form';
 import { IBrandResultModel } from '@src/models/output/orderDetail/IBrandResultModel';
 import { IOrderDetailPageProp } from './IOrderDetailProp';
 import WeekPicker from '@src/components/weekPicker/WeekPicker';
+import { CustomFunctions } from '@src/utils/custom';
+import { useToast } from '@src/hooks/useToast';
+import Picker from 'react-mobile-picker';
+import { IAddressesResultModel } from '@src/models/output/orderDetail/IAddressesResultModel';
+import AddAddressModal from './AddAddressModal';
 
 const options = [
   { label: 'ال جی', value: '1' },
@@ -33,7 +38,12 @@ const options = [
 ];
 
 const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleClickPrevious }) => {
+  const toast = useToast();
+  const [selectDate, setSelectDate] = useState<string>('');
+  const [addressList, setAddressList] = useState<IAddressesResultModel[]>();
+  const [refKey, setRefKey] = useState<number>();
   // const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
+  const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const [dateTime, setDateTime] = useState<any>({
     viewBgVisible: false,
     addAddressModalVisible: false,
@@ -43,42 +53,41 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
   });
 
   const navigate = useNavigate();
-  const [brandList, setBrandList] = useState<any>();
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
-  //   const { state }: any = useLocation();
+  const [isUrgent, setIsUrgent] = useState<boolean>(false);
   const [input, setInput] = useState<any>({
     model: false,
     serialNo: false,
     descriptions: false,
   });
   const handleChange = (name: any, value: any) => {
+    debugger;
+    console.log(name, value);
     setDateTime(({ valueGroups }: any) => ({
       valueGroups: {
         ...valueGroups,
         [name]: value,
       },
+      optionGroups: { title: ['صبح ۱۲-۸', 'ظهر ۱۶-۱۲', 'عصر ۲۰-۱۶'] },
     }));
   };
-  const selectDate = (newValue: any, quesId: any) => {
-    console.log(newValue, quesId);
+  const GetAddresses = () => {
+    httpRequest
+      .getRequest<IOutputResult<IAddressesResultModel[]>>(
+        `${APIURL_GET_ADDRESSES}?UserName=${userData?.userName}`
+        // 'http://127.0.0.1:2500/getProducts',
+      )
+      .then((result) => {
+        debugger;
+        setAddressList(result.data.data);
+      });
   };
 
   const chbOnChange = (e: any) => {
-    // console.log(e)
-    if (e.target.checked === true) {
-      setDateTime({ isUrgent: true });
-    } else {
-      setDateTime({ isUrgent: false });
-    }
+    e.target.checked ? setIsUrgent(true) : setIsUrgent(false);
   };
-  // const  isUrgentMessage = () => {
-  //     props.showSnackbar({
-  //         type: SnackbarType.ERROR,
-  //         message: "در حالت مراجعه فوری امکان انتخاب زمان نمی باشد.",
-  //         isShow: true
-  //     })
-  // };
+
   //   const {
   //     register,
   //     control,
@@ -105,6 +114,12 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
   //         .finally(() => setLoading(false));
   //     }
   //   };
+
+  useEffect(() => {
+    GetAddresses();
+    CustomFunctions();
+  }, []);
+
   const { optionGroups, valueGroups } = dateTime;
   return (
     <div id="page">
@@ -133,19 +148,26 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
             >
               <Col xs={8}>
                 <WeekPicker
-                  onSelectDateTime={(e: any) => selectDate(e, 3)}
-                  selectedDate={'2022/05/18 20:00'}
+                  onSelectDateTime={(value: string) => {
+                    debugger;
+                    setSelectDate(value);
+                  }}
+                  selectedDate={selectDate}
                   questionId={3}
-                  //   isUrgent={state.isUrgent}
-                  //   isUrgentMessage={(e) => isUrgentMessage(e)}
+                  isUrgent={isUrgent}
+                  //  isUrgentMessage={(e) => isUrgentMessage(e)}
                 />
               </Col>
               <Col xs={4}>
-                <Picker
-                  optionGroups={optionGroups}
-                  valueGroups={valueGroups}
-                  //   onChange={state.isUrgent ? (e) => isUrgentMessage(e) : (name, value) => handleChange(name, value)}
-                />
+                {!!!isUrgent ? (
+                  <Picker
+                    optionGroups={optionGroups}
+                    valueGroups={valueGroups}
+                    onChange={(name: any, value: any) => handleChange(name, value)}
+                  />
+                ) : (
+                  <>{toast.showWarning('در حالت مراجعه فوری امکان انتخاب زمان وجود ندارد.')} </>
+                )}
               </Col>
             </Row>
           </Container>
@@ -162,11 +184,54 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
 
         <div className="card card-style p-4">
           <h6>انتخاب آدرس</h6>
-
-          {/* <Address /> */}
+          {addressList &&
+            addressList.length &&
+            addressList.map((item: IAddressesResultModel, index: number) => {
+              debugger;
+              return (
+                <div
+                  className="form-check icon-check"
+                  style={{
+                    border: '1px solid #CCD1D9',
+                    borderStyle: 'dashed',
+                    padding: '5px 0px 5px 10px',
+                    margin: '15px 0 15px 0',
+                  }}
+                >
+                  <label className="form-check-label" htmlFor={`radio${index}`}>
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="inlineRadioOptions"
+                      onClick={(e) => {
+                        debugger;
+                        setRefKey(item.refkey);
+                      }}
+                      value=""
+                      id={`radio${index}`}
+                    />{' '}
+                    <i className="icon-check-1 far fa-frown color-gray-dark font-16"></i>
+                    <i className="icon-check-2 far fa-smile font-16 color-highlight"></i>
+                    <div className="row mb-2">
+                      <div className="col-6">{item.title}</div>
+                      <div className="col-6" style={{ textAlign: 'left' }}>
+                        {item.homeTel}
+                      </div>
+                    </div>
+                    <div className="row mb-2">
+                      <div className="col-12">{item.address}</div>
+                      <div className="col-6">کد پستی</div>
+                      <div className="col-6" style={{ textAlign: 'left' }}>
+                        item.zipCode
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              );
+            })}
 
           <div
-            // onClick={(e) => showAddAddressModal(e)}
+            data-menu="add-address-Modal"
             style={{ marginTop: '10px' }}
             className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0"
           >
@@ -195,7 +260,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           </div>
         </div>
       </div>
-
+      <AddAddressModal />
       {/* <AddAddressModal
         addAddressModalVisible={state.addAddressModalVisible}
         hideAddAddressModal={(e) => hideAddAddressModal(e)}

@@ -44,16 +44,15 @@ const OrderDetail: FunctionComponent<IPageProps> = (prop) => {
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
   const { state }: any = useLocation();
-  const [activeStep, setActiveStep] = useState<number>(0);
+  const [activeStep, setActiveStep] = useState<number>(1);
   const [CurrentStep, setCurrentStep] = useState(steps[activeStep]);
   const [data, setData] = useState<ICreateConsumerRequest>();
-  const [requestDetail,setRequestDetail] = useState<IRequestDetail>();
-
+  const [requestDetail, setRequestDetail] = useState<IRequestDetail>();
 
   const onClickNext = (requestDetail: IRequestDetail) => {
     // save to state
     debugger;
-    setRequestDetail(requestDetail)
+    setRequestDetail(requestDetail);
     setCurrentStep(steps[activeStep + 1]);
     setActiveStep(activeStep + 1);
   };
@@ -62,6 +61,17 @@ const OrderDetail: FunctionComponent<IPageProps> = (prop) => {
     setActiveStep(activeStep - 1);
   };
   const handleSubmit = () => {
+    debugger;
+    // var formData = new FormData();
+    // formData.append('serviceTypeId', state.ServiceTypeId);
+    // formData.append('productCategoryId', state.ProductId);
+    // formData.append('brandId', data.brandId.value.toString());
+    // formData.append('model', data.model);
+    // formData.append('serial', data.serial);
+    // formData.append('requestDescription', data.requestDescription);
+    // if (audioFile) formData.append('audioMessage', audioFile);
+    // if (imageFile) formData.append('imageMessage', imageFile);
+    // if (videoFile) formData.append('videoMessage', videoFile);
     //state
     // send to request api
   };
