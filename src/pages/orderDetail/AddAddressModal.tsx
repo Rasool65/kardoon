@@ -1,10 +1,11 @@
-import { IAddAddressModel } from '@src/models/input/addAddress/IAddAddressModel';
+import { AddAddressModelSchema, IAddAddressModel } from '@src/models/input/addAddress/IAddAddressModel';
 import { CustomFunctions } from '@src/utils/custom';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Container, Form, FormFeedback, Input, Row } from 'reactstrap';
 import Select from 'react-select';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any) => {
   const [forMe, setForMe] = useState<Boolean>(true);

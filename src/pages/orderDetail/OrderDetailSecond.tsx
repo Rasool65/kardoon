@@ -6,7 +6,7 @@ import React, { Component, FunctionComponent, useEffect, useState } from 'react'
 import { Col, Container, Input, Row } from 'reactstrap';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { APIURL_GET_ADDRESSES, APIURL_GET_BRANDS } from '@src/configs/apiConfig/apiUrls';
@@ -21,6 +21,7 @@ import { useToast } from '@src/hooks/useToast';
 import Picker from 'react-mobile-picker';
 import { IAddressesResultModel } from '@src/models/output/orderDetail/IAddressesResultModel';
 import AddAddressModal from './AddAddressModal';
+import { useTranslation } from 'react-i18next';
 
 const options = [
   { label: 'ال جی', value: '1' },
@@ -251,6 +252,14 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
             </div>
           </div>
           <div className="col-6">
+            <div
+              //   onClick={(e) => completeRegistration(e)}
+              className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700"
+            >
+              تکمیل ثبت سفارش
+            </div>
+          </div>
+          <div className="col-12">
             <div
               //   onClick={(e) => completeRegistration(e)}
               className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700"
