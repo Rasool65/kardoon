@@ -66,7 +66,7 @@ class WeekPicker extends React.Component {
       let pDate = ConvertDate.gregorian_to_jalali(yyyy, mm, dd);
       let day = wdays[today.getDay()];
       let y = pDate.substring(5, 7);
-      let gregDate = yyyy + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + String(today.getDate()).padStart(2, '0');
+      let gregDate = yyyy + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
       // alert(parseInt( (pDate.substring(5,2))));
       let month = months[parseInt(pDate.substring(5, 7)) - 1];
 
@@ -99,6 +99,7 @@ class WeekPicker extends React.Component {
   }
 
   onSelectCallBack(i, opType) {
+    debugger;
     switch (opType) {
       case 1: {
         this.setState({ value: parseInt(this.q), selectedHour: this.timeShifts[this.q - 1].startTime });

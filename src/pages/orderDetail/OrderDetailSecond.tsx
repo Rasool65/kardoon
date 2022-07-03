@@ -11,10 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { APIURL_GET_ADDRESSES, APIURL_GET_BRANDS } from '@src/configs/apiConfig/apiUrls';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import { URL_MAIN } from '@src/configs/urls';
-import { Controller, useForm } from 'react-hook-form';
-import { IBrandResultModel } from '@src/models/output/orderDetail/IBrandResultModel';
-import { IOrderDetailPageProp } from './IOrderDetailProp';
+import { IOrderDetailPageProp, IOrderDetailSecond } from './IOrderDetailProp';
 import WeekPicker from '@src/components/weekPicker/WeekPicker';
 import { CustomFunctions } from '@src/utils/custom';
 import { useToast } from '@src/hooks/useToast';
@@ -23,56 +20,42 @@ import { IAddressesResultModel } from '@src/models/output/orderDetail/IAddresses
 import AddAddressModal from './AddAddressModal';
 import { useTranslation } from 'react-i18next';
 
-const options = [
-  { label: 'ال جی', value: '1' },
-  { label: 'سامسونگ', value: '2' },
-  { label: 'جی پلاس', value: '3' },
-  { label: 'سونی', value: '4' },
-  { label: 'بوش', value: '5' },
-  { label: 'دلونگی', value: '6' },
-  { label: 'اسنوا', value: '7' },
-  { label: 'امرسان', value: '8' },
-  { label: 'پاناسونیک', value: '9' },
-  { label: 'پارس خزر', value: '10' },
-  { label: 'میدیا', value: '11' },
-  { label: 'سانی', value: '12' },
-];
-
-const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleClickPrevious }) => {
+const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleClickPrevious, handleSubmit }) => {
   const toast = useToast();
   const [selectDate, setSelectDate] = useState<string>('');
   const [addressList, setAddressList] = useState<IAddressesResultModel[]>();
   const [refKey, setRefKey] = useState<number>();
+  const [isUrgent, setIsUrgent] = useState<boolean>(false);
   // const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
-  const [dateTime, setDateTime] = useState<any>({
-    viewBgVisible: false,
-    addAddressModalVisible: false,
-    isUrgent: false,
+  const [shift, setShift] = useState<number>();
+  const [shiftTime, setShiftTime] = useState<any>({
+    isUrgent: isUrgent,
     valueGroups: { title: 'ظهر ۱۶-۱۲' },
-    optionGroups: { title: ['صبح ۱۲-۸', 'ظهر ۱۶-۱۲', 'عصر ۲۰-۱۶'] },
+    optionGroups: { title: ['صبح ۱۲-۸', 'ظهر ۱۶-۱۲', 'عصر ۲۰-۱۶', 'شب ۲۴-۲۰'] },
   });
-
-  const navigate = useNavigate();
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
-  const [isUrgent, setIsUrgent] = useState<boolean>(false);
-  const [input, setInput] = useState<any>({
-    model: false,
-    serialNo: false,
-    descriptions: false,
-  });
+
+  const getIndex = (value: any) => {
+    const arr = optionGroups.title;
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] == value) {
+        return i;
+      }
+    }
+    return -1;
+  };
   const handleChange = (name: any, value: any) => {
-    debugger;
-    console.log(name, value);
-    setDateTime(({ valueGroups }: any) => ({
+    setShiftTime(({ valueGroups }: any) => ({
       valueGroups: {
         ...valueGroups,
         [name]: value,
       },
-      optionGroups: { title: ['صبح ۱۲-۸', 'ظهر ۱۶-۱۲', 'عصر ۲۰-۱۶'] },
+      optionGroups: { title: ['صبح ۱۲-۸', 'ظهر ۱۶-۱۲', 'عصر ۲۰-۱۶', 'شب ۲۴-۲۰'] },
     }));
   };
+
   const GetAddresses = () => {
     httpRequest
       .getRequest<IOutputResult<IAddressesResultModel[]>>(
@@ -80,48 +63,20 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
         // 'http://127.0.0.1:2500/getProducts',
       )
       .then((result) => {
-        debugger;
         setAddressList(result.data.data);
       });
   };
 
   const chbOnChange = (e: any) => {
-    e.target.checked ? setIsUrgent(true) : setIsUrgent(false);
+    e.target.checked ? (setIsUrgent(true), setShift(undefined)) : setIsUrgent(false);
   };
-
-  //   const {
-  //     register,
-  //     control,
-  //     setError,
-  //     handleSubmit,
-  //     formState: { errors },
-  //   } = useForm<IRegisterModel>({ mode: 'onChange', resolver: yupResolver(RegisterModelSchema) });
-
-  //   const onSubmit = (data: IRegisterModel) => {
-  //     setLoading(true);
-  //     const body = {
-  //       firstName: data.firstName,
-  //       lastName: data.lastName,
-  //       mobile: data.mobile,
-  //       gender: data.gender,
-  //     };
-  //     if (data && !loading) {
-  //       httpRequest
-  //         .postRequest<IOutputResult<IRegisterResultModel>>(APIURL_REGISTER, body)
-  //         .then((result) => {
-  //           toast.showSuccess(result.data.message);
-  //           handleRegisterModal();
-  //         })
-  //         .finally(() => setLoading(false));
-  //     }
-  //   };
 
   useEffect(() => {
     GetAddresses();
     CustomFunctions();
   }, []);
 
-  const { optionGroups, valueGroups } = dateTime;
+  const { optionGroups, valueGroups } = shiftTime;
   return (
     <div id="page">
       <div className="page-content" style={{ paddingBottom: '0px' }}>
@@ -150,7 +105,6 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
               <Col xs={8}>
                 <WeekPicker
                   onSelectDateTime={(value: string) => {
-                    debugger;
                     setSelectDate(value);
                   }}
                   selectedDate={selectDate}
@@ -164,7 +118,10 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
                   <Picker
                     optionGroups={optionGroups}
                     valueGroups={valueGroups}
-                    onChange={(name: any, value: any) => handleChange(name, value)}
+                    onChange={(name: string, value: string) => {
+                      handleChange(name, value);
+                      setShift(getIndex(value));
+                    }}
                   />
                 ) : (
                   <>{toast.showWarning('در حالت مراجعه فوری امکان انتخاب زمان وجود ندارد.')} </>
@@ -188,7 +145,6 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           {addressList &&
             addressList.length &&
             addressList.map((item: IAddressesResultModel, index: number) => {
-              debugger;
               return (
                 <div
                   className="form-check icon-check"
@@ -205,7 +161,6 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
                       type="radio"
                       name="inlineRadioOptions"
                       onClick={(e) => {
-                        debugger;
                         setRefKey(item.refkey);
                       }}
                       value=""
@@ -223,7 +178,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
                       <div className="col-12">{item.address}</div>
                       <div className="col-6">کد پستی</div>
                       <div className="col-6" style={{ textAlign: 'left' }}>
-                        item.zipCode
+                        {item.zipCode}
                       </div>
                     </div>
                   </label>
@@ -253,15 +208,15 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           </div>
           <div className="col-6">
             <div
-              //   onClick={(e) => completeRegistration(e)}
-              className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700"
-            >
-              تکمیل ثبت سفارش
-            </div>
-          </div>
-          <div className="col-12">
-            <div
-              //   onClick={(e) => completeRegistration(e)}
+              onClick={(e) => {
+                const body: IOrderDetailSecond = {
+                  refkey: refKey,
+                  presenceDate: selectDate,
+                  presenceShift: shift,
+                  isUrgent: isUrgent,
+                };
+                handleSubmit(body);
+              }}
               className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700"
             >
               تکمیل ثبت سفارش

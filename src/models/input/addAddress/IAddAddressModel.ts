@@ -6,14 +6,14 @@ export interface IAddAddressModel {
   cityId: number;
   provinceId: IProvinceSelectModel;
   districtId: IDistrictSelectModel;
-  zipCode?: string;
+  zipCode: string;
   latitude?: number;
   longitude?: number;
-  title?: string;
-  homeTel?: string;
-  address?: string;
-  number?: number;
-  unit?: number;
+  title: string;
+  homeTel: string;
+  address: string;
+  number: number;
+  unit: number;
   anotherAddressOwnerInformation?: IAnotherAddressOwnerInformation;
 }
 export const AddAddressModelSchema: yup.SchemaOf<IAddAddressModel> = yup.object({
@@ -31,14 +31,14 @@ export const AddAddressModelSchema: yup.SchemaOf<IAddAddressModel> = yup.object(
       label: yup.string().required(t('SelectDistrictRequired')),
     })
     .required(t('SelectDistrictRequired')),
-  zipCode: yup.string(),
+  zipCode: yup.string().required(t('ZipCodeRequired')),
   latitude: yup.number(),
   longitude: yup.number(),
-  title: yup.string(),
-  homeTel: yup.string(),
-  address: yup.string(),
-  number: yup.number(),
-  unit: yup.number(),
+  title: yup.string().required(t('TitleRequired')),
+  homeTel: yup.string().required(t('HomeTelRequired')),
+  address: yup.string().required(t('AddressRequired')),
+  number: yup.number().required(t('NumberRequired')),
+  unit: yup.number().required(t('UnitRequired')),
   anotherAddressOwnerInformation: yup.object({
     firstName: yup.string(),
     lastName: yup.string(),

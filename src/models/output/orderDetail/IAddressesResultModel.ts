@@ -1,8 +1,11 @@
 export interface IAddressesResultModel {
   refkey?: number;
+  provinceName?: string;
   provinceId?: number;
   cityId?: number;
+  cityName?: string;
   districtId?: number;
+  districtName?: string;
   latitude?: number;
   longitude?: number;
   title?: string;
@@ -10,6 +13,7 @@ export interface IAddressesResultModel {
   address?: string;
   number?: number;
   unit?: number;
+  zipCode?: string;
   anotherAddressOwnerInformation?: IAnotherAddressOwnerInformation;
 }
 

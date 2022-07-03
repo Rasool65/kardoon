@@ -1,6 +1,6 @@
 import { AddAddressModelSchema, IAddAddressModel } from '@src/models/input/addAddress/IAddAddressModel';
 import { CustomFunctions } from '@src/utils/custom';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Container, Form, FormFeedback, Input, Row } from 'reactstrap';
@@ -8,8 +8,19 @@ import Select from 'react-select';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any) => {
+  const messagesEndRef = useRef(null);
   const [forMe, setForMe] = useState<Boolean>(true);
   const { t }: any = useTranslation();
+  const scrollToBottom = () => {
+    //@ts-ignore
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  const changeForMe = (forMe: boolean) => {
+    setForMe(forMe);
+    setTimeout(() => {
+      scrollToBottom();
+    }, 400);
+  };
   const [input, setInput] = useState<any>({
     title: false,
     zipCode: false, // code posti
@@ -53,14 +64,15 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
   }, []);
   return (
     <div
+      id="add-address-Modal"
       className={`menu menu-box-bottom menu-box-detached rounded-m ${addAddressModalVisible ? 'menu-active' : ''}`}
-      data-menu-height="513"
+      data-menu-height="600"
       style={{ display: 'inherit' }}
       data-menu-effect="menu-over"
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <div className="card p-4" style={{ marginBottom: '0px' }}>
-          <div style={{ height: '388px', overflow: 'scroll' }}>
+          <div style={{ height: '550px', overflow: 'scroll' }}>
             <div className={`input-style has-borders no-icon validate-field mb-4 ${input.title ? 'input-style-active' : ''}`}>
               <Controller
                 name="title"
@@ -128,7 +140,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                   <>
                     <Select
                       noOptionsMessage={() => t('ListIsEmpty')}
-                      onFocus={() => GetProvinceList()}
+                      // onFocus={() => GetProvinceList()}
                       isClearable
                       // theme={(theme) => ({
                       //   ...theme,
@@ -136,7 +148,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                       // })}
                       className="select-city"
                       placeholder={t('SelectProvince')}
-                      options={provinces}
+                      // options={provinces}
                       isSearchable={true}
                       {...field}
                     />
@@ -155,7 +167,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                   <>
                     <Select
                       noOptionsMessage={() => t('ListIsEmpty')}
-                      onFocus={() => GetDistrictList()}
+                      // onFocus={() => GetDistrictList()}
                       isClearable
                       // theme={(theme) => ({
                       //   ...theme,
@@ -163,7 +175,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                       // })}
                       className="select-city"
                       placeholder={t('SelectDistrict')}
-                      options={districts}
+                      // options={districts}
                       isSearchable={true}
                       {...field}
                     />
@@ -304,14 +316,14 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
               </Row>
             </Container>
 
-            <div className="tab-controls tabs-large tabs-rounded" data-highlight="bg-green-dark">
-              <div onClick={(e) => setForMe(true)} className={`pointer ${forMe ? 'bg-green-dark' : ''}`}>
-                برای خودم
-              </div>
-              <div onClick={(e) => setForMe(false)} className={`pointer ${forMe ? '' : 'bg-green-dark'}`}>
-                برای دیگری
-              </div>
-            </div>
+            <b className="tab-controls tabs-large tabs-rounded" data-highlight="bg-green-dark">
+              <Button onClick={(e) => changeForMe(true)} className={`${forMe ? 'bg-green-dark' : ''}`}>
+                {t('ForMe')}
+              </Button>
+              <Button onClick={(e) => changeForMe(false)} className={`${forMe ? '' : 'bg-green-dark'}`}>
+                {t('ForOther')}
+              </Button>
+            </b>
 
             {forMe ? null : (
               <div>
@@ -333,7 +345,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                           type="text"
                           placeholder={t('EnterFirstName')}
                           autoComplete="off"
-                          invalid={errors.anotherAddressOwnerInformation?.message && true}
+                          invalid={errors.anotherAddressOwnerInformation?.firstName?.message && true}
                           {...field}
                         />
                         <label htmlFor="form4" className="color-highlight">
@@ -342,7 +354,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                         <i className={`fa fa-times disabled invalid color-red-dark ${input.firstName ? 'disabled' : ''}`} />
                         <i className="fa fa-check disabled valid color-green-dark" />
                         <em className={`${input.firstName ? 'disabled' : ''}`}>({t('Required')})</em>
-                        <FormFeedback>{errors.anotherAddressOwnerInformation?.firstName.message}</FormFeedback>
+                        <FormFeedback>{errors.anotherAddressOwnerInformation?.firstName?.message}</FormFeedback>
                       </>
                     )}
                   />
@@ -364,7 +376,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                           type="text"
                           placeholder={t('EnterLastName')}
                           autoComplete="off"
-                          invalid={errors.anotherAddressOwnerInformation?.message && true}
+                          invalid={errors.anotherAddressOwnerInformation?.lastName?.message && true}
                           {...field}
                         />
                         <label htmlFor="form4" className="color-highlight">
@@ -373,7 +385,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                         <i className={`fa fa-times disabled invalid color-red-dark ${input.LastName ? 'disabled' : ''}`} />
                         <i className="fa fa-check disabled valid color-green-dark" />
                         <em className={`${input.lastName ? 'disabled' : ''}`}>({t('Required')})</em>
-                        <FormFeedback>{errors.anotherAddressOwnerInformation?.lastName.message}</FormFeedback>
+                        <FormFeedback>{errors.anotherAddressOwnerInformation?.lastName?.message}</FormFeedback>
                       </>
                     )}
                   />
@@ -397,7 +409,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                           type="text"
                           placeholder={t('شماره تلفن همراه گیرنده خدمات را وارد نمایید')}
                           autoComplete="off"
-                          invalid={errors.anotherAddressOwnerInformation?.message && true}
+                          invalid={errors.anotherAddressOwnerInformation?.mobileNumber?.message && true}
                           {...field}
                         />
                         <label htmlFor="form4" className="color-highlight">
@@ -406,15 +418,13 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                         <i className={`fa fa-times disabled invalid color-red-dark ${input.mobileNumber ? 'disabled' : ''}`} />
                         <i className="fa fa-check disabled valid color-green-dark" />
                         <em className={`${input.mobileNumber ? 'disabled' : ''}`}>({t('Required')})</em>
-                        <FormFeedback>{errors.anotherAddressOwnerInformation?.mobileNumber.message}</FormFeedback>
+                        <FormFeedback>{errors.anotherAddressOwnerInformation?.mobileNumber?.message}</FormFeedback>
                       </>
                     )}
                   />
                 </div>
                 <div
-                  className={`input-style has-borders no-icon validate-field mb-4 ${
-                    input.mobileNumber ? 'input-style-active' : ''
-                  }`}
+                  className={`input-style has-borders no-icon validate-field mb-4 ${input.telNumber ? 'input-style-active' : ''}`}
                 >
                   <Controller
                     name="anotherAddressOwnerInformation.telNumber"
@@ -429,7 +439,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                           type="text"
                           placeholder={t('شماره تلفن ثابت گیرنده خدمات را وارد نمایید')}
                           autoComplete="off"
-                          invalid={errors.anotherAddressOwnerInformation?.message && true}
+                          invalid={errors.anotherAddressOwnerInformation?.telNumber?.message && true}
                           {...field}
                         />
                         <label htmlFor="form4" className="color-highlight">
@@ -438,7 +448,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                         <i className={`fa fa-times disabled invalid color-red-dark ${input.telNumber ? 'disabled' : ''}`} />
                         <i className="fa fa-check disabled valid color-green-dark" />
                         <em className={`${input.telNumber ? 'disabled' : ''}`}>({t('Required')})</em>
-                        <FormFeedback>{errors.anotherAddressOwnerInformation?.telNumber.message}</FormFeedback>
+                        <FormFeedback>{errors.anotherAddressOwnerInformation?.telNumber?.message}</FormFeedback>
                       </>
                     )}
                   />
@@ -446,13 +456,14 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
               </div>
             )}
           </div>
-          {/* <div
-            onClick={(e) => hideAddAddressModal(e)}
+          <Button
+            type="submit"
+            // onClick={(e) => hideAddAddressModal(e)}
             style={{ marginTop: '30px' }}
             className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0"
           >
             ذخیره آدرس
-          </div> */}
+          </Button>
         </div>
       </Form>
     </div>

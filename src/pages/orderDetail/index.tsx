@@ -16,6 +16,7 @@ import OrderDetailFirst from './OrderDetailFirst';
 import OrderDetailConfirm from './OrderDetailSecond';
 import { ICreateConsumerRequest } from '@src/models/input/orderDetail/ICreateConsumerRequest';
 import { IRequestDetail } from '@src/models/input/orderDetail/IRequestDetail';
+import { IOrderDetailSecond } from './IOrderDetailProp';
 
 export type ISteps = {
   id: number;
@@ -48,7 +49,6 @@ const OrderDetail: FunctionComponent<IPageProps> = (prop) => {
   const [CurrentStep, setCurrentStep] = useState(steps[activeStep]);
   const [data, setData] = useState<ICreateConsumerRequest>();
   const [requestDetail, setRequestDetail] = useState<IRequestDetail>();
-
   const onClickNext = (requestDetail: IRequestDetail) => {
     // save to state
     debugger;
@@ -60,18 +60,27 @@ const OrderDetail: FunctionComponent<IPageProps> = (prop) => {
     setCurrentStep(steps[activeStep - 1]);
     setActiveStep(activeStep - 1);
   };
-  const handleSubmit = () => {
+  const handleSubmit = (body: IOrderDetailSecond) => {
     debugger;
-    // var formData = new FormData();
-    // formData.append('serviceTypeId', state.ServiceTypeId);
-    // formData.append('productCategoryId', state.ProductId);
-    // formData.append('brandId', data.brandId.value.toString());
-    // formData.append('model', data.model);
-    // formData.append('serial', data.serial);
-    // formData.append('requestDescription', data.requestDescription);
-    // if (audioFile) formData.append('audioMessage', audioFile);
-    // if (imageFile) formData.append('imageMessage', imageFile);
-    // if (videoFile) formData.append('videoMessage', videoFile);
+    var formData = new FormData();
+    if (userData?.userId) formData.append('userId', userData?.userId.toString());
+    if (body.presenceDate) formData.append('presenceDate', body.presenceDate?.toString());
+    if (body.presenceShift) formData.append('presenceShift', body.presenceShift?.toString());
+    if (body.refkey) formData.append('refkey', body.refkey?.toString());
+    formData.append('isUrgent', body.isUrgent.toString());
+    let requests = [{ requestDetail }];
+    for (var i = 0; i < requests.length; i++) {
+      if (requests) formData.append('serviceTypeId', requestDetail.ServiceTypeId);
+      formData.append('productCategoryId', requestDetail.ProductId);
+      formData.append('brandId', requestDetail.brandId.value.toString());
+      formData.append('model', requestDetail.model);
+      formData.append('serial', requestDetail.serial);
+      formData.append('requestDescription', requestDetail.requestDescription);
+      if (audioFile) formData.append('audioMessage', requestDetail.audioFile);
+      if (imageFile) formData.append('imageMessage', requestDetail.imageFile);
+      if (videoFile) formData.append('videoMessage', requestDetail.videoFile);
+    }
+
     //state
     // send to request api
   };

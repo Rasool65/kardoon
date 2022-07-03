@@ -3,8 +3,8 @@ import { IRequestDetail } from './IRequestDetail';
 export interface ICreateConsumerRequest {
   userId?: number;
   presenceDate?: string;
+  isUrgent?: boolean;
   presenceShift?: number;
-  address?: IAddress;
   requestDetail: IRequestDetail[];
 }
 
