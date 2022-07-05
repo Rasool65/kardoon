@@ -26,7 +26,6 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
   const [addressList, setAddressList] = useState<IAddressesResultModel[]>();
   const [refKey, setRefKey] = useState<number>();
   const [isUrgent, setIsUrgent] = useState<boolean>(false);
-  // const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const [shift, setShift] = useState<number>();
   const [shiftTime, setShiftTime] = useState<any>({
@@ -58,10 +57,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
 
   const GetAddresses = () => {
     httpRequest
-      .getRequest<IOutputResult<IAddressesResultModel[]>>(
-        `${APIURL_GET_ADDRESSES}?UserName=${userData?.userName}`
-        // 'http://127.0.0.1:2500/getProducts',
-      )
+      .getRequest<IOutputResult<IAddressesResultModel[]>>(`${APIURL_GET_ADDRESSES}?UserName=${userData?.userName}`)
       .then((result) => {
         setAddressList(result.data.data);
       });
@@ -225,15 +221,6 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
         </div>
       </div>
       <AddAddressModal />
-      {/* <AddAddressModal
-        addAddressModalVisible={state.addAddressModalVisible}
-        hideAddAddressModal={(e) => hideAddAddressModal(e)}
-      /> */}
-
-      {/* <div
-        onClick={state.addAddressModalVisible ? (e) => hideAddAddressModal(e) : null}
-        className={state.viewBgVisible ? 'menu-hider menu-active' : ''}
-      /> */}
     </div>
   );
 };

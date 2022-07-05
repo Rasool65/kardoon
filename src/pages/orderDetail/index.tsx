@@ -1,24 +1,15 @@
-import React, { Component, ComponentType, FunctionComponent, useState } from 'react';
-import Select from 'react-select';
+import { ComponentType, FunctionComponent, useState } from 'react';
 import { IPageProps } from './../../configs/routerConfig/IPageProps';
-import { Col, Container, Input, Row } from 'reactstrap';
 import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-import { APIURL_GET_BRANDS, APIURL_POST_CREATE_REQUEST, APIURL_SEND_PASSWORD } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_POST_CREATE_REQUEST } from '@src/configs/apiConfig/apiUrls';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import { URL_MAIN } from '@src/configs/urls';
-import { Controller, useForm } from 'react-hook-form';
-import { IBrandResultModel } from '@src/models/output/orderDetail/IBrandResultModel';
 import OrderDetailFirst from './OrderDetailFirst';
 import OrderDetailConfirm from './OrderDetailSecond';
-import { ICreateConsumerRequest } from '@src/models/input/orderDetail/ICreateConsumerRequest';
 import { IRequestDetail } from '@src/models/input/orderDetail/IRequestDetail';
 import { IOrderDetailSecond } from './IOrderDetailProp';
 import { ICreateRequestResultModel } from '@src/models/output/orderDetail/ICreateRequestResultModel';
-import { toast } from 'react-toastify';
 import { useToast } from '@src/hooks/useToast';
 
 export type ISteps = {
@@ -41,24 +32,15 @@ const steps: ISteps[] = [
 ];
 
 const OrderDetail: FunctionComponent<IPageProps> = (prop) => {
-  let requestDetail: IRequestDetail[];
   const toast = useToast();
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
-  const cityId = userData?.profile.residenceCityId;
-  const userId = userData?.userId;
-  const navigate = useNavigate();
   const httpRequest = useHttpRequest(RequestDataType.formData);
-  const { t }: any = useTranslation();
-  const { state }: any = useLocation();
-  const [activeStep, setActiveStep] = useState<number>(1);
+  const [activeStep, setActiveStep] = useState<number>(0);
   const [CurrentStep, setCurrentStep] = useState(steps[activeStep]);
-  const [data, setData] = useState<ICreateConsumerRequest>();
-  // const [requestDetail, setRequestDetail] = useState<IRequestDetail[]>();
+  const [requestDetail, setRequestDetail] = useState<IRequestDetail[]>([]);
+
   const onClickNext = (data: IRequestDetail) => {
-    // save to state
-    requestDetail.push(data);
-    debugger;
-    // setRequestDetail(requestDetail);
+    setRequestDetail([...requestDetail, data]);
     setCurrentStep(steps[activeStep + 1]);
     setActiveStep(activeStep + 1);
   };
@@ -95,18 +77,10 @@ const OrderDetail: FunctionComponent<IPageProps> = (prop) => {
         })
         .finally(() => {});
     }
-    //state
-    // send to request api
   };
   return (
     <>
-      <CurrentStep.Component
-        handleClickNext={onClickNext}
-        handleClickPrevious={onClickPrevious}
-        handleSubmit={handleSubmit}
-        // loadingPage={loadingPage}
-        // loadingOrder={loadingOrder}
-      />
+      <CurrentStep.Component handleClickNext={onClickNext} handleClickPrevious={onClickPrevious} handleSubmit={handleSubmit} />
     </>
   );
 };

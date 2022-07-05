@@ -3,9 +3,11 @@ import * as yup from 'yup';
 
 export interface IAddAddressModel {
   userName?: string;
-  cityId: number;
-  provinceId: IProvinceSelectModel;
-  districtId: IDistrictSelectModel;
+  countryId?: number;
+  cityId?: number;
+  provinceId?: number;
+  regionId?: number;
+  districtId?: number;
   zipCode: string;
   latitude?: number;
   longitude?: number;
@@ -18,19 +20,11 @@ export interface IAddAddressModel {
 }
 export const AddAddressModelSchema: yup.SchemaOf<IAddAddressModel> = yup.object({
   userName: yup.string(),
-  cityId: yup.number().required(''),
-  provinceId: yup
-    .object({
-      value: yup.number().required(t('SelectProvinceRequired')),
-      label: yup.string().required(t('SelectProvinceRequired')),
-    })
-    .required(t('SelectProvinceRequired')),
-  districtId: yup
-    .object({
-      value: yup.number().required(t('SelectDistrictRequired')),
-      label: yup.string().required(t('SelectDistrictRequired')),
-    })
-    .required(t('SelectDistrictRequired')),
+  countryId: yup.number(),
+  cityId: yup.number(),
+  provinceId: yup.number(),
+  regionId: yup.number(),
+  districtId: yup.number(),
   zipCode: yup.string().required(t('ZipCodeRequired')),
   latitude: yup.number(),
   longitude: yup.number(),
@@ -58,6 +52,18 @@ interface IProvinceSelectModel {
   value: number;
 }
 interface IDistrictSelectModel {
+  label: string;
+  value: number;
+}
+interface ICountrySelectModel {
+  label: string;
+  value: number;
+}
+interface IRegionSelectModel {
+  label: string;
+  value: number;
+}
+interface ICitySelectModel {
   label: string;
   value: number;
 }

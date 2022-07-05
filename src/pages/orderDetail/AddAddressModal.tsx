@@ -6,11 +6,54 @@ import { useTranslation } from 'react-i18next';
 import { Button, Col, Container, Form, FormFeedback, Input, Row } from 'reactstrap';
 import Select from 'react-select';
 import { yupResolver } from '@hookform/resolvers/yup';
+import useHttpRequest from '@src/hooks/useHttpRequest';
+import {
+  APIURL_GET_CITIES,
+  APIURL_GET_COUNTRIES,
+  APIURL_GET_DISTRICTS,
+  APIURL_GET_PROVINES,
+  APIURL_GET_REGIONES,
+  APIURL_POST_ADD_USER_ADDRESS,
+} from '@src/configs/apiConfig/apiUrls';
+import { IOutputResult } from '@src/models/output/IOutputResult';
+import { ICountryResultModel } from '@src/models/output/countryDivision/ICountryResultModel';
+import { IProvinceResultModel } from '@src/models/output/countryDivision/IProvinceResultModel';
+import { ICitiesResultModel } from './../../models/output/countryDivision/ICitiesResultModel';
+import { IRegionResultModel } from '@src/models/output/countryDivision/IRegionResultModel';
+import { IDistrictsResultModel } from './../../models/output/countryDivision/IDistrictsResultModel';
+import { useSelector } from 'react-redux';
+import { RootStateType } from '@src/redux/Store';
+import { useToast } from './../../hooks/useToast';
+import { IAddAddressesResultModel } from '@src/models/output/addAddress/IAddAddressesResultModel';
 
-const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any) => {
+const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => {
+  const userName = useSelector((state: RootStateType) => state.authentication.userData?.userName);
+  let countryList: any[] = [];
+  const [countries, setCountries] = useState<any>();
+
+  let provincesList: any[] = [];
+  const [provinces, setProvinces] = useState<any>();
+
+  let citiesList: any[] = [];
+  const [cities, setCities] = useState<any>();
+
+  let regionList: any[] = [];
+  const [regiones, setRegion] = useState<any>();
+
+  let districtList: any[] = [];
+  const [distritcs, setDistritcs] = useState<any>();
+
+  const [countryId, setCountryId] = useState<number>();
+  const [provinceId, setProvinceId] = useState<number>();
+  const [cityId, setCityId] = useState<number>();
+  const [regionId, setRegionId] = useState<number>();
+  const [districtId, setDistrictId] = useState<number>();
+  const toast = useToast();
   const messagesEndRef = useRef(null);
+  const httpRequest = useHttpRequest();
   const [forMe, setForMe] = useState<Boolean>(true);
   const { t }: any = useTranslation();
+
   const scrollToBottom = () => {
     //@ts-ignore
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -24,6 +67,9 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
   const [input, setInput] = useState<any>({
     title: false,
     zipCode: false, // code posti
+    cityId: false,
+    countryId: false,
+    regionId: false,
     provinceId: false, //ostan
     districtId: false, //mantaghe
     address: false,
@@ -43,23 +89,95 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
     formState: { errors },
   } = useForm<IAddAddressModel>({ mode: 'onChange', resolver: yupResolver(AddAddressModelSchema) });
 
-  const onSubmit = (data: IAddAddressModel) => {
-    debugger;
-    // const body: IAddAddressModel = {
-    //   serviceTypeId: state.ServiceTypeId,
-    //   productCategoryId: state.ProductId,
-    //   brandId: data.brandId,
-    //   model: data.model,
-    //   serial: data.serial,
-    //   requestDescription: data.requestDescription,
-    //   audioMessage: audioFile,
-    //   imageMessage: imageFile,
-    //   videoMessage: videoFile,
-    // };
-
-    // handleClickNext(body);
+  const GetCountryList = () => {
+    httpRequest.getRequest<IOutputResult<ICountryResultModel>>(`${APIURL_GET_COUNTRIES}`).then((result) => {
+      setCountries(result.data.data);
+    });
   };
+
+  const GetProvincesList = (countryId: number) => {
+    httpRequest.getRequest<IOutputResult<IProvinceResultModel>>(`${APIURL_GET_PROVINES}?ParentId=${countryId}`).then((result) => {
+      setProvinces(result.data.data);
+    });
+  };
+  const GetCityList = (provinesId: number) => {
+    httpRequest.getRequest<IOutputResult<ICitiesResultModel>>(`${APIURL_GET_CITIES}?ParentId=${provinesId}`).then((result) => {
+      setCities(result.data.data);
+    });
+  };
+  const GetRegionList = (citiesId: number) => {
+    httpRequest.getRequest<IOutputResult<IRegionResultModel>>(`${APIURL_GET_REGIONES}?ParentId=${citiesId}`).then((result) => {
+      setRegion(result.data.data);
+    });
+  };
+  const GetDistrictList = (regionId: number) => {
+    httpRequest
+      .getRequest<IOutputResult<IDistrictsResultModel>>(`${APIURL_GET_DISTRICTS}?ParentId=${regionId}`)
+      .then((result) => {
+        setDistritcs(result.data.data);
+      });
+  };
+  const onSubmit = (data: IAddAddressModel) => {
+    const body: IAddAddressModel = {
+      userName: userName,
+      countryId: countryId,
+      cityId: cityId,
+      provinceId: provinceId,
+      regionId: regionId,
+      districtId: districtId,
+      zipCode: data.zipCode,
+      title: data.title,
+      homeTel: data.homeTel,
+      address: data.address,
+      number: data.number,
+      unit: data.unit,
+    };
+    if (data) {
+      httpRequest
+        .postRequest<IOutputResult<IAddAddressesResultModel>>(APIURL_POST_ADD_USER_ADDRESS, body)
+        .then((result) => {
+          toast.showSuccess(result.data.message);
+        })
+        .finally(() => {});
+    }
+  };
+
+  // useEffect(() => {
+  //   countries &&
+  //     countries.forEach((e: ICountryResultModel) => {
+  //       countryList.push({ value: e.id, label: e.persianTitle });
+  //     });
+  // }, [countries]);
+
+  // useEffect(() => {
+  //   provinces &&
+  //     provinces.forEach((e: IProvinceResultModel) => {
+  //       provincesList.push({ value: e.id, label: e.persianTitle });
+  //     });
+  // }, [provinces]);
+
+  // useEffect(() => {
+  //   cities &&
+  //     cities.forEach((e: ICitiesResultModel) => {
+  //       citiesList.push({ value: e.id, label: e.persianTitle });
+  //     });
+  // }, [cities]);
+  // useEffect(() => {
+  //   regiones &&
+  //     regiones.forEach((e: IRegionResultModel) => {
+  //       regionList.push({ value: e.id, label: e.persianTitle });
+  //     });
+  // }, [regiones]);
+
+  // useEffect(() => {
+  //   distritcs &&
+  //     distritcs.forEach((e: IDistrictsResultModel) => {
+  //       districtList.push({ value: e.id, label: e.persianTitle });
+  //     });
+  // }, [distritcs]);
+
   useEffect(() => {
+    GetCountryList();
     CustomFunctions();
   }, []);
   return (
@@ -82,7 +200,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                     <Input
                       id="form4a"
                       onFocus={() => setInput({ title: true })}
-                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
+                      style={{ backgroundPosition: 'left', marginTop: '10px', height: '53px' }}
                       className="form-control validate-text"
                       type="text"
                       placeholder={t('EnterTitle')}
@@ -130,58 +248,87 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                 )}
               />
             </div>
+            {/* کشور */}
+            <div className={`input-style has-borders no-icon validate-field mb-4 ${input.countryId ? 'input-style-active' : ''}`}>
+              <Select
+                noOptionsMessage={() => t('ListIsEmpty')}
+                isClearable
+                className="select-city"
+                placeholder={t('SelectCountry')}
+                options={countryList}
+                isSearchable={true}
+                onChange={(e) => {
+                  e ? (setCountryId(e.value), GetProvincesList(e.value)) : setCountryId(undefined),
+                    (provincesList = []),
+                    GetCountryList();
+                }}
+              />
+            </div>
+            {/* استان */}
             <div
               className={`input-style has-borders no-icon validate-field mb-4 ${input.provinceId ? 'input-style-active' : ''}`}
             >
-              <Controller
-                name="provinceId"
-                control={control}
-                render={({ field }) => (
-                  <>
-                    <Select
-                      noOptionsMessage={() => t('ListIsEmpty')}
-                      // onFocus={() => GetProvinceList()}
-                      isClearable
-                      // theme={(theme) => ({
-                      //   ...theme,
-                      //   borderRadius: 10,
-                      // })}
-                      className="select-city"
-                      placeholder={t('SelectProvince')}
-                      // options={provinces}
-                      isSearchable={true}
-                      {...field}
-                    />
-                    <FormFeedback className="d-block">{errors.provinceId?.value?.message}</FormFeedback>
-                  </>
-                )}
+              <Select
+                noOptionsMessage={() => t('ListIsEmpty')}
+                isClearable
+                className="select-city"
+                placeholder={t('SelectProvince')}
+                options={provincesList}
+                isSearchable={true}
+                onChange={(e) => {
+                  e ? (setProvinceId(e.value), GetCityList(e.value)) : setProvinceId(undefined),
+                    (citiesList = []),
+                    GetProvincesList(countryId!);
+                }}
               />
             </div>
+            {/* شهر */}
+            <div className={`input-style has-borders no-icon validate-field mb-4 ${input.cityId ? 'input-style-active' : ''}`}>
+              <Select
+                noOptionsMessage={() => t('ListIsEmpty')}
+                isClearable
+                className="select-city"
+                placeholder={t('SelectCity')}
+                options={citiesList}
+                isSearchable={true}
+                onChange={(e) => {
+                  e ? (setRegionId(e.value), GetRegionList(e.value)) : setRegion(undefined),
+                    (regionList = []),
+                    GetCityList(provinceId!);
+                }}
+              />
+            </div>
+            {/* منطقه */}
+            <div className={`input-style has-borders no-icon validate-field mb-4 ${input.region ? 'input-style-active' : ''}`}>
+              <Select
+                noOptionsMessage={() => t('ListIsEmpty')}
+                isClearable
+                className="select-city"
+                placeholder={t('SelectRegion')}
+                options={regionList}
+                isSearchable={true}
+                onChange={(e) => {
+                  e ? (setDistrictId(e.value), GetDistrictList(e.value)) : setRegionId(undefined),
+                    setDistritcs(undefined),
+                    (districtList = []),
+                    GetRegionList(cityId!);
+                }}
+              />
+            </div>
+            {/* محله */}
             <div
               className={`input-style has-borders no-icon validate-field mb-4 ${input.districtId ? 'input-style-active' : ''}`}
             >
-              <Controller
-                name="districtId"
-                control={control}
-                render={({ field }) => (
-                  <>
-                    <Select
-                      noOptionsMessage={() => t('ListIsEmpty')}
-                      // onFocus={() => GetDistrictList()}
-                      isClearable
-                      // theme={(theme) => ({
-                      //   ...theme,
-                      //   borderRadius: 10,
-                      // })}
-                      className="select-city"
-                      placeholder={t('SelectDistrict')}
-                      // options={districts}
-                      isSearchable={true}
-                      {...field}
-                    />
-                    <FormFeedback className="d-block">{errors.districtId?.value?.message}</FormFeedback>
-                  </>
-                )}
+              <Select
+                noOptionsMessage={() => t('ListIsEmpty')}
+                isClearable
+                className="select-city"
+                placeholder={t('SelectDistrict')}
+                options={districtList}
+                isSearchable={true}
+                onChange={(e) => {
+                  setDistrictId(e.value);
+                }}
               />
             </div>
             <div className={`input-style has-borders no-icon validate-field mb-4 ${input.address ? 'input-style-active' : ''}`}>
@@ -224,13 +371,13 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
                       style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
                       className="form-control validate-text"
                       type="number"
-                      placeholder={t('EnterHomeTell')}
+                      placeholder={t('EnterHomeTel')}
                       autoComplete="off"
                       invalid={errors.homeTel && true}
                       {...field}
                     />
                     <label htmlFor="form4" className="color-highlight">
-                      {t('HomeTell')}
+                      {t('HomeTel')}
                     </label>
                     <i className={`fa fa-times disabled invalid color-red-dark ${input.homeTel ? 'disabled' : ''}`} />
                     <i className="fa fa-check disabled valid color-green-dark" />
@@ -328,7 +475,7 @@ const AddAddressModal: FunctionComponent<any> = ({ addAddressModalVisible }: any
             {forMe ? null : (
               <div>
                 <div
-                  style={{ marginTop: '15px' }}
+                  style={{ marginTop: '25px' }}
                   ref={messagesEndRef}
                   className={`input-style has-borders no-icon validate-field mb-4 ${input.firstName ? 'input-style-active' : ''}`}
                 >

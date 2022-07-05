@@ -35,16 +35,18 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
     requestDescription: false,
   });
   const [audioDisplay, setAudioDisplay] = useState<string>('none');
+  const [imageDisplay, setImageDisplay] = useState<string>('none');
+  const [videoDisplay, setVideoDisplay] = useState<string>('none');
+  const [imgSrc, setImgSrc] = useState<any>();
+  const [videoSrc, setVideoSrc] = useState<any>();
   const [imageFile, setImageFile] = useState<any>();
   const [audioFile, setAudioFile] = useState<any>();
   const [videoFile, setVideoFile] = useState<any>();
-
   const GetBrands = () => {
     !!state
       ? httpRequest
           .getRequest<IOutputResult<IBrandResultModel>>(
             `${APIURL_GET_BRANDS}?CityId=${cityId}&ProductId=${state.ProductId}&ServiceTypeId=${state.ServiceTypeId}`
-            // 'http://127.0.0.1:2500/getProducts',
           )
           .then((result) => {
             setBrandList(result.data.data);
@@ -58,14 +60,13 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
         })
       : '';
   };
+  useEffect(() => {
+    Brands();
+  }, [brandList]);
 
   useEffect(() => {
     GetBrands();
   }, []);
-
-  useEffect(() => {
-    Brands();
-  }, [brandList]);
 
   const {
     register,
@@ -94,7 +95,15 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   useEffect(() => {
     CustomFunctions();
   }, []);
-
+  useEffect(() => {
+    imgSrc &&
+      fetch(imgSrc)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const file = new File([blob], 'image', { type: 'image/jpeg' });
+          setImageFile(file);
+        });
+  }, [imgSrc]);
   useEffect(() => {
     setAudioFile(audioData);
   }, [audioData]);
@@ -105,7 +114,6 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
     height: 600,
     facingMode: 'environment',
   };
-
   const WebcamCapture = () => (
     <Webcam audio={false} height={600} screenshotFormat="image/jpeg" width={800} videoConstraints={videoConstraints}>
       {/* @ts-ignore */}
@@ -113,9 +121,8 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
         <Button
           className="close-menu"
           onClick={() => {
-            debugger;
-            const imageSrc = getScreenshot();
-            setImageFile(imageSrc);
+            setImgSrc(getScreenshot());
+            setImageDisplay('flex');
           }}
         >
           ثبت تصویر
@@ -158,12 +165,23 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
       setCapturing(false);
     }, [mediaRecorderRef, webcamRef, setCapturing]);
 
-    const handleDownload = useCallback(() => {
+    const saveVideo = useCallback(() => {
       if (recordedChunks.length) {
         const blob = new Blob(recordedChunks, {
           type: 'video/webm',
         });
         setVideoFile(blob);
+        setVideoDisplay('flex');
+        // setVideoSrc(URL.createObjectURL(blob));
+      }
+    }, [recordedChunks]);
+
+    const handleDownload = useCallback(() => {
+      if (recordedChunks.length) {
+        const blob = new Blob(recordedChunks, {
+          type: 'video/webm',
+        });
+        // setVideoFile(blob);
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         document.body.appendChild(a);
@@ -186,8 +204,8 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
           <Button onClick={handleStartCaptureClick}>شروع ضبط</Button>
         )}
         {recordedChunks.length > 0 && (
-          <Button className="close-menu" onClick={handleDownload}>
-            ارسال ویدئو
+          <Button className="close-menu" onClick={saveVideo}>
+            تایید ویدیو
           </Button>
         )}
       </>
@@ -411,7 +429,14 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                     }}
                   >
                     <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
-                      <audio hidden={isRecording} src={audioURL} controls />
+                      <audio
+                        style={{
+                          width: '-webkit-fill-available',
+                        }}
+                        hidden={isRecording}
+                        src={audioURL}
+                        controls
+                      />
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
                       <img
@@ -443,11 +468,38 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                       در صورت نیاز می توانید تصویری را بارگذاری نمایید
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
-                      {/* <Webcam /> */}
                       <img
                         data-menu="capture-Modal"
                         style={{ cursor: 'pointer' }}
                         src="images/forTest/camera.png"
+                        width="46"
+                        height="46"
+                        alt=""
+                      />
+                    </Col>
+                  </Row>
+                  <Row
+                    style={{
+                      display: `${imageDisplay}`,
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      padding: '0 0 0 0',
+                      marginBottom: '0',
+                    }}
+                  >
+                    <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
+                      <p>تصویر ضمیمه شد.</p>
+                      <img width="320" height="240" src={imgSrc} />
+                    </Col>
+                    <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
+                      <img
+                        // hidden={isRecording}
+                        style={{ cursor: 'pointer' }}
+                        src="images/forTest/delete.png"
+                        onClick={() => {
+                          setImageFile(null);
+                          setImageDisplay('none');
+                        }}
                         width="46"
                         height="46"
                         alt=""
@@ -472,6 +524,37 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                         data-menu="video-Modal"
                         style={{ cursor: 'pointer' }}
                         src="images/forTest/video.png"
+                        width="46"
+                        height="46"
+                        alt=""
+                      />
+                    </Col>
+                  </Row>
+                  <Row
+                    style={{
+                      display: `${videoDisplay}`,
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      padding: '0 0 0 0',
+                      marginBottom: '0',
+                    }}
+                  >
+                    <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
+                      <p>ویدئو ضمیمه شد.</p>
+                      <video width="320" height="240" controls>
+                        <source src={videoSrc} type="video/webm" />
+                      </video>
+                      {/* <video src={videoSrc}></video> */}
+                      {/* <video src={videoFile}></video> */}
+                    </Col>
+                    <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
+                      <img
+                        style={{ cursor: 'pointer' }}
+                        src="images/forTest/delete.png"
+                        onClick={() => {
+                          setVideoFile(null);
+                          setVideoDisplay('none');
+                        }}
                         width="46"
                         height="46"
                         alt=""

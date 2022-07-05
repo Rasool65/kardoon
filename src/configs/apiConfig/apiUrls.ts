@@ -16,3 +16,10 @@ export const APIURL_UPDATE_RESIDENCE_CITY = '/UserManagement/UserResidenceCity';
 export const APIURL_GET_BRANDS = '/ProductCategory/GetProductBrandList';
 export const APIURL_GET_ADDRESSES = '/UserManagement/GetUserAddress';
 export const APIURL_POST_CREATE_REQUEST = '/Request/CreateConsumerRequest';
+//ADD ADDRESS
+export const APIURL_GET_COUNTRIES = '/CountryDivision/GetCountries';
+export const APIURL_GET_CITIES = '/CountryDivision/GetCities';
+export const APIURL_GET_PROVINES = '/CountryDivision/GetProvinces';
+export const APIURL_GET_REGIONES = '/CountryDivision/GetRegiones';
+export const APIURL_GET_DISTRICTS = '/CountryDivision/GetDistricts';
+export const APIURL_POST_ADD_USER_ADDRESS = '/UserManagement/AddUserAddress';
