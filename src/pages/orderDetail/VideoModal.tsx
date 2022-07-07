@@ -11,7 +11,7 @@ const VideoModal: FunctionComponent<ICameraModal> = ({ WebcamStreamCapture }: an
       id="video-Modal"
       className={`menu menu-box-bottom menu-box-detached rounded-m`}
       style={{ display: 'inherit', textAlign: 'center' }}
-      data-menu-height="650"
+      data-menu-height="780"
       data-menu-effect="menu-over"
     >
       <WebcamStreamCapture />

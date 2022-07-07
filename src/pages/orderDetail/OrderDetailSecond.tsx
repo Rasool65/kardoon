@@ -1,15 +1,15 @@
-import React, { Component, FunctionComponent, useEffect, useState } from 'react';
+import React, { Component, FunctionComponent, useEffect, useRef, useState } from 'react';
 // import 'bootstrap/dist/css/bootstrap.css';
 // import '../Style/style.css';
 // import '../Style/scss/style.scss';
 
-import { Col, Container, Input, Row } from 'reactstrap';
+import { Button, Col, Container, Input, Row } from 'reactstrap';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-import { APIURL_GET_ADDRESSES, APIURL_GET_BRANDS } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_GET_ADDRESSES, APIURL_GET_BRANDS, APIURL_POST_DELETE_USER_ADDRESS } from '@src/configs/apiConfig/apiUrls';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IOrderDetailPageProp, IOrderDetailSecond } from './IOrderDetailProp';
 import WeekPicker from '@src/components/weekPicker/WeekPicker';
@@ -36,6 +36,13 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
 
+  const mypage = useRef<any>(null);
+
+  const closeModal = () => {
+    //select dive here
+    debugger;
+    mypage.current.focus();
+  };
   const getIndex = (value: any) => {
     const arr = optionGroups.title;
     for (let i = 0; i < arr.length; i++) {
@@ -66,7 +73,15 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
   const chbOnChange = (e: any) => {
     e.target.checked ? (setIsUrgent(true), setShift(undefined)) : setIsUrgent(false);
   };
-
+  const deleteAddress = (refKey: number) => {
+    const body = {
+      userName: userData?.userName,
+      refkey: refKey,
+    };
+    httpRequest.postRequest<IOutputResult<IAddressesResultModel[]>>(`${APIURL_POST_DELETE_USER_ADDRESS}`, body).then((result) => {
+      setAddressList(result.data.data);
+    });
+  };
   useEffect(() => {
     GetAddresses();
     CustomFunctions();
@@ -74,7 +89,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
 
   const { optionGroups, valueGroups } = shiftTime;
   return (
-    <div id="page">
+    <div id="page" ref={mypage}>
       <div className="page-content" style={{ paddingBottom: '0px' }}>
         <div className="page-title page-title-small pointer" style={{ color: '#FFF', width: 'fit-content', fontSize: '16px' }}>
           جزئیات سفارش
@@ -178,6 +193,16 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
                       </div>
                     </div>
                   </label>
+
+                  <Button
+                    className="btn-danger"
+                    style={{ float: 'left' }}
+                    onClick={() => {
+                      deleteAddress(item.refkey!);
+                    }}
+                  >
+                    حذف
+                  </Button>
                 </div>
               );
             })}
@@ -185,7 +210,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           <div
             data-menu="add-address-Modal"
             style={{ marginTop: '10px' }}
-            className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0"
+            className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0 "
           >
             + افزودن آدرس
           </div>
@@ -220,7 +245,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           </div>
         </div>
       </div>
-      <AddAddressModal />
+      <AddAddressModal closeModal={closeModal} />
     </div>
   );
 };

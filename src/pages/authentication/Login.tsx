@@ -7,7 +7,7 @@ import { Alert, Button, Col, Container, Form, FormFeedback, Input, Row, Spinner 
 import { ILoginModel, LoginModelSchema } from '@src/models/input/authentication/ILoginModel';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import { APIURL_IDP_TOKEN, APIURL_LOGIN } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_LOGIN } from '@src/configs/apiConfig/apiUrls';
 import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
 import { handleLogin } from '@src/redux/reducers/authenticationReducer';
 import { URL_MAIN, URL_USER_PROFILE, URL_CITY } from './../../configs/urls';

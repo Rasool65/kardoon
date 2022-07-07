@@ -110,12 +110,12 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
 
   //* Take Picture
   const videoConstraints = {
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 720,
     facingMode: 'environment',
   };
   const WebcamCapture = () => (
-    <Webcam audio={false} height={600} screenshotFormat="image/jpeg" width={800} videoConstraints={videoConstraints}>
+    <Webcam audio={false} height={720} screenshotFormat="image/jpeg" width={1280} videoConstraints={videoConstraints}>
       {/* @ts-ignore */}
       {({ getScreenshot }) => (
         <Button
@@ -172,7 +172,11 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
         });
         setVideoFile(blob);
         setVideoDisplay('flex');
-        // setVideoSrc(URL.createObjectURL(blob));
+        //  setVideoSrc(URL.createObjectURL(blob));
+        const url = URL.createObjectURL(blob);
+        const video = document.getElementById('video-replay');
+        // @ts-ignore
+        video.src = url;
       }
     }, [recordedChunks]);
 
@@ -245,10 +249,6 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                         noOptionsMessage={() => t('ListIsEmpty')}
                         onFocus={() => GetBrands()}
                         isClearable
-                        // theme={(theme) => ({
-                        //   ...theme,
-                        //   borderRadius: 10,
-                        // })}
                         className="select-city"
                         placeholder={t('SelectBrand')}
                         options={brands}
@@ -541,11 +541,9 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                   >
                     <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
                       <p>ویدئو ضمیمه شد.</p>
-                      <video width="320" height="240" controls>
+                      <video id="video-replay" width="320" height="240" controls>
                         <source src={videoSrc} type="video/webm" />
                       </video>
-                      {/* <video src={videoSrc}></video> */}
-                      {/* <video src={videoFile}></video> */}
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
                       <img

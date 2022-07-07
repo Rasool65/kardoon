@@ -25,22 +25,18 @@ import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { useToast } from './../../hooks/useToast';
 import { IAddAddressesResultModel } from '@src/models/output/addAddress/IAddAddressesResultModel';
+import { ICloseModal } from './ICloseModal';
 
-const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => {
+const AddAddressModal: FunctionComponent<ICloseModal> = ({ closeModal }: any) => {
   const userName = useSelector((state: RootStateType) => state.authentication.userData?.userName);
-  let countryList: any[] = [];
   const [countries, setCountries] = useState<any>();
 
-  let provincesList: any[] = [];
   const [provinces, setProvinces] = useState<any>();
 
-  let citiesList: any[] = [];
   const [cities, setCities] = useState<any>();
 
-  let regionList: any[] = [];
   const [regiones, setRegion] = useState<any>();
 
-  let districtList: any[] = [];
   const [distritcs, setDistritcs] = useState<any>();
 
   const [countryId, setCountryId] = useState<number>();
@@ -94,7 +90,6 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
       setCountries(result.data.data);
     });
   };
-
   const GetProvincesList = (countryId: number) => {
     httpRequest.getRequest<IOutputResult<IProvinceResultModel>>(`${APIURL_GET_PROVINES}?ParentId=${countryId}`).then((result) => {
       setProvinces(result.data.data);
@@ -111,12 +106,14 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
     });
   };
   const GetDistrictList = (regionId: number) => {
+    debugger;
     httpRequest
       .getRequest<IOutputResult<IDistrictsResultModel>>(`${APIURL_GET_DISTRICTS}?ParentId=${regionId}`)
       .then((result) => {
         setDistritcs(result.data.data);
       });
   };
+
   const onSubmit = (data: IAddAddressModel) => {
     const body: IAddAddressModel = {
       userName: userName,
@@ -137,44 +134,11 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
         .postRequest<IOutputResult<IAddAddressesResultModel>>(APIURL_POST_ADD_USER_ADDRESS, body)
         .then((result) => {
           toast.showSuccess(result.data.message);
+          closeModal(); //close modal
         })
         .finally(() => {});
     }
   };
-
-  // useEffect(() => {
-  //   countries &&
-  //     countries.forEach((e: ICountryResultModel) => {
-  //       countryList.push({ value: e.id, label: e.persianTitle });
-  //     });
-  // }, [countries]);
-
-  // useEffect(() => {
-  //   provinces &&
-  //     provinces.forEach((e: IProvinceResultModel) => {
-  //       provincesList.push({ value: e.id, label: e.persianTitle });
-  //     });
-  // }, [provinces]);
-
-  // useEffect(() => {
-  //   cities &&
-  //     cities.forEach((e: ICitiesResultModel) => {
-  //       citiesList.push({ value: e.id, label: e.persianTitle });
-  //     });
-  // }, [cities]);
-  // useEffect(() => {
-  //   regiones &&
-  //     regiones.forEach((e: IRegionResultModel) => {
-  //       regionList.push({ value: e.id, label: e.persianTitle });
-  //     });
-  // }, [regiones]);
-
-  // useEffect(() => {
-  //   distritcs &&
-  //     distritcs.forEach((e: IDistrictsResultModel) => {
-  //       districtList.push({ value: e.id, label: e.persianTitle });
-  //     });
-  // }, [distritcs]);
 
   useEffect(() => {
     GetCountryList();
@@ -183,7 +147,7 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
   return (
     <div
       id="add-address-Modal"
-      className={`menu menu-box-bottom menu-box-detached rounded-m ${addAddressModalVisible ? 'menu-active' : ''}`}
+      className="menu menu-box-bottom menu-box-detached rounded-m"
       data-menu-height="600"
       style={{ display: 'inherit' }}
       data-menu-effect="menu-over"
@@ -231,7 +195,7 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
                       onFocus={() => setInput({ zipCode: true })}
                       style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
                       className="form-control validate-text"
-                      type="text"
+                      type="number"
                       placeholder={t('EnterZipCode')}
                       autoComplete="off"
                       invalid={errors.zipCode && true}
@@ -255,11 +219,11 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
                 isClearable
                 className="select-city"
                 placeholder={t('SelectCountry')}
-                options={countryList}
+                options={countries}
                 isSearchable={true}
-                onChange={(e) => {
+                onChange={(e: any) => {
                   e ? (setCountryId(e.value), GetProvincesList(e.value)) : setCountryId(undefined),
-                    (provincesList = []),
+                    setProvinces([]),
                     GetCountryList();
                 }}
               />
@@ -273,11 +237,11 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
                 isClearable
                 className="select-city"
                 placeholder={t('SelectProvince')}
-                options={provincesList}
+                options={provinces}
                 isSearchable={true}
-                onChange={(e) => {
+                onChange={(e: any) => {
                   e ? (setProvinceId(e.value), GetCityList(e.value)) : setProvinceId(undefined),
-                    (citiesList = []),
+                    setCities([]),
                     GetProvincesList(countryId!);
                 }}
               />
@@ -289,12 +253,10 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
                 isClearable
                 className="select-city"
                 placeholder={t('SelectCity')}
-                options={citiesList}
+                options={cities}
                 isSearchable={true}
-                onChange={(e) => {
-                  e ? (setRegionId(e.value), GetRegionList(e.value)) : setRegion(undefined),
-                    (regionList = []),
-                    GetCityList(provinceId!);
+                onChange={(e: any) => {
+                  e ? (setRegionId(e.value), GetRegionList(e.value)) : setRegion([]), GetCityList(provinceId!);
                 }}
               />
             </div>
@@ -305,13 +267,11 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
                 isClearable
                 className="select-city"
                 placeholder={t('SelectRegion')}
-                options={regionList}
+                options={regiones}
                 isSearchable={true}
-                onChange={(e) => {
-                  e ? (setDistrictId(e.value), GetDistrictList(e.value)) : setRegionId(undefined),
-                    setDistritcs(undefined),
-                    (districtList = []),
-                    GetRegionList(cityId!);
+                onChange={(e: any) => {
+                  e ? (setDistrictId(e.value), GetDistrictList(e.value)) : setDistrictId(undefined), setDistritcs([]);
+                  // GetRegionList(cityId!);
                 }}
               />
             </div>
@@ -324,9 +284,9 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
                 isClearable
                 className="select-city"
                 placeholder={t('SelectDistrict')}
-                options={districtList}
+                options={distritcs}
                 isSearchable={true}
-                onChange={(e) => {
+                onChange={(e: any) => {
                   setDistrictId(e.value);
                 }}
               />
@@ -410,7 +370,7 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
                             onFocus={() => setInput({ number: true })}
                             style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
                             className="form-control validate-text"
-                            type="text"
+                            type="number"
                             placeholder={t('EnterNumber')}
                             autoComplete="off"
                             invalid={errors.number && true}
@@ -442,7 +402,7 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
                             onFocus={() => setInput({ unit: true })}
                             style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
                             className="form-control validate-text"
-                            type="text"
+                            type="number"
                             placeholder={t('EnterUnit')}
                             autoComplete="off"
                             invalid={errors.unit && true}
@@ -553,7 +513,7 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
                           onFocus={() => setInput({ mobileNumber: true })}
                           style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
                           className="form-control validate-text"
-                          type="text"
+                          type="number"
                           placeholder={t('شماره تلفن همراه گیرنده خدمات را وارد نمایید')}
                           autoComplete="off"
                           invalid={errors.anotherAddressOwnerInformation?.mobileNumber?.message && true}
@@ -583,7 +543,7 @@ const AddAddressModal: FunctionComponent = ({ addAddressModalVisible }: any) => 
                           onFocus={() => setInput({ telNumber: true })}
                           style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
                           className="form-control validate-text"
-                          type="text"
+                          type="number"
                           placeholder={t('شماره تلفن ثابت گیرنده خدمات را وارد نمایید')}
                           autoComplete="off"
                           invalid={errors.anotherAddressOwnerInformation?.telNumber?.message && true}

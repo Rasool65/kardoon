@@ -35,7 +35,6 @@ const Products: FunctionComponent<IPageProps> = (props) => {
       ? httpRequest
           .getRequest<IOutputResult<IProductsResultModel[]>>(
             `${APIURL_GET_PRODUCTS}?CityId=${cityId}&ProductCategoryId=${state.ProductCategoryId}&ServiceTypeId=${state.ServiceTypeId}`
-            // 'http://127.0.0.1:2500/getProducts',
           )
           .then((result) => {
             setProducts(result.data.data);
@@ -46,7 +45,6 @@ const Products: FunctionComponent<IPageProps> = (props) => {
     httpRequest
       .getRequest<IOutputResult<IProductTypeResultModel[]>>(
         `${APIURL_GET_DEVICE_TYPE}?CityId=${cityId}&ProductCategoryId=${ProductCategoryId}&ServiceTypeId=${state.ServiceTypeId}`
-        // 'http://127.0.0.1:2500/getProducts',
       )
       .then((result) => {
         setDeviceType(result.data.data);

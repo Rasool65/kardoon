@@ -1,6 +1,6 @@
 // Authentication
 export const APIURL_LOGIN = '/account/login';
-export const APIURL_IDP_TOKEN = 'https://krdnv07.kardoon.local:8008/TokenProvider';
+// export const APIURL_IDP_TOKEN = 'https://krdnv07.kardoon.local:8008/TokenProvider';
 export const APIURL_GET_COUNTRY_DIVISION = '/CountryDivision/GetCountryDivision';
 export const APIURL_REGISTER = '/Account/RegisterUser';
 export const APIURL_SEND_PASSWORD = '/Account/SendPassword';
@@ -23,3 +23,4 @@ export const APIURL_GET_PROVINES = '/CountryDivision/GetProvinces';
 export const APIURL_GET_REGIONES = '/CountryDivision/GetRegiones';
 export const APIURL_GET_DISTRICTS = '/CountryDivision/GetDistricts';
 export const APIURL_POST_ADD_USER_ADDRESS = '/UserManagement/AddUserAddress';
+export const APIURL_POST_DELETE_USER_ADDRESS = '/UserManagement/DeleteUserAddress';
