@@ -36,13 +36,6 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
 
-  const mypage = useRef<any>(null);
-
-  const closeModal = () => {
-    //select dive here
-    debugger;
-    mypage.current.focus();
-  };
   const getIndex = (value: any) => {
     const arr = optionGroups.title;
     for (let i = 0; i < arr.length; i++) {
@@ -89,7 +82,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
 
   const { optionGroups, valueGroups } = shiftTime;
   return (
-    <div id="page" ref={mypage}>
+    <div id="page">
       <div className="page-content" style={{ paddingBottom: '0px' }}>
         <div className="page-title page-title-small pointer" style={{ color: '#FFF', width: 'fit-content', fontSize: '16px' }}>
           جزئیات سفارش
@@ -135,7 +128,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
                     }}
                   />
                 ) : (
-                  <>{toast.showWarning('در حالت مراجعه فوری امکان انتخاب زمان وجود ندارد.')} </>
+                  <>{toast.showInfo('در حالت مراجعه فوری امکان انتخاب زمان وجود ندارد.')} </>
                 )}
               </Col>
             </Row>
@@ -245,7 +238,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           </div>
         </div>
       </div>
-      <AddAddressModal closeModal={closeModal} />
+      <AddAddressModal GetAddresses={GetAddresses} />
     </div>
   );
 };

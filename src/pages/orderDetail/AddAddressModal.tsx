@@ -27,7 +27,7 @@ import { useToast } from './../../hooks/useToast';
 import { IAddAddressesResultModel } from '@src/models/output/addAddress/IAddAddressesResultModel';
 import { ICloseModal } from './ICloseModal';
 
-const AddAddressModal: FunctionComponent<ICloseModal> = ({ closeModal }: any) => {
+const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
   const userName = useSelector((state: RootStateType) => state.authentication.userData?.userName);
   const [countries, setCountries] = useState<any>();
 
@@ -134,7 +134,8 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ closeModal }: any) =>
         .postRequest<IOutputResult<IAddAddressesResultModel>>(APIURL_POST_ADD_USER_ADDRESS, body)
         .then((result) => {
           toast.showSuccess(result.data.message);
-          closeModal(); //close modal
+          document.getElementById('close-add-address-Modal')?.click();
+          GetAddresses();
         })
         .finally(() => {});
     }
@@ -152,6 +153,7 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ closeModal }: any) =>
       style={{ display: 'inherit' }}
       data-menu-effect="menu-over"
     >
+      <a id="close-add-address-Modal" className="close-menu" />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <div className="card p-4" style={{ marginBottom: '0px' }}>
           <div style={{ height: '550px', overflow: 'scroll' }}>
@@ -565,7 +567,6 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ closeModal }: any) =>
           </div>
           <Button
             type="submit"
-            // onClick={(e) => hideAddAddressModal(e)}
             style={{ marginTop: '30px' }}
             className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0"
           >

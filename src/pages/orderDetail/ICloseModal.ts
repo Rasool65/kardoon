@@ -1,3 +1,3 @@
 export interface ICloseModal {
-  closeModal?: any;
+  GetAddresses?: any;
 }
