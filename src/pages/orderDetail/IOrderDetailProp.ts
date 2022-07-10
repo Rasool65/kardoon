@@ -3,11 +3,6 @@ export interface IOrderDetailPageProp {
   handleClickPrevious?: any;
   handleSubmit?: any;
 }
-export interface ICameraModal {
-  WebcamCapture?: any;
-  WebcamStreamCapture?: any;
-  capturMenuVisible?: boolean;
-}
 
 export interface IOrderDetailSecond {
   isUrgent: boolean;
