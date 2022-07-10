@@ -215,6 +215,16 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
       </>
     );
   };
+  const onImageFileChange = (e: any) => {
+    const reader = new FileReader(),
+      files = e.target.files;
+    reader.onload = function () {
+      // setAvatar(reader.result);
+    };
+    // setAvatarFile(files[0]);
+    // setDeleteAvatar(false);
+    reader.readAsDataURL(files[0]);
+  };
   return (
     <div id="page">
       {/* <Header/> */}
@@ -477,6 +487,21 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                         alt=""
                       />
                     </Col>
+                    {/* <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
+                      <label htmlFor="img">
+                        <img style={{ cursor: 'pointer' }} src="images/forTest/camera.png" width="46" height="46" alt="" />
+                      </label>
+                      <Input
+                        onChange={() => {
+                          onImageFileChange;
+                        }}
+                        style={{ display: 'none' }}
+                        id="img"
+                        type="file"
+                        capture="user"
+                        accept="image/*"
+                      />
+                    </Col> */}
                   </Row>
                   <Row
                     style={{

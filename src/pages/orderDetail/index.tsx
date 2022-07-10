@@ -35,7 +35,7 @@ const OrderDetail: FunctionComponent<IPageProps> = (prop) => {
   const toast = useToast();
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const httpRequest = useHttpRequest(RequestDataType.formData);
-  const [activeStep, setActiveStep] = useState<number>(1);
+  const [activeStep, setActiveStep] = useState<number>(0);
   const [CurrentStep, setCurrentStep] = useState(steps[activeStep]);
   const [requestDetail, setRequestDetail] = useState<IRequestDetail[]>([]);
 
