@@ -30,21 +30,21 @@ const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordMod
   } = useForm<IForgetPasswordModel>({ mode: 'onChange', resolver: yupResolver(ForgetPasswordModelSchema) });
 
   const handleEditMobileNo = () => {
-      setShow(false);
-      setForgetPasswordModalVisible(true);
-  }
+    setShow(false);
+    setForgetPasswordModalVisible(true);
+  };
 
   const onSubmit = (data: IForgetPasswordModel) => {
     setLoading(true);
-    setMobileNumber(data.mobileNumber);
-    setForgetPasswordModalVisible(false);
-      setShow(true);
+
     if (data && !loading) {
       httpRequest
         .postRequest<IOutputResult<IForgetPasswordResultModel>>(APIURL_SEND_PASSWORD, data)
         .then((result) => {
           toast.showSuccess(result.data.message);
+          setMobileNumber(data.mobileNumber);
           setShow(true);
+          setForgetPasswordModalVisible(false);
         })
         .finally(() => setLoading(false));
     }
@@ -66,12 +66,12 @@ const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordMod
               <Controller
                 name="mobileNumber"
                 control={control}
-                render={({ field }:any) => (
+                render={({ field }: any) => (
                   <>
                     <Input
                       id="form1a"
                       onFocus={() => setInput({ mobile: true })}
-                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px'}}
+                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
                       className="form-control validate-text"
                       type="text"
                       placeholder={t('EnterMobile')}
@@ -101,13 +101,6 @@ const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordMod
         </Form>
       </div>
       <EnterCode showEnterCodeModal={show} mobileNumber={mobileNumber} handleEditMobileNo={handleEditMobileNo} />
-        {/* <div
-        onClick={() => {
-          debugger;
-          setShow(false);
-        }}
-        className={registerModalVisible || forgetPasswordModalVisible ? 'menu-hider menu-active' : ''}
-      /> */}
     </>
   );
 };

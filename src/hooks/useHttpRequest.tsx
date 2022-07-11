@@ -10,6 +10,8 @@ export enum RequestDataType {
   formData,
   urlencoded,
 }
+let delayBetweenErrors: number;
+let lastErrorTime: number = 0;
 
 const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
   const navigate = useNavigate();
@@ -31,11 +33,12 @@ const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
           },
           ...config,
         });
+        delayBetweenErrors = Date.now() - lastErrorTime;
+        lastErrorTime = Date.now();
         if (res.status >= 200 && res.status <= 204) resolve(res);
-        else if (res.status == 401) {
-          debugger;
+        else if (res.status == 401 && delayBetweenErrors > 500) {
+          toast.showError('لطفا مجدد وارد حساب کاربری خود شوید');
           authToken.deleteLogoutToken();
-          toast.showError('مجددأ وارد شوید');
           navigate(URL_LOGIN);
         } else {
           toast.showError(res.data.message);
