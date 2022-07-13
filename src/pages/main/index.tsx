@@ -15,9 +15,11 @@ import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import MainMenuModal from './MainMenuModal';
 import { URL_CATEGORIES } from '@src/configs/urls';
+import { Spinner } from 'reactstrap';
 
 const Main: FunctionComponent<IPageProps> = (props) => {
   const [services, setServices] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [advertise, setAdvertise] = useState<any>([]);
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
@@ -25,20 +27,17 @@ const Main: FunctionComponent<IPageProps> = (props) => {
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
 
   const GetServices = (cityId: number) => {
+    setLoading(true);
     httpRequest.getRequest<IOutputResult<IServicesResultModel>>(`${APIURL_GET_SERVICES}?CityId=${cityId}`).then((result) => {
       setServices(result.data.data);
+      setLoading(false);
     });
   };
 
   const GetAdvertise = () => {
-    httpRequest
-      .getRequest<IOutputResult<IAdvertiseResultModel[]>>(
-        APIURL_GET_ADVERTISE
-        // 'http://127.0.0.1:2500/GetAdvertise'
-      )
-      .then((result) => {
-        setAdvertise(result.data.data);
-      });
+    httpRequest.getRequest<IOutputResult<IAdvertiseResultModel[]>>(APIURL_GET_ADVERTISE).then((result) => {
+      setAdvertise(result.data.data);
+    });
   };
 
   useEffect(() => {
@@ -110,8 +109,12 @@ const Main: FunctionComponent<IPageProps> = (props) => {
                 </div>
               );
             })}
-
-          {!!services &&
+          {loading ? (
+            <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-around' }}>
+              <Spinner />
+            </div>
+          ) : (
+            !!services &&
             services?.length > 0 &&
             services.map((item: IServicesResultModel, id: number) => {
               return (
@@ -141,7 +144,8 @@ const Main: FunctionComponent<IPageProps> = (props) => {
                   <div className="card-overlay bg-black opacity-30" />
                 </div>
               );
-            })}
+            })
+          )}
 
           <div className="card card-style  me-0 ms-0 rounded-0 gradient-blue">
             <div className="content pt-5 pb-5">

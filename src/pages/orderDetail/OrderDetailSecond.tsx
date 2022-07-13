@@ -1,12 +1,6 @@
 import React, { Component, FunctionComponent, useEffect, useRef, useState } from 'react';
-// import 'bootstrap/dist/css/bootstrap.css';
-// import '../Style/style.css';
-// import '../Style/scss/style.scss';
-
-import { Button, Col, Container, Input, Row } from 'reactstrap';
+import { Button, Col, Container, Input, Row, Spinner } from 'reactstrap';
 import useHttpRequest from '@src/hooks/useHttpRequest';
-import { useLocation, useNavigate } from 'react-router-dom';
-
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { APIURL_GET_ADDRESSES, APIURL_GET_BRANDS, APIURL_POST_DELETE_USER_ADDRESS } from '@src/configs/apiConfig/apiUrls';
@@ -26,6 +20,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
   const [addressList, setAddressList] = useState<IAddressesResultModel[]>();
   const [refKey, setRefKey] = useState<number>();
   const [isUrgent, setIsUrgent] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const [shift, setShift] = useState<number>();
   const [shiftTime, setShiftTime] = useState<any>({
@@ -56,10 +51,12 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
   };
 
   const GetAddresses = () => {
+    setLoading(true);
     httpRequest
       .getRequest<IOutputResult<IAddressesResultModel[]>>(`${APIURL_GET_ADDRESSES}?UserName=${userData?.userName}`)
       .then((result) => {
         setAddressList(result.data.data);
+        setLoading(false);
       });
   };
 
@@ -67,14 +64,19 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
     e.target.checked ? (setIsUrgent(true), setShift(undefined)) : setIsUrgent(false);
   };
   const deleteAddress = (refKey: number) => {
+    setLoading(true);
     const body = {
       userName: userData?.userName,
       refkey: refKey,
     };
     httpRequest.postRequest<IOutputResult<IAddressesResultModel[]>>(`${APIURL_POST_DELETE_USER_ADDRESS}`, body).then((result) => {
       setAddressList(result.data.data);
+      setLoading(false);
     });
   };
+  useEffect(() => {
+    CustomFunctions();
+  }, [refKey]);
   useEffect(() => {
     GetAddresses();
     CustomFunctions();
@@ -146,13 +148,19 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
 
         <div className="card card-style p-4">
           <h6>انتخاب آدرس</h6>
-          {addressList &&
+          {loading ? (
+            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+              <Spinner />
+            </div>
+          ) : (
+            addressList &&
             addressList.length &&
             addressList.map((item: IAddressesResultModel, index: number) => {
               return (
                 <div
                   className="form-check icon-check"
                   style={{
+                    display: 'flex',
                     border: '1px solid #CCD1D9',
                     borderStyle: 'dashed',
                     padding: '5px 0px 5px 10px',
@@ -186,19 +194,17 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
                       </div>
                     </div>
                   </label>
-
-                  <Button
-                    className="btn-danger"
-                    style={{ float: 'left' }}
+                  <div
                     onClick={() => {
-                      deleteAddress(item.refkey!);
+                      setRefKey(item.refkey!);
                     }}
-                  >
-                    حذف
-                  </Button>
+                    data-menu="remove-address-Modal"
+                    className="fa fa-times color-red-dark"
+                  ></div>
                 </div>
               );
-            })}
+            })
+          )}
 
           <div
             data-menu="add-address-Modal"
@@ -210,16 +216,6 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
         </div>
 
         <div className="row mb-2" style={{ padding: '0 25px 25px 25px' }}>
-          <div className="col-6">
-            <div
-              onClick={(e) => {
-                handleClickPrevious();
-              }}
-              className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700"
-            >
-              بازگشت
-            </div>
-          </div>
           <div className="col-6">
             <div
               onClick={(e) => {
@@ -235,6 +231,40 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
             >
               تکمیل ثبت سفارش
             </div>
+          </div>
+          <div className="col-6">
+            <div
+              onClick={(e) => {
+                handleClickPrevious();
+              }}
+              className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700"
+            >
+              افزودن محصول دیگر{' '}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="remove-address-Modal" className="menu menu-box-modal rounded-m" data-menu-height="200" data-menu-width="320">
+        <h1 className="text-center font-700 mt-3 pb-1">حذف آدرس</h1>
+        <p className="boxed-text-l">آیا از حذف آدرس اطمینان دارید؟</p>
+        <div className="row me-3 ms-3 mb-0">
+          <div className="col-6">
+            <a
+              onClick={() => {
+                deleteAddress(refKey!);
+              }}
+              className="close-menu btn btn-sm btn-full button-s shadow-l rounded-s text-uppercase font-700 bg-green-dark"
+            >
+              بله
+            </a>
+          </div>
+          <div className="col-6">
+            <a
+              href="#"
+              className="close-menu btn btn-sm btn-full button-s shadow-l rounded-s text-uppercase font-700 bg-red-dark"
+            >
+              خیر
+            </a>
           </div>
         </div>
       </div>

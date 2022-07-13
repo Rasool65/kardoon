@@ -387,7 +387,12 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                   >
                     <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
                       <p>تصویر ضمیمه شد.</p>
-                      <img width="320" height="240" src={imgSrc} />
+                      <img
+                        // width="320"
+                        style={{ width: 'inherit' }}
+                        height="240"
+                        src={imgSrc}
+                      />
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
                       <img

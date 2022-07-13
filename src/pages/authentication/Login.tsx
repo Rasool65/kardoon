@@ -149,9 +149,10 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   <em>({t('Required')})</em>
                 </div>
                 <Button
+                  disabled={loading}
                   style={{ width: '100%', marginTop: '30px' }}
                   type="submit"
-                  className="btn btn-m mt-4 mb-0 btn-full bg-blue-dark rounded-sm text-uppercase font-900"
+                  className="btn btn-primary btn-m mt-4 mb-0 btn-full bg-blue-dark rounded-sm text-uppercase font-900"
                 >
                   {loading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : t('Login')}
                 </Button>

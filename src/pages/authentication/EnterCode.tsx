@@ -19,27 +19,26 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
   const toast = useToast();
   const { t }: any = useTranslation();
   const Ref1 = useRef(null);
-  const [timer, setTimer] = useState<string>('00:00');
+  const [remainingTimeSeconds, setRemainingTimeSeconds] = useState<number>(30);
   const httpRequest = useHttpRequest();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [timer, setTimer] = useState<boolean>(true);
   const [pinLoading, setPinLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const Resent = () => {
-    if (!loading) {
+    if (!timer) {
       httpRequest
-        .postRequest<IOutputResult<IForgetPasswordResultModel>>(APIURL_SEND_PASSWORD, mobileNumber)
+        .postRequest<IOutputResult<IForgetPasswordResultModel>>(APIURL_SEND_PASSWORD, { mobileNumber: mobileNumber })
         .then((result) => {
-          setLoading(true);
+          setTimer(true);
           toast.showSuccess(result.data.message);
-          clearTimer(getDeadTime());
-        })
-        .finally(() => setLoading(false));
+          // setRemainingTimeSeconds(result.data.data.remainingTimeSeconds);
+          setRemainingTimeSeconds(30);
+        });
     }
   };
 
   const LoginWithSMS = (e: string) => {
-    debugger;
     setPinLoading(true);
     const body = {
       ClientId: 'Kardoon_Technician',
@@ -50,7 +49,6 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
     httpRequest
       .postRequest<IOutputResult<ILoginResultModel>>(APIURL_LOGIN, body)
       .then((result) => {
-        debugger;
         dispatch(handleLogin(result));
         navigate(URL_USER_PROFILE);
         toast.showSuccess(result.data.message);
@@ -61,48 +59,17 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
       });
   };
 
-  const getTimeRemaining = (e: any) => {
-    const total = Date.parse(e) - Date.parse(new Date().toString());
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-    return {
-      total,
-      minutes,
-      seconds,
-    };
-  };
-
-  const startTimer = (e: any) => {
-    setLoading(true);
-    let { total, minutes, seconds } = getTimeRemaining(e);
-    if (total >= 0) {
-      setTimer((minutes > 9 ? minutes : '0' + minutes) + ':' + (seconds > 9 ? seconds : '0' + seconds));
-    } else {
-      debugger;
-      setLoading(false);
-      if (Ref1.current) clearInterval(Ref1.current);
-    }
-  };
-
-  const clearTimer = (e: any) => {
-    setTimer('00:59');
-    if (Ref1.current) clearInterval(Ref1.current);
-    const id = setInterval(() => {
-      startTimer(e);
-    }, 1000);
-    Ref1.current ? Ref1.current : id;
-  };
-
-  const getDeadTime = () => {
-    let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 59);
-    return deadline;
-  };
-
   useEffect(() => {
-    if (!showEnterCodeModal) return;
-    clearTimer(getDeadTime());
-  }, [showEnterCodeModal]);
+    if (remainingTimeSeconds > 0) {
+      const timer = setTimeout(() => {
+        setRemainingTimeSeconds(remainingTimeSeconds - 1);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    } else {
+      setTimer(false);
+    }
+  });
 
   return (
     <>
@@ -119,16 +86,18 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
             {pinLoading ? (
               <Spinner style={{ width: '1rem', height: '1rem' }} />
             ) : (
-              <PinField className="pin-field"
-                        style={{height: '55px'}}
-                        length={6}
-                        validate={/^[0-9]$/}
-                        onComplete={(e) => LoginWithSMS(e)} />
+              <PinField
+                className="pin-field"
+                style={{ height: '55px' }}
+                length={6}
+                validate={/^[0-9]$/}
+                onComplete={(e) => LoginWithSMS(e)}
+              />
             )}
           </div>
           <div className="divider" style={{ marginTop: '15px', marginBottom: '15px' }} />
           <Button onClick={Resent} className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0">
-            {loading ? `${t('PleaseWait')}(${timer})` : t('Resent')}
+            {remainingTimeSeconds > 0 ? `${t('PleaseWait')}(${remainingTimeSeconds})` : t('Resent')}
           </Button>
           <div className="color-theme pointer" style={{ marginTop: '25px' }} onClick={handleEditMobileNo}>
             {t('EditMobileNumber')}

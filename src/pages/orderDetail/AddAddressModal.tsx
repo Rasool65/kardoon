@@ -3,7 +3,7 @@ import { CustomFunctions } from '@src/utils/custom';
 import { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Container, Form, FormFeedback, Input, Row } from 'reactstrap';
+import { Button, Col, Container, Form, FormFeedback, Input, Row, Spinner } from 'reactstrap';
 import Select from 'react-select';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useHttpRequest from '@src/hooks/useHttpRequest';
@@ -30,7 +30,7 @@ import { ICloseModal } from './ICloseModal';
 const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
   const userName = useSelector((state: RootStateType) => state.authentication.userData?.userName);
   const [countries, setCountries] = useState<any>();
-
+  const [loading, setLoading] = useState<boolean>(false);
   const [provinces, setProvinces] = useState<any>();
 
   const [cities, setCities] = useState<any>();
@@ -106,7 +106,6 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
     });
   };
   const GetDistrictList = (regionId: number) => {
-    debugger;
     httpRequest
       .getRequest<IOutputResult<IDistrictsResultModel>>(`${APIURL_GET_DISTRICTS}?ParentId=${regionId}`)
       .then((result) => {
@@ -115,6 +114,7 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
   };
 
   const onSubmit = (data: IAddAddressModel) => {
+    setLoading(true);
     const body: IAddAddressModel = {
       userName: userName,
       countryId: countryId,
@@ -136,6 +136,7 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
           toast.showSuccess(result.data.message);
           document.getElementById('close-add-address-Modal')?.click();
           GetAddresses();
+          setLoading(false);
         })
         .finally(() => {});
     }
@@ -570,7 +571,7 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
             style={{ marginTop: '30px' }}
             className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0"
           >
-            ذخیره آدرس
+            {loading ? <Spinner /> : 'ذخیره آدرس'}
           </Button>
         </div>
       </Form>

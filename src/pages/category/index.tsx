@@ -16,12 +16,14 @@ import { URL_PRODUCTS } from './../../configs/urls';
 import Header from './Header';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
+import { Spinner } from 'reactstrap';
 
 const Category: FunctionComponent<IPageProps> = (props) => {
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const navigate = useNavigate();
   const [advertise, setAdvertise] = useState<any>([]);
   const [categories, setCategories] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
   const { state }: any = useLocation();
@@ -37,14 +39,14 @@ const Category: FunctionComponent<IPageProps> = (props) => {
   };
 
   const GetCategories = () => {
+    setLoading(true);
     httpRequest
-      .getRequest<IOutputResult<ICategory>>(
-        `${APIURL_GET_CATEGORIES}/?CityId=${cityId}&ServiceTypeId=${state.ServiceTypeId}`
-        // 'http://127.0.0.1:2500/getCategory'
-      )
+      .getRequest<IOutputResult<ICategory>>(`${APIURL_GET_CATEGORIES}/?CityId=${cityId}&ServiceTypeId=${state.ServiceTypeId}`)
       .then((result) => {
         setCategories(result.data.data);
-      });
+        setLoading(false);
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -108,40 +110,48 @@ const Category: FunctionComponent<IPageProps> = (props) => {
                 </div>
               );
             })}
-
-          <div className="row" style={{ margin: '30px 10px 20px 10px' }}>
-            {!!categories &&
-              categories.length > 0 &&
-              categories.map((item: ICategory, index: number) => {
-                debugger;
-                return (
-                  <div className="col-6" style={{ padding: '0 0 0 0' }}>
-                    <div
-                      style={{ backgroundImage: `url(${item.backgroundImageUrl})`, cursor: 'pointer', margin: '0 8px 16px 8px' }}
-                      className="card card-style bg-10"
-                      data-card-height="250"
-                      onClick={() => {
-                        navigate(URL_PRODUCTS, {
-                          state: {
-                            ProductCategoryId: item.id,
-                            ServiceTypeId: state.ServiceTypeId,
-                          },
-                        });
-                      }}
-                    >
-                      <div className="card-center text-uppercase ps-3">
-                        <h1 className="color-white fa-5x pb-3">{item.id}</h1>
-                        <h6 className="color-white pt-1">{item.name}</h6>
+          {loading ? (
+            <div style={{ marginTop: '150px', display: 'flex', justifyContent: 'space-around' }}>
+              <Spinner />
+            </div>
+          ) : (
+            <div className="row" style={{ margin: '30px 10px 20px 10px' }}>
+              {!!categories &&
+                categories.length > 0 &&
+                categories.map((item: ICategory, index: number) => {
+                  return (
+                    <div className="col-6" style={{ padding: '0 0 0 0' }}>
+                      <div
+                        style={{
+                          backgroundImage: `url(${item.backgroundImageUrl})`,
+                          cursor: 'pointer',
+                          margin: '0 8px 16px 8px',
+                        }}
+                        className="card card-style bg-10"
+                        data-card-height="250"
+                        onClick={() => {
+                          navigate(URL_PRODUCTS, {
+                            state: {
+                              ProductCategoryId: item.id,
+                              ServiceTypeId: state.ServiceTypeId,
+                            },
+                          });
+                        }}
+                      >
+                        <div className="card-center text-uppercase ps-3">
+                          <h1 className="color-white fa-5x pb-3">{item.id}</h1>
+                          <h6 className="color-white pt-1">{item.name}</h6>
+                        </div>
+                        <div className="card-bottom ps-3">
+                          <p className="color-white mb-0 pb-2 font-11">{item.logoUrl}</p>
+                        </div>
+                        <div className="card-overlay bg-black opacity-90"></div>
                       </div>
-                      <div className="card-bottom ps-3">
-                        <p className="color-white mb-0 pb-2 font-11">{item.logoUrl}</p>
-                      </div>
-                      <div className="card-overlay bg-black opacity-90"></div>
                     </div>
-                  </div>
-                );
-              })}
-          </div>
+                  );
+                })}
+            </div>
+          )}
 
           {/* <FooterCard footerMenuVisible={true} /> */}
         </div>
