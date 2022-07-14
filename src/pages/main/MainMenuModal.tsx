@@ -3,10 +3,9 @@ import React, { FunctionComponent, useEffect } from 'react';
 import SelectCity from '../city/SelectCity';
 import { IModalModel } from './../authentication/ModalModel';
 
-
 const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any) => {
   //   const dispatch = useDispatch();
- 
+
   //   const handleChangeCity = (e) => {
   //     // console.log(e)
   //   };
@@ -19,13 +18,14 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
   //   const closeMainMenu = () => {
   //     dispatch(ViewActions.showMainMenu(false));
   //   };
-  useEffect(() => {
-    CustomFunctions();
-  }, [mainMenuVisible]);
+  // useEffect(() => {
+  //   CustomFunctions();
+  // }, [mainMenuVisible]);
   return (
     <div
       id="menu-main"
-      className={`menu menu-box-right menu-box-detached rounded-m ${mainMenuVisible ? 'menu-active' : ''}`}
+      // className={`menu menu-box-right menu-box-detached rounded-m ${mainMenuVisible ? 'menu-active' : ''}`}
+      className="menu menu-box-right menu-box-detached rounded-m"
       data-menu-width="260"
       style={{ display: 'inherit' }}
       data-menu-active="nav-welcome"
@@ -202,6 +202,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
         </a>
         <a
           href="#"
+          className="close-menu"
           // onClick={(e) => closeMainMenu(e)}
         >
           <i

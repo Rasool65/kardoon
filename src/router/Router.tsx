@@ -23,9 +23,9 @@ const Routers: FunctionComponent = () => {
                 key={index}
                 path={route.path}
                 element={
-                  <PrivateLayout {...route.props}>
-                    <route.component name={route.name} />
-                  </PrivateLayout>
+                  // <PrivateLayout {...route.props}> // problem with menu-main modal
+                  <route.component name={route.name} />
+                  // </PrivateLayout>
                 }
               />
             </Route>

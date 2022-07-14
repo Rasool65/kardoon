@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
-import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
+import useHttpRequest from '@src/hooks/useHttpRequest';
 import { Alert, Button, Col, Container, Form, FormFeedback, Input, Row, Spinner } from 'reactstrap';
 import { ILoginModel, LoginModelSchema } from '@src/models/input/authentication/ILoginModel';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -53,11 +53,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
     };
     if (data && !loading) {
       httpRequest
-        .postRequest<IOutputResult<ILoginResultModel>>(
-          APIURL_LOGIN,
-          // 'http://127.0.0.1:2500/login',
-          body
-        )
+        .postRequest<IOutputResult<ILoginResultModel>>(APIURL_LOGIN, body)
         .then((result) => {
           dispatch(handleLogin(result));
           toast.showSuccess(result.data.message);
@@ -100,8 +96,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
             <div className="card card-style p-2">
               <div className="content mt-2 mb-0">
                 <div className="input-style no-borders has-icon validate-field mb-4">
-                  {/* <input type="name" className="form-control validate-name" id="form1a" placeholder="نام" />
-            <label className="color-blue-dark font-10 mt-1">{t('UserName')}</label> */}
                   <Controller
                     name="username"
                     control={control}
@@ -149,7 +143,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   <em>({t('Required')})</em>
                 </div>
                 <Button
-                  disabled={loading}
+                  // disabled={loading}
                   style={{ width: '100%', marginTop: '30px' }}
                   type="submit"
                   className="btn btn-primary btn-m mt-4 mb-0 btn-full bg-blue-dark rounded-sm text-uppercase font-900"
