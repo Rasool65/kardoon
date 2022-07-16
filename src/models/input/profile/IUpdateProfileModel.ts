@@ -10,11 +10,11 @@ export interface IUpdateProfileModel {
   birthDate: string;
   gender: number;
   nationalCode: string;
-  introductionInfo: IIntroductionInfo;
+  introductionInfo?: IIntroductionInfo;
 }
 interface IIntroductionInfo {
   refkey?: number;
-  introMethodId?: number;
+  // introMethodId?: number;
   introductionCode?: string;
 }
 
@@ -68,7 +68,7 @@ export const UpdateProfileModelSchema: yup.SchemaOf<IUpdateProfileModel> = yup.o
   gender: yup.number().required(t('GenderIsRequired')),
   introductionInfo: yup.object({
     refkey: yup.number(),
-    introMethodId: yup.number().required(t('IntroductionRequired')),
+    // introMethodId: yup.number(),
     introductionCode: yup.string(),
   }),
 });

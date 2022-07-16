@@ -38,6 +38,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
     introductionCode: false,
   });
   const [loading, setLoading] = useState<boolean>(false);
+  const [introMethodId, setIntroMethodId] = useState<any>(userData?.profile?.intrductionInfo?.introMethodId!);
   const httpRequest = useHttpRequest();
   const weekDays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
 
@@ -56,7 +57,6 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
   } = useForm<IUpdateProfileModel>({ mode: 'onChange', resolver: yupResolver(UpdateProfileModelSchema) });
 
   const onSubmit = (data: IUpdateProfileModel) => {
-    setLoading(true);
     const body = {
       userName: userData?.userName,
       firstName: data.firstName,
@@ -68,11 +68,13 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
       nationalCode: data.nationalCode,
       introductionInfo: {
         refkey: 0,
-        introMethodId: data.introductionInfo.introMethodId,
-        introductionCode: data.introductionInfo.introductionCode,
+        // introMethodId: data.introductionInfo.introMethodId,
+        introMethodId: introMethodId,
+        introductionCode: data.introductionInfo?.introductionCode,
       },
     };
-    if (data && !loading) {
+    if (data && !loading && introMethodId) {
+      setLoading(true);
       httpRequest
         .postRequest<IOutputResult<IUpdateProfileResultModel>>(APIURL_UPDATE_PROFILE, body)
         .then((result) => {
@@ -236,7 +238,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
               </div>
               <div className={`validate-field mb-4`}>
                 <Controller
-                  name="introductionInfo.introMethodId"
+                  name="introductionInfo"
                   control={control}
                   render={({ field }) => (
                     <>
@@ -247,8 +249,12 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         options={introductions}
                         isSearchable={true}
                         {...field}
+                        defaultInputValue={userData?.profile?.intrductionInfo?.introMethodId?.toString()}
+                        onChange={(e: any) => {
+                          e ? setIntroMethodId(e.value) : setIntroMethodId(undefined);
+                        }}
                       />
-                      <FormFeedback className="d-block">{errors.introductionInfo?.introMethodId?.message}</FormFeedback>
+                      {!introMethodId ? <FormFeedback className="d-block">نحوه آشناییمون اجباریه یاد میاد</FormFeedback> : ''}
                     </>
                   )}
                 />
