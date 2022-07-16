@@ -4,7 +4,10 @@ export const APIURL_LOGIN = '/account/login';
 export const APIURL_GET_COUNTRY_DIVISION = '/CountryDivision/GetCountryDivision';
 export const APIURL_REGISTER = '/Account/RegisterUser';
 export const APIURL_SEND_PASSWORD = '/Account/SendPassword';
+//profile
 export const APIURL_UPDATE_PROFILE = '/UserManagement/UpdateUserProfile';
+export const APIURL_GET_INTRODUCTIONS = '/Introduction/GetIntroductionMethodList';
+
 export const APIURL_GET_SERVICES = '/ProductCategory/GetServiceTypeList';
 export const APIURL_GET_ADVERTISE = '/Slider/GetSliders';
 export const APIURL_GET_CATEGORIES = '/ProductCategory/GetCategoryList';

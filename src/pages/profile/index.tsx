@@ -1,15 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { APIURL_UPDATE_PROFILE } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_GET_COUNTRIES, APIURL_GET_INTRODUCTIONS, APIURL_UPDATE_PROFILE } from '@src/configs/apiConfig/apiUrls';
 import IPageProps from '@src/configs/routerConfig/IPageProps';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { useToast } from '@src/hooks/useToast';
 import Footer from '@src/layout/Footer';
+import Select from 'react-select';
 // import FooterCard from '@src/layout/FooterCard';
 import { IUpdateProfileModel, UpdateProfileModelSchema } from '@src/models/input/profile/IUpdateProfileModel';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IUpdateProfileResultModel } from '@src/models/output/profile/IUpdateProfileResultModel';
 import { FunctionComponent, useState, useEffect } from 'react';
-
 import { Button, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap';
 import InputIcon from 'react-multi-date-picker/components/input_icon';
 import DatePicker from 'react-multi-date-picker';
@@ -21,21 +21,31 @@ import { reloadUserData } from '@src/redux/reducers/authenticationReducer';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { CustomFunctions } from '@src/utils/custom';
+import { IIntroductionResultModel } from '@src/models/output/profile/IIntroductionResultModel';
 
 const Profile: FunctionComponent<IPageProps> = (props) => {
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const dispatch = useDispatch();
   const { t }: any = useTranslation();
   const toast = useToast();
+  const [introductions, setIntroductions] = useState<any>();
   const [input, setInput] = useState<any>({
     firstName: false,
     lastName: false,
     email: false,
     birthDate: false,
+    nationalCode: false,
+    introductionCode: false,
   });
   const [loading, setLoading] = useState<boolean>(false);
   const httpRequest = useHttpRequest();
   const weekDays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+
+  const GetIntroductions = () => {
+    httpRequest.getRequest<IOutputResult<IIntroductionResultModel>>(`${APIURL_GET_INTRODUCTIONS}`).then((result) => {
+      setIntroductions(result.data.data);
+    });
+  };
 
   const {
     register,
@@ -55,6 +65,12 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
       isPublicEmail: data.isPublicEmail,
       birthDate: data.birthDate,
       gender: data.gender,
+      nationalCode: data.nationalCode,
+      introductionInfo: {
+        refkey: 0,
+        introMethodId: data.introductionInfo.introMethodId,
+        introductionCode: data.introductionInfo.introductionCode,
+      },
     };
     if (data && !loading) {
       httpRequest
@@ -66,8 +82,10 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
         .finally(() => setLoading(false));
     }
   };
+
   useEffect(() => {
     CustomFunctions();
+    GetIntroductions();
   }, []);
   return (
     <>
@@ -180,6 +198,89 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                       <i className={`fa fa-times disabled invalid color-red-dark ${input.email ? 'disabled' : ''}`} />
                       <em className={`${input.email ? 'disabled' : ''}`}>({t('Required')})</em>
                       <FormFeedback>{errors.email?.message}</FormFeedback>
+                    </>
+                  )}
+                />
+              </div>
+              <div
+                className={`input-style has-borders no-icon validate-field mb-4 ${
+                  input.nationalCode ? 'input-style-active' : ''
+                }`}
+              >
+                <Controller
+                  name="nationalCode"
+                  control={control}
+                  defaultValue={userData?.profile?.nationalCode || ''}
+                  render={({ field }) => (
+                    <>
+                      <Input
+                        id="form1a"
+                        onFocus={() => setInput({ nationalCode: true })}
+                        style={{ backgroundPosition: 'left' }}
+                        className="form-control validate-text"
+                        type="number"
+                        placeholder={t('EnterNationalCode')}
+                        autoComplete="off"
+                        invalid={errors.nationalCode && true}
+                        {...field}
+                      />
+                      <label htmlFor="form4" className="color-highlight">
+                        {t('NationalCode')}
+                      </label>
+                      <i className={`fa fa-times disabled invalid color-red-dark ${input.nationalCode ? 'disabled' : ''}`} />
+                      <em className={`${input.nationalCode ? 'disabled' : ''}`}>({t('Required')})</em>
+                      <FormFeedback>{errors.nationalCode?.message}</FormFeedback>
+                    </>
+                  )}
+                />
+              </div>
+              <div className={`validate-field mb-4`}>
+                <Controller
+                  name="introductionInfo.introMethodId"
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <Select
+                        noOptionsMessage={() => t('ListIsEmpty')}
+                        isClearable
+                        placeholder={t('SelectIntroduction')}
+                        options={introductions}
+                        isSearchable={true}
+                        {...field}
+                      />
+                      <FormFeedback className="d-block">{errors.introductionInfo?.introMethodId?.message}</FormFeedback>
+                    </>
+                  )}
+                />
+              </div>
+              <div
+                className={`input-style has-borders no-icon validate-field mb-4 ${
+                  input.introductionCode ? 'input-style-active' : ''
+                }`}
+              >
+                <Controller
+                  name="introductionInfo.introductionCode"
+                  control={control}
+                  defaultValue={userData?.profile.intrductionInfo?.introductionCode || ''}
+                  render={({ field }) => (
+                    <>
+                      <Input
+                        id="form1a"
+                        onFocus={() => setInput({ introductionCode: true })}
+                        style={{ backgroundPosition: 'left' }}
+                        className="form-control validate-text"
+                        type="text"
+                        placeholder={t('EnterIntroductionCode')}
+                        autoComplete="off"
+                        invalid={errors.introductionInfo?.introductionCode && true}
+                        {...field}
+                      />
+                      <label htmlFor="form4" className="color-highlight">
+                        {t('IntroductionCode')}
+                      </label>
+                      <i className={`fa fa-times disabled invalid color-red-dark ${input.introductionCode ? 'disabled' : ''}`} />
+                      <em className={`${input.introductionCode ? 'disabled' : ''}`}>({t('Required')})</em>
+                      <FormFeedback>{errors.introductionInfo?.introductionCode?.message}</FormFeedback>
                     </>
                   )}
                 />

@@ -6,4 +6,5 @@ export interface IUpdateProfileResultModel {
   isPublicEmail: boolean;
   birthDate: string;
   gender: number;
+  nationalCode: string;
 }

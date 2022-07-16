@@ -20,7 +20,15 @@ export interface IProfileUser {
   isPublicEmail: boolean;
   residenceCityId?: number;
   residenceCityName?: string;
+  nationalCode?: string;
   addresses?: string[];
+  intrductionInfo: IIntrductionInfo;
+}
+
+export interface IIntrductionInfo {
+  refkey: number;
+  introMethodId: number;
+  introductionCode: string;
 }
 export interface IUserModel {
   userId: number;

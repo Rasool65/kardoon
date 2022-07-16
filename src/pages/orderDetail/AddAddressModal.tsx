@@ -32,13 +32,9 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
   const [countries, setCountries] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [provinces, setProvinces] = useState<any>();
-
   const [cities, setCities] = useState<any>();
-
   const [regiones, setRegion] = useState<any>();
-
   const [distritcs, setDistritcs] = useState<any>();
-
   const [countryId, setCountryId] = useState<number>();
   const [provinceId, setProvinceId] = useState<number>();
   const [cityId, setCityId] = useState<number>();
