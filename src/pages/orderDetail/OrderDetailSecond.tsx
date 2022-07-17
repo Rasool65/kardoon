@@ -13,14 +13,19 @@ import Picker from 'react-mobile-picker';
 import { IAddressesResultModel } from '@src/models/output/orderDetail/IAddressesResultModel';
 import AddAddressModal from './AddAddressModal';
 import { useTranslation } from 'react-i18next';
+import EditAddressModal from './EditAddressModal';
 
 const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleClickPrevious, handleSubmit }) => {
   const toast = useToast();
   const [selectDate, setSelectDate] = useState<string>('');
   const [addressList, setAddressList] = useState<IAddressesResultModel[]>();
+  const [currentAddress, setCurrentAddress] = useState<IAddressesResultModel>();
   const [refKey, setRefKey] = useState<number>();
   const [isUrgent, setIsUrgent] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [confirmRemoveModalVisible, setConfirmRemoveModalVisible] = useState<boolean>(false);
+  const [editAddressModalVisible, setEditAddressModalVisible] = useState<boolean>(false);
+  const [dimmerBackground, setDimmerBackground] = useState<boolean>(false);
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const [shift, setShift] = useState<number>();
   const [shiftTime, setShiftTime] = useState<any>({
@@ -59,7 +64,9 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
         setLoading(false);
       });
   };
-
+  const getAddress = (refKey: number) => {
+    debugger;
+  };
   const chbOnChange = (e: any) => {
     e.target.checked ? (setIsUrgent(true), setShift(undefined)) : setIsUrgent(false);
   };
@@ -74,9 +81,10 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
       setLoading(false);
     });
   };
-  useEffect(() => {
-    CustomFunctions();
-  }, [refKey]);
+  // useEffect(() => {
+  //   CustomFunctions();
+  // }, [refKey]);
+
   useEffect(() => {
     GetAddresses();
     CustomFunctions();
@@ -85,7 +93,15 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
   const { optionGroups, valueGroups } = shiftTime;
   return (
     <div id="page">
-      <div className="page-content" style={{ paddingBottom: '0px' }}>
+      <div
+        onClick={() => {
+          setDimmerBackground(false);
+          setConfirmRemoveModalVisible(false);
+          setEditAddressModalVisible(false);
+        }}
+        className={`menu-hider ${dimmerBackground ? 'menu-active' : ''}`}
+      />
+      <div className="page-content " style={{ paddingBottom: '0px' }}>
         <div className="page-title page-title-small pointer" style={{ color: '#FFF', width: 'fit-content', fontSize: '16px' }}>
           جزئیات سفارش
         </div>
@@ -197,10 +213,22 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
                   <div
                     onClick={() => {
                       setRefKey(item.refkey!);
+                      setConfirmRemoveModalVisible(true);
+                      setDimmerBackground(true);
                     }}
-                    data-menu="remove-address-Modal"
                     className="fa fa-times color-red-dark"
-                  ></div>
+                  />
+                  <div
+                    style={{ marginRight: '10px' }}
+                    onClick={() => {
+                      debugger;
+                      setRefKey(item.refkey!);
+                      setEditAddressModalVisible(true);
+                      setDimmerBackground(true);
+                      setCurrentAddress(item);
+                    }}
+                    className="fa fa-pencil color-yellow-dark"
+                  />
                 </div>
               );
             })
@@ -209,6 +237,9 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           <div
             data-menu="add-address-Modal"
             style={{ marginTop: '10px' }}
+            // onClick={() => {
+            //   setAddAddressModalVisible(true), setDimmerBackground(true);
+            // }}
             className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0 "
           >
             + افزودن آدرس
@@ -244,7 +275,11 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           </div>
         </div>
       </div>
-      <div id="remove-address-Modal" className="menu menu-box-modal rounded-m" data-menu-height="200" data-menu-width="320">
+      <div
+        className={`menu menu-box-modal rounded-m ${confirmRemoveModalVisible ? 'menu-active' : ''}`}
+        data-menu-height="200"
+        data-menu-width="320"
+      >
         <h1 className="text-center font-700 mt-3 pb-1">حذف آدرس</h1>
         <p className="boxed-text-l">آیا از حذف آدرس اطمینان دارید؟</p>
         <div className="row me-3 ms-3 mb-0">
@@ -252,6 +287,8 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
             <a
               onClick={() => {
                 deleteAddress(refKey!);
+                setConfirmRemoveModalVisible(false);
+                setDimmerBackground(false);
               }}
               className="close-menu btn btn-sm btn-full button-s shadow-l rounded-s text-uppercase font-700 bg-green-dark"
             >
@@ -260,6 +297,10 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           </div>
           <div className="col-6">
             <a
+              onClick={() => {
+                setConfirmRemoveModalVisible(false);
+                setDimmerBackground(false);
+              }}
               href="#"
               className="close-menu btn btn-sm btn-full button-s shadow-l rounded-s text-uppercase font-700 bg-red-dark"
             >
@@ -268,6 +309,8 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           </div>
         </div>
       </div>
+
+      <EditAddressModal CurrentAddress={currentAddress} EditAddressModalVisible={editAddressModalVisible} />
       <AddAddressModal GetAddresses={GetAddresses} />
     </div>
   );

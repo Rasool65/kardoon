@@ -1,4 +1,3 @@
-import { AddAddressModelSchema, IAddAddressModel } from '@src/models/input/address/IAddAddressModel';
 import { CustomFunctions } from '@src/utils/custom';
 import { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -26,9 +25,11 @@ import { RootStateType } from '@src/redux/Store';
 import { useToast } from './../../hooks/useToast';
 import { IAddAddressesResultModel } from '@src/models/output/addAddress/IAddAddressesResultModel';
 import { ICloseModal } from './ICloseModal';
+import { IUpdateAddressModel, UpdateAddressModelSchema } from '@src/models/input/address/IUpdateAddressModel';
 
-const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
+const EditAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses, EditAddressModalVisible, CurrentAddress }) => {
   const userName = useSelector((state: RootStateType) => state.authentication.userData?.userName);
+  const [address, setAddress] = useState<string>('');
   const [countries, setCountries] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [provinces, setProvinces] = useState<any>();
@@ -73,13 +74,6 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
     mobileNumber: false,
     telNumber: false,
   });
-  const {
-    register,
-    control,
-    setError,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IAddAddressModel>({ mode: 'onChange', resolver: yupResolver(AddAddressModelSchema) });
 
   const GetCountryList = () => {
     httpRequest.getRequest<IOutputResult<ICountryResultModel>>(`${APIURL_GET_COUNTRIES}`).then((result) => {
@@ -109,9 +103,10 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
       });
   };
 
-  const onSubmit = (data: IAddAddressModel) => {
+  const onSubmit = (data: IUpdateAddressModel) => {
     setLoading(true);
-    const body: IAddAddressModel = {
+    const body: IUpdateAddressModel = {
+      refkey: CurrentAddress?.refkey,
       userName: userName,
       countryId: countryId,
       cityId: cityId,
@@ -142,10 +137,24 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
     GetCountryList();
     CustomFunctions();
   }, []);
+
+  useEffect(() => {
+    console.log(CurrentAddress?.address);
+    debugger;
+    setTimeout(() => {
+      setAddress(CurrentAddress?.address!);
+    }, 10);
+  });
+  const {
+    register,
+    control,
+    setError,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IUpdateAddressModel>({ mode: 'onChange', resolver: yupResolver(UpdateAddressModelSchema) });
   return (
     <div
-      id="add-address-Modal"
-      className="menu menu-box-bottom menu-box-detached rounded-m"
+      className={`menu menu-box-bottom menu-box-detached rounded-m ${EditAddressModalVisible ? `menu-active` : ``}`}
       data-menu-height="600"
       style={{ display: 'inherit' }}
       data-menu-effect="menu-over"
@@ -157,12 +166,14 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
             <div className={`input-style has-borders no-icon validate-field mb-4 ${input.title ? 'input-style-active' : ''}`}>
               <Controller
                 name="title"
+                defaultValue={CurrentAddress?.title}
                 control={control}
-                render={({ field }: any) => (
+                render={({ field }) => (
                   <>
                     <Input
                       id="form4a"
                       onFocus={() => setInput({ title: true })}
+                      defaultValue={CurrentAddress?.title}
                       style={{ backgroundPosition: 'left', marginTop: '10px', height: '53px' }}
                       className="form-control validate-text"
                       type="text"
@@ -574,4 +585,4 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
     </div>
   );
 };
-export default AddAddressModal;
+export default EditAddressModal;
