@@ -27,3 +27,4 @@ export const APIURL_GET_REGIONES = '/CountryDivision/GetRegiones';
 export const APIURL_GET_DISTRICTS = '/CountryDivision/GetDistricts';
 export const APIURL_POST_ADD_USER_ADDRESS = '/UserManagement/AddUserAddress';
 export const APIURL_POST_DELETE_USER_ADDRESS = '/UserManagement/DeleteUserAddress';
+export const APIURL_PUT_UPDATE_USER_ADDRESS = '/UserManagement/UpdateUserAddress';

@@ -9,6 +9,8 @@ export interface IAddressesResultModel {
   latitude?: number;
   longitude?: number;
   title?: string;
+  regionId?: number;
+  regionName?: string;
   homeTel?: string;
   address?: string;
   number?: number;

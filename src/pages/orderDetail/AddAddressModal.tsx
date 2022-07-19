@@ -24,10 +24,10 @@ import { IDistrictsResultModel } from './../../models/output/countryDivision/IDi
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { useToast } from './../../hooks/useToast';
-import { IAddAddressesResultModel } from '@src/models/output/addAddress/IAddAddressesResultModel';
-import { ICloseModal } from './ICloseModal';
+import { IAddAddressesResultModel } from '@src/models/output/address/IAddAddressesResultModel';
+import { IAddAddressModal } from './IAddressModals';
 
-const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
+const AddAddressModal: FunctionComponent<IAddAddressModal> = ({ GetAddresses }) => {
   const userName = useSelector((state: RootStateType) => state.authentication.userData?.userName);
   const [countries, setCountries] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -124,8 +124,15 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
       address: data.address,
       number: data.number,
       unit: data.unit,
+      anotherAddressOwnerInformation: {
+        firstName: data.anotherAddressOwnerInformation?.firstName,
+        lastName: data.anotherAddressOwnerInformation?.lastName,
+        mobileNumber: data.anotherAddressOwnerInformation?.mobileNumber,
+        telNumber: data.anotherAddressOwnerInformation?.telNumber,
+      },
     };
     if (data) {
+      forMe && delete body.anotherAddressOwnerInformation;
       httpRequest
         .postRequest<IOutputResult<IAddAddressesResultModel>>(APIURL_POST_ADD_USER_ADDRESS, body)
         .then((result) => {
@@ -134,7 +141,9 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
           GetAddresses();
           setLoading(false);
         })
-        .finally(() => {});
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
 
@@ -255,7 +264,8 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
                 options={cities}
                 isSearchable={true}
                 onChange={(e: any) => {
-                  e ? (setRegionId(e.value), GetRegionList(e.value)) : setRegion([]), GetCityList(provinceId!);
+                  e ? (setCityId(e.value), setRegionId(e.value), GetRegionList(e.value)) : setRegion([]),
+                    GetCityList(provinceId!);
                 }}
               />
             </div>
@@ -269,7 +279,8 @@ const AddAddressModal: FunctionComponent<ICloseModal> = ({ GetAddresses }) => {
                 options={regiones}
                 isSearchable={true}
                 onChange={(e: any) => {
-                  e ? (setDistrictId(e.value), GetDistrictList(e.value)) : setDistrictId(undefined), setDistritcs([]);
+                  e ? (setRegionId(e.value), setDistrictId(e.value), GetDistrictList(e.value)) : setDistrictId(undefined),
+                    setDistritcs([]);
                   // GetRegionList(cityId!);
                 }}
               />

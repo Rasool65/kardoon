@@ -64,9 +64,6 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
         setLoading(false);
       });
   };
-  const getAddress = (refKey: number) => {
-    debugger;
-  };
   const chbOnChange = (e: any) => {
     e.target.checked ? (setIsUrgent(true), setShift(undefined)) : setIsUrgent(false);
   };
@@ -98,6 +95,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           setDimmerBackground(false);
           setConfirmRemoveModalVisible(false);
           setEditAddressModalVisible(false);
+          setCurrentAddress(undefined);
         }}
         className={`menu-hider ${dimmerBackground ? 'menu-active' : ''}`}
       />
@@ -221,7 +219,6 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
                   <div
                     style={{ marginRight: '10px' }}
                     onClick={() => {
-                      debugger;
                       setRefKey(item.refkey!);
                       setEditAddressModalVisible(true);
                       setDimmerBackground(true);
@@ -309,8 +306,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           </div>
         </div>
       </div>
-
-      <EditAddressModal CurrentAddress={currentAddress} EditAddressModalVisible={editAddressModalVisible} />
+      <EditAddressModal CurrentAddress={currentAddress!} EditAddressModalVisible={editAddressModalVisible} />
       <AddAddressModal GetAddresses={GetAddresses} />
     </div>
   );
