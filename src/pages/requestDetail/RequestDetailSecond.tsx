@@ -5,17 +5,18 @@ import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { APIURL_GET_ADDRESSES, APIURL_GET_BRANDS, APIURL_POST_DELETE_USER_ADDRESS } from '@src/configs/apiConfig/apiUrls';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import { IOrderDetailPageProp, IOrderDetailSecond } from './IOrderDetailProp';
+import { IRequestDetailPageProp, IRequestDetailSecond } from './IRequestDetailProp';
 import WeekPicker from '@src/components/weekPicker/WeekPicker';
 import { CustomFunctions } from '@src/utils/custom';
 import { useToast } from '@src/hooks/useToast';
 import Picker from 'react-mobile-picker';
-import { IAddressesResultModel } from '@src/models/output/orderDetail/IAddressesResultModel';
+import { IAddressesResultModel } from '@src/models/output/requestDetail/IAddressesResultModel';
 import AddAddressModal from './AddAddressModal';
 import { useTranslation } from 'react-i18next';
 import EditAddressModal from './EditAddressModal';
+import { ConvertDate } from '@src/utils/ConvertDate';
 
-const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleClickPrevious, handleSubmit }) => {
+const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handleClickPrevious, handleSubmit }) => {
   const toast = useToast();
   const [selectDate, setSelectDate] = useState<string>('');
   const [addressList, setAddressList] = useState<IAddressesResultModel[]>();
@@ -87,6 +88,12 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
     CustomFunctions();
   }, []);
 
+  var date = new Date();
+  var dd = parseInt(String(date.getDate()).padStart(2, '0'));
+  var mm = parseInt(String(date.getMonth() + 1).padStart(2, '0'));
+  var yyyy = parseInt(date.getFullYear().toString());
+  const today = ConvertDate.gregorian_to_jalali(yyyy, mm, dd);
+
   const { optionGroups, valueGroups } = shiftTime;
   return (
     <div id="page">
@@ -122,31 +129,37 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
                 marginBottom: '0',
               }}
             >
-              <Col xs={8}>
-                <WeekPicker
-                  onSelectDateTime={(value: string) => {
-                    setSelectDate(value);
-                  }}
-                  selectedDate={selectDate}
-                  questionId={3}
-                  isUrgent={isUrgent}
-                  //  isUrgentMessage={(e) => isUrgentMessage(e)}
-                />
-              </Col>
-              <Col xs={4}>
-                {!!!isUrgent ? (
-                  <Picker
-                    optionGroups={optionGroups}
-                    valueGroups={valueGroups}
-                    onChange={(name: string, value: string) => {
-                      handleChange(name, value);
-                      setShift(getIndex(value));
-                    }}
-                  />
-                ) : (
-                  <>{toast.showInfo('در حالت مراجعه فوری امکان انتخاب زمان وجود ندارد.')} </>
-                )}
-              </Col>
+              {!isUrgent ? (
+                <>
+                  <Col xs={8}>
+                    <WeekPicker
+                      onSelectDateTime={(value: string) => {
+                        setSelectDate(value);
+                      }}
+                      selectedDate={selectDate}
+                      questionId={3}
+                      isUrgent={isUrgent}
+                      //  isUrgentMessage={(e) => isUrgentMessage(e)}
+                    />
+                  </Col>
+                  <Col xs={4}>
+                    <Picker
+                      isUrgent={isUrgent}
+                      optionGroups={optionGroups}
+                      valueGroups={valueGroups}
+                      onChange={(name: string, value: string) => {
+                        handleChange(name, value);
+                        setShift(getIndex(value));
+                      }}
+                    />
+                  </Col>
+                </>
+              ) : (
+                <>
+                  <p>در تاریخ {today}مراجعه فوری انجام خواهد شد</p>
+                  {/* {toast.showInfo('در حالت مراجعه فوری در کوتاه ترین زمان اقدام انجام میشود.')} */}
+                </>
+              )}
             </Row>
           </Container>
 
@@ -247,7 +260,7 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
           <div className="col-6">
             <div
               onClick={(e) => {
-                const body: IOrderDetailSecond = {
+                const body: IRequestDetailSecond = {
                   refkey: refKey,
                   presenceDate: selectDate,
                   presenceShift: shift,
@@ -312,4 +325,4 @@ const OrderDetailConfirm: FunctionComponent<IOrderDetailPageProp> = ({ handleCli
   );
 };
 
-export default OrderDetailConfirm;
+export default RequestDetailConfirm;

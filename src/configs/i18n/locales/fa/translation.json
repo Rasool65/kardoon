@@ -109,5 +109,6 @@
   "SelectIntroduction": "انتخاب نحوه آشنایی",
   "IntroductionRequired": "نحوه آشنایی اجباریست",
   "IntroductionCode": "کد معرف",
-  "EnterIntroductionCode": "کد معرف را وارد نمایید"
+  "EnterIntroductionCode": "کد معرف را وارد نمایید",
+  "SelectProblems": "انتخاب ایرادات"
 }

@@ -10,19 +10,21 @@ import { APIURL_GET_BRANDS } from '@src/configs/apiConfig/apiUrls';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { URL_MAIN } from '@src/configs/urls';
 import { Controller, useForm } from 'react-hook-form';
-import { IBrandResultModel } from '@src/models/output/orderDetail/IBrandResultModel';
-import { IOrderDetailPageProp } from './IOrderDetailProp';
+import { IBrandResultModel } from '@src/models/output/requestDetail/IBrandResultModel';
+import { IRequestDetailPageProp } from './IRequestDetailProp';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CustomFunctions } from '@src/utils/custom';
-import { IRequestDetail, RequestDetailModelSchema } from '@src/models/input/orderDetail/IRequestDetail';
+import { IRequestDetail, RequestDetailModelSchema } from '@src/models/input/requestDetail/IRequestDetail';
 import { useRecorder } from '@src/hooks/useRecorder';
+import { IProductProblemsResultModel } from '@src/models/output/requestDetail/IProductProblemsResultModel';
 
-const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClickNext }) => {
+const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleClickNext }) => {
   let brands: any[] = [];
   let { audioData, audioURL, isRecording, startRecording, stopRecording } = useRecorder();
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const navigate = useNavigate();
   const [brandList, setBrandList] = useState<any>();
+  const [problemsList, setProblemsList] = useState<any>();
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
   const { state }: any = useLocation();
@@ -35,10 +37,10 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   const [imageDisplay, setImageDisplay] = useState<string>('none');
   const [videoDisplay, setVideoDisplay] = useState<string>('none');
   const [imgSrc, setImgSrc] = useState<any>();
-
   const [imageFile, setImageFile] = useState<any>();
   const [audioFile, setAudioFile] = useState<any>();
   const [videoFile, setVideoFile] = useState<any>();
+
   const GetBrands = () => {
     !!state
       ? httpRequest
@@ -50,19 +52,33 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
           })
       : navigate(URL_MAIN);
   };
-  const Brands = () => {
-    brandList
-      ? brandList.forEach((d: any) => {
-          brands.push({ value: d.id, label: d.title });
-        })
-      : '';
+  // const Brands = () => {
+  //   brandList
+  //     ? brandList.forEach((d: any) => {
+  //         brands.push({ value: d.id, label: d.title });
+  //       })
+  //     : '';
+  // };
+  // useEffect(() => {
+  //   Brands();
+  // }, [brandList]);
+
+  const GetProblems = () => {
+    // setLoading(true);
+    httpRequest
+      .getRequest<IOutputResult<IProductProblemsResultModel[]>>(
+        'http://127.0.0.1:2500/getProductProblems'
+        // `${APIURL_GET_ADDRESSES}?UserName=${userData?.userName}`
+      )
+      .then((result) => {
+        debugger;
+        setProblemsList(result.data.data);
+        // setLoading(false);
+      });
   };
   useEffect(() => {
-    Brands();
-  }, [brandList]);
-
-  useEffect(() => {
     GetBrands();
+    GetProblems();
   }, []);
 
   const {
@@ -79,6 +95,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
       serviceTypeId: state.ServiceTypeId,
       productCategoryId: state.ProductId,
       brandId: data.brandId,
+      problemsId: data.problemsId,
       model: data.model,
       serial: data.serial,
       requestDescription: data.requestDescription,
@@ -89,6 +106,7 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
 
     handleClickNext(body);
   };
+
   useEffect(() => {
     CustomFunctions();
   }, []);
@@ -98,7 +116,6 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   }, [audioData]);
 
   const onImageFileChange = (e: any) => {
-    debugger;
     const reader = new FileReader(),
       files = e.target.files;
     reader.onload = function () {
@@ -110,7 +127,6 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   };
 
   const onVideoFileChange = (e: any) => {
-    debugger;
     let file = e.target.files[0];
     setVideoFile(file);
     let blobURL = URL.createObjectURL(file);
@@ -149,11 +165,11 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                     <>
                       <Select
                         noOptionsMessage={() => t('ListIsEmpty')}
-                        onFocus={() => GetBrands()}
+                        // onFocus={() => GetBrands()}
                         isClearable
                         className="select-city"
                         placeholder={t('SelectBrand')}
-                        options={brands}
+                        options={brandList}
                         isSearchable={true}
                         {...field}
                       />
@@ -270,6 +286,26 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
                         <i className="fa fa-check disabled valid color-green-dark" />
                         <em className={`${input.requestDescription ? 'disabled' : ''}`}>({t('Required')})</em>
                         <FormFeedback>{errors.requestDescription?.message}</FormFeedback>
+                      </>
+                    )}
+                  />
+                  <Controller
+                    name="problemsId"
+                    control={control}
+                    render={({ field }) => (
+                      <>
+                        {problemsList && (
+                          <Select
+                            isMulti
+                            noOptionsMessage={() => t('ListIsEmpty')}
+                            isClearable
+                            className="select-city"
+                            placeholder={t('SelectProblems')}
+                            options={problemsList}
+                            isSearchable={true}
+                            {...field}
+                          />
+                        )}
                       </>
                     )}
                   />
@@ -481,4 +517,4 @@ const OrderDetailFirst: FunctionComponent<IOrderDetailPageProp> = ({ handleClick
   );
 };
 
-export default OrderDetailFirst;
+export default RequestDetailFirst;

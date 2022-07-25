@@ -18,12 +18,12 @@ import {
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { ICountryResultModel } from '@src/models/output/countryDivision/ICountryResultModel';
 import { IProvinceResultModel } from '@src/models/output/countryDivision/IProvinceResultModel';
-import { ICitiesResultModel } from './../../models/output/countryDivision/ICitiesResultModel';
+import { ICitiesResultModel } from '../../models/output/countryDivision/ICitiesResultModel';
 import { IRegionResultModel } from '@src/models/output/countryDivision/IRegionResultModel';
-import { IDistrictsResultModel } from './../../models/output/countryDivision/IDistrictsResultModel';
+import { IDistrictsResultModel } from '../../models/output/countryDivision/IDistrictsResultModel';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-import { useToast } from './../../hooks/useToast';
+import { useToast } from '../../hooks/useToast';
 import { IEditAddressModal } from './IAddressModals';
 import { IUpdateAddressModel, UpdateAddressModelSchema } from '@src/models/input/address/IUpdateAddressModel';
 import { IUpdateAddressesResultModel } from '@src/models/output/address/IUpdateAddressResultModel';

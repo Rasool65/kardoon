@@ -99,7 +99,6 @@ class WeekPicker extends React.Component {
   }
 
   onSelectCallBack(i, opType) {
-    debugger;
     switch (opType) {
       case 1: {
         this.setState({ value: parseInt(this.q), selectedHour: this.timeShifts[this.q - 1].startTime });

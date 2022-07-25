@@ -1,88 +1,80 @@
-import { ComponentType, FunctionComponent, useState } from 'react';
-import { IPageProps } from './../../configs/routerConfig/IPageProps';
-import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
-import { useSelector } from 'react-redux';
-import { RootStateType } from '@src/redux/Store';
-import { APIURL_POST_CREATE_REQUEST } from '@src/configs/apiConfig/apiUrls';
-import { IOutputResult } from '@src/models/output/IOutputResult';
-import OrderDetailFirst from './OrderDetailFirst';
-import OrderDetailConfirm from './OrderDetailSecond';
-import { IRequestDetail } from '@src/models/input/orderDetail/IRequestDetail';
-import { IOrderDetailSecond } from './IOrderDetailProp';
-import { ICreateRequestResultModel } from '@src/models/output/orderDetail/ICreateRequestResultModel';
-import { useToast } from '@src/hooks/useToast';
+// import IPageProps from '@src/configs/routerConfig/IPageProps';
+// import { FunctionComponent } from 'react';
+// import { Button } from 'reactstrap';
+// import Buttons from 'react-multi-date-picker/components/button';
+// import { Navigate, useNavigate } from 'react-router-dom';
+// import { URL_ORDER_DETAIL_REPORT } from '@src/configs/urls';
 
-export type ISteps = {
-  id: number;
-  name: string;
-  Component: ComponentType<any>;
-};
+// const OrderDetail: FunctionComponent<IPageProps> = () => {
+//   const navigate = useNavigate();
+//   return (
+//     <>
+//       <div className="card card-style">
+//         <div className="content">
+//           <h4 className="my-4">
+//             شماره درخواست
+//             <span className="float-end">220706001</span>
+//           </h4>
+//           <span className="">تهران - شهران - کوچه اول - پلاک 1</span>
+//           <span className="float-end">یکشنبه 1401/04/26 - عصر</span>
+//         </div>
 
-const steps: ISteps[] = [
-  {
-    id: 0,
-    name: 'اولیه',
-    Component: OrderDetailFirst,
-  },
-  {
-    id: 1,
-    name: 'تکمیلی',
-    Component: OrderDetailConfirm,
-  },
-];
+//         <div className="accordion" id="accordion-1">
+//           <div className="mb-0">
+//             <button
+//               style={{ backgroundColor: 'blue' }}
+//               className="btn accordion-btn no-effect color-theme"
+//               data-bs-toggle="collapse"
+//               data-bs-target="#collapse2"
+//             >
+//               <i className="fa fa-star color-yellow-dark me-2"></i>
+//               تعمیر یخچال
+//               <span className="float-end">معلق</span>
+//               <i className="fa fa-chevron-down font-10 accordion-icon"></i>
+//             </button>
+//             <div id="collapse2" className="collapse" data-bs-parent="#accordion-1">
+//               <div className="pt-1 pb-2 ps-3 pe-3 font-weight-bold">
+//                 <section id="technician" className="my-4">
+//                   <h5>نام تکنسین :</h5>
+//                   <div className="m-2">
+//                     <span className="font-15 font-700 color-theme">حسین کعبی</span>
+//                     <span className="float-end font-15 font-700 color-theme"></span>
+//                   </div>
+//                   <div className="m-2">
+//                     <span className="font-15 font-700 color-theme">ناصر قاجاری</span>
+//                     <span className="float-end"></span>
+//                   </div>
+//                 </section>
+//                 <section id="technician" className="my-4">
+//                   <h5>جزئیات سفارش :</h5>
+//                   <div className="m-2">
+//                     <span className="font-15 font-700 color-theme">برند: سامسونگ</span>
+//                   </div>
+//                   <div className="m-2">
+//                     <span className="font-15 font-700 color-theme">ظرفیت: 32 فوت</span>
+//                   </div>
+//                 </section>
+//               </div>
+//             </div>
+//           </div>
+//           <section id="paymentStatus" className="m-2 row">
+//             <section>
+//               <Button
+//                 className="btn btn-info"
+//                 onClick={() => {
+//                   navigate(URL_ORDER_DETAIL_REPORT);
+//                 }}
+//               >
+//                 شرح اقدامات انجام شده
+//               </Button>
+//               <span>تسویه نشده</span>
+//               <Button className="btn btn-success float-end">پرداخت مبلغ</Button>
+//             </section>
+//           </section>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
 
-const OrderDetail: FunctionComponent<IPageProps> = (prop) => {
-  const toast = useToast();
-  const userData = useSelector((state: RootStateType) => state.authentication.userData);
-  const httpRequest = useHttpRequest(RequestDataType.formData);
-  const [activeStep, setActiveStep] = useState<number>(0);
-  const [CurrentStep, setCurrentStep] = useState(steps[activeStep]);
-  const [requestDetail, setRequestDetail] = useState<IRequestDetail[]>([]);
-
-  const onClickNext = (data: IRequestDetail) => {
-    setRequestDetail([...requestDetail, data]);
-    setCurrentStep(steps[activeStep + 1]);
-    setActiveStep(activeStep + 1);
-  };
-  const onClickPrevious = () => {
-    setCurrentStep(steps[activeStep - 1]);
-    setActiveStep(activeStep - 1);
-  };
-  const handleSubmit = (body: IOrderDetailSecond) => {
-    debugger;
-    var formData = new FormData();
-    if (userData?.userId) formData.append('userId', userData.userId?.toString());
-    if (body.presenceDate) formData.append('presenceDate', body.presenceDate?.toString());
-    if (body.presenceShift) formData.append('presenceShift', body.presenceShift?.toString());
-    if (body.refkey) formData.append('refkey', body.refkey?.toString());
-    formData.append('isUrgent', body.isUrgent.toString());
-
-    for (var i = 0; i < requestDetail.length; i++) {
-      if (requestDetail[i]?.serviceTypeId) formData.append('serviceTypeId', requestDetail[i].serviceTypeId!.toString());
-      if (requestDetail[i]?.productCategoryId)
-        formData.append('productCategoryId', requestDetail[i].productCategoryId!.toString());
-      formData.append('brandId', requestDetail[i].brandId.value.toString());
-      formData.append('model', requestDetail[i].model);
-      formData.append('serial', requestDetail[i].serial);
-      formData.append('requestDescription', requestDetail[i].requestDescription);
-      if (requestDetail[i].audioMessage) formData.append('audioMessage', requestDetail[i].audioMessage);
-      if (requestDetail[i].imageMessage != undefined) formData.append('imageMessage', requestDetail[i].imageMessage!);
-      if (requestDetail[i].videoMessage) formData.append('videoMessage', requestDetail[i].videoMessage);
-    }
-    if (formData) {
-      httpRequest
-        .postRequest<IOutputResult<ICreateRequestResultModel>>(APIURL_POST_CREATE_REQUEST, formData)
-        .then((result) => {
-          toast.showSuccess(result.data.message);
-        })
-        .finally(() => {});
-    }
-  };
-  return (
-    <>
-      <CurrentStep.Component handleClickNext={onClickNext} handleClickPrevious={onClickPrevious} handleSubmit={handleSubmit} />
-    </>
-  );
-};
-
-export default OrderDetail;
+// export default OrderDetail;

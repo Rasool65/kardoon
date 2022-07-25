@@ -21,7 +21,7 @@ const FooterCard: FunctionComponent<IFooterProps> = ({ footerMenuVisible, active
   };
   return (
     <div id="footer-bar" className={footerMenuVisible ? 'footer-bar-5' : 'footer-bar-5 footer-menu-hidden'}>
-      <div className={`${activePage === 2 ? 'active-nav' : ''} pointer`} onClick={() => goToMyOrders()}>
+      <div className={`${activePage === 1 ? 'active-nav' : ''} pointer`} onClick={() => goToMyOrders()}>
         <i
           data-feather="heart"
           data-feather-line="1"
@@ -31,7 +31,7 @@ const FooterCard: FunctionComponent<IFooterProps> = ({ footerMenuVisible, active
         ></i>
         <span>سفارشات من</span>
       </div>
-      <div className={`${activePage === 1 ? 'active-nav' : ''} pointer`} onClick={(e) => goToHome()}>
+      <div className={`${activePage === 2 ? 'active-nav' : ''} pointer`} onClick={(e) => goToHome()}>
         <i
           data-feather="home"
           data-feather-line="1"

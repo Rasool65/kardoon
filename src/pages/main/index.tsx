@@ -62,7 +62,7 @@ const Main: FunctionComponent<IPageProps> = (props) => {
           data-menu-active="nav-settings"
           data-menu-effect="menu-over"
         ></div> */}
-        <Footer footerMenuVisible={true} activePage={1} />
+        <Footer footerMenuVisible={true} activePage={2} />
 
         <div className="page-content" style={{ paddingBottom: '0' }}>
           <Header headerTitle={'صفحه اصلی'} />

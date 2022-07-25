@@ -28,6 +28,7 @@ export interface IProfileUser {
 export interface IIntrductionInfo {
   refkey: number;
   introMethodId: number;
+  introMethodTitle: string;
   introductionCode: string;
 }
 export interface IUserModel {

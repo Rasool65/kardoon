@@ -16,6 +16,7 @@ interface IIntroductionInfo {
   refkey?: number;
   // introMethodId?: number;
   introductionCode?: string;
+  introMethodTitle?: string;
 }
 
 const checkCodeMelli = (meli_code: any) => {

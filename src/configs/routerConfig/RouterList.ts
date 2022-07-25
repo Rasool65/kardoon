@@ -1,4 +1,15 @@
-import { URL_MAIN, URL_LOGIN, URL_USER_PROFILE, URL_CATEGORIES, URL_PRODUCTS, URL_CITY, URL_ORDER_DETAIL } from './../urls';
+import {
+  URL_MAIN,
+  URL_LOGIN,
+  URL_USER_PROFILE,
+  URL_CATEGORIES,
+  URL_PRODUCTS,
+  URL_CITY,
+  URL_REQUEST_DETAIL,
+  URL_ORDER_DETAIL_REPORT,
+  URL_MY_ORDERS,
+} from './../urls';
+
 import IRoute from './IRoute';
 import RouteType from './RouteType';
 import Login from '@src/pages/authentication/Login';
@@ -8,7 +19,9 @@ import Category from '@src/pages/category';
 import Products from '@src/pages/products';
 import Main from '@src/pages/main';
 import City from '@src/pages/city';
-import OrderDetail from '@src/pages/orderDetail';
+import Order from '@src/pages/order';
+import RequestDetail from '@src/pages/requestDetail';
+import OrderDetailReport from '@src/pages/orderDetailReport';
 
 const routes: IRoute[] = [
   {
@@ -68,11 +81,27 @@ const routes: IRoute[] = [
     },
   },
   {
-    path: URL_ORDER_DETAIL,
-    component: OrderDetail,
-    type: RouteType.public,
+    path: URL_MY_ORDERS,
+    component: Order,
+    type: RouteType.private,
     props: {
-      title: 'حزییات سفارش اولیه',
+      title: 'سفارشات من',
+    },
+  },
+  {
+    path: URL_REQUEST_DETAIL,
+    component: RequestDetail,
+    type: RouteType.private,
+    props: {
+      title: 'جزئیات درخواست',
+    },
+  },
+  {
+    path: URL_ORDER_DETAIL_REPORT,
+    component: OrderDetailReport,
+    type: RouteType.private,
+    props: {
+      title: 'شرح اقدامات انجام شده',
     },
   },
 ];

@@ -1,10 +1,10 @@
-export interface IOrderDetailPageProp {
+export interface IRequestDetailPageProp {
   handleClickNext?: any;
   handleClickPrevious?: any;
   handleSubmit?: any;
 }
 
-export interface IOrderDetailSecond {
+export interface IRequestDetailSecond {
   isUrgent: boolean;
   presenceDate?: string;
   presenceShift?: number;

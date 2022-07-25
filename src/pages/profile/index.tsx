@@ -57,6 +57,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
   } = useForm<IUpdateProfileModel>({ mode: 'onChange', resolver: yupResolver(UpdateProfileModelSchema) });
 
   const onSubmit = (data: IUpdateProfileModel) => {
+    debugger;
     const body = {
       userName: userData?.userName,
       firstName: data.firstName,
@@ -238,7 +239,7 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
               </div>
               <div className={`validate-field mb-4`}>
                 <Controller
-                  name="introductionInfo"
+                  name="introductionInfo.introMethodTitle"
                   control={control}
                   render={({ field }) => (
                     <>
@@ -249,12 +250,12 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                         options={introductions}
                         isSearchable={true}
                         {...field}
-                        defaultInputValue={userData?.profile?.intrductionInfo?.introMethodId?.toString()}
+                        defaultInputValue={userData?.profile?.intrductionInfo?.introMethodTitle || ''}
                         onChange={(e: any) => {
                           e ? setIntroMethodId(e.value) : setIntroMethodId(undefined);
                         }}
                       />
-                      {!introMethodId ? <FormFeedback className="d-block">نحوه آشناییمون اجباریه یاد میاد</FormFeedback> : ''}
+                      {!introMethodId ? <FormFeedback className="d-block">نحوه آشنایی اجباریست</FormFeedback> : ''}
                     </>
                   )}
                 />

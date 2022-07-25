@@ -1,4 +1,4 @@
-import { IAddressesResultModel } from '@src/models/output/orderDetail/IAddressesResultModel';
+import { IAddressesResultModel } from '@src/models/output/requestDetail/IAddressesResultModel';
 
 export interface IAddAddressModal {
   GetAddresses?: any;

@@ -5,6 +5,7 @@ export interface IRequestDetail {
   serviceTypeId?: number;
   productCategoryId?: number;
   brandId: IBrandSelectModel;
+  problemsId?: IProblemsSelectModel[];
   model: string;
   serial: string;
   requestDescription: string;
@@ -28,9 +29,19 @@ export const RequestDetailModelSchema: yup.SchemaOf<IRequestDetail> = yup.object
   audioMessage: yup.object(),
   imageMessage: yup.object(),
   videoMessage: yup.object(),
+  problemsId: yup.array(
+    yup.object({
+      value: yup.number(),
+      label: yup.string(),
+    })
+  ),
 });
 
 export interface IBrandSelectModel {
   label: string;
   value: number;
+}
+export interface IProblemsSelectModel {
+  label?: string;
+  value?: number;
 }
