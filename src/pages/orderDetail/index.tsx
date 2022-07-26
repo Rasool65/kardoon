@@ -299,6 +299,34 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
               </div>
             </div>
           </div>
+          {/* شرح اقدامات */}
+          <div className="card card-style">
+            <i className="fa fa-list-ul font-20 m-2"> شرح اقدامات</i>
+            <div className="m-1" style={{ display: 'flex', marginRight: '10px', justifyContent: 'space-around' }}>
+              <div style={{ display: 'flex' }}>1.هزینه ایاب و ذهاب</div>
+              <div>70.000</div>
+              <div>
+                <i className="fa fa-check font-15"> نقدی</i>
+              </div>
+            </div>
+            <div className="m-1" style={{ display: 'flex', marginRight: '10px', justifyContent: 'space-around' }}>
+              <div style={{ display: 'flex' }}>2.تعمیر یخچال</div>
+              <div>100.000</div>
+              <div>
+                <i className="fa fa-check font-15"> گارانتی</i>
+              </div>
+            </div>
+            <div className="m-1" style={{ display: 'flex', marginRight: '10px', justifyContent: 'space-around' }}>
+              <div style={{ display: 'flex' }}>3.نصب تلیویزیون دیواری</div>
+              <div>200.000</div>
+              <div>
+                <i className="fa fa-hourglass-half font-15"> پرداخت</i>
+              </div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Button>پرداخت آنلاین</Button>
+          </div>
         </div>
       </div>
     </>
