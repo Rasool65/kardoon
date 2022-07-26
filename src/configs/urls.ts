@@ -8,4 +8,3 @@ export const URL_CITY = '/city';
 export const URL_ORDER_DETAIL = '/order-detail';
 export const URL_REQUEST = '/request';
 export const URL_REQUEST_DETAIL = '/request-detail';
-export const URL_ORDER_DETAIL_REPORT = '/order-report';

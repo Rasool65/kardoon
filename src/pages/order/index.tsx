@@ -6,7 +6,7 @@ import { FunctionComponent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
-import { URL_ORDER_DETAIL_REPORT, URL_REQUEST_DETAIL } from '../../configs/urls';
+import { URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '../../configs/urls';
 import OrderDetailReport from '../orderDetailReport';
 
 const Order: FunctionComponent<IPageProps> = () => {
@@ -16,70 +16,143 @@ const Order: FunctionComponent<IPageProps> = () => {
   }, []);
   return (
     <div id="page">
-      {/* <div className="card header-card shape-rounded" data-card-height="150">
-        <div className="card-overlay bg-highlight opacity-95"></div>
-        <div className="card-overlay dark-mode-tint"></div>
-        <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
-      </div> */}
-      <Footer footerMenuVisible={true} activePage={1} />
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-around',
-        }}
-      >
-        <Button className="btn btn-success mb-5">سفارشات جاری</Button>
-        <Button className="btn btn-success mb-5 float-end">سفارشات قبلی</Button>
-      </div>
-      <div className="card card-style">
-        <div className="accordion" id="accordion-1">
-          <div className="mb-0">
-            <button
-              style={{ backgroundColor: '#000eb7a1' }}
-              className="btn accordion-btn no-effect color-theme"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapse2"
-            >
-              <div className="content">
-                <h5 className="my-4">
-                  شماره درخواست :<span>220706001</span>
-                  <span className="float-end">
-                    1401/05/02 <span style={{ border: 'solid red 1px', color: 'red' }}>SOS</span>
-                  </span>
-                </h5>
-                {/* <span className="">تهران - شهران - کوچه اول - پلاک 1</span>
-                <span className="float-end">یکشنبه 1401/04/26 - عصر</span> */}
-                <div>
-                  1. تعمیر یخچال ساید
-                  <span className="float-end">درحال انجام</span>
-                </div>
-                <div>
-                  2. نصب تلویزیون
-                  <span className="float-end">معلق</span>
-                </div>
+      <div className="page-content">
+        <div className="page-title page-title-small">
+          {/* <h2>
+              <a href="#" data-back-button>
+                <i className="fa fa-arrow-right"></i>
+              </a>
+              بازگشت
+            </h2> */}
+          {/* <a
+              href="#"
+              data-menu="menu-main"
+              className="bg-fade-highlight-light shadow-xl preload-img"
+              data-src="images/avatars/5s.png"
+            ></a> */}
+        </div>
+        {/* <div className="card header-card shape-rounded" data-card-height="150">
+          <div className="card-overlay bg-highlight opacity-95"></div>
+          <div className="card-overlay dark-mode-tint"></div>
+          <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
+        </div> */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+          }}
+        >
+          <button className="btn btn-success mb-5">سفارشات جاری</button>
+          <button className="btn btn-success mb-5 float-end">سفارشات قبلی</button>
+        </div>
+        <Footer footerMenuVisible={true} activePage={1} />
+        <div className="card card-style shadow-0 bg-highlight mb-1">
+          <button className="btn accordion-btn color-white no-effect" data-bs-toggle="collapse" data-bs-target="#collapse5">
+            <div style={{ marginBottom: '20px' }}>
+              شماره درخواست : <div> 220470051 </div>
+              <div style={{ marginRight: 'auto' }}>1401/05/02</div>
+              <div style={{ border: '2px solid red', color: 'red', marginRight: '10px' }}>SOS</div>
+            </div>
+            <div style={{ marginBottom: '5px' }}>
+              <div className="col-6">
+                <div>1-</div>تعمیر کولر گازی
               </div>
-              <i className="fa fa-chevron-down font-10 accordion-icon"></i>
-            </button>
-            <div id="collapse2" className="collapse" data-bs-parent="#accordion-1">
-              <div className="pt-1 pb-2 ps-3 pe-3 font-weight-bold">
-                <div>
-                  1. تعمیر یخچال ساید
-                  <span className="float-end">درحال انجام</span>
-                  <div>
-                    برند : <span>سامسونگ</span>
-                  </div>
-                  <div>
-                    مدل : <span>LC745</span>
-                  </div>
-                </div>
-                <div>
-                  2. نصب تلویزیون
-                  <span className="float-end">معلق</span>
-                </div>
-                {/* <OrderDetailReport title="" /> */}
+              <div className="col-5">
+                <span className="bg-success">بسته</span>
               </div>
             </div>
-            <Button className="btn btn-success m-2">شرح اقدامات</Button>
+            <div style={{ marginBottom: '5px' }}>
+              <div className=" col-6">
+                <div>2-</div> نصب تلویزیون
+              </div>
+              <div className="col-5">
+                <span className="bg-warning">درحال انجام</span>
+              </div>
+            </div>
+            <div style={{ marginBottom: '5px' }}>
+              <div className=" col-6">
+                <div>3-</div> نصب تلویزیون
+              </div>
+              <div className="col-5">
+                <span className="bg-danger">معلق</span>
+              </div>
+            </div>
+            <i className="fa fa-chevron-down font-10 accordion-icon"></i>
+          </button>
+          <div
+            style={{ backgroundColor: 'white' }}
+            id="collapse5"
+            className="collapse bg-theme accordion-open"
+            data-bs-parent="#accordion-2"
+          >
+            <Button onClick={() => navigate(`${URL_ORDER_DETAIL}?id=2`)} style={{ width: 'inherit' }}>
+              جزئیات بیشتر
+            </Button>
+          </div>
+        </div>
+        {/* End loop */}
+        <div className="card card-style shadow-0 bg-highlight mb-1">
+          <button className="btn accordion-btn color-white no-effect" data-bs-toggle="collapse" data-bs-target="#collapse4">
+            <div style={{ marginBottom: '20px' }}>
+              شماره درخواست : <div> 22065365 </div>
+              <div style={{ marginRight: 'auto' }}>1401/05/05</div>
+              {/* <div style={{ border: '2px solid red', color: 'red', marginRight: '10px' }}>SOS</div> */}
+            </div>
+            <div style={{ marginBottom: '5px' }}>
+              <div className="col-6">
+                <div>1-</div>نصب گاز
+              </div>
+              <div className="col-5">
+                <span className="bg-success">بسته</span>
+              </div>
+            </div>
+            <div style={{ marginBottom: '5px' }}>
+              <div className=" col-6">
+                <div>2-</div> نصب ماشین لباسشویی
+              </div>
+              <div className="col-5">
+                <span className="bg-warning">درحال انجام</span>
+              </div>
+            </div>
+            <i className="fa fa-chevron-down font-10 accordion-icon"></i>
+          </button>
+          <div
+            style={{ backgroundColor: 'white' }}
+            id="collapse4"
+            className="collapse bg-theme accordion-open"
+            data-bs-parent="#accordion-2"
+          >
+            <Button onClick={() => navigate(URL_ORDER_DETAIL)} style={{ width: 'inherit' }}>
+              جزئیات بیشتر
+            </Button>
+          </div>
+        </div>
+        <div className="card card-style shadow-0 bg-highlight mb-1">
+          <button className="btn accordion-btn color-white no-effect" data-bs-toggle="collapse" data-bs-target="#collapse1">
+            <div style={{ marginBottom: '20px' }}>
+              شماره درخواست : <div> 2212060508 </div>
+              <div style={{ marginRight: 'auto' }}>1401/05/07</div>
+              <div style={{ border: '2px solid red', color: 'red', marginRight: '10px' }}>SOS</div>
+            </div>
+            <div style={{ marginBottom: '5px' }}>
+              <div className="col-6">
+                <div>1-</div>نصب پکیج
+              </div>
+              <div className="col-5">
+                <span className="bg-danger">معلق</span>
+              </div>
+            </div>
+            <i className="fa fa-chevron-down font-10 accordion-icon"></i>
+          </button>
+          <div
+            style={{ backgroundColor: 'white' }}
+            id="collapse1"
+            className="collapse bg-theme accordion-open"
+            data-bs-parent="#accordion-2"
+          >
+            <Button onClick={() => navigate(URL_ORDER_DETAIL)} style={{ width: 'inherit' }}>
+              جزئیات بیشتر
+            </Button>
           </div>
         </div>
       </div>

@@ -6,8 +6,8 @@ import {
   URL_PRODUCTS,
   URL_CITY,
   URL_REQUEST_DETAIL,
-  URL_ORDER_DETAIL_REPORT,
   URL_MY_ORDERS,
+  URL_ORDER_DETAIL,
 } from './../urls';
 
 import IRoute from './IRoute';
@@ -22,6 +22,7 @@ import City from '@src/pages/city';
 import Order from '@src/pages/order';
 import RequestDetail from '@src/pages/requestDetail';
 import OrderDetailReport from '@src/pages/orderDetailReport';
+import OrderDetail from '@src/pages/orderDetail';
 
 const routes: IRoute[] = [
   {
@@ -97,11 +98,11 @@ const routes: IRoute[] = [
     },
   },
   {
-    path: URL_ORDER_DETAIL_REPORT,
-    component: OrderDetailReport,
+    path: URL_ORDER_DETAIL,
+    component: OrderDetail,
     type: RouteType.private,
     props: {
-      title: 'شرح اقدامات انجام شده',
+      title: 'جرئیات بیشتر سفارش',
     },
   },
 ];

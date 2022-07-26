@@ -1,80 +1,308 @@
-// import IPageProps from '@src/configs/routerConfig/IPageProps';
-// import { FunctionComponent } from 'react';
-// import { Button } from 'reactstrap';
-// import Buttons from 'react-multi-date-picker/components/button';
-// import { Navigate, useNavigate } from 'react-router-dom';
-// import { URL_ORDER_DETAIL_REPORT } from '@src/configs/urls';
+import Footer from '@src/layout/Footer';
+import FooterCard from '@src/layout/FooterCard';
+import HeaderCard from '@src/layout/HeaderCard';
+import { CustomFunctions } from '@src/utils/custom';
+import { FunctionComponent, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Button } from 'reactstrap';
+import { IPageProps } from '../../configs/routerConfig/IPageProps';
+import { URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '../../configs/urls';
+import OrderDetailReport from '../orderDetailReport';
+import './style.scss';
 
-// const OrderDetail: FunctionComponent<IPageProps> = () => {
-//   const navigate = useNavigate();
-//   return (
-//     <>
-//       <div className="card card-style">
-//         <div className="content">
-//           <h4 className="my-4">
-//             شماره درخواست
-//             <span className="float-end">220706001</span>
-//           </h4>
-//           <span className="">تهران - شهران - کوچه اول - پلاک 1</span>
-//           <span className="float-end">یکشنبه 1401/04/26 - عصر</span>
-//         </div>
+const OrderDetail: FunctionComponent<IPageProps> = () => {
+  const search = useLocation().search;
+  const id = new URLSearchParams(search).get('id');
+  console.log(id); //12345
 
-//         <div className="accordion" id="accordion-1">
-//           <div className="mb-0">
-//             <button
-//               style={{ backgroundColor: 'blue' }}
-//               className="btn accordion-btn no-effect color-theme"
-//               data-bs-toggle="collapse"
-//               data-bs-target="#collapse2"
-//             >
-//               <i className="fa fa-star color-yellow-dark me-2"></i>
-//               تعمیر یخچال
-//               <span className="float-end">معلق</span>
-//               <i className="fa fa-chevron-down font-10 accordion-icon"></i>
-//             </button>
-//             <div id="collapse2" className="collapse" data-bs-parent="#accordion-1">
-//               <div className="pt-1 pb-2 ps-3 pe-3 font-weight-bold">
-//                 <section id="technician" className="my-4">
-//                   <h5>نام تکنسین :</h5>
-//                   <div className="m-2">
-//                     <span className="font-15 font-700 color-theme">حسین کعبی</span>
-//                     <span className="float-end font-15 font-700 color-theme"></span>
-//                   </div>
-//                   <div className="m-2">
-//                     <span className="font-15 font-700 color-theme">ناصر قاجاری</span>
-//                     <span className="float-end"></span>
-//                   </div>
-//                 </section>
-//                 <section id="technician" className="my-4">
-//                   <h5>جزئیات سفارش :</h5>
-//                   <div className="m-2">
-//                     <span className="font-15 font-700 color-theme">برند: سامسونگ</span>
-//                   </div>
-//                   <div className="m-2">
-//                     <span className="font-15 font-700 color-theme">ظرفیت: 32 فوت</span>
-//                   </div>
-//                 </section>
-//               </div>
-//             </div>
-//           </div>
-//           <section id="paymentStatus" className="m-2 row">
-//             <section>
-//               <Button
-//                 className="btn btn-info"
-//                 onClick={() => {
-//                   navigate(URL_ORDER_DETAIL_REPORT);
-//                 }}
-//               >
-//                 شرح اقدامات انجام شده
-//               </Button>
-//               <span>تسویه نشده</span>
-//               <Button className="btn btn-success float-end">پرداخت مبلغ</Button>
-//             </section>
-//           </section>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
+  const navigate = useNavigate();
+  useEffect(() => {
+    CustomFunctions();
+  }, []);
+  return (
+    <>
+      {/* <div className="card header-card shape-rounded" data-card-height="150">
+        <div className="card-overlay bg-highlight opacity-95"></div>
+        <div className="card-overlay dark-mode-tint"></div>
+        <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
+      </div> */}
+      <Footer footerMenuVisible={true} activePage={1} />
+      <div id="page">
+        <div className="page-content">
+          <div className="page-title page-title-small">
+            {/* <h2>
+              <a href="#" data-back-button>
+                <i className="fa fa-arrow-right"></i>
+              </a>
+              بازگشت
+            </h2> */}
+            {/* <a
+              href="#"
+              data-menu="menu-main"
+              className="bg-fade-highlight-light shadow-xl preload-img"
+              data-src="images/avatars/5s.png"
+            ></a> */}
+          </div>
+          <div className="card header-card shape-rounded" data-card-height="150">
+            <div className="card-overlay bg-highlight opacity-95"></div>
+            <div className="card-overlay dark-mode-tint"></div>
+            <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
+          </div>
 
-// export default OrderDetail;
+          <div className="card card-style header-order">
+            <div className="card-body">
+              <div className="">
+                <div className=" col-6">شماره درخواست:</div>
+                <div className=" col-6 justify-content-end">220706001</div>
+              </div>
+              <div className="">
+                <div className=" col-6">تهران-تهران</div>
+                <div className=" col-6 justify-content-end">شنبه 1401/5/15-عصر</div>
+              </div>
+            </div>
+          </div>
+          <div className="card card-style">
+            <div className="accordion mt-4" id="accordion-2">
+              <div className="card card-style shadow-0 bg-highlight mb-1">
+                <button className="btn accordion-btn color-white no-effect" data-bs-toggle="collapse" data-bs-target="#collapse5">
+                  <div>
+                    <div className=" col-6">تعمیر کولر گازی</div>
+                    <div className=" col-5">
+                      <span className="bg-success">بسته</span>
+                    </div>
+                    <div className=" col-1">
+                      <i className="fa fa-chevron-down font-10 accordion-icon"></i>
+                    </div>
+                  </div>
+                </button>
+                <div
+                  style={{ backgroundColor: 'white' }}
+                  id="collapse5"
+                  className="collapse bg-theme accordion-open"
+                  data-bs-parent="#accordion-2"
+                >
+                  <div>
+                    <div>
+                      <div>
+                        <div className="col-6">برند</div>
+                        <div className="col-6">سامسونگ</div>
+                      </div>
+                      <div>
+                        <div className="col-6">مدل</div>
+                        <div className="col-6">RC745Z</div>
+                      </div>
+                      <div>
+                        <div className="col-6">سریال</div>
+                        <div className="col-6">ROWK72325</div>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <p style={{ marginBottom: '0' }}>علت درخواست:</p>
+                      </div>
+                      <div>
+                        <ul>
+                          <li>عدم سرمایش کافی</li>
+                          <li>ریموت خراب است</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <audio src="" controls></audio>
+                      </div>
+                      <div>
+                        <i className="fa fa-play"></i>
+                        <i className="fa fa-image"></i>
+                        <i className="fa fa-image"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <p>نام تکنسین:</p>
+                      </div>
+                      <div>
+                        <div className="col-6">
+                          <p>حسین کعبی</p>
+                        </div>
+                        <div className="col-6">
+                          <i className="fa fa-phone"></i>
+                          <i className="fa fa-message"></i>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="col-6">
+                          <p>ناصر قاجاری</p>
+                        </div>
+                        <div className="col-6">
+                          <i className="fa fa-phone"></i>
+                          <i className="fa fa-message"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="card card-style shadow-0 bg-highlight mb-1">
+                <button className="btn accordion-btn color-white no-effect" data-bs-toggle="collapse" data-bs-target="#collapse6">
+                  <div>
+                    <div className=" col-5">نصب تلیویزیون</div>
+                    <div className=" col-6">
+                      <span className="bg-warning">در حال انجام</span>
+                    </div>
+                    <div className=" col-1">
+                      <i className="fa fa-chevron-down font-10 accordion-icon"></i>
+                    </div>
+                  </div>
+                </button>
+                <div
+                  style={{ backgroundColor: 'white' }}
+                  id="collapse6"
+                  className="collapse bg-theme accordion-open"
+                  data-bs-parent="#accordion-2"
+                >
+                  <div className="pt-3 pb-3">
+                    <div>
+                      <div>
+                        <div className="col-6">برند</div>
+                        <div className="col-6">سامسونگ</div>
+                      </div>
+                      <div>
+                        <div className="col-6">مدل</div>
+                        <div className="col-6">RC745Z</div>
+                      </div>
+                      <div>
+                        <div className="col-6">سریال</div>
+                        <div className="col-6">ROWK72325</div>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <p style={{ marginBottom: '0px' }}>علت درخواست:</p>
+                      </div>
+                      <div>
+                        <ul>
+                          <li>عدم سرمایش کافی</li>
+                          <li>ریموت خراب است</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <audio src="" controls></audio>
+                      </div>
+                      <div>
+                        <i className="bi bi-play-btn"></i>
+                        <i className="bi bi-card-image"></i>
+                        <i className="bi bi-card-image"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <p>نام تکنسین:</p>
+                      </div>
+                      <div>
+                        <div className="col-6">
+                          <p>حسین کعبی</p>
+                        </div>
+                        <div className="col-6">
+                          <i className="fa fa-phone"></i>
+                          <i className="fa fa-message"></i>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="col-6">
+                          <p>ناصر قاجاری</p>
+                        </div>
+                        <div className="col-6">
+                          <i className="fa fa-phone"></i>
+                          <i className="fa fa-message"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="card card-style shadow-0 bg-highlight mb-1">
+                <button className="btn accordion-btn color-white no-effect" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                  <div>
+                    <div className=" col-5">نصب تلیویزیون</div>
+                    <div className=" col-6">
+                      <span className="bg-danger">معلق</span>
+                    </div>
+                    <div className=" col-1">
+                      <i className="fa fa-chevron-down font-10 accordion-icon"></i>
+                    </div>
+                  </div>
+                </button>
+                <div
+                  style={{ backgroundColor: 'white' }}
+                  id="collapse1"
+                  className="collapse bg-theme accordion-open"
+                  data-bs-parent="#accordion-2"
+                >
+                  <div className="pt-3 pb-3">
+                    <div>
+                      <div>
+                        <div className="col-6">برند</div>
+                        <div className="col-6">سامسونگ</div>
+                      </div>
+                      <div>
+                        <div className="col-6">مدل</div>
+                        <div className="col-6">RC745Z</div>
+                      </div>
+                      <div>
+                        <div className="col-6">سریال</div>
+                        <div className="col-6">ROWK72325</div>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <p style={{ marginBottom: '0px' }}>علت درخواست:</p>
+                      </div>
+                      <div>
+                        <ul>
+                          <li>عدم سرمایش کافی</li>
+                          <li>ریموت خراب است</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <audio src="" controls></audio>
+                      </div>
+                      <div>
+                        <i className="bi bi-play-btn"></i>
+                        <i className="bi bi-card-image"></i>
+                        <i className="bi bi-card-image"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <p>نام تکنسین:</p>
+                      </div>
+                      <div>
+                        <div className="col-6">
+                          <p>حسین کعبی</p>
+                        </div>
+                        <div className="col-6">
+                          <i className="fa fa-phone"></i>
+                          <i className="fa fa-message"></i>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="col-6">
+                          <p>ناصر قاجاری</p>
+                        </div>
+                        <div className="col-6">
+                          <i className="fa fa-phone"></i>
+                          <i className="fa fa-message"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default OrderDetail;

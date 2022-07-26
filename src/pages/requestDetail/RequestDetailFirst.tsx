@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-import { APIURL_GET_BRANDS } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_GET_BRANDS, APIURL_GET_PROBLEM_LIST } from '@src/configs/apiConfig/apiUrls';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { URL_MAIN } from '@src/configs/urls';
 import { Controller, useForm } from 'react-hook-form';
@@ -52,26 +52,14 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
           })
       : navigate(URL_MAIN);
   };
-  // const Brands = () => {
-  //   brandList
-  //     ? brandList.forEach((d: any) => {
-  //         brands.push({ value: d.id, label: d.title });
-  //       })
-  //     : '';
-  // };
-  // useEffect(() => {
-  //   Brands();
-  // }, [brandList]);
 
   const GetProblems = () => {
     // setLoading(true);
     httpRequest
       .getRequest<IOutputResult<IProductProblemsResultModel[]>>(
-        'http://127.0.0.1:2500/getProductProblems'
-        // `${APIURL_GET_ADDRESSES}?UserName=${userData?.userName}`
+        `${APIURL_GET_PROBLEM_LIST}?productCategoryId=${state.ProductId}&ServiceTypeId=${state.ServiceTypeId}`
       )
       .then((result) => {
-        debugger;
         setProblemsList(result.data.data);
         // setLoading(false);
       });
@@ -294,7 +282,7 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                     control={control}
                     render={({ field }) => (
                       <>
-                        {problemsList && (
+                        {problemsList && problemsList.length > 0 && (
                           <Select
                             isMulti
                             noOptionsMessage={() => t('ListIsEmpty')}
