@@ -30,12 +30,12 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
       <div id="page">
         <div className="page-content">
           <div className="page-title page-title-small">
-            {/* <h2>
+            <h2>
               <a href="#" data-back-button>
-                <i className="fa fa-arrow-right"></i>
+                <i className="fa fa-arrow-right mx-2"></i>
+                بازگشت
               </a>
-              بازگشت
-            </h2> */}
+            </h2>
             {/* <a
               href="#"
               data-menu="menu-main"
@@ -130,162 +130,6 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                           <img className="m-2" src={require('/src/scss/images/ath.png')} />
                           <img className="m-2" src={require('/src/scss/images/ath.png')} />
                         </div>
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <p>نام تکنسین:</p>
-                      </div>
-                      <div>
-                        <div className="col-6">
-                          <p>حسین کعبی</p>
-                        </div>
-                        <div className="col-6">
-                          <i className="fa fa-phone"></i>
-                          <i className="fa fa-message"></i>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="col-6">
-                          <p>ناصر قاجاری</p>
-                        </div>
-                        <div className="col-6">
-                          <i className="fa fa-phone"></i>
-                          <i className="fa fa-message"></i>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="card card-style shadow-0 bg-highlight mb-1">
-                <button className="btn accordion-btn color-white no-effect" data-bs-toggle="collapse" data-bs-target="#collapse6">
-                  <div>
-                    <div className=" col-5">نصب تلیویزیون</div>
-                    <div className=" col-6">
-                      <span className="bg-warning">در حال انجام</span>
-                    </div>
-                    <div className=" col-1">
-                      <i className="fa fa-chevron-down font-10 accordion-icon"></i>
-                    </div>
-                  </div>
-                </button>
-                <div
-                  style={{ backgroundColor: 'white' }}
-                  id="collapse6"
-                  className="collapse bg-theme accordion-open"
-                  data-bs-parent="#accordion-2"
-                >
-                  <div className="pt-3 pb-3">
-                    <div>
-                      <div>
-                        <div className="col-6">برند</div>
-                        <div className="col-6">سامسونگ</div>
-                      </div>
-                      <div>
-                        <div className="col-6">مدل</div>
-                        <div className="col-6">RC745Z</div>
-                      </div>
-                      <div>
-                        <div className="col-6">سریال</div>
-                        <div className="col-6">ROWK72325</div>
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <p style={{ marginBottom: '0px' }}>علت درخواست:</p>
-                      </div>
-                      <div>
-                        <ul>
-                          <li>عدم سرمایش کافی</li>
-                          <li>ریموت خراب است</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <audio src="" controls></audio>
-                      </div>
-                      <div>
-                        <i className="bi bi-play-btn"></i>
-                        <i className="bi bi-card-image"></i>
-                        <i className="bi bi-card-image"></i>
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <p>نام تکنسین:</p>
-                      </div>
-                      <div>
-                        <div className="col-6">
-                          <p>حسین کعبی</p>
-                        </div>
-                        <div className="col-6">
-                          <i className="fa fa-phone"></i>
-                          <i className="fa fa-message"></i>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="col-6">
-                          <p>ناصر قاجاری</p>
-                        </div>
-                        <div className="col-6">
-                          <i className="fa fa-phone"></i>
-                          <i className="fa fa-message"></i>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="card card-style shadow-0 bg-highlight mb-1">
-                <button className="btn accordion-btn color-white no-effect" data-bs-toggle="collapse" data-bs-target="#collapse1">
-                  <div>
-                    <div className=" col-5">نصب تلیویزیون</div>
-                    <div className=" col-6">
-                      <span className="bg-danger">معلق</span>
-                    </div>
-                    <div className=" col-1">
-                      <i className="fa fa-chevron-down font-10 accordion-icon"></i>
-                    </div>
-                  </div>
-                </button>
-                <div
-                  style={{ backgroundColor: 'white' }}
-                  id="collapse1"
-                  className="collapse bg-theme accordion-open"
-                  data-bs-parent="#accordion-2"
-                >
-                  <div className="pt-3 pb-3">
-                    <div>
-                      <div>
-                        <div className="col-6">برند</div>
-                        <div className="col-6">سامسونگ</div>
-                      </div>
-                      <div>
-                        <div className="col-6">مدل</div>
-                        <div className="col-6">RC745Z</div>
-                      </div>
-                      <div>
-                        <div className="col-6">سریال</div>
-                        <div className="col-6">ROWK72325</div>
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <p style={{ marginBottom: '0px' }}>علت درخواست:</p>
-                      </div>
-                      <div>
-                        <ul>
-                          <li>عدم سرمایش کافی</li>
-                          <li>ریموت خراب است</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <audio src="" controls></audio>
-                      </div>
-                      <div>
-                        <i className="bi bi-play-btn"></i>
-                        <i className="bi bi-card-image"></i>
-                        <i className="bi bi-card-image"></i>
                       </div>
                     </div>
                     <div>
