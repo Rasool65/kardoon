@@ -167,3 +167,60 @@ figure {
         }
     }
 }
+
+.area-1{
+    height: auto;
+    width: 95%;
+    background-color: white;
+    margin: 0px 15px 30px 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 23px 1px #454545;
+    >div{
+        &:nth-of-type(1){
+            display: flex;
+            align-items: center;
+            padding: 5px 10px 5px 0;
+            >i{
+                font-size: 30px;
+            }
+            >p{
+                margin-right: 10px;
+            }
+        }
+        &:nth-of-type(2){
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            >div{
+                width: 90%;
+                margin: 10px 0;
+                background-color: rgba(128, 128, 128, 0.238);
+                display: flex;
+                border-radius: 10px;
+                >div{
+                    display: flex;
+                    align-items: center;
+                    &:nth-of-type(1){
+                        padding-right: 5px;
+                        font-size: 14px;
+                    }
+                    &:nth-of-type(2){
+                        justify-content: center;
+                    }
+                    &:nth-of-type(3){
+                        justify-content: center;
+                        >i{
+                            font-size: 30px;
+                            color: rgb(3, 187, 0);
+                        }
+                    }
+                    &:nth-of-type(4){
+                        justify-content: center;
+                    }
+                }
+
+            }
+        }
+    }
+}
+

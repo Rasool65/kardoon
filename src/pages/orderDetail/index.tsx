@@ -107,12 +107,29 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                         </ul>
                       </div>
                       <div>
-                        <audio src="" controls></audio>
+                        <audio
+                          src="https://irsv.upmusics.com/Downloads/Musics/Meysam%20Ebrahimi%20%7C%20Roshan%20Kon%20(320).mp3"
+                          controls
+                        />
                       </div>
-                      <div>
-                        <i className="fa fa-play"></i>
-                        <i className="fa fa-image"></i>
-                        <i className="fa fa-image"></i>
+                      <div style={{ display: 'block' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                          <video
+                            width="320"
+                            height="240"
+                            controls
+                            style={{ display: 'flex', alignContent: 'center' }}
+                            src="https://jadvalyab.ir/blog/wp-content/uploads/2020/04/%D8%A7%D8%B4%D9%88%D8%A7%D9%86.mp4?_=1"
+                          />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'inherit', flexWrap: 'wrap' }}>
+                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
+                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
+                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
+                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
+                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
+                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
+                        </div>
                       </div>
                     </div>
                     <div>
@@ -298,6 +315,59 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                 </div>
               </div>
             </div>
+          </div>
+          {/* footer */}
+          <div
+            className="card "
+            style={{
+              height: '40vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <div className="area-1 m-3">
+              <div className="m-2" style={{ alignItems: 'inherit' }}>
+                <i className="fa fa-list"></i>
+                <p>شرح اقدامات</p>
+              </div>
+              <div className="">
+                <div className="">
+                  <div className="col-5">1- هزینه ایاب و ذهاب</div>
+                  <div className="col-2">70.000</div>
+                  <div className="col-2">
+                    <i className="fa fa-check"></i>
+                  </div>
+                  <div className="col-3">نقدی</div>
+                </div>
+                <div className="">
+                  <div className="col-5">2- تعمیر یخچال</div>
+                  <div className="col-2">100.000</div>
+                  <div className="col-2">
+                    <i className="fa fa-check"></i>
+                  </div>
+                  <div className="col-3">گارانتی</div>
+                </div>
+                <div className="">
+                  <div className="col-5">3- نصب تلیویزیون </div>
+                  <div className="col-2">
+                    <div style={{ textDecoration: 'line-through', color: 'red' }}>70.000</div>
+                    <span className="p-1">50.000</span>
+                  </div>
+                  <div className="col-2">
+                    <i className="fa fa-hourglass"></i>
+                  </div>
+                  <div className="col-3">
+                    <Button className="btn btn-success">پرداخت</Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <section className="box4">
+              <Button className="btn btn-3d btn-m btn-full mb-3 rounded-xs text-uppercase font-700 shadow-s  border-blue-dark bg-blue-light">
+                تسویه حساب <span className="fa-fw select-all fas"></span>
+              </Button>
+            </section>
           </div>
         </div>
       </div>
