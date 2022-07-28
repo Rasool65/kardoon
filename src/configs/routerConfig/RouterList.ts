@@ -21,7 +21,6 @@ import Main from '@src/pages/main';
 import City from '@src/pages/city';
 import Order from '@src/pages/order';
 import RequestDetail from '@src/pages/requestDetail';
-import OrderDetailReport from '@src/pages/orderDetailReport';
 import OrderDetail from '@src/pages/orderDetail';
 
 const routes: IRoute[] = [

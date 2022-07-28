@@ -6,8 +6,8 @@ import { FunctionComponent, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
-import { URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '../../configs/urls';
-import OrderDetailReport from '../orderDetailReport';
+import { URL_MY_ORDERS, URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '../../configs/urls';
+
 import './style.scss';
 
 const OrderDetail: FunctionComponent<IPageProps> = () => {
@@ -31,7 +31,7 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
         <div className="page-content">
           <div className="page-title page-title-small">
             <h2>
-              <a href="#" data-back-button>
+              <a href="#" onClick={() => navigate(URL_MY_ORDERS)}>
                 <i className="fa fa-arrow-right mx-2"></i>
                 بازگشت
               </a>
