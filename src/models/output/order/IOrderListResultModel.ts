@@ -14,8 +14,8 @@ export interface IOrderRequestDetail {
 }
 export enum IEStatusId {
   'bg-success',
-  'bg-warning',
-  'bg-danger',
+  'bg-warning ',
+  'bg-danger ',
   'bg-info',
   'bg-danger',
   'bg-warning',

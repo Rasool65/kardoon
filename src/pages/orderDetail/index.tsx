@@ -8,8 +8,6 @@ import { Button } from 'reactstrap';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
 import { URL_MY_ORDERS, URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '../../configs/urls';
 
-import './style.scss';
-
 const OrderDetail: FunctionComponent<IPageProps> = () => {
   const search = useLocation().search;
   const id = new URLSearchParams(search).get('id');
@@ -64,7 +62,11 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
           <div className="card card-style">
             <div className="accordion mt-4" id="accordion-2">
               <div className="card card-style shadow-0 bg-highlight mb-1">
-                <button className="btn accordion-btn color-white no-effect" data-bs-toggle="collapse" data-bs-target="#collapse5">
+                <button
+                  className="btn custom-accordion-btn accordion-btn color-white no-effect"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapse5"
+                >
                   <div>
                     <div className=" col-6">تعمیر کولر گازی</div>
                     <div className=" col-5">
@@ -78,7 +80,7 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                 <div
                   style={{ backgroundColor: 'white' }}
                   id="collapse5"
-                  className="collapse bg-theme accordion-open"
+                  className="collapse bg-theme custom-accordion-open"
                   data-bs-parent="#accordion-2"
                 >
                   <div>

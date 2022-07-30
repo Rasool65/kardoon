@@ -5,6 +5,7 @@ import HeaderCard from '@src/layout/HeaderCard';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IEStatusId, IOrderListResultModel, IOrderRequestDetail } from '@src/models/output/order/IOrderListResultModel';
 import { CustomFunctions } from '@src/utils/custom';
+import { DateHelper } from '@src/utils/dateHelper';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'reactstrap';
@@ -24,7 +25,6 @@ const Order: FunctionComponent<IPageProps> = () => {
         'http://127.0.0.1:2500/GetCurrentOrder'
       )
       .then((result) => {
-        debugger;
         setOrderList(result.data.data);
         // setLoading(false);
       });
@@ -74,13 +74,13 @@ const Order: FunctionComponent<IPageProps> = () => {
               <>
                 <div className="card card-style shadow-0 bg-highlight mb-1">
                   <button
-                    className="btn accordion-btn color-white no-effect"
+                    className="btn accordion-btn custom-accordion-btn  color-white no-effect"
                     data-bs-toggle="collapse"
                     data-bs-target={`#collapse${index}`}
                   >
                     <div style={{ marginBottom: '20px' }}>
                       شماره درخواست : <div>{requests.requestNumber}</div>
-                      <div style={{ marginRight: 'auto' }}>{requests.presenceTime}</div>
+                      <div style={{ marginRight: 'auto' }}>{DateHelper.isoDateTopersian(requests.presenceTime)}</div>
                       {requests.isUrgent ? (
                         <div style={{ border: '2px solid red', color: 'red', marginRight: '10px' }}>مراجعه فوری</div>
                       ) : (
@@ -91,7 +91,6 @@ const Order: FunctionComponent<IPageProps> = () => {
                     {requests.requestDetail &&
                       requests.requestDetail.length > 0 &&
                       requests.requestDetail.map((requestDetail: IOrderRequestDetail, index: number) => {
-                        debugger;
                         return (
                           <div style={{ marginBottom: '5px' }}>
                             <div className="col-6">
@@ -111,10 +110,10 @@ const Order: FunctionComponent<IPageProps> = () => {
                   <div
                     style={{ backgroundColor: 'white' }}
                     id={`collapse${index}`}
-                    className="collapse bg-theme accordion-open"
+                    className="collapse bg-theme custom-accordion-open"
                     data-bs-parent="#accordion-2"
                   >
-                    <Button onClick={() => navigate(`${URL_ORDER_DETAIL}?id=2`)} style={{ width: 'inherit' }}>
+                    <Button onClick={() => navigate(`${URL_ORDER_DETAIL}?id=${requests.id}`)} style={{ width: 'inherit' }}>
                       جزئیات بیشتر
                     </Button>
                   </div>

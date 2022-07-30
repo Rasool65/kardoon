@@ -15,6 +15,7 @@ import AddAddressModal from './AddAddressModal';
 import { useTranslation } from 'react-i18next';
 import EditAddressModal from './EditAddressModal';
 import { ConvertDate } from '@src/utils/ConvertDate';
+import { DateHelper } from '@src/utils/dateHelper';
 
 const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handleClickPrevious, handleSubmit }) => {
   const toast = useToast();
@@ -88,12 +89,6 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
     CustomFunctions();
   }, []);
 
-  var date = new Date();
-  var dd = parseInt(String(date.getDate()).padStart(2, '0'));
-  var mm = parseInt(String(date.getMonth() + 1).padStart(2, '0'));
-  var yyyy = parseInt(date.getFullYear().toString());
-  const today = ConvertDate.gregorian_to_jalali(yyyy, mm, dd);
-
   const { optionGroups, valueGroups } = shiftTime;
   return (
     <div id="page">
@@ -156,7 +151,7 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
                 </>
               ) : (
                 <>
-                  <p>در تاریخ {today}مراجعه فوری انجام خواهد شد</p>
+                  <p>در تاریخ {DateHelper.isoDateTopersian(new Date())}مراجعه فوری انجام خواهد شد</p>
                   {/* {toast.showInfo('در حالت مراجعه فوری در کوتاه ترین زمان اقدام انجام میشود.')} */}
                 </>
               )}
