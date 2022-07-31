@@ -36,8 +36,8 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
   const [audioDisplay, setAudioDisplay] = useState<string>('none');
   const [imageDisplay, setImageDisplay] = useState<string>('none');
   const [videoDisplay, setVideoDisplay] = useState<string>('none');
-  const [imgSrc, setImgSrc] = useState<any>();
-  const [imageFile, setImageFile] = useState<any>();
+  const [imgSrcList, setImgSrcList] = useState<any[]>([]);
+  const [imageFile, setImageFile] = useState<any[]>([]);
   const [audioFile, setAudioFile] = useState<any>();
   const [videoFile, setVideoFile] = useState<any>();
 
@@ -65,8 +65,8 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
       });
   };
   useEffect(() => {
-    GetBrands();
-    GetProblems();
+    // GetBrands();
+    // GetProblems();
   }, []);
 
   const {
@@ -104,13 +104,16 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
   }, [audioData]);
 
   const onImageFileChange = (e: any) => {
-    const reader = new FileReader(),
-      files = e.target.files;
+    const files = e.target.files;
+    files.length > 1 ? setImageFile(files) : setImageFile([...imageFile, files[0]]);
+
+    const reader = new FileReader();
     reader.onload = function () {
-      setImgSrc(reader.result);
+      setImgSrcList([...imgSrcList, reader.result]);
     };
-    setImageFile(files[0]);
+    // for (let i = 0; i < files.length; i++) {
     reader.readAsDataURL(files[0]);
+    // }
     setImageDisplay('flex');
   };
 
@@ -153,7 +156,6 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                     <>
                       <Select
                         noOptionsMessage={() => t('ListIsEmpty')}
-                        // onFocus={() => GetBrands()}
                         isClearable
                         className="select-city"
                         placeholder={t('SelectBrand')}
@@ -391,6 +393,7 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                         <img style={{ cursor: 'pointer' }} src="images/forTest/camera.png" width="46" height="46" alt="" />
                       </label>
                       <Input
+                        multiple
                         onChange={onImageFileChange}
                         style={{ display: 'none' }}
                         id="img"
@@ -410,20 +413,19 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                     }}
                   >
                     <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
-                      <p>تصویر ضمیمه شد.</p>
-                      <img
-                        // width="320"
-                        style={{ width: 'inherit' }}
-                        height="240"
-                        src={imgSrc}
-                      />
+                      {imgSrcList &&
+                        imgSrcList.length > 0 &&
+                        imgSrcList.map((item: any, index: number) => {
+                          return <img className="m-1" width="75" height="75" src={item} />;
+                        })}
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
                       <img
                         style={{ cursor: 'pointer' }}
                         src="images/forTest/delete.png"
                         onClick={() => {
-                          setImageFile(null);
+                          setImgSrcList([]);
+                          setImageFile([]);
                           setImageDisplay('none');
                         }}
                         width="46"
@@ -469,14 +471,13 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                     }}
                   >
                     <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
-                      <p>ویدئو ضمیمه شد.</p>
-                      <video id="video" width="320" height="240" controls>
+                      <video id="video" width="200" height="240" controls>
                         مرور گر شما از ویدیو پشتیبانی نمیکند
                       </video>
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
                       <img
-                        style={{ cursor: 'pointer' }}
+                        style={{ zIndex: '1', cursor: 'pointer' }}
                         src="images/forTest/delete.png"
                         onClick={() => {
                           setVideoFile(null);

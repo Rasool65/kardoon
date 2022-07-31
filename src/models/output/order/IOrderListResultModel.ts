@@ -12,6 +12,7 @@ export interface IOrderRequestDetail {
   statusId?: number;
   statusTitle?: string;
 }
+
 export enum IEStatusId {
   'bg-success',
   'bg-warning ',

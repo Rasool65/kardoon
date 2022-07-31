@@ -10,7 +10,7 @@ export interface IRequestDetail {
   serial: string;
   requestDescription: string;
   audioMessage?: any;
-  imageMessage?: any;
+  imageMessage?: any[];
   videoMessage?: any;
 }
 
@@ -27,7 +27,7 @@ export const RequestDetailModelSchema: yup.SchemaOf<IRequestDetail> = yup.object
   serial: yup.string().required(t('SerialRequired')),
   requestDescription: yup.string().required(t('RequestDescriptionRequired')),
   audioMessage: yup.object(),
-  imageMessage: yup.object(),
+  imageMessage: yup.array(),
   videoMessage: yup.object(),
   problemsId: yup.array(
     yup.object({

@@ -1,223 +1,298 @@
+import useHttpRequest from '@src/hooks/useHttpRequest';
 import Footer from '@src/layout/Footer';
 import FooterCard from '@src/layout/FooterCard';
 import HeaderCard from '@src/layout/HeaderCard';
+import { IOutputResult } from '@src/models/output/IOutputResult';
+import { IEStatusId, IOrderListResultModel } from '@src/models/output/order/IOrderListResultModel';
+import {
+  Iinvoice,
+  IOrderDetailListResultModel,
+  IProblemList,
+  IRequestList,
+  ITechnicians,
+} from '@src/models/output/orderDetail/IOrderDetailListResultModel';
 import { CustomFunctions } from '@src/utils/custom';
-import { FunctionComponent, useEffect } from 'react';
+import { DateHelper } from '@src/utils/dateHelper';
+import { UtilsHelper } from '@src/utils/GeneralHelpers';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
 import { URL_MY_ORDERS, URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '../../configs/urls';
 
 const OrderDetail: FunctionComponent<IPageProps> = () => {
+  const navigate = useNavigate();
   const search = useLocation().search;
   const id = new URLSearchParams(search).get('id');
   console.log(id); //12345
+  const httpRequest = useHttpRequest();
+  const [orderDetailList, setOrderDetailList] = useState<IOrderDetailListResultModel>();
+  const [imageModalVisible, setImageModalVisible] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string>();
 
-  const navigate = useNavigate();
+  const GetOrderDetailList = () => {
+    // setLoading(true);
+    httpRequest
+      .getRequest<IOutputResult<IOrderDetailListResultModel>>(
+        // `${APIURL_GET_ORDER_DETAILS}?id=${id}`
+        'http://127.0.0.1:2500/GetOrderDetail'
+      )
+      .then((result) => {
+        setOrderDetailList(result.data.data);
+        // setLoading(false);
+      });
+  };
+
   useEffect(() => {
+    GetOrderDetailList();
     CustomFunctions();
   }, []);
   return (
-    <>
-      {/* <div className="card header-card shape-rounded" data-card-height="150">
-        <div className="card-overlay bg-highlight opacity-95"></div>
-        <div className="card-overlay dark-mode-tint"></div>
-        <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
-      </div> */}
+    <div id="page">
       <Footer footerMenuVisible={true} activePage={1} />
-      <div id="page">
-        <div className="page-content">
-          <div className="page-title page-title-small">
-            <h2>
-              <a href="#" onClick={() => navigate(URL_MY_ORDERS)}>
-                <i className="fa fa-arrow-right mx-2"></i>
-                بازگشت
-              </a>
-            </h2>
-            {/* <a
+      <div className="page-content">
+        <div className="page-title page-title-small">
+          <h2>
+            <a href="#" onClick={() => navigate(URL_MY_ORDERS)}>
+              <i className="fa fa-arrow-right mx-2"></i>
+              بازگشت
+            </a>
+          </h2>
+          {/* <a
               href="#"
               data-menu="menu-main"
               className="bg-fade-highlight-light shadow-xl preload-img"
               data-src="images/avatars/5s.png"
             ></a> */}
-          </div>
-          <div className="card header-card shape-rounded" data-card-height="150">
-            <div className="card-overlay bg-highlight opacity-95"></div>
-            <div className="card-overlay dark-mode-tint"></div>
-            <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
-          </div>
+        </div>
+        <div className="card header-card shape-rounded" data-card-height="150">
+          <div className="card-overlay bg-highlight opacity-95"></div>
+          <div className="card-overlay dark-mode-tint"></div>
+          <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
+        </div>
 
-          <div className="card card-style header-order">
-            <div className="card-body">
-              <div className="">
-                <div className=" col-6">شماره درخواست:</div>
-                <div className=" col-6 justify-content-end">220706001</div>
-              </div>
-              <div className="">
-                <div className=" col-6">تهران-تهران</div>
-                <div className=" col-6 justify-content-end">شنبه 1401/5/15-عصر</div>
+        <div className="card card-style header-order">
+          <div className="card-body">
+            <div className="">
+              <div className=" col-6">شماره درخواست:</div>
+              <div className=" col-6 justify-content-end">{orderDetailList?.requestNumber}</div>
+            </div>
+            <div className="">
+              <div className=" col-6">{orderDetailList?.address}</div>
+              <div className=" col-6 justify-content-end">
+                {DateHelper.isoDateTopersian(orderDetailList?.presenceTime)}-{orderDetailList?.shiftTitle}
               </div>
             </div>
-          </div>
-          <div className="card card-style">
-            <div className="accordion mt-4" id="accordion-2">
-              <div className="card card-style shadow-0 bg-highlight mb-1">
-                <button
-                  className="btn custom-accordion-btn accordion-btn color-white no-effect"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapse5"
-                >
-                  <div>
-                    <div className=" col-6">تعمیر کولر گازی</div>
-                    <div className=" col-5">
-                      <span className="bg-success">بسته</span>
-                    </div>
-                    <div className=" col-1">
-                      <i className="fa fa-chevron-down font-10 accordion-icon"></i>
-                    </div>
-                  </div>
-                </button>
-                <div
-                  style={{ backgroundColor: 'white' }}
-                  id="collapse5"
-                  className="collapse bg-theme custom-accordion-open"
-                  data-bs-parent="#accordion-2"
-                >
-                  <div>
-                    <div>
-                      <div>
-                        <div className="col-6">برند</div>
-                        <div className="col-6">سامسونگ</div>
-                      </div>
-                      <div>
-                        <div className="col-6">مدل</div>
-                        <div className="col-6">RC745Z</div>
-                      </div>
-                      <div>
-                        <div className="col-6">سریال</div>
-                        <div className="col-6">ROWK72325</div>
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <p style={{ marginBottom: '0' }}>علت درخواست:</p>
-                      </div>
-                      <div>
-                        <ul>
-                          <li>عدم سرمایش کافی</li>
-                          <li>ریموت خراب است</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <audio
-                          src="https://irsv.upmusics.com/Downloads/Musics/Meysam%20Ebrahimi%20%7C%20Roshan%20Kon%20(320).mp3"
-                          controls
-                        />
-                      </div>
-                      <div style={{ display: 'block' }}>
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                          <video
-                            width="320"
-                            height="240"
-                            controls
-                            style={{ display: 'flex', alignContent: 'center' }}
-                            src="https://jadvalyab.ir/blog/wp-content/uploads/2020/04/%D8%A7%D8%B4%D9%88%D8%A7%D9%86.mp4?_=1"
-                          />
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'inherit', flexWrap: 'wrap' }}>
-                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
-                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
-                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
-                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
-                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
-                          <img className="m-2" src={require('/src/scss/images/ath.png')} />
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <p>نام تکنسین:</p>
-                      </div>
-                      <div>
-                        <div className="col-6">
-                          <p>حسین کعبی</p>
-                        </div>
-                        <div className="col-6">
-                          <i className="fa fa-phone"></i>
-                          <i className="fa fa-message"></i>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="col-6">
-                          <p>ناصر قاجاری</p>
-                        </div>
-                        <div className="col-6">
-                          <i className="fa fa-phone"></i>
-                          <i className="fa fa-message"></i>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* footer */}
-          <div
-            className="card "
-            style={{
-              height: '40vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <div className="area-1 m-3">
-              <div className="m-2" style={{ alignItems: 'inherit' }}>
-                <i className="fa fa-list"></i>
-                <p>شرح اقدامات</p>
-              </div>
-              <div className="">
-                <div className="">
-                  <div className="col-5">1- هزینه ایاب و ذهاب</div>
-                  <div className="col-2">70.000</div>
-                  <div className="col-2">
-                    <i className="fa fa-check"></i>
-                  </div>
-                  <div className="col-3">نقدی</div>
-                </div>
-                <div className="">
-                  <div className="col-5">2- تعمیر یخچال</div>
-                  <div className="col-2">100.000</div>
-                  <div className="col-2">
-                    <i className="fa fa-check"></i>
-                  </div>
-                  <div className="col-3">گارانتی</div>
-                </div>
-                <div className="">
-                  <div className="col-5">3- نصب تلیویزیون </div>
-                  <div className="col-2">
-                    <div style={{ textDecoration: 'line-through', color: 'red' }}>70.000</div>
-                    <span className="p-1">50.000</span>
-                  </div>
-                  <div className="col-2">
-                    <i className="fa fa-hourglass"></i>
-                  </div>
-                  <div className="col-3">
-                    <Button className="btn btn-success">پرداخت</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <section className="box4">
-              <Button className="btn btn-3d btn-m btn-full mb-3 rounded-xs text-uppercase font-700 shadow-s  border-blue-dark bg-blue-light">
-                تسویه حساب <span className="fa-fw select-all fas"></span>
-              </Button>
-            </section>
           </div>
         </div>
+        <div className="card card-style">
+          <div className="accordion mt-4" id="accordion-2">
+            <div className="card card-style shadow-0 bg-highlight mb-1">
+              {orderDetailList?.requestList &&
+                orderDetailList.requestList.length > 0 &&
+                orderDetailList.requestList.map((orderDetail: IRequestList, index: number) => {
+                  return (
+                    <>
+                      <button
+                        className="btn custom-accordion-btn accordion-btn color-white no-effect"
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#collapse${orderDetail.id}`}
+                      >
+                        <div>
+                          <div className=" col-6">{orderDetail.requestDescription}</div>
+                          <div className=" col-5">
+                            <span className={IEStatusId[orderDetail.statusId!]}>{orderDetail.statusTitle}</span>
+                          </div>
+                          <div className=" col-1">
+                            <i className="fa fa-chevron-down font-10 accordion-icon"></i>
+                          </div>
+                        </div>
+                      </button>
+                      <div
+                        style={{ backgroundColor: 'white' }}
+                        id={`collapse${orderDetail.id}`}
+                        className="collapse bg-theme custom-accordion-open"
+                        data-bs-parent="#accordion-2"
+                      >
+                        <div>
+                          <div>
+                            <div>
+                              <div className="col-6">برند</div>
+                              <div className="col-6">{orderDetail.brandName}</div>
+                            </div>
+                            <div>
+                              <div className="col-6">مدل</div>
+                              <div className="col-6">{orderDetail.model}</div>
+                            </div>
+                            <div>
+                              <div className="col-6">سریال</div>
+                              <div className="col-6">{orderDetail.serial}</div>
+                            </div>
+                          </div>
+                          <div>
+                            <div>
+                              <p style={{ marginBottom: '0' }}>علت درخواست:</p>
+                            </div>
+                            <div>
+                              <ul>
+                                {orderDetail.problemList &&
+                                  orderDetail.problemList.length > 0 &&
+                                  orderDetail.problemList.map((problems: IProblemList, index: number) => {
+                                    return <li>{problems.label}</li>;
+                                  })}
+                              </ul>
+                            </div>
+                            <div>
+                              <audio src={orderDetail.voiceMessageUrl} controls />
+                            </div>
+                            <div style={{ display: 'block' }}>
+                              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <video
+                                  width="320"
+                                  height="240"
+                                  controls
+                                  style={{ display: 'flex', alignContent: 'center' }}
+                                  src={orderDetail.videoMessageUrl}
+                                />
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'inherit', flexWrap: 'wrap' }}>
+                                {orderDetail.imageUrlList &&
+                                  orderDetail.imageUrlList.length > 0 &&
+                                  orderDetail.imageUrlList.map((imageAddress: string, index: number) => {
+                                    return (
+                                      <img
+                                        style={{ maxWidth: '85px', cursor: 'pointer' }}
+                                        className="m-2"
+                                        onClick={() => {
+                                          setImageUrl(imageAddress);
+                                          setImageModalVisible(true);
+                                        }}
+                                        src={imageAddress}
+                                      />
+                                    );
+                                  })}
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <div>
+                              <p>نام تکنسین:</p>
+                            </div>
+                            {orderDetail.technicians &&
+                              orderDetail.technicians.length &&
+                              orderDetail.technicians.map((technician: ITechnicians, index: number) => {
+                                return (
+                                  <div>
+                                    <div className="col-6">
+                                      <p>
+                                        {index + 1}- {technician.name}
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <i
+                                        className="fa fa-phone"
+                                        onClick={() => window.open(`tel:${technician.mobileNumber}`)}
+                                      ></i>
+                                      <i
+                                        className="fa fa-message"
+                                        onClick={() => window.open(`sms:${technician.mobileNumber}`)}
+                                      ></i>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })}
+            </div>
+          </div>
+        </div>
+        {/* invoice */}
+        <div
+          className="card "
+          style={{
+            height: '40vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <div className="area-1 m-3">
+            <div className="m-2" style={{ alignItems: 'inherit' }}>
+              <i className="fa fa-list"></i>
+              <h5 className="m-1">شرح اقدامات</h5>
+            </div>
+            <div className="">
+              {orderDetailList?.invoice &&
+                orderDetailList.invoice.length &&
+                orderDetailList.invoice.map((invoice: Iinvoice, index: number) => {
+                  return (
+                    <div className="col-12">
+                      <div className="col-5">
+                        {index + 1} -{invoice.title}
+                      </div>
+                      <div className={invoice.discount ? 'discount' : ''}>{UtilsHelper.threeDigitSeparator(invoice.price)}</div>
+                      {invoice.discount ? (
+                        <div className="p-1">{UtilsHelper.threeDigitSeparator(invoice.priceAfterDiscount)}</div>
+                      ) : (
+                        ''
+                      )}
+                      <div className="col-2">
+                        <i className="fa fa-check"></i>
+                      </div>
+                      <div className="col-2">
+                        {invoice.status}
+                        <div> {!invoice.settlementStatus ? <Button>پرداخت</Button> : ''}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              {/* <div className="">
+                <div className="col-5">2- تعمیر یخچال</div>
+                <div className="col-2">100.000</div>
+                <div className="col-2">
+                  <i className="fa fa-check"></i>
+                </div>
+                <div className="col-3">گارانتی</div>
+              </div>
+              <div className="">
+                <div className="col-5">3- نصب تلیویزیون </div>
+                <div className="col-2">
+                  <div style={{ textDecoration: 'line-through', color: 'red' }}>70.000</div>
+                  <span className="p-1">50.000</span>
+                </div>
+                <div className="col-2">
+                  <i className="fa fa-hourglass"></i>
+                </div>
+                <div className="col-3">
+                  <Button className="btn btn-success">پرداخت</Button>
+                </div>
+              </div> */}
+            </div>
+          </div>
+          <section className="box4">
+            <Button className="btn btn-3d btn-m btn-full mb-3 rounded-xs text-uppercase font-700 shadow-s  border-blue-dark bg-blue-light">
+              تسویه حساب <span className="fa-fw select-all fas"></span>
+            </Button>
+          </section>
+        </div>
       </div>
-    </>
+      <div
+        className={`menu menu-box-modal rounded-m ${imageModalVisible ? 'menu-active' : ''}`}
+        style={{
+          backgroundImage: `url("${imageUrl}")`,
+          backgroundRepeat: 'round',
+          backgroundAttachment: 'fixed',
+          backgroundSize: 'cover',
+        }}
+        data-menu-height="cover"
+        data-menu-width="cover"
+        onClick={() => setImageModalVisible(false)}
+      />
+    </div>
   );
 };
 

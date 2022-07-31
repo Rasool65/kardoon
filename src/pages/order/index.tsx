@@ -40,9 +40,9 @@ const Order: FunctionComponent<IPageProps> = () => {
         <div className="page-title page-title-small">
           <h2>
             <a href="#" data-back-button>
-              <i className="fa fa-arrow-right"></i>
+              <i className="fa fa-arrow-right mx-2"></i>
+              بازگشت
             </a>
-            بازگشت
           </h2>
           {/* <a
               href="#"

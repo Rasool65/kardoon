@@ -71,7 +71,13 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
       formData.append('serial', requestDetail[i].serial);
       formData.append('requestDescription', requestDetail[i].requestDescription);
       if (requestDetail[i].audioMessage) formData.append('audioMessage', requestDetail[i].audioMessage);
-      if (requestDetail[i].imageMessage != undefined) formData.append('imageMessage', requestDetail[i].imageMessage!);
+
+      // if (requestDetail[i].imageMessage != undefined) formData.append('imageMessage', requestDetail[i].imageMessage!);
+      if (requestDetail[i].imageMessage && requestDetail[i].imageMessage?.length! > 0)
+        requestDetail[i].imageMessage?.forEach((e) => {
+          formData.append('imageMessage', e.requestDetail[i].imageMessage);
+        });
+
       if (requestDetail[i].videoMessage) formData.append('videoMessage', requestDetail[i].videoMessage);
     }
     if (formData) {

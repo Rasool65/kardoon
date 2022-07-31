@@ -322,6 +322,10 @@
                   }
                   &:nth-of-type(4){
                       justify-content: center;
+                      >i{
+                          font-size: 30px;
+                          color: rgb(3, 187, 0);
+                      }
                   }
               }
 
@@ -330,3 +334,7 @@
   }
 }
 
+.discount{
+    text-decoration: line-through;
+     color: red;
+}
