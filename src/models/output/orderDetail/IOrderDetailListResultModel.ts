@@ -6,11 +6,11 @@ export interface IOrderDetailListResultModel {
   shiftTitle?: string;
   shiftId?: number;
   address?: string;
-  requestList?: IRequestList[];
+  details?: IDetails[];
   invoice?: Iinvoice[];
 }
 
-export interface IRequestList {
+export interface IDetails {
   id?: number;
   requestDescription?: string;
   statusId?: number;

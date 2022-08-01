@@ -19,7 +19,6 @@ import { useRecorder } from '@src/hooks/useRecorder';
 import { IProductProblemsResultModel } from '@src/models/output/requestDetail/IProductProblemsResultModel';
 
 const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleClickNext }) => {
-  let brands: any[] = [];
   let { audioData, audioURL, isRecording, startRecording, stopRecording } = useRecorder();
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const navigate = useNavigate();
@@ -42,15 +41,25 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
   const [videoFile, setVideoFile] = useState<any>();
 
   const GetBrands = () => {
-    !!state
-      ? httpRequest
-          .getRequest<IOutputResult<IBrandResultModel>>(
-            `${APIURL_GET_BRANDS}?CityId=${cityId}&ProductId=${state.ProductId}&ServiceTypeId=${state.ServiceTypeId}`
-          )
-          .then((result) => {
-            setBrandList(result.data.data);
-          })
-      : navigate(URL_MAIN);
+    setBrandList([
+      {
+        label: 'Snowa',
+        value: 1,
+      },
+      {
+        label: 'LG',
+        value: 2,
+      },
+    ]);
+    // !!state
+    //   ? httpRequest
+    //       .getRequest<IOutputResult<IBrandResultModel>>(
+    //         `${APIURL_GET_BRANDS}?CityId=${cityId}&ProductId=${state.ProductId}&ServiceTypeId=${state.ServiceTypeId}`
+    //       )
+    //       .then((result) => {
+    //         setBrandList(result.data.data);
+    //       })
+    //   : navigate(URL_MAIN);
   };
 
   const GetProblems = () => {
@@ -65,8 +74,8 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
       });
   };
   useEffect(() => {
-    // GetBrands();
-    // GetProblems();
+    GetBrands();
+    GetProblems();
   }, []);
 
   const {
@@ -90,6 +99,13 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
       audioMessage: audioFile,
       imageMessage: imageFile,
       videoMessage: videoFile,
+      attributes: [
+        {
+          attributeId: 1,
+          attributeValue: 'string',
+          attributeValueId: 2,
+        },
+      ],
     };
 
     handleClickNext(body);
@@ -111,9 +127,7 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
     reader.onload = function () {
       setImgSrcList([...imgSrcList, reader.result]);
     };
-    // for (let i = 0; i < files.length; i++) {
     reader.readAsDataURL(files[0]);
-    // }
     setImageDisplay('flex');
   };
 
@@ -386,14 +400,13 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                     }}
                   >
                     <Col xs={9} style={{ textAlign: 'right', padding: '0 12px 0 2px' }}>
-                      در صورت نیاز می توانید تصویری را بارگذاری نمایید
+                      در صورت نیاز می توانید تصاویری را بارگذاری نمایید
                     </Col>
                     <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
                       <label htmlFor="img">
                         <img style={{ cursor: 'pointer' }} src="images/forTest/camera.png" width="46" height="46" alt="" />
                       </label>
                       <Input
-                        multiple
                         onChange={onImageFileChange}
                         style={{ display: 'none' }}
                         id="img"

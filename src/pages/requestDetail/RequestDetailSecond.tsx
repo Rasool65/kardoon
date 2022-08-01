@@ -17,7 +17,7 @@ import EditAddressModal from './EditAddressModal';
 import { ConvertDate } from '@src/utils/ConvertDate';
 import { DateHelper } from '@src/utils/dateHelper';
 
-const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handleClickPrevious, handleSubmit }) => {
+const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handleClickPrevious, handleSubmit, isLoading }) => {
   const toast = useToast();
   const [selectDate, setSelectDate] = useState<string>('');
   const [addressList, setAddressList] = useState<IAddressesResultModel[]>();
@@ -261,11 +261,14 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
                   presenceShift: shift,
                   isUrgent: isUrgent,
                 };
+                isUrgent &&
+                  //  delete body.presenceDate &&
+                  delete body.presenceShift;
                 handleSubmit(body);
               }}
               className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700"
             >
-              تکمیل ثبت سفارش
+              {isLoading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : 'تکمیل ثبت سفارش'}
             </div>
           </div>
           <div className="col-6">

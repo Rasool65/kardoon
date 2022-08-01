@@ -12,6 +12,7 @@ export interface IRequestDetail {
   audioMessage?: any;
   imageMessage?: any[];
   videoMessage?: any;
+  attributes: IAttributes[];
 }
 
 export const RequestDetailModelSchema: yup.SchemaOf<IRequestDetail> = yup.object({
@@ -35,8 +36,14 @@ export const RequestDetailModelSchema: yup.SchemaOf<IRequestDetail> = yup.object
       label: yup.string(),
     })
   ),
+  attributes: yup.array(),
 });
 
+export interface IAttributes {
+  attributeId: number;
+  attributeValue: string;
+  attributeValueId: number;
+}
 export interface IBrandSelectModel {
   label: string;
   value: number;

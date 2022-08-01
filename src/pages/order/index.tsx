@@ -1,14 +1,21 @@
+import {
+  APIURL_GET_CURRENT_CONSUMER_REQUEST,
+  APIURL_GET_PREVIOUS_CONSUMER_REQUEST,
+  APIURL_GET_SERVICES,
+} from '@src/configs/apiConfig/apiUrls';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import Footer from '@src/layout/Footer';
 import FooterCard from '@src/layout/FooterCard';
 import HeaderCard from '@src/layout/HeaderCard';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IEStatusId, IOrderListResultModel, IOrderRequestDetail } from '@src/models/output/order/IOrderListResultModel';
+import { RootStateType } from '@src/redux/Store';
 import { CustomFunctions } from '@src/utils/custom';
 import { DateHelper } from '@src/utils/dateHelper';
 import { FunctionComponent, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Button } from 'reactstrap';
+import { Button, Spinner } from 'reactstrap';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
 import { URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '../../configs/urls';
 
@@ -16,17 +23,25 @@ const Order: FunctionComponent<IPageProps> = () => {
   const navigate = useNavigate();
   const httpRequest = useHttpRequest();
   const [orderList, setOrderList] = useState<any>([]);
+  const userId = useSelector((state: RootStateType) => state.authentication.userData?.userId);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const GetCurrentOrders = () => {
-    // setLoading(true);
+    setLoading(true);
     httpRequest
-      .getRequest<IOutputResult<IOrderListResultModel[]>>(
-        // `${APIURL_GET_SERVICES}?CityId=${cityId}`
-        'http://127.0.0.1:2500/GetCurrentOrder'
-      )
+      .getRequest<IOutputResult<IOrderListResultModel[]>>(`${APIURL_GET_CURRENT_CONSUMER_REQUEST}?UserId=${userId}`)
       .then((result) => {
         setOrderList(result.data.data);
-        // setLoading(false);
+        setLoading(false);
+      });
+  };
+  const GetPreviousOrders = () => {
+    setLoading(true);
+    httpRequest
+      .getRequest<IOutputResult<IOrderListResultModel[]>>(`${APIURL_GET_PREVIOUS_CONSUMER_REQUEST}?UserId=${userId}`)
+      .then((result) => {
+        setOrderList(result.data.data);
+        setLoading(false);
       });
   };
 
@@ -64,10 +79,20 @@ const Order: FunctionComponent<IPageProps> = () => {
             justifyContent: 'space-around',
           }}
         >
-          <button className="btn btn-success mb-5">سفارشات جاری</button>
-          <button className="btn btn-success mb-5 float-end">سفارشات قبلی</button>
+          <button className="btn btn-success mb-5" onClick={GetCurrentOrders}>
+            سفارشات جاری
+          </button>
+          <button className="btn btn-success mb-5 float-end" onClick={GetPreviousOrders}>
+            سفارشات قبلی
+          </button>
         </div>
-        {orderList &&
+
+        {loading ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '120px' }}>
+            <Spinner style={{ width: '5rem', height: '5rem' }} />
+          </div>
+        ) : (
+          orderList &&
           orderList.length > 0 &&
           orderList.map((requests: IOrderListResultModel, index: number) => {
             return (
@@ -113,14 +138,18 @@ const Order: FunctionComponent<IPageProps> = () => {
                     className="collapse bg-theme custom-accordion-open"
                     data-bs-parent="#accordion-2"
                   >
-                    <Button onClick={() => navigate(`${URL_ORDER_DETAIL}?id=${requests.id}`)} style={{ width: 'inherit' }}>
+                    <Button
+                      onClick={() => navigate(`${URL_ORDER_DETAIL}?id=${requests.requestNumber}`)}
+                      style={{ width: 'inherit' }}
+                    >
                       جزئیات بیشتر
                     </Button>
                   </div>
                 </div>
               </>
             );
-          })}
+          })
+        )}
 
         {/* End loop */}
       </div>

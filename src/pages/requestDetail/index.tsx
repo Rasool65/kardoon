@@ -36,6 +36,7 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const httpRequest = useHttpRequest(RequestDataType.formData);
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [CurrentStep, setCurrentStep] = useState(steps[activeStep]);
   const [requestDetail, setRequestDetail] = useState<IRequestDetail[]>([]);
 
@@ -58,40 +59,55 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
     formData.append('isUrgent', body.isUrgent.toString());
 
     for (var i = 0; i < requestDetail.length; i++) {
-      if (requestDetail[i]?.serviceTypeId) formData.append('serviceTypeId', requestDetail[i].serviceTypeId!.toString());
+      if (requestDetail[i]?.serviceTypeId)
+        formData.append(`requestDetail[${i}].serviceTypeId`, requestDetail[i].serviceTypeId!.toString());
       if (requestDetail[i]?.productCategoryId)
         if (requestDetail[i]?.problemsId?.length! > 0) {
           requestDetail[i].problemsId?.forEach((e) => {
-            formData.append('problemId', e.value?.toString()!);
+            formData.append(`requestDetail[${i}].problemId`, e.value?.toString()!);
           });
         }
-      formData.append('productCategoryId', requestDetail[i].productCategoryId!.toString());
-      formData.append('brandId', requestDetail[i].brandId.value.toString());
-      formData.append('model', requestDetail[i].model);
-      formData.append('serial', requestDetail[i].serial);
-      formData.append('requestDescription', requestDetail[i].requestDescription);
-      if (requestDetail[i].audioMessage) formData.append('audioMessage', requestDetail[i].audioMessage);
-
-      // if (requestDetail[i].imageMessage != undefined) formData.append('imageMessage', requestDetail[i].imageMessage!);
-      if (requestDetail[i].imageMessage && requestDetail[i].imageMessage?.length! > 0)
-        requestDetail[i].imageMessage?.forEach((e) => {
-          formData.append('imageMessage', e.requestDetail[i].imageMessage);
+      if (requestDetail[i]?.attributes?.length! > 0) {
+        requestDetail[i].attributes?.forEach((e) => {
+          formData.append(`requestDetail[${i}].attributes[0].attributeId`, e.attributeId?.toString()!);
+          formData.append(`requestDetail[${i}].attributes[0].attributeValue`, e.attributeValue?.toString()!);
+          formData.append(`requestDetail[${i}].attributes[0].attributeValueId`, e.attributeValueId?.toString()!);
         });
-
-      if (requestDetail[i].videoMessage) formData.append('videoMessage', requestDetail[i].videoMessage);
+      }
+      formData.append(`requestDetail[${i}].productCategoryId`, requestDetail[i].productCategoryId!.toString());
+      formData.append(`requestDetail[${i}].brandId`, requestDetail[i].brandId.value.toString());
+      formData.append(`requestDetail[${i}].model`, requestDetail[i].model);
+      formData.append(`requestDetail[${i}].serial`, requestDetail[i].serial);
+      formData.append(`requestDetail[${i}].requestDescription`, requestDetail[i].requestDescription);
+      if (requestDetail[i].audioMessage) formData.append(`requestDetail[${i}].audioMessage`, requestDetail[i].audioMessage);
+      if (requestDetail[i].imageMessage != undefined && requestDetail[i].imageMessage?.length! > 0)
+        requestDetail[i].imageMessage?.forEach((imageFile: any) => {
+          console.log(requestDetail[i].imageMessage);
+          formData.append(`requestDetail[${i}].imageMessage`, imageFile);
+        });
+      if (requestDetail[i].videoMessage) formData.append(`requestDetail[${i}].videoMessage`, requestDetail[i].videoMessage);
     }
     if (formData) {
+      setIsLoading(true);
       httpRequest
         .postRequest<IOutputResult<ICreateRequestResultModel>>(APIURL_POST_CREATE_REQUEST, formData)
         .then((result) => {
           toast.showSuccess(result.data.message);
+          setIsLoading(false);
         })
-        .finally(() => {});
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   };
   return (
     <>
-      <CurrentStep.Component handleClickNext={onClickNext} handleClickPrevious={onClickPrevious} handleSubmit={handleSubmit} />
+      <CurrentStep.Component
+        handleClickNext={onClickNext}
+        handleClickPrevious={onClickPrevious}
+        handleSubmit={handleSubmit}
+        isLoading={isLoading}
+      />
     </>
   );
 };
