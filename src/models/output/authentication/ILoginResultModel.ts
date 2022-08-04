@@ -35,5 +35,11 @@ export interface IUserModel {
   userId: number;
   userName: string;
   profile: IProfileUser;
-  roles: string[];
+  roles: IUserRoles[];
+}
+
+interface IUserRoles {
+  id: number;
+  name: string;
+  normalizedName: string;
 }

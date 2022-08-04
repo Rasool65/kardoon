@@ -30,6 +30,7 @@ export const APIURL_POST_DELETE_USER_ADDRESS = '/UserManagement/DeleteUserAddres
 export const APIURL_PUT_UPDATE_USER_ADDRESS = '/UserManagement/UpdateUserAddress';
 //REQUEST DETAIL
 export const APIURL_GET_PROBLEM_LIST = '/ProductCategory/GetProductCategoryProblemList';
+export const APIURL_GET_PRODUCTS_ATTRIBUTES = '/ProductCategory/GetProductAttributes';
 //ORDERS
 export const APIURL_GET_CURRENT_CONSUMER_REQUEST = '/Request/GetCurrentConsumerRequestList';
 export const APIURL_GET_PREVIOUS_CONSUMER_REQUEST = '/Request/GetPreviousConsumerRequestList';

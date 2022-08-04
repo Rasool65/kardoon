@@ -11,7 +11,7 @@ import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseRe
 import { useTranslation } from 'react-i18next';
 import { ICategory } from '@src/models/output/productCategory/ICategory';
 import { CustomFunctions } from '@src/utils/custom';
-import { URL_PRODUCTS } from './../../configs/urls';
+import { URL_CITY, URL_MAIN, URL_PRODUCTS } from './../../configs/urls';
 
 import Header from './Header';
 import { useSelector } from 'react-redux';
@@ -19,8 +19,14 @@ import { RootStateType } from '@src/redux/Store';
 import { Spinner } from 'reactstrap';
 
 const Category: FunctionComponent<IPageProps> = (props) => {
-  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const navigate = useNavigate();
+  const auth = useSelector((state: RootStateType) => state.authentication.isAuthenticate);
+  const cityId = auth
+    ? useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId)
+    : localStorage.getItem('city')
+    ? JSON.parse(localStorage.getItem('city')!).value
+    : navigate(URL_CITY);
+
   const [advertise, setAdvertise] = useState<any>([]);
   const [categories, setCategories] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,25 +34,23 @@ const Category: FunctionComponent<IPageProps> = (props) => {
   const { t }: any = useTranslation();
   const { state }: any = useLocation();
   const GetAdvertise = () => {
-    httpRequest
-      .getRequest<IOutputResult<IAdvertiseResultModel[]>>(
-        APIURL_GET_ADVERTISE
-        // 'http://127.0.0.1:2500/GetAdvertise'
-      )
-      .then((result) => {
-        setAdvertise(result.data.data);
-      });
+    httpRequest.getRequest<IOutputResult<IAdvertiseResultModel[]>>(APIURL_GET_ADVERTISE).then((result) => {
+      setAdvertise(result.data.data);
+    });
   };
 
   const GetCategories = () => {
-    setLoading(true);
-    httpRequest
-      .getRequest<IOutputResult<ICategory>>(`${APIURL_GET_CATEGORIES}/?CityId=${cityId}&ServiceTypeId=${state.ServiceTypeId}`)
-      .then((result) => {
-        setCategories(result.data.data);
-        setLoading(false);
-      })
-      .finally(() => setLoading(false));
+    debugger;
+    state && state.ServiceTypeId
+      ? (setLoading(true),
+        httpRequest
+          .getRequest<IOutputResult<ICategory>>(`${APIURL_GET_CATEGORIES}/?CityId=${cityId}&ServiceTypeId=${state.ServiceTypeId}`)
+          .then((result) => {
+            setCategories(result.data.data);
+            setLoading(false);
+          })
+          .finally(() => setLoading(false)))
+      : navigate(URL_MAIN);
   };
 
   useEffect(() => {

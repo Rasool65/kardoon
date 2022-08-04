@@ -1,5 +1,6 @@
 export interface IRequestDetailPageProp {
-  handleClickNext?: any;
+  handleClickNextToFirst?: any;
+  handleClickNextToSecond?: any;
   handleClickPrevious?: any;
   handleSubmit?: any;
   isLoading?: boolean;

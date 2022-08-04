@@ -24,14 +24,14 @@ import RequestDetail from '@src/pages/requestDetail';
 import OrderDetail from '@src/pages/orderDetail';
 
 const routes: IRoute[] = [
-  {
-    path: '/',
-    component: Main,
-    type: RouteType.private,
-    props: {
-      title: 'صفحه اصلی',
-    },
-  },
+  // {
+  //   path: '/',
+  //   component: Main,
+  //   type: RouteType.public,
+  //   props: {
+  //     title: 'صفحه اصلی',
+  //   },
+  // },
   {
     path: URL_LOGIN,
     component: Login,
@@ -48,22 +48,22 @@ const routes: IRoute[] = [
       title: 'حساب کاربری',
     },
   },
-  {
-    path: URL_CATEGORIES,
-    component: Category,
-    type: RouteType.private,
-    props: {
-      title: 'دسته بندی ها',
-    },
-  },
-  {
-    path: URL_PRODUCTS,
-    component: Products,
-    type: RouteType.private,
-    props: {
-      title: 'محصولات',
-    },
-  },
+  // {
+  //   path: URL_CATEGORIES,
+  //   component: Category,
+  //   type: RouteType.private,
+  //   props: {
+  //     title: 'دسته بندی ها',
+  //   },
+  // },
+  // {
+  //   path: URL_PRODUCTS,
+  //   component: Products,
+  //   type: RouteType.private,
+  //   props: {
+  //     title: 'محصولات',
+  //   },
+  // },
   {
     path: '/test',
     component: test,
@@ -75,7 +75,7 @@ const routes: IRoute[] = [
   {
     path: URL_CITY,
     component: City,
-    type: RouteType.private,
+    type: RouteType.public,
     props: {
       title: 'انتخاب شهر',
     },

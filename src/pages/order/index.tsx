@@ -46,8 +46,8 @@ const Order: FunctionComponent<IPageProps> = () => {
   };
 
   useEffect(() => {
-    GetCurrentOrders();
     CustomFunctions();
+    GetCurrentOrders();
   }, []);
   return (
     <div id="page">

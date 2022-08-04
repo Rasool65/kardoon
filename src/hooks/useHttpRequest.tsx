@@ -68,7 +68,11 @@ const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
           ...config,
         });
         if (res.status >= 200 && res.status <= 204) resolve(res);
-        else {
+        else if (res.status == 401 && delayBetweenErrors > 500) {
+          toast.showError('لطفا مجدد وارد حساب کاربری خود شوید');
+          authToken.deleteLogoutToken();
+          navigate(URL_LOGIN);
+        } else {
           toast.showError(res.data.message);
           if (onError) onError(res);
           reject(res);
@@ -91,7 +95,11 @@ const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
           data: body,
         });
         if (res.status >= 200 && res.status <= 204) resolve(res);
-        else {
+        else if (res.status == 401 && delayBetweenErrors > 500) {
+          toast.showError('لطفا مجدد وارد حساب کاربری خود شوید');
+          authToken.deleteLogoutToken();
+          navigate(URL_LOGIN);
+        } else {
           toast.showError(res.data.message);
           if (onError) onError(res);
           reject(res);
@@ -113,7 +121,11 @@ const useHttpRequest = (dataType: RequestDataType = RequestDataType.json) => {
           },
         });
         if (res.status >= 200 && res.status <= 204) resolve(res);
-        else {
+        else if (res.status == 401 && delayBetweenErrors > 500) {
+          toast.showError('لطفا مجدد وارد حساب کاربری خود شوید');
+          authToken.deleteLogoutToken();
+          navigate(URL_LOGIN);
+        } else {
           toast.showError(res.data.message);
           if (onError) onError(res);
           reject(res);

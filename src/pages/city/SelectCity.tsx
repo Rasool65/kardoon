@@ -18,6 +18,7 @@ import { ICitiesResultModel } from '@src/models/output/countryDivision/ICitiesRe
 
 const SelectCity: FunctionComponent = (props) => {
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
+  const auth = useSelector((state: RootStateType) => state.authentication.isAuthenticate);
   const [result, setResult] = useState<any>();
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
@@ -57,7 +58,10 @@ const SelectCity: FunctionComponent = (props) => {
         GetCitiesList(e[0].value);
         break;
       case 2:
-        UpdateResidenceCity(userData?.userId ? userData.userId : 0, e[1].value);
+        auth
+          ? UpdateResidenceCity(userData?.userId ? userData.userId : 0, e[1].value)
+          : (localStorage.setItem('city', JSON.stringify(e[1])), navigate(URL_MAIN), history.go(0));
+
         break;
     }
   };
@@ -72,7 +76,11 @@ const SelectCity: FunctionComponent = (props) => {
         onChange={(e: any) => {
           onchange(e);
         }}
-        placeholder={userData?.profile.residenceCityName}
+        placeholder={
+          auth
+            ? userData?.profile.residenceCityName
+            : localStorage.getItem('city') && JSON.parse(localStorage.getItem('city')!).label
+        }
         options={result}
         isSearchable={true}
         isMulti

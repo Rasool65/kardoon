@@ -8,17 +8,16 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IRequestDetailPageProp, IRequestDetailSecond } from './IRequestDetailProp';
 import WeekPicker from '@src/components/weekPicker/WeekPicker';
 import { CustomFunctions } from '@src/utils/custom';
-import { useToast } from '@src/hooks/useToast';
 import Picker from 'react-mobile-picker';
 import { IAddressesResultModel } from '@src/models/output/requestDetail/IAddressesResultModel';
 import AddAddressModal from './AddAddressModal';
 import { useTranslation } from 'react-i18next';
 import EditAddressModal from './EditAddressModal';
-import { ConvertDate } from '@src/utils/ConvertDate';
 import { DateHelper } from '@src/utils/dateHelper';
+import { useNavigate } from 'react-router-dom';
 
 const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handleClickPrevious, handleSubmit, isLoading }) => {
-  const toast = useToast();
+  // const toast = useToast();
   const [selectDate, setSelectDate] = useState<string>('');
   const [addressList, setAddressList] = useState<IAddressesResultModel[]>();
   const [currentAddress, setCurrentAddress] = useState<IAddressesResultModel>();
@@ -29,7 +28,7 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
   const [editAddressModalVisible, setEditAddressModalVisible] = useState<boolean>(false);
   const [dimmerBackground, setDimmerBackground] = useState<boolean>(false);
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
-  const [shift, setShift] = useState<number>();
+  const [shift, setShift] = useState<number>(1);
   const [shiftTime, setShiftTime] = useState<any>({
     isUrgent: isUrgent,
     valueGroups: { title: 'ظهر ۱۶-۱۲' },
@@ -67,7 +66,7 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
       });
   };
   const chbOnChange = (e: any) => {
-    e.target.checked ? (setIsUrgent(true), setShift(undefined)) : setIsUrgent(false);
+    e.target.checked ? setIsUrgent(true) : setIsUrgent(false);
   };
   const deleteAddress = (refKey: number) => {
     setLoading(true);
@@ -80,9 +79,6 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
       setLoading(false);
     });
   };
-  // useEffect(() => {
-  //   CustomFunctions();
-  // }, [refKey]);
 
   useEffect(() => {
     GetAddresses();
@@ -317,7 +313,11 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
           </div>
         </div>
       </div>
-      <EditAddressModal CurrentAddress={currentAddress!} EditAddressModalVisible={editAddressModalVisible} />
+      <EditAddressModal
+        GetAddresses={GetAddresses}
+        CurrentAddress={currentAddress!}
+        EditAddressModalVisible={editAddressModalVisible}
+      />
       <AddAddressModal GetAddresses={GetAddresses} />
     </div>
   );

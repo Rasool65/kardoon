@@ -16,6 +16,7 @@ import { RootStateType } from '@src/redux/Store';
 import MainMenuModal from './MainMenuModal';
 import { URL_CATEGORIES } from '@src/configs/urls';
 import { Spinner } from 'reactstrap';
+import { URL_CITY } from './../../configs/urls';
 
 const Main: FunctionComponent<IPageProps> = (props) => {
   const [services, setServices] = useState<any>();
@@ -24,7 +25,13 @@ const Main: FunctionComponent<IPageProps> = (props) => {
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
   const navigate = useNavigate();
-  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
+  const auth = useSelector((state: RootStateType) => state.authentication.isAuthenticate);
+
+  const cityId = auth
+    ? useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId)
+    : localStorage.getItem('city')
+    ? JSON.parse(localStorage.getItem('city')!).value
+    : navigate(URL_CITY);
 
   const GetServices = (cityId: number) => {
     setLoading(true);
@@ -52,7 +59,7 @@ const Main: FunctionComponent<IPageProps> = (props) => {
 
   return (
     <>
-      <MainMenuModal />
+      {auth && <MainMenuModal />}
       <div id="page">
         {/* <div
           id="menu-main"

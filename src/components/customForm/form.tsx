@@ -1,10 +1,5 @@
-import JSONForm, {
-  AjvError,
-  IChangeEvent,
-  ISubmitEvent,
-  UiSchema
-} from '@rjsf/core'
-import type { JSONSchema7 } from 'json-schema'
+import JSONForm, { AjvError, IChangeEvent, ISubmitEvent, UiSchema } from '@rjsf/core';
+import type { JSONSchema7 } from 'json-schema';
 
 const schema: JSONSchema7 = {
   title: 'Todo',
@@ -12,32 +7,24 @@ const schema: JSONSchema7 = {
   required: ['title'],
   properties: {
     title: { type: 'string', title: 'Title', default: 'A new task' },
-    done: { type: 'boolean', title: 'Done?', default: false }
-  }
-}
+    done: { type: 'boolean', title: 'Done?', default: false },
+  },
+};
 
-const uiSchema: UiSchema = {}
+const uiSchema: UiSchema = {};
 
 export function Form() {
   const onSubmit = (event: ISubmitEvent<unknown>) => {
-    console.log('submit', event.formData)
-  }
+    console.log('submit', event.formData);
+  };
 
   const onChange = (event: IChangeEvent<unknown>) => {
-    console.log('change', event.formData)
-  }
+    console.log('change', event.formData);
+  };
 
   const onError = (errors: AjvError[]) => {
-    console.error(errors)
-  }
+    console.error(errors);
+  };
 
-  return (
-    <JSONForm
-      schema={schema}
-      uiSchema={uiSchema}
-      onSubmit={onSubmit}
-      onChange={onChange}
-      onError={onError}
-    />
-  )
+  return <JSONForm schema={schema} uiSchema={uiSchema} onSubmit={onSubmit} onChange={onChange} onError={onError} />;
 }

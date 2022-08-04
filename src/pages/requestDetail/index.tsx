@@ -11,6 +11,10 @@ import { IRequestDetail } from '@src/models/input/requestDetail/IRequestDetail';
 import { IRequestDetailSecond } from './IRequestDetailProp';
 import { ICreateRequestResultModel } from '@src/models/output/requestDetail/ICreateRequestResultModel';
 import { useToast } from '@src/hooks/useToast';
+import { ISubmitEvent } from '@rjsf/core';
+import RequestDetailZero from './RequestDetailZero';
+import { useNavigate } from 'react-router-dom';
+import { URL_MAIN } from '@src/configs/urls';
 
 export type ISteps = {
   id: number;
@@ -21,52 +25,60 @@ export type ISteps = {
 const steps: ISteps[] = [
   {
     id: 0,
+    name: 'فرم ساز',
+    Component: RequestDetailZero,
+  },
+  {
+    id: 1,
     name: 'اولیه',
     Component: RequestDetailFirst,
   },
   {
-    id: 1,
+    id: 2,
     name: 'تکمیلی',
     Component: RequestDetailConfirm,
   },
 ];
 
 const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
+  const navigate = useNavigate();
   const toast = useToast();
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const httpRequest = useHttpRequest(RequestDataType.formData);
-  const [activeStep, setActiveStep] = useState<number>(0);
+  const [activeStep, setActiveStep] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [CurrentStep, setCurrentStep] = useState(steps[activeStep]);
   const [requestDetail, setRequestDetail] = useState<IRequestDetail[]>([]);
+  const [formGenDetail, setFormGenDetail] = useState<ISubmitEvent<unknown>[]>([]);
 
-  const onClickNext = (data: IRequestDetail) => {
+  const onClickNextToFirst = (data: ISubmitEvent<unknown>) => {
+    setFormGenDetail([...formGenDetail, data]);
+    setCurrentStep(steps[activeStep + 1]);
+    setActiveStep(activeStep + 1);
+  };
+  const onClickNextToSecond = (data: IRequestDetail) => {
     setRequestDetail([...requestDetail, data]);
     setCurrentStep(steps[activeStep + 1]);
     setActiveStep(activeStep + 1);
   };
   const onClickPrevious = () => {
-    setCurrentStep(steps[activeStep - 1]);
-    setActiveStep(activeStep - 1);
+    setCurrentStep(steps[activeStep - 2]);
+    setActiveStep(activeStep - 2);
   };
   const handleSubmit = (body: IRequestDetailSecond) => {
-    debugger;
     var formData = new FormData();
     if (userData?.userId) formData.append('userId', userData.userId?.toString());
     if (body.presenceDate) formData.append('presenceDate', body.presenceDate?.toString());
     if (body.presenceShift) formData.append('presenceShift', body.presenceShift?.toString());
     if (body.refkey) formData.append('refkey', body.refkey?.toString());
     formData.append('isUrgent', body.isUrgent.toString());
-
+    for (var i = 0; i < formGenDetail.length; i++) {
+      formData.append(`formGenDetail[${i}]`, formGenDetail[i] ? JSON.stringify(formGenDetail[i].formData) : 'null');
+    }
     for (var i = 0; i < requestDetail.length; i++) {
       if (requestDetail[i]?.serviceTypeId)
         formData.append(`requestDetail[${i}].serviceTypeId`, requestDetail[i].serviceTypeId!.toString());
-      if (requestDetail[i]?.productCategoryId)
-        if (requestDetail[i]?.problemsId?.length! > 0) {
-          requestDetail[i].problemsId?.forEach((e) => {
-            formData.append(`requestDetail[${i}].problemId`, e.value?.toString()!);
-          });
-        }
+      // if (requestDetail[i]?.productCategoryId)
       if (requestDetail[i]?.attributes?.length! > 0) {
         requestDetail[i].attributes?.forEach((e) => {
           formData.append(`requestDetail[${i}].attributes[0].attributeId`, e.attributeId?.toString()!);
@@ -75,9 +87,6 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
         });
       }
       formData.append(`requestDetail[${i}].productCategoryId`, requestDetail[i].productCategoryId!.toString());
-      formData.append(`requestDetail[${i}].brandId`, requestDetail[i].brandId.value.toString());
-      formData.append(`requestDetail[${i}].model`, requestDetail[i].model);
-      formData.append(`requestDetail[${i}].serial`, requestDetail[i].serial);
       formData.append(`requestDetail[${i}].requestDescription`, requestDetail[i].requestDescription);
       if (requestDetail[i].audioMessage) formData.append(`requestDetail[${i}].audioMessage`, requestDetail[i].audioMessage);
       if (requestDetail[i].imageMessage != undefined && requestDetail[i].imageMessage?.length! > 0)
@@ -92,6 +101,7 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
       httpRequest
         .postRequest<IOutputResult<ICreateRequestResultModel>>(APIURL_POST_CREATE_REQUEST, formData)
         .then((result) => {
+          navigate(URL_MAIN);
           toast.showSuccess(result.data.message);
           setIsLoading(false);
         })
@@ -103,7 +113,8 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
   return (
     <>
       <CurrentStep.Component
-        handleClickNext={onClickNext}
+        handleClickNextToFirst={onClickNextToFirst}
+        handleClickNextToSecond={onClickNextToSecond}
         handleClickPrevious={onClickPrevious}
         handleSubmit={handleSubmit}
         isLoading={isLoading}

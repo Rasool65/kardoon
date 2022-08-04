@@ -12,17 +12,20 @@ import { CustomFunctions } from '@src/utils/custom';
 import { IProductsResultModel } from './../../models/output/products/IProductsResultModel';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-import { URL_MAIN, URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '@src/configs/urls';
+import { URL_CITY, URL_MAIN, URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '@src/configs/urls';
 import { IProductTypeResultModel } from '@src/models/output/products/IProductTypeResultModel';
 import { Spinner } from 'reactstrap';
 
 const Products: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
-  const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
+  const auth = useSelector((state: RootStateType) => state.authentication.isAuthenticate);
+  const cityId = auth
+    ? useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId)
+    : localStorage.getItem('city')
+    ? JSON.parse(localStorage.getItem('city')!).value
+    : navigate(URL_CITY);
   const [products, setProducts] = useState<any>();
-  const [deviceType, setDeviceType] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [deviceLoading, setDeviceLoading] = useState<boolean>(false);
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
   const { state }: any = useLocation();
@@ -41,18 +44,6 @@ const Products: FunctionComponent<IPageProps> = (props) => {
       : navigate(URL_MAIN);
   };
 
-  // const GetDeviceType = (ProductCategoryId: number) => {
-  //   setDeviceLoading(true);
-  //   httpRequest
-  //     .getRequest<IOutputResult<IProductTypeResultModel[]>>(
-  //       `${APIURL_GET_DEVICE_TYPE}?CityId=${cityId}&ProductCategoryId=${ProductCategoryId}&ServiceTypeId=${state.ServiceTypeId}`
-  //     )
-  //     .then((result) => {
-  //       setDeviceType(result.data.data);
-  //       setDeviceLoading(false);
-  //     });
-  // };
-
   useEffect(() => {
     GetProducts();
     document.title = props.title;
@@ -60,7 +51,7 @@ const Products: FunctionComponent<IPageProps> = (props) => {
 
   useEffect(() => {
     CustomFunctions();
-  }, [products, deviceType]);
+  }, [products]);
 
   const RecursiveComponent = ({ recProduct }: { recProduct: IProductsResultModel }) => {
     const hasSubProducts = recProduct.subProducts?.length! > 0;
@@ -81,7 +72,9 @@ const Products: FunctionComponent<IPageProps> = (props) => {
               <div className="pt-3 pb-3">
                 <p className="mb-0">
                   {hasSubProducts &&
-                    recProduct.subProducts?.map((item: IProductsResultModel) => <RecursiveComponent recProduct={item} />)}
+                    recProduct.subProducts?.map((item: IProductsResultModel, index: number) => (
+                      <RecursiveComponent recProduct={item} />
+                    ))}
                 </p>
               </div>
             </div>
