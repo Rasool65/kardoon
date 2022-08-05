@@ -1,26 +1,19 @@
+import { URL_LOGIN } from '@src/configs/urls';
+import { handleLogout } from '@src/redux/reducers/authenticationReducer';
 import { CustomFunctions } from '@src/utils/custom';
 import React, { FunctionComponent, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import SelectCity from '../city/SelectCity';
 import { IModalModel } from './../authentication/ModalModel';
 
 const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any) => {
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  //   const handleChangeCity = (e) => {
-  //     // console.log(e)
-  //   };
-
-  //   const showThemeColorModal = () => {
-  //     dispatch(ViewActions.showMainMenu(false));
-  //     dispatch(ViewActions.showThemeColorModal(true));
-  //   };
-
-  //   const closeMainMenu = () => {
-  //     dispatch(ViewActions.showMainMenu(false));
-  //   };
-  // useEffect(() => {
-  //   CustomFunctions();
-  // }, [mainMenuVisible]);
+  useEffect(() => {
+    CustomFunctions();
+  }, [mainMenuVisible]);
   return (
     <div
       id="menu-main"
@@ -47,31 +40,12 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
         <div className="border-right-0 pointer">
           <i className="fa font-12 color-blue2-dark fa-cog" />
         </div>
-        <div
-          className="border-right-0 pointer"
-          // onClick={(e) => closeMainMenu(e)}
-        >
+        <div className="border-right-0 pointer close-menu">
           <i className="fa font-12 color-red2-dark fa-times" />
         </div>
       </div>
 
-      <SelectCity
-      // theme={(theme) => ({
-      //   ...theme,
-      //   borderRadius: 0,
-      // })}
-      // className="select-city-menu"
-      // placeholder="انتخاب شهر"
-      // onChange={(e) => handleChangeCity(e)}
-      // options={options}
-      // isSearchable={true}
-      // onChange={() => {}}
-      // value={undefined}
-      // inputValue={''}
-      // onInputChange={() => {}}
-      // onMenuOpen={() => {}}
-      // onMenuClose={() => {}}
-      />
+      <SelectCity />
 
       <div className="menu-logo text-center">
         <a
@@ -203,7 +177,9 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
         <a
           href="#"
           className="close-menu"
-          // onClick={(e) => closeMainMenu(e)}
+          onClick={() => {
+            dispatch(handleLogout()), navigate(URL_LOGIN);
+          }}
         >
           <i
             data-feather="x"
@@ -212,7 +188,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
             data-feather-color="red2-dark"
             data-feather-bg="red2-fade-dark"
           />
-          <span>بستن منو</span>
+          <span>خروج</span>
           <i className="fa fa-circle" />
         </a>
       </div>
@@ -233,7 +209,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
         <a href="#" className="icon icon-xs rounded-s bg-whatsapp">
           <i className="fab fa-whatsapp" />
         </a>
-        <p className="mb-0 pt-3 font-10 opacity-30">تمامی حقوق برای کاردون محفوظ می باشد. ۱۴۰۰ – ۲۰۲۲</p>
+        <p className="mb-0 pt-3 font-10 opacity-30">تمامی حقوق برای کاردون محفوظ می باشد. ۱۴۰1 – ۲۰۲۲</p>
       </div>
     </div>
   );

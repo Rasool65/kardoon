@@ -16,7 +16,7 @@ import EditAddressModal from './EditAddressModal';
 import { DateHelper } from '@src/utils/dateHelper';
 import { useNavigate } from 'react-router-dom';
 
-const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handleClickPrevious, handleSubmit, isLoading }) => {
+const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handleClickMore, handleSubmit, isLoading }) => {
   // const toast = useToast();
   const [selectDate, setSelectDate] = useState<string>('');
   const [addressList, setAddressList] = useState<IAddressesResultModel[]>();
@@ -248,7 +248,7 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
         </div>
 
         <div className="row mb-2" style={{ padding: '0 25px 25px 25px' }}>
-          <div className="col-6">
+          <div className="col-12">
             <div
               onClick={(e) => {
                 const body: IRequestDetailSecond = {
@@ -265,16 +265,6 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
               className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700"
             >
               {isLoading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : 'تکمیل ثبت سفارش'}
-            </div>
-          </div>
-          <div className="col-6">
-            <div
-              onClick={(e) => {
-                handleClickPrevious();
-              }}
-              className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700"
-            >
-              افزودن محصول دیگر{' '}
             </div>
           </div>
         </div>

@@ -11,7 +11,7 @@ import { CustomFunctions } from '@src/utils/custom';
 import { IRequestDetail, RequestDetailModelSchema } from '@src/models/input/requestDetail/IRequestDetail';
 import { useRecorder } from '@src/hooks/useRecorder';
 
-const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleClickNextToSecond }) => {
+const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleClickNextToSecond, handleClickMore }) => {
   let { audioData, audioURL, isRecording, startRecording, stopRecording } = useRecorder();
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const { t }: any = useTranslation();
@@ -26,7 +26,7 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
   const [imageFile, setImageFile] = useState<any[]>([]);
   const [audioFile, setAudioFile] = useState<any>();
   const [videoFile, setVideoFile] = useState<any>();
-
+  const [more, setMore] = useState<boolean>(false);
   const {
     register,
     control,
@@ -51,7 +51,7 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
         },
       ],
     };
-    handleClickNextToSecond(body);
+    more ? handleClickMore(body) : handleClickNextToSecond(body);
   };
 
   useEffect(() => {
@@ -335,13 +335,26 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                     </Row>
                   </Container>
                 </div>
-                <Button
-                  type="submit"
-                  style={{ marginTop: '40px', width: '100%' }}
-                  className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0"
-                >
-                  ادامه
-                </Button>
+                <div className="flex-column" style={{ display: 'flex' }}>
+                  <Button
+                    type="submit"
+                    onClick={(e) => {
+                      setMore(true);
+                    }}
+                    className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700 m-1"
+                  >
+                    افزودن محصول دیگر{' '}
+                  </Button>
+                  <Button
+                    type="submit"
+                    onClick={() => {
+                      setMore(false);
+                    }}
+                    className="btn btn-full rounded-sm shadow-l bg-highlight btn-m font-900 text-uppercase mb-0 m-1"
+                  >
+                    ادامه
+                  </Button>
+                </div>
               </Form>
             </>
           </div>

@@ -1,7 +1,7 @@
 import { ComponentType, FunctionComponent, useState } from 'react';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
 import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { APIURL_POST_CREATE_REQUEST } from '@src/configs/apiConfig/apiUrls';
 import { IOutputResult } from '@src/models/output/IOutputResult';
@@ -15,6 +15,7 @@ import { ISubmitEvent } from '@rjsf/core';
 import RequestDetailZero from './RequestDetailZero';
 import { useNavigate } from 'react-router-dom';
 import { URL_MAIN } from '@src/configs/urls';
+import { handleAddRequest } from '@src/redux/reducers/requestReducer';
 
 export type ISteps = {
   id: number;
@@ -41,6 +42,7 @@ const steps: ISteps[] = [
 ];
 
 const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useToast();
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
@@ -52,20 +54,33 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
   const [formGenDetail, setFormGenDetail] = useState<ISubmitEvent<unknown>[]>([]);
 
   const onClickNextToFirst = (data: ISubmitEvent<unknown>) => {
-    setFormGenDetail([...formGenDetail, data]);
+    dispatch(handleAddRequest(data));
+    // setFormGenDetail([...formGenDetail, data]); bayad be redux esh ezafe beshe
     setCurrentStep(steps[activeStep + 1]);
     setActiveStep(activeStep + 1);
   };
   const onClickNextToSecond = (data: IRequestDetail) => {
-    setRequestDetail([...requestDetail, data]);
+    // setRequestDetail([...requestDetail, data]); bayad be redux esh ezafe beshe
     setCurrentStep(steps[activeStep + 1]);
     setActiveStep(activeStep + 1);
   };
-  const onClickPrevious = () => {
-    setCurrentStep(steps[activeStep - 2]);
-    setActiveStep(activeStep - 2);
+  const onClickMore = (data: IRequestDetail) => {
+    debugger;
+    // setRequestDetail([...requestDetail, data]); bayad be redux esh ezafe beshe
+    const Data = {
+      formGenDetail,
+      requestDetail,
+    };
+    dispatch(handleAddRequest(Data));
+    // save redux
+    navigate(URL_MAIN);
+    // setCurrentStep(steps[activeStep - 2]);
+    // setActiveStep(activeStep - 2);
   };
   const handleSubmit = (body: IRequestDetailSecond) => {
+    //1- request detail va formGen az redux load beshe
+    //2- set beshe tooye state
+    debugger;
     var formData = new FormData();
     if (userData?.userId) formData.append('userId', userData.userId?.toString());
     if (body.presenceDate) formData.append('presenceDate', body.presenceDate?.toString());
@@ -115,7 +130,7 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
       <CurrentStep.Component
         handleClickNextToFirst={onClickNextToFirst}
         handleClickNextToSecond={onClickNextToSecond}
-        handleClickPrevious={onClickPrevious}
+        handleClickMore={onClickMore}
         handleSubmit={handleSubmit}
         isLoading={isLoading}
       />
