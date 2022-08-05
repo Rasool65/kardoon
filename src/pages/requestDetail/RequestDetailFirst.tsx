@@ -43,13 +43,13 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
       audioMessage: audioFile,
       imageMessage: imageFile,
       videoMessage: videoFile,
-      attributes: [
-        {
-          attributeId: 1,
-          attributeValue: 'string',
-          attributeValueId: 2,
-        },
-      ],
+      // attributes: [
+      //   {
+      //     attributeId: 1,
+      //     attributeValue: 'string',
+      //     attributeValueId: 2,
+      //   },
+      // ],
     };
     more ? handleClickMore(body) : handleClickNextToSecond(body);
   };

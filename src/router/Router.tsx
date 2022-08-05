@@ -16,7 +16,6 @@ const Routers: FunctionComponent = () => {
     <BrowserRouter>
       <Routes>
         {routes.map((route, index) => {
-          debugger;
           return route.type == RouteType.all ? (
             //* all Route
             <Route key={index} path={route.path} element={<route.component />} />

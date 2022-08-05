@@ -1,4 +1,4 @@
-import { ComponentType, FunctionComponent, useState } from 'react';
+import { ComponentType, FunctionComponent, useEffect, useState } from 'react';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
 import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,7 +15,7 @@ import { ISubmitEvent } from '@rjsf/core';
 import RequestDetailZero from './RequestDetailZero';
 import { useNavigate } from 'react-router-dom';
 import { URL_MAIN } from '@src/configs/urls';
-import { handleAddRequest } from '@src/redux/reducers/requestReducer';
+import { handleAddRequest, handleResetRequest } from '@src/redux/reducers/requestReducer';
 
 export type ISteps = {
   id: number;
@@ -46,78 +46,72 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
   const navigate = useNavigate();
   const toast = useToast();
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
+  const request = useSelector((state: RootStateType) => state.Request);
   const httpRequest = useHttpRequest(RequestDataType.formData);
   const [activeStep, setActiveStep] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [CurrentStep, setCurrentStep] = useState(steps[activeStep]);
-  const [requestDetail, setRequestDetail] = useState<IRequestDetail[]>([]);
-  const [formGenDetail, setFormGenDetail] = useState<ISubmitEvent<unknown>[]>([]);
+  const [formGenDetail, setFormGenDetail] = useState<ISubmitEvent<unknown>>();
 
-  const onClickNextToFirst = (data: ISubmitEvent<unknown>) => {
-    dispatch(handleAddRequest(data));
-    // setFormGenDetail([...formGenDetail, data]); bayad be redux esh ezafe beshe
+  const onClickNextToFirst = (formGenDetail: ISubmitEvent<unknown>) => {
+    setFormGenDetail(formGenDetail);
     setCurrentStep(steps[activeStep + 1]);
     setActiveStep(activeStep + 1);
   };
-  const onClickNextToSecond = (data: IRequestDetail) => {
-    // setRequestDetail([...requestDetail, data]); bayad be redux esh ezafe beshe
-    setCurrentStep(steps[activeStep + 1]);
-    setActiveStep(activeStep + 1);
-  };
-  const onClickMore = (data: IRequestDetail) => {
-    debugger;
-    // setRequestDetail([...requestDetail, data]); bayad be redux esh ezafe beshe
-    const Data = {
-      formGenDetail,
-      requestDetail,
+  const onClickNextToSecond = (requestDetail: IRequestDetail) => {
+    const body = {
+      formGenDetail: formGenDetail,
+      requestDetail: requestDetail,
     };
-    dispatch(handleAddRequest(Data));
-    // save redux
+    dispatch(handleAddRequest(body));
+    setCurrentStep(steps[activeStep + 1]);
+    setActiveStep(activeStep + 1);
+  };
+  const onClickMore = (requestDetail: IRequestDetail) => {
+    const body = {
+      formGenDetail: formGenDetail,
+      requestDetail: requestDetail,
+    };
+    dispatch(handleAddRequest(body));
     navigate(URL_MAIN);
-    // setCurrentStep(steps[activeStep - 2]);
-    // setActiveStep(activeStep - 2);
   };
   const handleSubmit = (body: IRequestDetailSecond) => {
-    //1- request detail va formGen az redux load beshe
-    //2- set beshe tooye state
-    debugger;
     var formData = new FormData();
     if (userData?.userId) formData.append('userId', userData.userId?.toString());
     if (body.presenceDate) formData.append('presenceDate', body.presenceDate?.toString());
     if (body.presenceShift) formData.append('presenceShift', body.presenceShift?.toString());
     if (body.refkey) formData.append('refkey', body.refkey?.toString());
     formData.append('isUrgent', body.isUrgent.toString());
-    for (var i = 0; i < formGenDetail.length; i++) {
-      formData.append(`formGenDetail[${i}]`, formGenDetail[i] ? JSON.stringify(formGenDetail[i].formData) : 'null');
-    }
-    for (var i = 0; i < requestDetail.length; i++) {
-      if (requestDetail[i]?.serviceTypeId)
-        formData.append(`requestDetail[${i}].serviceTypeId`, requestDetail[i].serviceTypeId!.toString());
-      // if (requestDetail[i]?.productCategoryId)
-      if (requestDetail[i]?.attributes?.length! > 0) {
-        requestDetail[i].attributes?.forEach((e) => {
-          formData.append(`requestDetail[${i}].attributes[0].attributeId`, e.attributeId?.toString()!);
-          formData.append(`requestDetail[${i}].attributes[0].attributeValue`, e.attributeValue?.toString()!);
-          formData.append(`requestDetail[${i}].attributes[0].attributeValueId`, e.attributeValueId?.toString()!);
-        });
-      }
-      formData.append(`requestDetail[${i}].productCategoryId`, requestDetail[i].productCategoryId!.toString());
-      formData.append(`requestDetail[${i}].requestDescription`, requestDetail[i].requestDescription);
-      if (requestDetail[i].audioMessage) formData.append(`requestDetail[${i}].audioMessage`, requestDetail[i].audioMessage);
-      if (requestDetail[i].imageMessage != undefined && requestDetail[i].imageMessage?.length! > 0)
-        requestDetail[i].imageMessage?.forEach((imageFile: any) => {
-          console.log(requestDetail[i].imageMessage);
+
+    for (var i = 0; i < request.length; i++) {
+      //formGen
+      formData.append(
+        `formGenDetail[${i}]`,
+        request[i].formGenDetail ? JSON.stringify(request[i].formGenDetail?.formData) : 'null'
+      );
+      //requestDetail
+      if (request[i].requestDetail?.serviceTypeId)
+        formData.append(`requestDetail[${i}].serviceTypeId`, request[i].requestDetail!.serviceTypeId!.toString());
+      formData.append(`requestDetail[${i}].productCategoryId`, request[i].requestDetail!.productCategoryId!.toString());
+      formData.append(`requestDetail[${i}].requestDescription`, request[i].requestDetail!.requestDescription);
+      if (request[i].requestDetail?.audioMessage)
+        formData.append(`requestDetail[${i}].audioMessage`, request[i].requestDetail?.audioMessage);
+
+      if (request[i].requestDetail?.imageMessage != undefined && request[i].requestDetail?.imageMessage?.length! > 0)
+        request[i].requestDetail?.imageMessage?.forEach((imageFile: any) => {
           formData.append(`requestDetail[${i}].imageMessage`, imageFile);
         });
-      if (requestDetail[i].videoMessage) formData.append(`requestDetail[${i}].videoMessage`, requestDetail[i].videoMessage);
+      if (request[i].requestDetail?.videoMessage)
+        formData.append(`requestDetail[${i}].videoMessage`, request[i].requestDetail?.videoMessage);
     }
     if (formData) {
       setIsLoading(true);
       httpRequest
         .postRequest<IOutputResult<ICreateRequestResultModel>>(APIURL_POST_CREATE_REQUEST, formData)
         .then((result) => {
-          navigate(URL_MAIN);
           toast.showSuccess(result.data.message);
+          dispatch(handleResetRequest());
+          navigate(URL_MAIN);
           setIsLoading(false);
         })
         .finally(() => {
@@ -125,6 +119,7 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
         });
     }
   };
+
   return (
     <>
       <CurrentStep.Component

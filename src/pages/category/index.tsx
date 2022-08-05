@@ -40,7 +40,6 @@ const Category: FunctionComponent<IPageProps> = (props) => {
   };
 
   const GetCategories = () => {
-    debugger;
     state && state.ServiceTypeId
       ? (setLoading(true),
         httpRequest
