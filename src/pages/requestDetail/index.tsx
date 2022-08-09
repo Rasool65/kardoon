@@ -48,7 +48,7 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const request = useSelector((state: RootStateType) => state.Request);
   const httpRequest = useHttpRequest(RequestDataType.formData);
-  const [activeStep, setActiveStep] = useState<number>(1);
+  const [activeStep, setActiveStep] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [CurrentStep, setCurrentStep] = useState(steps[activeStep]);
   const [formGenDetail, setFormGenDetail] = useState<ISubmitEvent<unknown>>();
