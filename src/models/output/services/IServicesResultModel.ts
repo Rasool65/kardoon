@@ -4,4 +4,6 @@ export interface IServicesResultModel {
   shortDescription?: string;
   backgroundUrl?: string;
   icon?: string;
+  label?: string;
+  value?: number;
 }

@@ -7,4 +7,5 @@ export interface IModalModel {
   mobileNumber?: string;
   handleEditMobileNo?: any;
   resend?: any;
+  role?: string;
 }

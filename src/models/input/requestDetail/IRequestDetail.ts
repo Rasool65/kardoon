@@ -8,6 +8,7 @@ export interface IRequestDetail {
   audioMessage?: any;
   imageMessage?: any[];
   videoMessage?: any;
+  problemList?: IProblemsSelectModel[];
 }
 
 export const RequestDetailModelSchema: yup.SchemaOf<IRequestDetail> = yup.object({
@@ -17,4 +18,15 @@ export const RequestDetailModelSchema: yup.SchemaOf<IRequestDetail> = yup.object
   audioMessage: yup.object(),
   imageMessage: yup.array(),
   videoMessage: yup.object(),
+  problemList: yup.array(
+    yup.object({
+      value: yup.number(),
+      label: yup.string(),
+    })
+  ),
 });
+
+export interface IProblemsSelectModel {
+  label?: string;
+  value?: number;
+}

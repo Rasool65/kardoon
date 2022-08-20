@@ -1,12 +1,11 @@
-import { APIURL_GET_ORDER_DETAILS } from '@src/configs/apiConfig/apiUrls';
+import Form, { AjvError, IChangeEvent, ISubmitEvent, UiSchema } from '@rjsf/core';
+import { APIURL_GET_MISSION_ATTRIBUTES_DETAILS, APIURL_GET_ORDER_DETAILS } from '@src/configs/apiConfig/apiUrls';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import Footer from '@src/layout/Footer';
-import FooterCard from '@src/layout/FooterCard';
-import HeaderCard from '@src/layout/HeaderCard';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import { IEStatusId, IOrderListResultModel } from '@src/models/output/order/IOrderListResultModel';
+import { IEStatusId } from '@src/models/output/order/IOrderListResultModel';
 import {
-  Iinvoice,
+  IInvoice,
   IOrderDetailListResultModel,
   IProblemList,
   IDetails,
@@ -16,12 +15,13 @@ import { RootStateType } from '@src/redux/Store';
 import { CustomFunctions } from '@src/utils/custom';
 import { DateHelper } from '@src/utils/dateHelper';
 import { UtilsHelper } from '@src/utils/GeneralHelpers';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useState, forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Spinner } from 'reactstrap';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
 import { URL_MY_ORDERS } from '../../configs/urls';
+import { IAttributesResultModel } from '@src/models/output/missionDetail/IAttributesResultModel';
 
 const OrderDetail: FunctionComponent<IPageProps> = () => {
   const navigate = useNavigate();
@@ -31,16 +31,35 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
   const [orderDetailList, setOrderDetailList] = useState<IOrderDetailListResultModel>();
   const [imageModalVisible, setImageModalVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [formloading, setFormLoading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>();
-  const userId = useSelector((state: RootStateType) => state.authentication.userData?.userId);
-
+  const userData = useSelector((state: RootStateType) => state.authentication.userData);
+  const [genForm, setGenForm] = useState<IAttributesResultModel>();
+  const uiSchema = {
+    'ui:readonly': true,
+    // 'ui:widget': 'checkboxes',
+  };
   const GetOrderDetailList = () => {
     setLoading(true);
     httpRequest
-      .getRequest<IOutputResult<IOrderDetailListResultModel>>(`${APIURL_GET_ORDER_DETAILS}?RequestNumber=${id}&UserId=${userId}`)
+      .getRequest<IOutputResult<IOrderDetailListResultModel>>(
+        `${APIURL_GET_ORDER_DETAILS}?RequestNumber=${id}&UserId=${userData?.userId}`
+      )
       .then((result) => {
         setOrderDetailList(result.data.data);
         setLoading(false);
+      });
+  };
+
+  const FormGenDetail = (requestDetailId: number) => {
+    setFormLoading(true);
+    httpRequest
+      .getRequest<IOutputResult<IAttributesResultModel>>(
+        `${APIURL_GET_MISSION_ATTRIBUTES_DETAILS}?RequestDetailId=${requestDetailId}&UserId=${userData?.userId}`
+      )
+      .then((result) => {
+        setGenForm(result.data.data);
+        setFormLoading(false);
       });
   };
 
@@ -103,6 +122,9 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                         <>
                           <div className="card card-style shadow-0 bg-highlight mb-1">
                             <button
+                              onClick={() => {
+                                FormGenDetail(orderDetail.id!);
+                              }}
                               className="btn custom-accordion-btn accordion-btn color-white no-effect"
                               data-bs-toggle="collapse"
                               data-bs-target={`#collapse${orderDetail.id}`}
@@ -126,19 +148,19 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                               data-bs-parent="#accordion-2"
                             >
                               <div>
-                                <div>
-                                  <div>
-                                    <div className="col-6">برند</div>
-                                    <div className="col-6">{orderDetail.brandName}</div>
-                                  </div>
-                                  <div>
-                                    <div className="col-6">مدل</div>
-                                    <div className="col-6">{orderDetail.model}</div>
-                                  </div>
-                                  <div>
-                                    <div className="col-6">سریال</div>
-                                    <div className="col-6">{orderDetail.serial}</div>
-                                  </div>
+                                <div style={{ color: 'rgb(97, 97, 97)' }}>
+                                  {formloading ? (
+                                    <Spinner type="grow" style={{ backgroundColor: '#198754' }} children={true} />
+                                  ) : (
+                                    genForm && (
+                                      <Form
+                                        children={true}
+                                        schema={genForm.attributes}
+                                        formData={genForm.attributeValues}
+                                        uiSchema={uiSchema}
+                                      />
+                                    )
+                                  )}
                                 </div>
                                 <div>
                                   <div>
@@ -146,9 +168,9 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                                   </div>
                                   <div>
                                     <ul>
-                                      {orderDetail.problemList &&
-                                        orderDetail.problemList.length > 0 &&
-                                        orderDetail.problemList.map((problems: IProblemList, index: number) => {
+                                      {orderDetail.problems &&
+                                        orderDetail.problems.length > 0 &&
+                                        orderDetail.problems.map((problems: IProblemList, index: number) => {
                                           return <li>{problems.label}</li>;
                                         })}
                                     </ul>
@@ -239,7 +261,7 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                   <div className="">
                     {orderDetailList?.invoice &&
                       orderDetailList.invoice.length &&
-                      orderDetailList.invoice.map((invoice: Iinvoice, index: number) => {
+                      orderDetailList.invoice.map((invoice: IInvoice, index: number) => {
                         return (
                           <div className="col-12 justify-content-between">
                             <div className="col-4">
@@ -263,27 +285,6 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                           </div>
                         );
                       })}
-                    {/* <div className="">
-                <div className="col-5">2- تعمیر یخچال</div>
-                <div className="col-2">100.000</div>
-                <div className="col-2">
-                  <i className="fa fa-check"></i>
-                </div>
-                <div className="col-3">گارانتی</div>
-              </div>
-              <div className="">
-                <div className="col-5">3- نصب تلیویزیون </div>
-                <div className="col-2">
-                  <div style={{ textDecoration: 'line-through', color: 'red' }}>70.000</div>
-                  <span className="p-1">50.000</span>
-                </div>
-                <div className="col-2">
-                  <i className="fa fa-hourglass"></i>
-                </div>
-                <div className="col-3">
-                  <Button className="btn btn-success">پرداخت</Button>
-                </div>
-              </div> */}
                   </div>
                 </div>
                 <section className="box4">

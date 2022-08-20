@@ -36,3 +36,14 @@ export const APIURL_GET_CURRENT_CONSUMER_REQUEST = '/Request/GetCurrentConsumerR
 export const APIURL_GET_PREVIOUS_CONSUMER_REQUEST = '/Request/GetPreviousConsumerRequestList';
 //ORDER DETAIL
 export const APIURL_GET_ORDER_DETAILS = '/Request/GetConsumerRequest';
+//TECHNICIAN
+export const APIURL_GET_TECHNICIAN_PROFILE = 'http://127.0.0.1:2500/getTechnicianProfile';
+export const APIURL_GET_PRODUCT_TYPES = '/ProductCategory/GetAllProductListValue';
+export const APIURL_GET_TECHNICIAN_CONSUMERS = '/Order/GetTechnicianConsumerList';
+export const APIURL_GET_TECHNICIAN_MISSIONS = '/Order/GetTechnicianMissions';
+export const APIURL_GET_MISSION_DETAILS = '/Order/GetTechnicianRequestDetail';
+export const APIURL_GET_MISSION_ATTRIBUTES_DETAILS = '/Request/GetRequestDetailAttributeValues';
+export const APIURL_UPDATE_REQUEST_DETAIL_STATUS = '/Order/EditRequestDetailStatus';
+export const APIURL_GET_SERVICES_TYPES = '/BaseInformation/ServiceTypeList';
+export const APIURL_GET_SERVICES_TITLE = '/ProductCategory/ProductCategoryActionInfoList';
+export const APIURL_POST_REQUEST_DETAIL_ACTION = '/Order/AddAction';

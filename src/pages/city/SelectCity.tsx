@@ -26,7 +26,7 @@ const SelectCity: FunctionComponent = (props) => {
   const dispatch = useDispatch();
 
   const GetProvincesList = () => {
-    httpRequest.getRequest<IOutputResult<IProvinceResultModel>>(`${APIURL_GET_PROVINES}?ParentId=3`).then((result) => {
+    httpRequest.getRequest<IOutputResult<IProvinceResultModel>>(`${APIURL_GET_PROVINES}?ParentId=1`).then((result) => {
       setResult(result.data.data);
     });
   };
@@ -73,6 +73,8 @@ const SelectCity: FunctionComponent = (props) => {
     <>
       <Select
         className="select-city"
+        options={result}
+        isSearchable={true}
         onChange={(e: any) => {
           onchange(e);
         }}
@@ -81,8 +83,6 @@ const SelectCity: FunctionComponent = (props) => {
             ? userData?.profile.residenceCityName
             : localStorage.getItem('city') && JSON.parse(localStorage.getItem('city')!).label
         }
-        options={result}
-        isSearchable={true}
         isMulti
       />
     </>

@@ -1,6 +1,6 @@
 import Form, { AjvError, IChangeEvent, ISubmitEvent, UiSchema } from '@rjsf/core';
 import { FunctionComponent, useEffect, useState } from 'react';
-import { Spinner } from 'reactstrap';
+import { Button, Spinner } from 'reactstrap';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -89,7 +89,13 @@ const RequestDetailZero: FunctionComponent<IRequestDetailPageProp> = ({ handleCl
             </>
           ) : (
             <div>
-              {schema && <Form schema={schema} uiSchema={Ui} onSubmit={onSubmit} onChange={onChange} onError={onError} />}
+              {schema && (
+                <Form schema={schema} uiSchema={Ui} onSubmit={onSubmit} onChange={onChange} onError={onError}>
+                  <Button className="btn btn-info" style={{ marginTop: '10px', width: '100px' }} type="submit">
+                    ثبت
+                  </Button>
+                </Form>
+              )}
             </div>
           )}
         </div>

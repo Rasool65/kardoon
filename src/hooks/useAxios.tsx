@@ -26,18 +26,18 @@ export const useAxios = (dataType: RequestDataType = RequestDataType.json) => {
     headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      // 'accept-language': 'fa-IR',
+      'accept-language': 'fa-IR',
     };
   } else if (dataType == RequestDataType.formData) {
     headers = {
       'Content-Type': 'multipart/form-data',
-      // 'accept-language': 'fa-IR',
+      'accept-language': 'fa-IR',
     };
   } else if (dataType == RequestDataType.urlencoded) {
     headers = {
       Accept: 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
-      // 'accept-language': 'fa-IR',
+      'accept-language': 'fa-IR',
     };
   }
 

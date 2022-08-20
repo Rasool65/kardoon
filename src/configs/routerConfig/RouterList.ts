@@ -8,6 +8,10 @@ import {
   URL_REQUEST_DETAIL,
   URL_MY_ORDERS,
   URL_ORDER_DETAIL,
+  URL_TECHNICIAN_PROFILE,
+  URL_TECHNICIAN_MISSION,
+  URL_TECHNICIAN_MISSION_DETAIL,
+  URL_TECHNICIAN_MISSION_DETAIL_ACTION,
 } from './../urls';
 
 import IRoute from './IRoute';
@@ -22,6 +26,10 @@ import City from '@src/pages/city';
 import Order from '@src/pages/order';
 import RequestDetail from '@src/pages/requestDetail';
 import OrderDetail from '@src/pages/orderDetail';
+import TechnicianProfile from '@src/pages/technicianProfile';
+import TechnicianMission from '@src/pages/technicianMissions';
+import technicianMissionDetail from '@src/pages/technicianMissionDetail';
+import Action from '@src/pages/technicianMissionDetail/technicianAction';
 
 const routes: IRoute[] = [
   {
@@ -102,6 +110,38 @@ const routes: IRoute[] = [
     type: RouteType.private,
     props: {
       title: 'جرئیات بیشتر سفارش',
+    },
+  },
+  {
+    path: URL_TECHNICIAN_PROFILE,
+    component: TechnicianProfile,
+    type: RouteType.private,
+    props: {
+      title: 'پروفایل متخصص',
+    },
+  },
+  {
+    path: URL_TECHNICIAN_MISSION,
+    component: TechnicianMission,
+    type: RouteType.private,
+    props: {
+      title: 'لیست ماموریت های متخصص',
+    },
+  },
+  {
+    path: URL_TECHNICIAN_MISSION_DETAIL,
+    component: technicianMissionDetail,
+    type: RouteType.private,
+    props: {
+      title: 'جزییات ماموریت های متخصص',
+    },
+  },
+  {
+    path: URL_TECHNICIAN_MISSION_DETAIL_ACTION,
+    component: Action,
+    type: RouteType.private,
+    props: {
+      title: 'اکشن روی ماموریت',
     },
   },
 ];

@@ -16,6 +16,7 @@ import RequestDetailZero from './RequestDetailZero';
 import { useNavigate } from 'react-router-dom';
 import { URL_MAIN } from '@src/configs/urls';
 import { handleAddRequest, handleResetRequest } from '@src/redux/reducers/requestReducer';
+import { IProductProblemsResultModel } from './../../models/output/requestDetail/IProductProblemsResultModel';
 
 export type ISteps = {
   id: number;
@@ -76,11 +77,12 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
     navigate(URL_MAIN);
   };
   const handleSubmit = (body: IRequestDetailSecond) => {
+    !body.refkey && toast.showError('آدرس را انتخاب نمایید');
     var formData = new FormData();
     if (userData?.userId) formData.append('userId', userData.userId?.toString());
     if (body.presenceDate) formData.append('presenceDate', body.presenceDate?.toString());
     if (body.presenceShift) formData.append('presenceShift', body.presenceShift?.toString());
-    if (body.refkey) formData.append('refkey', body.refkey?.toString());
+    formData.append('refkey', body.refkey.toString());
     formData.append('isUrgent', body.isUrgent.toString());
 
     for (var i = 0; i < request.length; i++) {
@@ -100,6 +102,11 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
       if (request[i].requestDetail?.imageMessage != undefined && request[i].requestDetail?.imageMessage?.length! > 0)
         request[i].requestDetail?.imageMessage?.forEach((imageFile: any) => {
           formData.append(`requestDetail[${i}].imageMessage`, imageFile);
+        });
+
+      if (request[i].requestDetail?.problemList != undefined && request[i].requestDetail?.problemList?.length! > 0)
+        request[i].requestDetail?.problemList?.forEach((problemList: IProductProblemsResultModel) => {
+          formData.append(`requestDetail[${i}].problemList`, problemList.value?.toString()!);
         });
       if (request[i].requestDetail?.videoMessage)
         formData.append(`requestDetail[${i}].videoMessage`, request[i].requestDetail?.videoMessage);

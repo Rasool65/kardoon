@@ -10,5 +10,5 @@ export interface IRequestDetailSecond {
   isUrgent: boolean;
   presenceDate?: string;
   presenceShift?: number;
-  refkey?: number;
+  refkey: number;
 }

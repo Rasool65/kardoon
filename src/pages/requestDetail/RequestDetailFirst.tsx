@@ -1,4 +1,5 @@
 import React, { Component, FunctionComponent, useCallback, useEffect, useState } from 'react';
+import Select from 'react-select';
 import { Col, Container, Form, FormFeedback, Input, Row, Button, Label } from 'reactstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +11,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CustomFunctions } from '@src/utils/custom';
 import { IRequestDetail, RequestDetailModelSchema } from '@src/models/input/requestDetail/IRequestDetail';
 import { useRecorder } from '@src/hooks/useRecorder';
+import useHttpRequest from '@src/hooks/useHttpRequest';
+import { IOutputResult } from '@src/models/output/IOutputResult';
+import { IProductProblemsResultModel } from '@src/models/output/requestDetail/IProductProblemsResultModel';
+import { APIURL_GET_PROBLEM_LIST } from '@src/configs/apiConfig/apiUrls';
 
 const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleClickNextToSecond, handleClickMore }) => {
   let { audioData, audioURL, isRecording, startRecording, stopRecording } = useRecorder();
@@ -19,11 +24,13 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
   const [input, setInput] = useState<any>({
     requestDescription: false,
   });
+  const httpRequest = useHttpRequest();
   const [audioDisplay, setAudioDisplay] = useState<string>('none');
   const [imageDisplay, setImageDisplay] = useState<string>('none');
   const [videoDisplay, setVideoDisplay] = useState<string>('none');
   const [imgSrcList, setImgSrcList] = useState<any[]>([]);
   const [imageFile, setImageFile] = useState<any[]>([]);
+  const [problemsList, setProblemsList] = useState<any>();
   const [audioFile, setAudioFile] = useState<any>();
   const [videoFile, setVideoFile] = useState<any>();
   const [more, setMore] = useState<boolean>(false);
@@ -40,14 +47,27 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
       serviceTypeId: state.ServiceTypeId,
       productCategoryId: state.ProductId,
       requestDescription: data.requestDescription,
+      problemList: data.problemList,
       audioMessage: audioFile,
       imageMessage: imageFile,
       videoMessage: videoFile,
     };
     more ? handleClickMore(body) : handleClickNextToSecond(body);
   };
+  const GetProblems = () => {
+    // setLoading(true);
+    httpRequest
+      .getRequest<IOutputResult<IProductProblemsResultModel[]>>(
+        `${APIURL_GET_PROBLEM_LIST}?productCategoryId=${state.ProductId}&ServiceTypeId=${state.ServiceTypeId}`
+      )
+      .then((result) => {
+        setProblemsList(result.data.data);
+        // setLoading(false);
+      });
+  };
 
   useEffect(() => {
+    GetProblems();
     CustomFunctions();
   }, []);
 
@@ -101,44 +121,65 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                 {' '}
                 لطفا جزئیات سفارش خود را مشخص کنید.
                 <div>
-                  <Container style={{ maxWidth: '100%', marginTop: '15px', padding: '0 0 0 0' }}></Container>
-
-                  <div
-                    className={`input-style has-borders no-icon mb-4 ${input.requestDescription ? 'input-style-active' : ''}`}
-                    style={{ margin: '0 0 0 0', padding: '0 0 0 0' }}
-                  >
+                  <Container style={{ maxWidth: '100%', marginTop: '15px', padding: '0 0 0 0' }}>
                     <Controller
-                      name="requestDescription"
+                      name="problemList"
                       control={control}
-                      render={({ field }: any) => (
+                      render={({ field }) => (
                         <>
-                          <Input
-                            id="form7"
-                            onFocus={() => setInput({ requestDescription: true })}
-                            style={{ backgroundPosition: 'left', marginTop: '0', height: '100px' }}
-                            className="form-control validate-text"
-                            type="textarea"
-                            placeholder={t('EnterRequestDescription')}
-                            autoComplete="off"
-                            invalid={errors.requestDescription && true}
-                            {...field}
-                          />
-                          <label htmlFor="form7" className="color-highlight">
-                            {t('RequestDescription')}
-                          </label>
-                          <i
-                            className={`fa fa-times disabled invalid color-red-dark ${
-                              input.requestDescription ? 'disabled' : ''
-                            }`}
-                          />
-                          <i className="fa fa-check disabled valid color-green-dark" />
-                          <em className={`${input.requestDescription ? 'disabled' : ''}`}>({t('Required')})</em>
-                          <FormFeedback>{errors.requestDescription?.message}</FormFeedback>
+                          {problemsList && problemsList.length > 0 && (
+                            <Select
+                              isMulti
+                              noOptionsMessage={() => t('ListIsEmpty')}
+                              isClearable
+                              className="select-city"
+                              placeholder={t('SelectProblems')}
+                              options={problemsList}
+                              isSearchable={true}
+                              {...field}
+                            />
+                          )}
                         </>
                       )}
                     />
-                  </div>
-
+                  </Container>
+                  <Container style={{ maxWidth: '100%', marginTop: '15px', padding: '0 0 0 0' }}>
+                    <div
+                      className={`input-style has-borders no-icon mb-4 ${input.requestDescription ? 'input-style-active' : ''}`}
+                      style={{ margin: '0 0 0 0', padding: '0 0 0 0' }}
+                    >
+                      <Controller
+                        name="requestDescription"
+                        control={control}
+                        render={({ field }: any) => (
+                          <>
+                            <Input
+                              id="form7"
+                              onFocus={() => setInput({ requestDescription: true })}
+                              style={{ backgroundPosition: 'left', marginTop: '0', height: '100px' }}
+                              className="form-control validate-text"
+                              type="textarea"
+                              placeholder={t('EnterRequestDescription')}
+                              autoComplete="off"
+                              invalid={errors.requestDescription && true}
+                              {...field}
+                            />
+                            <label htmlFor="form7" className="color-highlight">
+                              {t('RequestDescription')}
+                            </label>
+                            <i
+                              className={`fa fa-times disabled invalid color-red-dark ${
+                                input.requestDescription ? 'disabled' : ''
+                              }`}
+                            />
+                            <i className="fa fa-check disabled valid color-green-dark" />
+                            <em className={`${input.requestDescription ? 'disabled' : ''}`}>({t('Required')})</em>
+                            <FormFeedback>{errors.requestDescription?.message}</FormFeedback>
+                          </>
+                        )}
+                      />
+                    </div>
+                  </Container>
                   <Container style={{ maxWidth: '100%', margin: '25px 0 20px 0', padding: '0 0 0 0' }}>
                     <Row
                       style={{

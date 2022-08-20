@@ -8,3 +8,7 @@ export const URL_CITY = '/city';
 export const URL_ORDER_DETAIL = '/order-detail';
 export const URL_REQUEST = '/request';
 export const URL_REQUEST_DETAIL = '/request-detail';
+export const URL_TECHNICIAN_PROFILE = '/technician-profile';
+export const URL_TECHNICIAN_MISSION = '/technician-mission';
+export const URL_TECHNICIAN_MISSION_DETAIL = '/mission-detail';
+export const URL_TECHNICIAN_MISSION_DETAIL_ACTION = '/mission-detail/action';

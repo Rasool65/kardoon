@@ -7,7 +7,7 @@ export interface IOrderDetailListResultModel {
   shiftId?: number;
   address?: string;
   details?: IDetails[];
-  invoice?: Iinvoice[];
+  invoice?: IInvoice[];
 }
 
 export interface IDetails {
@@ -15,10 +15,7 @@ export interface IDetails {
   requestDescription?: string;
   statusId?: number;
   statusTitle?: string;
-  brandName?: string;
-  model?: string;
-  serial?: string;
-  problemList?: IProblemList[];
+  problems?: IProblemList[];
   videoMessageUrl?: string;
   voiceMessageUrl?: string;
   imageUrlList?: string[];
@@ -32,7 +29,7 @@ export interface ITechnicians {
   name?: string;
   mobileNumber?: string;
 }
-export interface Iinvoice {
+export interface IInvoice {
   title?: string;
   price?: number;
   discount?: boolean;

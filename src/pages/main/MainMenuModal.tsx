@@ -1,15 +1,21 @@
-import { URL_LOGIN } from '@src/configs/urls';
+import { URL_LOGIN, URL_MY_ORDERS, URL_TECHNICIAN_MISSION, URL_TECHNICIAN_PROFILE } from '@src/configs/urls';
 import { handleLogout } from '@src/redux/reducers/authenticationReducer';
 import { CustomFunctions } from '@src/utils/custom';
-import React, { FunctionComponent, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { FunctionComponent, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import SelectCity from '../city/SelectCity';
 import { IModalModel } from './../authentication/ModalModel';
+import { RootStateType } from '@src/redux/Store';
 
 const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userData = useSelector((state: RootStateType) => state.authentication.userData);
+
+  function checkRole(normalizedName: string) {
+    return userData?.roles.some((roleName) => roleName.normalizedName === normalizedName);
+  }
 
   useEffect(() => {
     CustomFunctions();
@@ -25,28 +31,26 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
       data-menu-effect="menu-over"
     >
       <div className="menu-header">
-        <div data-toggle-theme className="border-right-0 pointer">
+        {/* <div data-toggle-theme className="border-right-0 pointer">
           <i className="fa font-12 color-yellow1-dark fa-lightbulb" />
-        </div>
-        <div
+        </div> */}
+        {/* <div
           className="border-right-0 pointer"
           //  onClick={(e) => showThemeColorModal(e)}
         >
           <i className="fa font-12 color-green1-dark fa-brush" />
-        </div>
-        <div data-menu="menu-share" className="border-right-0 pointer">
+        </div> */}
+        {/* <div data-menu="menu-share" className="border-right-0 pointer">
           <i className="fa font-12 color-red2-dark fa-share-alt" />
-        </div>
-        <div className="border-right-0 pointer">
+        </div> */}
+        {/* <div className="border-right-0 pointer">
           <i className="fa font-12 color-blue2-dark fa-cog" />
-        </div>
-        <div className="border-right-0 pointer close-menu">
-          <i className="fa font-12 color-red2-dark fa-times" />
+        </div> */}
+        <div className="border-right-0 pointer close-menu float-end">
+          <i className="fa font-12 color-red2-dark fa-times" style={{ float: 'left', margin: '20px' }} />
         </div>
       </div>
-
       <SelectCity />
-
       <div className="menu-logo text-center">
         <a
           href="#"
@@ -59,7 +63,6 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           کار رو به <span className="color-highlight">کاردون </span>بسپار!
         </p>
       </div>
-
       <div className="menu-items">
         <h5 className="text-uppercase opacity-20 font-12 pr-3">منوی کاردون</h5>
         <a
@@ -78,10 +81,10 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           <em className="badge bg-highlight color-white">HOT</em>
           <i className="fa fa-circle" />
         </a>
-        <a
+        {/* <a
           id="nav-starters"
           href="#"
-          // onClick={(e) => goToMyAddresses(e)}
+         onClick={(e) => navigate('/address')}
         >
           <i
             data-feather="star"
@@ -92,27 +95,8 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           />
           <span>آدرس های من</span>
           <i className="fa fa-circle" />
-        </a>
-        <a
-          id="nav-features"
-          href="#"
-          // onClick={(e) => goToMyComplexList(e)}
-        >
-          <i
-            data-feather="heart"
-            data-feather-line="1"
-            data-feather-size="16"
-            data-feather-color="red2-dark"
-            data-feather-bg="red2-fade-dark"
-          />
-          <span>مجموعه های من</span>
-          <i className="fa fa-circle" />
-        </a>
-        <a
-          id="nav-pages"
-          href="#"
-          // onClick={(e) => goToMyOrders(e)}
-        >
+        </a> */}
+        <a id="nav-pages" href="#" onClick={() => navigate(URL_MY_ORDERS)}>
           <i
             data-feather="file"
             data-feather-line="1"
@@ -123,7 +107,38 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           <span>سفارشات من</span>
           <i className="fa fa-circle" />
         </a>
-        <a id="nav-media" href="media.html">
+        {checkRole('TECHNICIAN') && (
+          <>
+            <a
+              id="nav-pages"
+              className="close-menu"
+              href="#"
+              onClick={() => navigate(`${URL_TECHNICIAN_PROFILE}?id=${userData?.userId}`)}
+            >
+              <i
+                data-feather="file"
+                data-feather-line="1"
+                data-feather-size="16"
+                data-feather-color="brown1-dark"
+                data-feather-bg="brown1-fade-dark"
+              />
+              <span>پروفایل تکنسین</span>
+              <i className="fa fa-circle" />
+            </a>
+            <a id="nav-features" href="#" onClick={() => navigate(URL_TECHNICIAN_MISSION)}>
+              <i
+                data-feather="heart"
+                data-feather-line="1"
+                data-feather-size="16"
+                data-feather-color="red2-dark"
+                data-feather-bg="red2-fade-dark"
+              />
+              <span>لیست ماموریت ها</span>
+              <i className="fa fa-circle" />
+            </a>
+          </>
+        )}
+        {/* <a id="nav-media" href="media.html">
           <i
             data-feather="image"
             data-feather-line="1"
@@ -133,8 +148,8 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           />
           <span>تصاویر</span>
           <i className="fa fa-circle" />
-        </a>
-        <a href="#" data-submenu="sub-contact">
+        </a> */}
+        {/* <a href="#" data-submenu="sub-contact">
           <i
             data-feather="mail"
             data-feather-line="1"
@@ -145,24 +160,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           <span>مخاطبین</span>
           <strong className="badge bg-highlight color-white">1</strong>
           <i className="fa fa-circle" />
-        </a>
-        <div id="sub-contact" className="submenu">
-          <a href="contact.html" id="nav-contact">
-            <i className="fa fa-envelope color-blue2-dark font-16 opacity-30" />
-            <span>Email</span>
-            <i className="fa fa-circle" />
-          </a>
-          <a href="#">
-            <i className="fa fa-phone color-green1-dark font-16 opacity-50" />
-            <span>Phone</span>
-            <i className="fa fa-circle" />
-          </a>
-          <a href="#">
-            <i className="fab fa-whatsapp color-whatsapp font-16 opacity-30" />
-            <span>WhatsApp</span>
-            <i className="fa fa-circle" />
-          </a>
-        </div>
+      </a> */}
         <a id="nav-settings" href="settings.html">
           <i
             data-feather="settings"
@@ -192,7 +190,6 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           <i className="fa fa-circle" />
         </a>
       </div>
-
       <div className="text-center pt-2" style={{ direction: 'ltr' }}>
         <a href="#" className="icon icon-xs mr-1 rounded-s bg-facebook">
           <i className="fab fa-facebook" />

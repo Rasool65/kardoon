@@ -7,6 +7,7 @@ import useHttpRequest from '@src/hooks/useHttpRequest';
 import Footer from '@src/layout/Footer';
 import FooterCard from '@src/layout/FooterCard';
 import HeaderCard from '@src/layout/HeaderCard';
+import PrevHeader from '@src/layout/PrevHeader';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IEStatusId, IOrderListResultModel, IOrderRequestDetail } from '@src/models/output/order/IOrderListResultModel';
 import { RootStateType } from '@src/redux/Store';
@@ -52,25 +53,7 @@ const Order: FunctionComponent<IPageProps> = () => {
   return (
     <div id="page">
       <div className="page-content">
-        <div className="page-title page-title-small">
-          <h2>
-            <a href="#" data-back-button>
-              <i className="fa fa-arrow-right mx-2"></i>
-              بازگشت
-            </a>
-          </h2>
-          {/* <a
-              href="#"
-              data-menu="menu-main"
-              className="bg-fade-highlight-light shadow-xl preload-img"
-              data-src="images/avatars/5s.png"
-            ></a> */}
-        </div>
-        <div className="card header-card shape-rounded" data-card-height="150">
-          <div className="card-overlay bg-highlight opacity-95"></div>
-          <div className="card-overlay dark-mode-tint"></div>
-          <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
-        </div>
+        <PrevHeader />
         <Footer footerMenuVisible={true} activePage={1} />
         <div
           style={{
