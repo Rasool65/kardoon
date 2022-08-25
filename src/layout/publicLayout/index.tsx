@@ -5,7 +5,6 @@ import IPageProps from '@src/configs/routerConfig/IPageProps';
 
 const PublicLayout = (props: any) => {
   const { children, title } = props;
-  console.log(title);
 
   return (
     <div id="body">

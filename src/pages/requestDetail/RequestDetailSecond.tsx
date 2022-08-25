@@ -252,7 +252,7 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
             <div
               onClick={(e) => {
                 const body: IRequestDetailSecond = {
-                  refkey: refKey,
+                  refkey: refKey!,
                   presenceDate: selectDate,
                   presenceShift: shift,
                   isUrgent: isUrgent,

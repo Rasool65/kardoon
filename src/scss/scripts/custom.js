@@ -26,17 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
     var i, e, el; //https://www.w3schools.com/js/js_performance.asp
 
     //Greetig Heading
-    var pageTitle = document.querySelectorAll(
-      '.page-title-large, .page-title-small, .menu-header a'
-    );
+    var pageTitle = document.querySelectorAll('.page-title-large, .page-title-small, .menu-header a');
     if (pageTitle) {
       var greetingTime = new Date().getHours();
       var greetingMessage;
       var greetingExist = document.querySelectorAll('.greeting-text')[0];
       if (greetingExist) {
-        var greetingUser = document
-          .querySelectorAll('.greeting-text')[0]
-          .getAttribute('data-username');
+        var greetingUser = document.querySelectorAll('.greeting-text')[0].getAttribute('data-username');
         var greetingMorning = 'Good morning';
         var greetingAfternoon = 'Good afternoon';
         var greetingEvening = 'Good evening';
@@ -48,12 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (greetingTime >= 17 && greetingTime < 24) {
           greetingMessage = greetingEvening;
         }
-        document
-          .querySelectorAll('.greeting-text')[0]
-          .insertAdjacentHTML(
-            'beforeend',
-            greetingMessage + ',<br>' + greetingUser
-          );
+        document.querySelectorAll('.greeting-text')[0].insertAdjacentHTML('beforeend', greetingMessage + ',<br>' + greetingUser);
       }
     }
 
@@ -80,8 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var inputField = document.querySelectorAll('input');
     if (inputField.length) {
       var mailValidator = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
-      var phoneValidator =
-        /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+      var phoneValidator = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
       var nameValidator =
         /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
       var passwordValidator = /[A-Za-z]{2}[A-Za-z]*[ ]?[A-Za-z]*/;
@@ -90,46 +80,28 @@ document.addEventListener('DOMContentLoaded', () => {
       var textValidator = /[A-Za-z]{2}[A-Za-z]*[ ]?[A-Za-z]*/;
 
       function valid(el) {
-        el.parentElement
-          .querySelectorAll('.valid')[0]
-          .classList.remove('disabled');
-        el.parentElement
-          .querySelectorAll('.invalid')[0]
-          .classList.add('disabled');
+        el.parentElement.querySelectorAll('.valid')[0].classList.remove('disabled');
+        el.parentElement.querySelectorAll('.invalid')[0].classList.add('disabled');
       }
       function invalid(el) {
-        el.parentElement
-          .querySelectorAll('.valid')[0]
-          .classList.add('disabled');
-        el.parentElement
-          .querySelectorAll('.invalid')[0]
-          .classList.remove('disabled');
+        el.parentElement.querySelectorAll('.valid')[0].classList.add('disabled');
+        el.parentElement.querySelectorAll('.invalid')[0].classList.remove('disabled');
       }
       function unfilled(el) {
         el.parentElement.querySelectorAll('em')[0].classList.remove('disabled');
-        el.parentElement
-          .querySelectorAll('.valid')[0]
-          .classList.add('disabled');
-        el.parentElement
-          .querySelectorAll('.invalid')[0]
-          .classList.add('disabled');
+        el.parentElement.querySelectorAll('.valid')[0].classList.add('disabled');
+        el.parentElement.querySelectorAll('.invalid')[0].classList.add('disabled');
       }
 
-      var regularField = document.querySelectorAll(
-        '.input-style input:not([type="date"])'
-      );
+      var regularField = document.querySelectorAll('.input-style input:not([type="date"])');
       regularField.forEach((el) =>
         el.addEventListener('keyup', (e) => {
           if (!el.value == '') {
             el.parentElement.classList.add('input-style-active');
             el.parentElement.querySelector('em').classList.add('disabled');
           } else {
-            el.parentElement
-              .querySelectorAll('.valid')[0]
-              .classList.add('disabled');
-            el.parentElement
-              .querySelectorAll('.invalid')[0]
-              .classList.add('disabled');
+            el.parentElement.querySelectorAll('.valid')[0].classList.add('disabled');
+            el.parentElement.querySelectorAll('.invalid')[0].classList.add('disabled');
             el.parentElement.classList.remove('input-style-active');
             el.parentElement.querySelector('em').classList.remove('disabled');
           }
@@ -154,43 +126,27 @@ document.addEventListener('DOMContentLoaded', () => {
         el.addEventListener('change', (e) => {
           if (el.value !== 'default') {
             el.parentElement.classList.add('input-style-active');
-            el.parentElement
-              .querySelectorAll('.valid')[0]
-              .classList.remove('disabled');
-            el.parentElement
-              .querySelectorAll('.invalid, em, span')[0]
-              .classList.add('disabled');
+            el.parentElement.querySelectorAll('.valid')[0].classList.remove('disabled');
+            el.parentElement.querySelectorAll('.invalid, em, span')[0].classList.add('disabled');
           }
           if (el.value == 'default') {
-            el.parentElement
-              .querySelectorAll('span, .valid, em')[0]
-              .classList.add('disabled');
-            el.parentElement
-              .querySelectorAll('.invalid')[0]
-              .classList.remove('disabled');
+            el.parentElement.querySelectorAll('span, .valid, em')[0].classList.add('disabled');
+            el.parentElement.querySelectorAll('.invalid')[0].classList.remove('disabled');
             el.parentElement.classList.add('input-style-active');
           }
         })
       );
 
-      var dateField = document.querySelectorAll(
-        '.input-style input[type="date"]'
-      );
+      var dateField = document.querySelectorAll('.input-style input[type="date"]');
       dateField.forEach((el) =>
         el.addEventListener('change', (e) => {
           el.parentElement.classList.add('input-style-active');
-          el.parentElement
-            .querySelectorAll('.valid')[0]
-            .classList.remove('disabled');
-          el.parentElement
-            .querySelectorAll('.invalid')[0]
-            .classList.add('disabled');
+          el.parentElement.querySelectorAll('.valid')[0].classList.remove('disabled');
+          el.parentElement.querySelectorAll('.invalid')[0].classList.add('disabled');
         })
       );
 
-      var validateField = document.querySelectorAll(
-        '.validate-field input, .validator-field textarea'
-      );
+      var validateField = document.querySelectorAll('.validate-field input, .validator-field textarea');
       if (validateField.length) {
         validateField.forEach((el) =>
           el.addEventListener('keyup', (e) => {
@@ -347,26 +303,14 @@ document.addEventListener('DOMContentLoaded', () => {
       var mapActivator = document.querySelectorAll('.show-map');
       var mapDisabler = document.querySelectorAll('.hide-map');
       mapActivator[0].addEventListener('click', function (e) {
-        document
-          .getElementsByClassName('map-overlay')[0]
-          .classList.add('disabled');
-        document
-          .getElementsByClassName('card-center')[0]
-          .classList.add('disabled');
-        document
-          .getElementsByClassName('hide-map')[0]
-          .classList.remove('disabled');
+        document.getElementsByClassName('map-overlay')[0].classList.add('disabled');
+        document.getElementsByClassName('card-center')[0].classList.add('disabled');
+        document.getElementsByClassName('hide-map')[0].classList.remove('disabled');
       });
       mapDisabler[0].addEventListener('click', function (e) {
-        document
-          .getElementsByClassName('map-overlay')[0]
-          .classList.remove('disabled');
-        document
-          .getElementsByClassName('card-center')[0]
-          .classList.remove('disabled');
-        document
-          .getElementsByClassName('hide-map')[0]
-          .classList.add('disabled');
+        document.getElementsByClassName('map-overlay')[0].classList.remove('disabled');
+        document.getElementsByClassName('card-center')[0].classList.remove('disabled');
+        document.getElementsByClassName('hide-map')[0].classList.add('disabled');
       });
     }
 
@@ -398,9 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var menus = document.querySelectorAll('.menu');
     function menuFunction() {
       if (menus.length) {
-        var menuSidebar = document.querySelectorAll(
-          '.menu-box-left, .menu-box-right'
-        );
+        var menuSidebar = document.querySelectorAll('.menu-box-left, .menu-box-right');
         menuSidebar.forEach(function (e) {
           if (e.getAttribute('data-menu-width') === 'cover') {
             e.style.width = '100%';
@@ -408,9 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.style.width = e.getAttribute('data-menu-width') + 'px';
           }
         });
-        var menuSheets = document.querySelectorAll(
-          '.menu-box-bottom, .menu-box-top, .menu-box-modal'
-        );
+        var menuSheets = document.querySelectorAll('.menu-box-bottom, .menu-box-top, .menu-box-modal');
         menuSheets.forEach(function (e) {
           if (e.getAttribute('data-menu-width') === 'cover') {
             e.style.width = '100%';
@@ -423,9 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //Opening Menus
         var menuOpen = document.querySelectorAll('[data-menu]');
-        var wrappers = document.querySelectorAll(
-          '.header, #footer-bar, .page-content'
-        );
+        var wrappers = document.querySelectorAll('.header, #footer-bar, .page-content');
 
         menuOpen.forEach((el) =>
           el.addEventListener('click', (e) => {
@@ -437,9 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //Open Clicked Menu
             var menuData = el.getAttribute('data-menu');
             document.getElementById(menuData).classList.add('menu-active');
-            document
-              .getElementsByClassName('menu-hider')[0]
-              .classList.add('menu-active');
+            document.getElementsByClassName('menu-hider')[0].classList.add('menu-active');
             //Check and Apply Effects
             var menu = document.getElementById(menuData);
             var menuEffect = menu.getAttribute('data-menu-effect');
@@ -453,70 +389,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (menuTimeout) {
               setTimeout(function () {
-                document
-                  .getElementById(menuData)
-                  .classList.remove('menu-active');
-                document
-                  .getElementsByClassName('menu-hider')[0]
-                  .classList.remove('menu-active');
+                document.getElementById(menuData).classList.remove('menu-active');
+                document.getElementsByClassName('menu-hider')[0].classList.remove('menu-active');
               }, menuTimeout);
             }
 
             if (menuEffect === 'menu-push') {
-              var menuWidth = document
-                .getElementById(menuData)
-                .getAttribute('data-menu-width');
+              var menuWidth = document.getElementById(menuData).getAttribute('data-menu-width');
               if (menuLeft) {
                 for (let i = 0; i < wrappers.length; i++) {
-                  wrappers[i].style.transform =
-                    'translateX(' + menuWidth + 'px)';
+                  wrappers[i].style.transform = 'translateX(' + menuWidth + 'px)';
                 }
               }
               if (menuRight) {
                 for (let i = 0; i < wrappers.length; i++) {
-                  wrappers[i].style.transform =
-                    'translateX(-' + menuWidth + 'px)';
+                  wrappers[i].style.transform = 'translateX(-' + menuWidth + 'px)';
                 }
               }
               if (menuBottom) {
                 for (let i = 0; i < wrappers.length; i++) {
-                  wrappers[i].style.transform =
-                    'translateY(-' + menuHeight + 'px)';
+                  wrappers[i].style.transform = 'translateY(-' + menuHeight + 'px)';
                 }
               }
               if (menuTop) {
                 for (let i = 0; i < wrappers.length; i++) {
-                  wrappers[i].style.transform =
-                    'translateY(' + menuHeight + 'px)';
+                  wrappers[i].style.transform = 'translateY(' + menuHeight + 'px)';
                 }
               }
             }
             if (menuEffect === 'menu-parallax') {
-              var menuWidth = document
-                .getElementById(menuData)
-                .getAttribute('data-menu-width');
+              var menuWidth = document.getElementById(menuData).getAttribute('data-menu-width');
               if (menuLeft) {
                 for (let i = 0; i < wrappers.length; i++) {
-                  wrappers[i].style.transform =
-                    'translateX(' + menuWidth / 10 + 'px)';
+                  wrappers[i].style.transform = 'translateX(' + menuWidth / 10 + 'px)';
                 }
               }
               if (menuRight) {
                 for (let i = 0; i < wrappers.length; i++) {
-                  wrappers[i].style.transform =
-                    'translateX(-' + menuWidth / 10 + 'px)';
+                  wrappers[i].style.transform = 'translateX(-' + menuWidth / 10 + 'px)';
                 }
               }
               if (menuBottom) {
                 for (let i = 0; i < wrappers.length; i++) {
-                  wrappers[i].style.transform =
-                    'translateY(-' + menuHeight / 5 + 'px)';
+                  wrappers[i].style.transform = 'translateY(-' + menuHeight / 5 + 'px)';
                 }
               }
               if (menuTop) {
                 for (let i = 0; i < wrappers.length; i++) {
-                  wrappers[i].style.transform =
-                    'translateY(' + menuHeight / 5 + 'px)';
+                  wrappers[i].style.transform = 'translateY(' + menuHeight / 5 + 'px)';
                 }
               }
             }
@@ -544,30 +464,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const menuActive = document.querySelectorAll('[data-menu-active]')[0];
       if (menuActive) {
         var selectedMenu = menuActive.getAttribute('data-menu-active');
-        document
-          .querySelectorAll('#' + selectedMenu)[0]
-          .classList.add('nav-item-active');
-        if (
-          document
-            .querySelectorAll('#' + selectedMenu)[0]
-            .parentNode.getAttribute('class') === 'submenu'
-        ) {
-          var subId =
-            '#' +
-            document
-              .querySelectorAll('#' + selectedMenu)[0]
-              .parentNode.getAttribute('id');
-          var subData = document
-            .querySelectorAll('#' + selectedMenu)[0]
-            .parentNode.getAttribute('id');
+        document.querySelectorAll('#' + selectedMenu)[0].classList.add('nav-item-active');
+        if (document.querySelectorAll('#' + selectedMenu)[0].parentNode.getAttribute('class') === 'submenu') {
+          var subId = '#' + document.querySelectorAll('#' + selectedMenu)[0].parentNode.getAttribute('id');
+          var subData = document.querySelectorAll('#' + selectedMenu)[0].parentNode.getAttribute('id');
           var subSize = document.querySelectorAll(subId)[0].children.length;
           var subHeight = document.querySelectorAll(subId)[0].offsetHeight;
           document.querySelectorAll(subId)[0].style.transition = 'all 250ms';
-          document.querySelectorAll(subId)[0].style.height =
-            subSize * 50 + 26 + 'px';
-          document
-            .querySelectorAll('[data-submenu="' + subData + '"]')[0]
-            .classList.add('nav-item-active');
+          document.querySelectorAll(subId)[0].style.height = subSize * 50 + 26 + 'px';
+          document.querySelectorAll('[data-submenu="' + subData + '"]')[0].classList.add('nav-item-active');
         }
       }
 
@@ -589,8 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (subHeight === 0) {
             console.log('true');
             document.querySelectorAll(subId)[0].style.transition = 'all 250ms';
-            document.querySelectorAll(subId)[0].style.height =
-              subSize * 50 + 26 + 'px';
+            document.querySelectorAll(subId)[0].style.height = subSize * 50 + 26 + 'px';
           } else {
             console.log('false');
             document.querySelectorAll(subId)[0].style.transition = 'all 250ms';
@@ -614,9 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Back to Top
     function backUp() {
-      const backToTop = document.querySelectorAll(
-        '.back-to-top-icon, .back-to-top-badge, .back-to-top'
-      );
+      const backToTop = document.querySelectorAll('.back-to-top-icon, .back-to-top-badge, .back-to-top');
       if (backToTop) {
         backToTop.forEach((el) =>
           el.addEventListener('click', (e) => {
@@ -634,12 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
         d = {
           status: true,
           version: parseInt(v[1], 10),
-          info:
-            parseInt(v[1], 10) +
-            '.' +
-            parseInt(v[2], 10) +
-            '.' +
-            parseInt(v[3] || 0, 10),
+          info: parseInt(v[1], 10) + '.' + parseInt(v[2], 10) + '.' + parseInt(v[3] || 0, 10),
         };
       } else {
         d = { status: false, version: false, info: '' };
@@ -655,18 +552,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = document.getElementsByClassName('card');
     function card_extender() {
       var headerHeight, footerHeight, headerOnPage;
-      var headerOnPage = document.querySelectorAll(
-        '.header:not(.header-transparent)'
-      )[0];
+      var headerOnPage = document.querySelectorAll('.header:not(.header-transparent)')[0];
       var footerOnPage = document.querySelectorAll('#footer-bar')[0];
 
-      headerOnPage
-        ? (headerHeight = document.querySelectorAll('.header')[0].offsetHeight)
-        : (headerHeight = 0);
-      footerOnPage
-        ? (footerHeight =
-            document.querySelectorAll('#footer-bar')[0].offsetHeight)
-        : (footerHeight = 0);
+      headerOnPage ? (headerHeight = document.querySelectorAll('.header')[0].offsetHeight) : (headerHeight = 0);
+      footerOnPage ? (footerHeight = document.querySelectorAll('#footer-bar')[0].offsetHeight) : (footerHeight = 0);
 
       for (let i = 0; i < cards.length; i++) {
         if (cards[i].getAttribute('data-card-height') === 'cover') {
@@ -715,11 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function selectHighlight() {
       var rememberHighlight = localStorage.getItem(pwaName + '-Highlight');
       if (rememberHighlight) {
-        document
-          .querySelectorAll(
-            '[data-change-highlight="' + rememberHighlight + '"]'
-          )[0]
-          .classList.add('highlight-active');
+        document.querySelectorAll('[data-change-highlight="' + rememberHighlight + '"]')[0].classList.add('highlight-active');
         document.body.setAttribute('data-highlight', rememberHighlight);
       }
     }
@@ -729,8 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
       var highlightData = document.querySelectorAll('[data-change-highlight]');
       highlightData.forEach((el) =>
         el.addEventListener('click', (e) => {
-          const activeHighlight =
-            document.querySelectorAll('.highlight-active');
+          const activeHighlight = document.querySelectorAll('.highlight-active');
           for (let i = 0; i < activeHighlight.length; i++) {
             activeHighlight[i].classList.remove('highlight-active');
           }
@@ -746,13 +631,9 @@ document.addEventListener('DOMContentLoaded', () => {
           loadHighlight.rel = 'stylesheet';
           loadHighlight.className = 'page-highlight';
           loadHighlight.type = 'text/css';
-          loadHighlight.href =
-            'styles/highlights/highlight_' + highlight + '.css';
+          loadHighlight.href = 'styles/highlights/highlight_' + highlight + '.css';
           document.getElementsByTagName('head')[0].appendChild(loadHighlight);
-          document.body.setAttribute(
-            'data-highlight',
-            'highlight-' + highlight
-          );
+          document.body.setAttribute('data-highlight', 'highlight-' + highlight);
           localStorage.setItem(pwaName + '-Highlight', highlight);
         })
       );
@@ -762,14 +643,10 @@ document.addEventListener('DOMContentLoaded', () => {
         loadHighlight.rel = 'stylesheet';
         loadHighlight.className = 'page-highlight';
         loadHighlight.type = 'text/css';
-        loadHighlight.href =
-          'styles/highlights/highlight_' + rememberHighlight + '.css';
+        loadHighlight.href = 'styles/highlights/highlight_' + rememberHighlight + '.css';
         if (!document.querySelectorAll('.page-highlight').length) {
           document.getElementsByTagName('head')[0].appendChild(loadHighlight);
-          document.body.setAttribute(
-            'data-highlight',
-            'highlight-' + rememberHighlight
-          );
+          document.body.setAttribute('data-highlight', 'highlight-' + rememberHighlight);
         }
       }
     }
@@ -788,10 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //Set Background and Highlight
     var pageBackground = localStorage.getItem(pwaName + '-Gradient');
     if (pageBackground) {
-      document.body.setAttribute(
-        'data-gradient',
-        'body-' + pageBackground + ''
-      );
+      document.body.setAttribute('data-gradient', 'body-' + pageBackground + '');
     }
 
     //Dark Mode
@@ -814,38 +688,24 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem(pwaName + '-Theme', 'light-mode');
       }
       function removeTransitions() {
-        var falseTransitions = document.querySelectorAll(
-          '.btn, .header, #footer-bar, .menu-box, .menu-active'
-        );
+        var falseTransitions = document.querySelectorAll('.btn, .header, #footer-bar, .menu-box, .menu-active');
         for (let i = 0; i < falseTransitions.length; i++) {
           falseTransitions[i].style.transition = 'all 0s ease';
         }
       }
       function addTransitions() {
-        var trueTransitions = document.querySelectorAll(
-          '.btn, .header, #footer-bar, .menu-box, .menu-active'
-        );
+        var trueTransitions = document.querySelectorAll('.btn, .header, #footer-bar, .menu-box, .menu-active');
         for (let i = 0; i < trueTransitions.length; i++) {
           trueTransitions[i].style.transition = '';
         }
       }
 
       function setColorScheme() {
-        const isDarkMode = window.matchMedia(
-          '(prefers-color-scheme: dark)'
-        ).matches;
-        const isLightMode = window.matchMedia(
-          '(prefers-color-scheme: light)'
-        ).matches;
-        const isNoPreference = window.matchMedia(
-          '(prefers-color-scheme: no-preference)'
-        ).matches;
-        window
-          .matchMedia('(prefers-color-scheme: dark)')
-          .addListener((e) => e.matches && activateDarkMode());
-        window
-          .matchMedia('(prefers-color-scheme: light)')
-          .addListener((e) => e.matches && activateLightMode());
+        const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
+        const isNoPreference = window.matchMedia('(prefers-color-scheme: no-preference)').matches;
+        window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => e.matches && activateDarkMode());
+        window.matchMedia('(prefers-color-scheme: light)').addListener((e) => e.matches && activateLightMode());
         if (isDarkMode) activateDarkMode();
         if (isLightMode) activateLightMode();
       }
@@ -921,72 +781,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const files = event.target.files;
         const fileName = files[0].name;
-        document
-          .getElementsByClassName('file-data')[0]
-          .classList.add('disabled');
-        document
-          .getElementsByClassName('upload-file-data')[0]
-          .classList.remove('disabled');
-        document.getElementsByClassName('upload-file-name')[0].innerHTML =
-          files[0].name;
-        document.getElementsByClassName('upload-file-modified')[0].innerHTML =
-          files[0].lastModifiedDate;
-        document.getElementsByClassName('upload-file-size')[0].innerHTML =
-          files[0].size / 1000 + 'kb';
-        document.getElementsByClassName('upload-file-type')[0].innerHTML =
-          files[0].type;
+        document.getElementsByClassName('file-data')[0].classList.add('disabled');
+        document.getElementsByClassName('upload-file-data')[0].classList.remove('disabled');
+        document.getElementsByClassName('upload-file-name')[0].innerHTML = files[0].name;
+        document.getElementsByClassName('upload-file-modified')[0].innerHTML = files[0].lastModifiedDate;
+        document.getElementsByClassName('upload-file-size')[0].innerHTML = files[0].size / 1000 + 'kb';
+        document.getElementsByClassName('upload-file-type')[0].innerHTML = files[0].type;
       }
     }
     var locationBut = document.querySelectorAll('.get-location');
     if (locationBut.length) {
-      var locationSupport =
-        document.getElementsByClassName('location-support')[0];
+      var locationSupport = document.getElementsByClassName('location-support')[0];
       if (typeof locationSupport != 'undefined' && locationSupport != null) {
         //Geo Location
         if ('geolocation' in navigator) {
-          locationSupport.innerHTML =
-            'Your browser and device <strong class="color-green2-dark">support</strong> Geolocation.';
+          locationSupport.innerHTML = 'Your browser and device <strong class="color-green2-dark">support</strong> Geolocation.';
         } else {
-          locationSupport.innerHTML =
-            'Your browser and device <strong class="color-red2-dark">support</strong> Geolocation.';
+          locationSupport.innerHTML = 'Your browser and device <strong class="color-red2-dark">support</strong> Geolocation.';
         }
       }
       function geoLocate() {
-        const locationCoordinates = document.querySelector(
-          '.location-coordinates'
-        );
+        const locationCoordinates = document.querySelector('.location-coordinates');
         function success(position) {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
           locationCoordinates.innerHTML =
-            '<strong>Longitude:</strong> ' +
-            longitude +
-            '<br><strong>Latitude:</strong> ' +
-            latitude;
-          var mapL1 =
-            'https://www.google.com/maps/embed/v1/view?key=AIzaSyAM3nxDVrkjyKwdIZp8QOplmBKLRVI5S_Y&center=';
+            '<strong>Longitude:</strong> ' + longitude + '<br><strong>Latitude:</strong> ' + latitude;
+          var mapL1 = 'https://www.google.com/maps/embed/v1/view?key=AIzaSyAM3nxDVrkjyKwdIZp8QOplmBKLRVI5S_Y&center=';
           var mapL2 = latitude + ',';
           var mapL3 = longitude;
           var mapL4 = '&zoom=16&maptype=satellite';
           var mapL5 = '';
           var mapLinkEmbed = mapL1 + mapL2 + mapL3 + mapL4;
           var mapLinkAddress = mapL1 + mapL2 + mapL3 + mapL5;
-          document
-            .getElementsByClassName('location-map')[0]
-            .setAttribute('src', mapLinkEmbed);
-          document
-            .getElementsByClassName('location-button')[0]
-            .setAttribute('href', mapLinkAddress);
-          document
-            .getElementsByClassName('location-button')[0]
-            .classList.remove('disabled');
+          document.getElementsByClassName('location-map')[0].setAttribute('src', mapLinkEmbed);
+          document.getElementsByClassName('location-button')[0].setAttribute('href', mapLinkAddress);
+          document.getElementsByClassName('location-button')[0].classList.remove('disabled');
         }
         function error() {
           locationCoordinates.textContent = 'Unable to retrieve your location';
         }
         if (!navigator.geolocation) {
-          locationCoordinates.textContent =
-            'Geolocation is not supported by your browser';
+          locationCoordinates.textContent = 'Geolocation is not supported by your browser';
         } else {
           locationCoordinates.textContent = 'Locating';
           navigator.geolocation.getCurrentPosition(success, error);
@@ -1020,16 +856,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cardHide.length) {
       cardHide.forEach((el) =>
         el.addEventListener('mouseenter', (event) => {
-          el.querySelectorAll(
-            '.card-center, .card-bottom, .card-top, .card-overlay'
-          )[0].classList.add('card-hide-image');
+          el.querySelectorAll('.card-center, .card-bottom, .card-top, .card-overlay')[0].classList.add('card-hide-image');
         })
       );
       cardHide.forEach((el) =>
         el.addEventListener('mouseleave', (event) => {
-          el.querySelectorAll(
-            '.card-center, .card-bottom, .card-top, .card-overlay'
-          )[0].classList.remove('card-hide-image');
+          el.querySelectorAll('.card-center, .card-bottom, .card-top, .card-overlay')[0].classList.remove('card-hide-image');
         })
       );
     }
@@ -1057,9 +889,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
       cardGray.forEach((el) =>
         el.addEventListener('mouseleave', (event) => {
-          el.querySelectorAll('img')[0].classList.remove(
-            'card-grayscale-image'
-          );
+          el.querySelectorAll('img')[0].classList.remove('card-grayscale-image');
         })
       );
     }
@@ -1082,8 +912,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var checkVisited = document.querySelectorAll('.check-visited');
     if (checkVisited.length) {
       function check_visited_links() {
-        var visited_links =
-          JSON.parse(localStorage.getItem(pwaName + '_Visited_Links')) || [];
+        var visited_links = JSON.parse(localStorage.getItem(pwaName + '_Visited_Links')) || [];
         var links = document.querySelectorAll('.check-visited a');
         for (let i = 0; i < links.length; i++) {
           var that = links[i];
@@ -1091,10 +920,7 @@ document.addEventListener('DOMContentLoaded', () => {
             var clicked_url = this.href;
             if (visited_links.indexOf(clicked_url) == -1) {
               visited_links.push(clicked_url);
-              localStorage.setItem(
-                pwaName + '_Visited_Links',
-                JSON.stringify(visited_links)
-              );
+              localStorage.setItem(pwaName + '_Visited_Links', JSON.stringify(visited_links));
             }
           });
           if (visited_links.indexOf(that.href) !== -1) {
@@ -1109,9 +935,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var footerBar = document.querySelectorAll('.footer-bar-5')[0];
     if (footerBar) {
-      var footerBar_select = document.querySelectorAll(
-        '#footer-bar .active-nav'
-      )[0];
+      var footerBar_select = document.querySelectorAll('#footer-bar .active-nav')[0];
       footerBar_select.insertAdjacentHTML('beforeend', '<strong></strong>');
     }
 
@@ -1120,8 +944,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var adblockMessage = document.getElementById('adblock-message');
     if (adblockMessage) {
       var adblockEnabled = false;
-      document.body.innerHTML +=
-        '<div class="adsbygoogle" id="ad-detector"></div>';
+      document.body.innerHTML += '<div class="adsbygoogle" id="ad-detector"></div>';
       var adElement = document.getElementById('ad-detector');
       var adElementStyle = getComputedStyle(adElement, null);
       if (adElementStyle.display === 'none') {
@@ -1132,9 +955,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //Ads
 
     //Scroll Ads
-    var scrollItems = document.querySelectorAll(
-      '.scroll-ad, .header-auto-show'
-    );
+    var scrollItems = document.querySelectorAll('.scroll-ad, .header-auto-show');
     if (scrollItems.length) {
       var scrollAd = document.querySelectorAll('.scroll-ad');
       var scrollHeader = document.querySelectorAll('.header-auto-show');
@@ -1191,17 +1012,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //Link List Toggle
-    var linkListToggle = document.querySelectorAll(
-      '[data-trigger-switch]:not([data-toggle-theme])'
-    );
+    var linkListToggle = document.querySelectorAll('[data-trigger-switch]:not([data-toggle-theme])');
     if (linkListToggle.length) {
       linkListToggle.forEach((el) =>
         el.addEventListener('click', (event) => {
           var switchData = el.getAttribute('data-trigger-switch');
           var getCheck = document.getElementById(switchData);
-          getCheck.checked
-            ? (getCheck.checked = false)
-            : (getCheck.checked = true);
+          getCheck.checked ? (getCheck.checked = false) : (getCheck.checked = true);
         })
       );
     }
@@ -1242,18 +1059,14 @@ document.addEventListener('DOMContentLoaded', () => {
         */
 
     //Dropdown
-    var dropdownElementList = [].slice.call(
-      document.querySelectorAll('[data-bs-toggle="dropdown"]')
-    );
+    var dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
     if (dropdownElementList.length) {
       var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
         return new bootstrap.Dropdown(dropdownToggleEl);
       });
     }
 
-    var workingHours = document.querySelectorAll(
-      '.show-business-opened, .show-business-closed, .working-hours'
-    );
+    var workingHours = document.querySelectorAll('.show-business-opened, .show-business-closed, .working-hours');
     if (workingHours.length) {
       //Working Hours
       var d = new Date();
@@ -1293,27 +1106,16 @@ document.addEventListener('DOMContentLoaded', () => {
         var matchDay = entry.getAttribute('data-day');
         if (matchDay === day[0]) {
           var matchData = '[data-day="' + day[0] + '"]';
-          if (
-            (now > day[1] && now < day[2]) ||
-            (now > day[3] && now < day[4])
-          ) {
-            document
-              .querySelectorAll(matchData)[0]
-              .classList.add('bg-green-dark');
-            document
-              .querySelectorAll(matchData + ' p')
-              .forEach(function (whiteText) {
-                whiteText.classList.add('color-white');
-              });
+          if ((now > day[1] && now < day[2]) || (now > day[3] && now < day[4])) {
+            document.querySelectorAll(matchData)[0].classList.add('bg-green-dark');
+            document.querySelectorAll(matchData + ' p').forEach(function (whiteText) {
+              whiteText.classList.add('color-white');
+            });
           } else {
-            document
-              .querySelectorAll(matchData)[0]
-              .classList.add('bg-red-dark');
-            document
-              .querySelectorAll(matchData + ' p')
-              .forEach(function (whiteText) {
-                whiteText.classList.add('color-white');
-              });
+            document.querySelectorAll(matchData)[0].classList.add('bg-red-dark');
+            document.querySelectorAll(matchData + ' p').forEach(function (whiteText) {
+              whiteText.classList.add('color-white');
+            });
           }
         }
       });
@@ -1322,13 +1124,11 @@ document.addEventListener('DOMContentLoaded', () => {
     //Vibrate API
     var vibrateButton = document.querySelectorAll('[data-vibrate]');
     if (vibrateButton.length) {
-      var startVibrating =
-        document.getElementsByClassName('start-vibrating')[0];
+      var startVibrating = document.getElementsByClassName('start-vibrating')[0];
       var stopVibrating = document.getElementsByClassName('stop-vibrating')[0];
 
       startVibrating.addEventListener('click', function () {
-        var vibrateTime =
-          document.getElementsByClassName('vibrate-demo')[0].value;
+        var vibrateTime = document.getElementsByClassName('vibrate-demo')[0].value;
         window.navigator.vibrate(vibrateTime);
       });
       stopVibrating.addEventListener('click', function () {
@@ -1353,23 +1153,13 @@ document.addEventListener('DOMContentLoaded', () => {
           var timerAdFunction = setInterval(function () {
             if (timedAdTimer <= 1) {
               clearInterval(timerAdFunction);
-              document
-                .getElementById(timedAdData)
-                .querySelectorAll('.fa-times')[0]
-                .classList.remove('disabled');
-              document
-                .getElementById(timedAdData)
-                .querySelectorAll('.close-menu')[0]
-                .classList.remove('no-click');
-              document
-                .getElementById(timedAdData)
-                .querySelectorAll('span')[0].style.display = 'none';
+              document.getElementById(timedAdData).querySelectorAll('.fa-times')[0].classList.remove('disabled');
+              document.getElementById(timedAdData).querySelectorAll('.close-menu')[0].classList.remove('no-click');
+              document.getElementById(timedAdData).querySelectorAll('span')[0].style.display = 'none';
             } else {
               //console.log(timedAdTimer);
             }
-            document
-              .getElementById(timedAdData)
-              .querySelectorAll('span')[0].innerHTML = timedAdTimer -= 1;
+            document.getElementById(timedAdData).querySelectorAll('span')[0].innerHTML = timedAdTimer -= 1;
           }, 1000);
         })
       );
@@ -1388,21 +1178,11 @@ document.addEventListener('DOMContentLoaded', () => {
           var downloadTimer = setInterval(function () {
             if (autoAdCloseTime <= 0) {
               clearInterval(downloadTimer);
-              document
-                .getElementById(autoAdId)
-                .querySelectorAll('.fa-times')[0]
-                .classList.remove('disabled');
-              document
-                .getElementById(autoAdId)
-                .querySelectorAll('.close-menu')[0]
-                .classList.remove('no-click');
-              document
-                .getElementById(autoAdId)
-                .querySelectorAll('span')[0].style.display = 'none';
+              document.getElementById(autoAdId).querySelectorAll('.fa-times')[0].classList.remove('disabled');
+              document.getElementById(autoAdId).querySelectorAll('.close-menu')[0].classList.remove('no-click');
+              document.getElementById(autoAdId).querySelectorAll('span')[0].style.display = 'none';
             }
-            document
-              .getElementById(autoAdId)
-              .querySelectorAll('span')[0].innerHTML = autoAdCloseTime -= 1;
+            document.getElementById(autoAdId).querySelectorAll('span')[0].innerHTML = autoAdCloseTime -= 1;
           }, 1000);
         }
         autoAdTime -= 1;
@@ -1417,24 +1197,17 @@ document.addEventListener('DOMContentLoaded', () => {
       var visitBeforeTime = document.querySelectorAll('.visit-before-time')[0];
       var lastVisitValue = localStorage.getItem(pwaName + '-Last-Visited');
       var d = new Date();
-      var strDate =
-        d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+      var strDate = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
       var strTime = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
       if (!lastVisitValue) {
         neverVisited.style.display = 'block';
         beforeVisited.style.display = 'none';
-        localStorage.setItem(
-          pwaName + '-Last-Visited',
-          'Your last visit was ' + strDate + ' at ' + strTime
-        );
+        localStorage.setItem(pwaName + '-Last-Visited', 'Your last visit was ' + strDate + ' at ' + strTime);
       } else {
         neverVisited.style.display = 'none';
         beforeVisited.style.display = 'block';
         visitBeforeTime.append(lastVisitValue);
-        localStorage.setItem(
-          pwaName + '-Last-Visited',
-          'Your last visit was ' + strDate + ' at ' + strTime
-        );
+        localStorage.setItem(pwaName + '-Last-Visited', 'Your last visit was ' + strDate + ' at ' + strTime);
       }
     }
 
@@ -1444,10 +1217,8 @@ document.addEventListener('DOMContentLoaded', () => {
       var readingWords = readingTextDiv[0].innerHTML.split(' ').length;
       var readingMinutes = Math.floor(readingWords / 250);
       var readingSeconds = readingWords % 60;
-      document.getElementsByClassName('reading-progress-words')[0].innerHTML =
-        readingWords;
-      document.getElementsByClassName('reading-progress-time')[0].innerHTML =
-        readingMinutes + ':' + readingSeconds;
+      document.getElementsByClassName('reading-progress-words')[0].innerHTML = readingWords;
+      document.getElementsByClassName('reading-progress-time')[0].innerHTML = readingMinutes + ':' + readingSeconds;
     }
 
     //Text Resizer
@@ -1458,25 +1229,19 @@ document.addEventListener('DOMContentLoaded', () => {
       var textSizeDefault = document.querySelectorAll('.text-size-default');
       textSizeIncrease[0].addEventListener('click', function () {
         textSizeChanger[0].querySelectorAll('*').forEach(function (element) {
-          const getFontSize = window
-            .getComputedStyle(element)
-            .fontSize.split('px', 2)[0];
+          const getFontSize = window.getComputedStyle(element).fontSize.split('px', 2)[0];
           element.style.fontSize = +getFontSize + 1 + 'px';
         });
       });
       textSizeDecrease[0].addEventListener('click', function () {
         textSizeChanger[0].querySelectorAll('*').forEach(function (element) {
-          const getFontSize = window
-            .getComputedStyle(element)
-            .fontSize.split('px', 2)[0];
+          const getFontSize = window.getComputedStyle(element).fontSize.split('px', 2)[0];
           element.style.fontSize = +getFontSize - 1 + 'px';
         });
       });
       textSizeDefault[0].addEventListener('click', function () {
         textSizeChanger[0].querySelectorAll('*').forEach(function (element) {
-          const getFontSize = window
-            .getComputedStyle(element)
-            .fontSize.split('px', 2)[0];
+          const getFontSize = window.getComputedStyle(element).fontSize.split('px', 2)[0];
           element.style.fontSize = '';
         });
       });
@@ -1487,8 +1252,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (qr_image.length) {
       var qr_this = window.location.href;
       var qr_auto = document.getElementsByClassName('generate-qr-auto')[0];
-      var qr_api_address =
-        'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=';
+      var qr_api_address = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=';
       if (qr_auto) {
         qr_auto.setAttribute('src', qr_api_address + qr_this);
       }
@@ -1496,8 +1260,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (qr_btn) {
         qr_btn.addEventListener('click', function () {
           var get_qr_url = document.getElementsByClassName('qr-url')[0].value;
-          var qr_api_address =
-            'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=';
+          var qr_api_address = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=';
           var qr_img =
             '<img class="mx-auto polaroid-effect shadow-l mt-4 delete-qr" width="200" src="' +
             qr_api_address +
@@ -1505,8 +1268,7 @@ document.addEventListener('DOMContentLoaded', () => {
             '" alt="img"><p class="font-11 text-center mb-0">' +
             get_qr_url +
             '</p>';
-          document.getElementsByClassName('generate-qr-result')[0].innerHTML =
-            qr_img;
+          document.getElementsByClassName('generate-qr-result')[0].innerHTML = qr_img;
           qr_btn.innerHTML = 'Generate New Button';
         });
       }
@@ -1526,19 +1288,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (searchField.length) {
       var searchResults = document.querySelectorAll('.search-results');
       var searchNoResults = document.querySelectorAll('.search-no-results');
-      var searchTotal = document.querySelectorAll('.search-results div')[0]
-        .childElementCount;
+      var searchTotal = document.querySelectorAll('.search-results div')[0].childElementCount;
       var searchTrending = document.querySelectorAll('.search-trending');
       function searchFunction() {
         var searchStr = searchField[0].value;
         var searchVal = searchStr.toLowerCase();
         if (searchVal != '') {
           searchResults[0].classList.remove('disabled-search-list');
-          var searchFilterItem =
-            document.querySelectorAll('[data-filter-item]');
+          var searchFilterItem = document.querySelectorAll('[data-filter-item]');
           for (let i = 0; i < searchFilterItem.length; i++) {
-            var searchData =
-              searchFilterItem[i].getAttribute('data-filter-name');
+            var searchData = searchFilterItem[i].getAttribute('data-filter-name');
             if (searchData.includes(searchVal)) {
               searchFilterItem[i].classList.remove('disabled');
               if (searchTrending.length) {
@@ -1550,9 +1309,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 searchTrending[0].classList.remove('disabled');
               }
             }
-            var disabledResults = document
-              .querySelectorAll('.search-results div')[0]
-              .getElementsByClassName('disabled').length;
+            var disabledResults = document.querySelectorAll('.search-results div')[0].getElementsByClassName('disabled').length;
             if (disabledResults === searchTotal) {
               searchNoResults[0].classList.remove('disabled');
               if (searchTrending.length) {
@@ -1585,9 +1342,7 @@ document.addEventListener('DOMContentLoaded', () => {
       var searchClick = document.querySelectorAll('.search-trending a');
       searchClick.forEach((el) =>
         el.addEventListener('click', (event) => {
-          var trendingResult = el
-            .querySelectorAll('span')[0]
-            .textContent.toLowerCase();
+          var trendingResult = el.querySelectorAll('span')[0].textContent.toLowerCase();
           searchField[0].value = trendingResult;
           searchField[0].click();
         })
@@ -1599,60 +1354,29 @@ document.addEventListener('DOMContentLoaded', () => {
       var shareTitle = document.title;
       var shareText = document.title;
       var shareLink = window.location.href;
-      if (
-        document.querySelectorAll(
-          '.shareToFacebook, .shareToTwitter, .shareToLinkedIn'
-        )[0]
-      ) {
+      if (document.querySelectorAll('.shareToFacebook, .shareToTwitter, .shareToLinkedIn')[0]) {
         document
-          .querySelectorAll(
-            '.shareToFacebook, .shareToTwitter, .shareToLinkedIn, .shareToWhatsApp, .shareToMail'
-          )
+          .querySelectorAll('.shareToFacebook, .shareToTwitter, .shareToLinkedIn, .shareToWhatsApp, .shareToMail')
           .forEach((x) => {
             x.setAttribute('target', '_blank');
           });
         document
           .querySelectorAll('.shareToFacebook')
-          .forEach((x) =>
-            x.setAttribute(
-              'href',
-              'https://www.facebook.com/sharer/sharer.php?u=' + shareLink
-            )
-          );
+          .forEach((x) => x.setAttribute('href', 'https://www.facebook.com/sharer/sharer.php?u=' + shareLink));
         document
           .querySelectorAll('.shareToTwitter')
-          .forEach((x) =>
-            x.setAttribute(
-              'href',
-              'http://twitter.com/share?text=' + shareTitle + '%20' + shareLink
-            )
-          );
+          .forEach((x) => x.setAttribute('href', 'http://twitter.com/share?text=' + shareTitle + '%20' + shareLink));
         document
           .querySelectorAll('.shareToPinterest')
-          .forEach((x) =>
-            x.setAttribute(
-              'href',
-              'https://pinterest.com/pin/create/button/?url=' + shareLink
-            )
-          );
-        document
-          .querySelectorAll('.shareToWhatsApp')
-          .forEach((x) =>
-            x.setAttribute('href', 'whatsapp://send?text=' + shareLink)
-          );
-        document
-          .querySelectorAll('.shareToMail')
-          .forEach((x) => x.setAttribute('href', 'mailto:?body=' + shareLink));
+          .forEach((x) => x.setAttribute('href', 'https://pinterest.com/pin/create/button/?url=' + shareLink));
+        document.querySelectorAll('.shareToWhatsApp').forEach((x) => x.setAttribute('href', 'whatsapp://send?text=' + shareLink));
+        document.querySelectorAll('.shareToMail').forEach((x) => x.setAttribute('href', 'mailto:?body=' + shareLink));
         document
           .querySelectorAll('.shareToLinkedIn')
           .forEach((x) =>
             x.setAttribute(
               'href',
-              'https://www.linkedin.com/shareArticle?mini=true&url=' +
-                shareLink +
-                '&title=' +
-                shareTitle +
-                '&summary=&source='
+              'https://www.linkedin.com/shareArticle?mini=true&url=' + shareLink + '&title=' + shareTitle + '&summary=&source='
             )
           );
 
@@ -1663,9 +1387,7 @@ document.addEventListener('DOMContentLoaded', () => {
             text: shareText,
             url: shareLink,
           };
-          var shareMenu = document.querySelectorAll(
-            '[data-menu="menu-share"], [data-show-share]'
-          );
+          var shareMenu = document.querySelectorAll('[data-menu="menu-share"], [data-show-share]');
           if (shareMenu) {
             shareMenu.forEach((el) => {
               el.addEventListener('click', async () => {
@@ -1707,9 +1429,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (nameField.value === '') {
           form.setAttribute('data-form', 'invalid');
           nameField.classList.add('border-red-dark');
-          document
-            .getElementById('validator-name')
-            .classList.remove('disabled');
+          document.getElementById('validator-name').classList.remove('disabled');
         } else {
           form.setAttribute('data-form', 'valid');
           document.getElementById('validator-name').classList.add('disabled');
@@ -1718,31 +1438,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mailField.value === '') {
           form.setAttribute('data-form', 'invalid');
           mailField.classList.add('border-red-dark');
-          document
-            .getElementById('validator-mail1')
-            .classList.remove('disabled');
+          document.getElementById('validator-mail1').classList.remove('disabled');
         } else {
           document.getElementById('validator-mail1').classList.add('disabled');
           if (!validateMail.test(mailField.value)) {
             form.setAttribute('data-form', 'invalid');
             mailField.classList.add('border-red-dark');
-            document
-              .getElementById('validator-mail2')
-              .classList.remove('disabled');
+            document.getElementById('validator-mail2').classList.remove('disabled');
           } else {
             form.setAttribute('data-form', 'valid');
-            document
-              .getElementById('validator-mail2')
-              .classList.add('disabled');
+            document.getElementById('validator-mail2').classList.add('disabled');
             mailField.classList.remove('border-red-dark');
           }
         }
         if (textField.value === '') {
           form.setAttribute('data-form', 'invalid');
           textField.classList.add('border-red-dark');
-          document
-            .getElementById('validator-text')
-            .classList.remove('disabled');
+          document.getElementById('validator-text').classList.remove('disabled');
         } else {
           form.setAttribute('data-form', 'valid');
           document.getElementById('validator-text').classList.add('disabled');
@@ -1750,12 +1462,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (form.getAttribute('data-form') === 'valid') {
-          document
-            .querySelectorAll('.form-sent')[0]
-            .classList.remove('disabled');
-          document
-            .querySelectorAll('.contact-form')[0]
-            .classList.add('disabled');
+          document.querySelectorAll('.form-sent')[0].classList.remove('disabled');
+          document.querySelectorAll('.contact-form')[0].classList.add('disabled');
           // Collect the form data while iterating over the inputs
           var data = {};
           for (let i = 0, ii = form.length; i < ii; ++i) {
@@ -1768,10 +1476,7 @@ document.addEventListener('DOMContentLoaded', () => {
           var xhr = new XMLHttpRequest();
           xhr.open(form.method, form.action, true);
           xhr.setRequestHeader('Accept', 'application/json; charset=utf-8');
-          xhr.setRequestHeader(
-            'Content-Type',
-            'application/json; charset=UTF-8'
-          );
+          xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
           // Send the collected data as JSON
           xhr.send(JSON.stringify(data));
           // Callback function
@@ -1785,9 +1490,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //Collapse Flip Icon
-    var collapseBtn = document.querySelectorAll(
-      '[data-bs-toggle="collapse"]:not(.no-effect)'
-    );
+    var collapseBtn = document.querySelectorAll('[data-bs-toggle="collapse"]:not(.no-effect)');
     if (collapseBtn.length) {
       collapseBtn.forEach((el) =>
         el.addEventListener('click', (e) => {
@@ -1828,16 +1531,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (menuFunction === 'show') {
           return (
             document.getElementById(menuName).classList.add('menu-active'),
-            document
-              .querySelectorAll('.menu-hider')[0]
-              .classList.add('menu-active')
+            document.querySelectorAll('.menu-hider')[0].classList.add('menu-active')
           );
         } else {
           return (
             document.getElementById(menuName).classList.remove('menu-active'),
-            document
-              .querySelectorAll('.menu-hider')[0]
-              .classList.remove('menu-active')
+            document.querySelectorAll('.menu-hider')[0].classList.remove('menu-active')
           );
         }
       }, menuTimeout);
@@ -1867,23 +1566,16 @@ document.addEventListener('DOMContentLoaded', () => {
     var checkAge = document.querySelectorAll('.check-age');
     if (checkAge.length) {
       checkAge[0].addEventListener('click', function () {
-        var dateBirthday =
-          document.querySelectorAll('#date-birth-day')[0].value;
-        var dateBirthMonth =
-          document.querySelectorAll('#date-birth-month')[0].value;
-        var dateBirthYear =
-          document.querySelectorAll('#date-birth-year')[0].value;
+        var dateBirthday = document.querySelectorAll('#date-birth-day')[0].value;
+        var dateBirthMonth = document.querySelectorAll('#date-birth-month')[0].value;
+        var dateBirthYear = document.querySelectorAll('#date-birth-year')[0].value;
         var age = 18;
         var mydate = new Date();
         mydate.setFullYear(dateBirthYear, dateBirthMonth - 1, dateBirthday);
 
         var currdate = new Date();
         var setDate = new Date();
-        setDate.setFullYear(
-          mydate.getFullYear() + age,
-          dateBirthMonth - 1,
-          dateBirthday
-        );
+        setDate.setFullYear(mydate.getFullYear() + age, dateBirthMonth - 1, dateBirthday);
 
         var menuAge = document.querySelectorAll('#menu-age');
         var menuAgeFail = document.querySelectorAll('#menu-age-fail');
@@ -2051,13 +1743,9 @@ document.addEventListener('DOMContentLoaded', () => {
       var showOffline = document.querySelectorAll('.show-offline');
       showOffline.forEach((el) =>
         el.addEventListener('click', (event) => {
-          document
-            .getElementsByClassName('offline-message')[0]
-            .classList.add('offline-message-active');
+          document.getElementsByClassName('offline-message')[0].classList.add('offline-message-active');
           setTimeout(function () {
-            document
-              .getElementsByClassName('offline-message')[0]
-              .classList.remove('offline-message-active');
+            document.getElementsByClassName('offline-message')[0].classList.remove('offline-message-active');
           }, 1500);
         })
       );
@@ -2122,12 +1810,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const iOSBadge = document.querySelectorAll('.simulate-iphone-badge');
     iOSBadge.forEach((el) =>
       el.addEventListener('click', (e) => {
-        document
-          .getElementsByClassName('add-to-home')[0]
-          .classList.add('add-to-home-visible', 'add-to-home-ios');
-        document
-          .getElementsByClassName('add-to-home')[0]
-          .classList.remove('add-to-home-android');
+        document.getElementsByClassName('add-to-home')[0].classList.add('add-to-home-visible', 'add-to-home-ios');
+        document.getElementsByClassName('add-to-home')[0].classList.remove('add-to-home-android');
       })
     );
 
@@ -2135,12 +1819,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const AndroidBadge = document.querySelectorAll('.simulate-android-badge');
     AndroidBadge.forEach((el) =>
       el.addEventListener('click', (e) => {
-        document
-          .getElementsByClassName('add-to-home')[0]
-          .classList.add('add-to-home-visible', 'add-to-home-android');
-        document
-          .getElementsByClassName('add-to-home')[0]
-          .classList.remove('add-to-home-ios');
+        document.getElementsByClassName('add-to-home')[0].classList.add('add-to-home-visible', 'add-to-home-android');
+        document.getElementsByClassName('add-to-home')[0].classList.remove('add-to-home-ios');
       })
     );
 
@@ -2148,9 +1828,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addToHomeBadgeClose = document.querySelectorAll('.add-to-home');
     addToHomeBadgeClose.forEach((el) =>
       el.addEventListener('click', (e) => {
-        document
-          .getElementsByClassName('add-to-home')[0]
-          .classList.remove('add-to-home-visible');
+        document.getElementsByClassName('add-to-home')[0].classList.remove('add-to-home-visible');
       })
     );
 
@@ -2160,11 +1838,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!checkPWA.classList.contains('isPWA')) {
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', function () {
-            navigator.serviceWorker
-              .register(pwaLocation, { scope: pwaScope })
-              .then(function (registration) {
-                registration.update();
-              });
+            navigator.serviceWorker.register(pwaLocation, { scope: pwaScope }).then(function (registration) {
+              registration.update();
+            });
           });
         }
 
@@ -2182,42 +1858,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const pwaClose = document.querySelectorAll('.pwa-dismiss');
         pwaClose.forEach((el) =>
           el.addEventListener('click', (e) => {
-            const pwaWindows = document.querySelectorAll(
-              '#menu-install-pwa-android, #menu-install-pwa-ios'
-            );
+            const pwaWindows = document.querySelectorAll('#menu-install-pwa-android, #menu-install-pwa-ios');
             for (let i = 0; i < pwaWindows.length; i++) {
               pwaWindows[i].classList.remove('menu-active');
             }
             localStorage.setItem(pwaName + '-PWA-Timeout-Value', now);
             localStorage.setItem(pwaName + '-PWA-Prompt', 'install-rejected');
-            console.log(
-              'PWA Install Rejected. Will Show Again in ' + pwaRemind + ' Days'
-            );
+            console.log('PWA Install Rejected. Will Show Again in ' + pwaRemind + ' Days');
           })
         );
 
         //Trigger Install Prompt for Android
-        const pwaWindows = document.querySelectorAll(
-          '#menu-install-pwa-android, #menu-install-pwa-ios'
-        );
+        const pwaWindows = document.querySelectorAll('#menu-install-pwa-android, #menu-install-pwa-ios');
         if (pwaWindows.length) {
           if (isMobile.Android()) {
-            if (
-              localStorage.getItem(pwaName + '-PWA-Prompt') !=
-              'install-rejected'
-            ) {
+            if (localStorage.getItem(pwaName + '-PWA-Prompt') != 'install-rejected') {
               function showInstallPrompt() {
                 setTimeout(function () {
-                  if (
-                    !window.matchMedia('(display-mode: fullscreen)').matches
-                  ) {
+                  if (!window.matchMedia('(display-mode: fullscreen)').matches) {
                     console.log('Triggering PWA Window for Android');
-                    document
-                      .getElementById('menu-install-pwa-android')
-                      .classList.add('menu-active');
-                    document
-                      .querySelectorAll('.menu-hider')[0]
-                      .classList.add('menu-active');
+                    document.getElementById('menu-install-pwa-android').classList.add('menu-active');
+                    document.querySelectorAll('.menu-hider')[0].classList.add('menu-active');
                   }
                 }, 3500);
               }
@@ -2237,20 +1898,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('Added');
                   } else {
                     localStorage.setItem(pwaName + '-PWA-Timeout-Value', now);
-                    localStorage.setItem(
-                      pwaName + '-PWA-Prompt',
-                      'install-rejected'
-                    );
+                    localStorage.setItem(pwaName + '-PWA-Prompt', 'install-rejected');
                     setTimeout(function () {
-                      if (
-                        !window.matchMedia('(display-mode: fullscreen)').matches
-                      ) {
-                        document
-                          .getElementById('menu-install-pwa-android')
-                          .classList.remove('menu-active');
-                        document
-                          .querySelectorAll('.menu-hider')[0]
-                          .classList.remove('menu-active');
+                      if (!window.matchMedia('(display-mode: fullscreen)').matches) {
+                        document.getElementById('menu-install-pwa-android').classList.remove('menu-active');
+                        document.querySelectorAll('.menu-hider')[0].classList.remove('menu-active');
                       }
                     }, 50);
                   }
@@ -2259,29 +1911,18 @@ document.addEventListener('DOMContentLoaded', () => {
               })
             );
             window.addEventListener('appinstalled', (evt) => {
-              document
-                .getElementById('menu-install-pwa-android')
-                .classList.remove('menu-active');
-              document
-                .querySelectorAll('.menu-hider')[0]
-                .classList.remove('menu-active');
+              document.getElementById('menu-install-pwa-android').classList.remove('menu-active');
+              document.querySelectorAll('.menu-hider')[0].classList.remove('menu-active');
             });
           }
           //Trigger Install Guide iOS
           if (isMobile.iOS()) {
-            if (
-              localStorage.getItem(pwaName + '-PWA-Prompt') !=
-              'install-rejected'
-            ) {
+            if (localStorage.getItem(pwaName + '-PWA-Prompt') != 'install-rejected') {
               setTimeout(function () {
                 if (!window.matchMedia('(display-mode: fullscreen)').matches) {
                   console.log('Triggering PWA Window for iOS');
-                  document
-                    .getElementById('menu-install-pwa-ios')
-                    .classList.add('menu-active');
-                  document
-                    .querySelectorAll('.menu-hider')[0]
-                    .classList.add('menu-active');
+                  document.getElementById('menu-install-pwa-ios').classList.add('menu-active');
+                  document.querySelectorAll('.menu-hider')[0].classList.add('menu-active');
                 }
               }, 3500);
             }
@@ -2430,8 +2071,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   //Fix Scroll for AJAX pages.
-  if ('scrollRestoration' in window.history)
-    window.history.scrollRestoration = 'manual';
+  if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
 
   //End of Init Template
   if (isAJAX === true) {
@@ -2441,8 +2081,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cache: false,
         animateHistoryBrowsing: false,
         plugins: [new SwupPreloadPlugin()],
-        linkSelector:
-          'a:not(.external-link):not(.default-link):not([href^="https"]):not([href^="http"]):not([data-gallery])',
+        linkSelector: 'a:not(.external-link):not(.default-link):not([href^="https"]):not([href^="http"]):not([data-gallery])',
       };
       const swup = new Swup(options);
       document.addEventListener('swup:pageView', (e) => {

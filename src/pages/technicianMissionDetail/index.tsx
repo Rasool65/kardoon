@@ -32,7 +32,7 @@ import Select from 'react-select';
 import { IAttributesResultModel } from '@src/models/output/missionDetail/IAttributesResultModel';
 import { useToast } from './../../hooks/useToast';
 
-const technicianMissionDetail: FunctionComponent<IPageProps> = (prop) => {
+const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
   const search = useLocation().search;
   const id = new URLSearchParams(search).get('id');
@@ -108,10 +108,11 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (prop) => {
   useEffect(() => {
     GetMissionDetail();
     FormGenDetail();
-    document.title = 'لیست ماموریت ها';
     CustomFunctions();
   }, []);
-
+  useEffect(() => {
+    document.title = props.title;
+  }, [props.title]);
   return (
     <>
       <div id="page">
@@ -239,7 +240,6 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (prop) => {
                     <span className="contact">
                       <i
                         className="fa-solid fa-location-crosshairs"
-                        // onClick={() => navigate(`${URL_TECHNICIAN_MISSION_DETAIL_ACTION}?id=${missionDetail?.requestDetailId}`)}
                         onClick={() =>
                           navigate(`${URL_TECHNICIAN_MISSION_DETAIL_ACTION}`, {
                             state: {

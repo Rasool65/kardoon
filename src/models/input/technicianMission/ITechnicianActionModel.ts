@@ -8,32 +8,41 @@ export interface ITechnicianActionModel {
   count: number;
   serviceTypeId: IService;
   description: string;
+  sourceCost: ISourceCost;
+  // discountAmount?: string;
 }
 
 export const AddTechnicianActionModelSchema: yup.SchemaOf<ITechnicianActionModel> = yup.object({
   id: yup.number(), //RequestDetailID
-  serviceTypeId: yup
-    .object({
-      value: yup.number().required('انتخاب نوع خدمت اجباریست'),
-      label: yup.string().required('انتخاب نوع خدمت اجباریست'),
-    })
-    .required('انتخاب نوع خدمت اجباریست'),
+  serviceTypeId: yup.object({
+    value: yup.number().required('انتخاب نوع خدمت اجباریست'),
+    label: yup.string().required('انتخاب نوع خدمت اجباریست'),
+  }),
   technicianId: yup.number(),
-  price: yup.number().required('مبلغ اجباریست'),
+  price: yup.number().required('مقدار هزینه اجباریست'),
   count: yup.number().required('تعداد اجباریست'),
-  description: yup.string().required('شرح کار اجباریست'),
-  action: yup
-    .object({
-      value: yup.number().required('انتخاب عنوان خدمت اجباریست'),
-      label: yup.string().required('انتخاب عنوان خدمت اجباریست'),
-    })
-    .required('انتخاب عنوان خدمت اجباریست'), //ActionTitle id
+  description: yup.string().required('توضیحات شرح اقدام اجباریست'),
+  action: yup.object({
+    price: yup.number().nullable(),
+    value: yup.number().required('انتخاب گروه خدمات اجباریست'),
+    label: yup.string().required('انتخاب گروه خدمات اجباریست'),
+  }),
+  sourceCost: yup.object({
+    value: yup.number().required('انتخاب منبع هزینه اجباریست'),
+    label: yup.string().required('انتخاب منبع هزینه اجباریست'),
+  }),
+  // discountAmount: yup.string(),
 });
 interface IAction {
+  price: number | null | undefined;
   value: number;
   label: string;
 }
 interface IService {
+  value: number;
+  label: string;
+}
+interface ISourceCost {
   value: number;
   label: string;
 }

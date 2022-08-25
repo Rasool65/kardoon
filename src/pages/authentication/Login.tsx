@@ -20,6 +20,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import EnterCode from './EnterCode';
 import { CustomFunctions } from '@src/utils/custom';
+import manifestJson from '../../../public/_manifest.json';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -42,12 +43,11 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   } = useForm<ILoginModel>({ mode: 'onChange', resolver: yupResolver(LoginModelSchema) });
 
   //todo <button onClick={() => i18n.changeLanguage('fa')}>changeLanguage</button>  */
-
   const onSubmit = (data: ILoginModel) => {
     setLoading(true);
     const body = {
-      ClientId: 'Kardoon_Technician',
-      ClientSecret: 'p@ssword@123',
+      ClientId: manifestJson.clientId,
+      ClientSecret: manifestJson.clientSecret,
       UserName: data.username,
       Password: data.password,
     };

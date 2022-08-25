@@ -9,7 +9,7 @@ import './style.css';
 import { useLocation } from 'react-router-dom';
 import PrevHeader from '@src/layout/PrevHeader';
 import { CustomFunctions } from '@src/utils/custom';
-const TechnicianProfile: FunctionComponent<IPageProps> = () => {
+const TechnicianProfile: FunctionComponent<IPageProps> = (props) => {
   const httpRequest = useHttpRequest();
   const search = useLocation().search;
   const id = new URLSearchParams(search).get('id');
@@ -19,13 +19,15 @@ const TechnicianProfile: FunctionComponent<IPageProps> = () => {
       .getRequest<IOutputResult<ITechnicianProfileResultModel>>(`${APIURL_GET_TECHNICIAN_PROFILE}?id=${id}`)
       .then((result) => {
         setProfile(result.data.data);
-        console.log(id);
       });
   };
   useEffect(() => {
     CustomFunctions();
     GetTechnicianProfile();
   }, []);
+  useEffect(() => {
+    document.title = props.title;
+  }, [props.title]);
   return (
     <>
       <div id="page">

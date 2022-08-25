@@ -14,21 +14,17 @@ import { APIURL_GET_PRODUCTS_ATTRIBUTES } from '@src/configs/apiConfig/apiUrls';
 
 const RequestDetailZero: FunctionComponent<IRequestDetailPageProp> = ({ handleClickNextToFirst }) => {
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
-
-  const navigate = useNavigate();
   const httpRequest = useHttpRequest();
   const { t }: any = useTranslation();
   const { state }: any = useLocation();
   const [loading, setLoading] = useState<boolean>(false);
   const [schema, setSchema] = useState<JSONSchema7>();
-  const [Ui, setUi] = useState<UiSchema>();
+  // const [Ui, setUi] = useState<UiSchema>();
   const GetFormSchema = () => {
-    debugger;
     setLoading(true);
     httpRequest
       .getRequest<IOutputResult<JSONSchema7>>(
         `${APIURL_GET_PRODUCTS_ATTRIBUTES}?CityId=${cityId}&ProductId=${state.ProductId}&ServiceTypeId=${state.ServiceTypeId}`
-        // 'http://127.0.0.1:2500/getFormSchema'
       )
       .then((result) => {
         setSchema(result.data.data);
@@ -36,17 +32,19 @@ const RequestDetailZero: FunctionComponent<IRequestDetailPageProp> = ({ handleCl
         setLoading(false);
       });
   };
-
-  const GetFormUI = () => {
-    setLoading(true);
-    httpRequest.getRequest<IOutputResult<UiSchema>>('http://127.0.0.1:2500/getFormUI').then((result) => {
-      setUi(result.data.data);
-      setLoading(false);
-    });
+  const uiSchema = {
+    'ui:widget': 'checkboxes',
   };
+  // const GetFormUI = () => {
+  //   setLoading(true);
+  //   httpRequest.getRequest<IOutputResult<UiSchema>>('http://127.0.0.1:2500/getFormUI').then((result) => {
+  //     setUi(result.data.data);
+  //     setLoading(false);
+  //   });
+  // };
   useEffect(() => {
-    GetFormSchema();
     // GetFormUI();
+    GetFormSchema();
     CustomFunctions();
   }, []);
 
@@ -55,11 +53,11 @@ const RequestDetailZero: FunctionComponent<IRequestDetailPageProp> = ({ handleCl
   };
 
   const onChange = (event: IChangeEvent<unknown>) => {
-    console.log('change', event.formData);
+    // console.log('change', event.formData);
   };
 
   const onError = (errors: AjvError[]) => {
-    console.error(errors);
+    // console.error(errors);
   };
   return (
     <div id="page">
@@ -90,7 +88,7 @@ const RequestDetailZero: FunctionComponent<IRequestDetailPageProp> = ({ handleCl
           ) : (
             <div>
               {schema && (
-                <Form schema={schema} uiSchema={Ui} onSubmit={onSubmit} onChange={onChange} onError={onError}>
+                <Form schema={schema} uiSchema={uiSchema} onSubmit={onSubmit} onChange={onChange} onError={onError}>
                   <Button className="btn btn-info" style={{ marginTop: '10px', width: '100px' }} type="submit">
                     ثبت
                   </Button>

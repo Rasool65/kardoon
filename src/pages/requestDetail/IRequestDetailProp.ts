@@ -4,6 +4,7 @@ export interface IRequestDetailPageProp {
   handleClickMore?: any;
   handleSubmit?: any;
   isLoading?: boolean;
+  title?: string;
 }
 
 export interface IRequestDetailSecond {

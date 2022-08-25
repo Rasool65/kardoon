@@ -46,6 +46,9 @@ const Products: FunctionComponent<IPageProps> = (props) => {
 
   useEffect(() => {
     GetProducts();
+  }, []);
+
+  useEffect(() => {
     document.title = props.title;
   }, [props.title]);
 

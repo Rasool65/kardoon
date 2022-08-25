@@ -20,7 +20,7 @@ import { Button, Spinner } from 'reactstrap';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
 import { URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '../../configs/urls';
 
-const Order: FunctionComponent<IPageProps> = () => {
+const Order: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
   const httpRequest = useHttpRequest();
   const [orderList, setOrderList] = useState<any>([]);
@@ -50,6 +50,9 @@ const Order: FunctionComponent<IPageProps> = () => {
     CustomFunctions();
     GetCurrentOrders();
   }, []);
+  useEffect(() => {
+    document.title = props.title;
+  }, [props.title]);
   return (
     <div id="page">
       <div className="page-content">

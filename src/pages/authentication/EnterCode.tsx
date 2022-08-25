@@ -14,7 +14,7 @@ import { handleLogin } from '@src/redux/reducers/authenticationReducer';
 import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
 import { URL_USER_PROFILE } from '@src/configs/urls';
 import { useTranslation } from 'react-i18next';
-
+import manifesJson from '../../../public/_manifest.json';
 const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileNumber, handleEditMobileNo }) => {
   const toast = useToast();
   const { t }: any = useTranslation();
@@ -41,8 +41,8 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
   const LoginWithSMS = (e: string) => {
     setPinLoading(true);
     const body = {
-      ClientId: 'Kardoon_Technician',
-      ClientSecret: 'p@ssword@123',
+      ClientId: manifesJson.clientId,
+      ClientSecret: manifesJson.clientSecret,
       UserName: mobileNumber,
       Password: e,
     };

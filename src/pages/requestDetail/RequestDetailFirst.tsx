@@ -197,7 +197,7 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                         <img
                           hidden={isRecording}
                           style={{ cursor: 'pointer' }}
-                          src="images/forTest/voice.png"
+                          src={require('@src/scss/images/forTest/voice.png')}
                           onClick={() => {
                             startRecording();
                             setAudioDisplay('flex');
@@ -209,7 +209,7 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                         <img
                           hidden={!isRecording}
                           style={{ cursor: 'pointer' }}
-                          src="images/forTest/stop.png"
+                          src={require('@src/scss/images/forTest/stop.png')}
                           onClick={() => {
                             stopRecording();
                           }}
@@ -242,7 +242,7 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                         <img
                           hidden={isRecording}
                           style={{ cursor: 'pointer' }}
-                          src="images/forTest/delete.png"
+                          src={require('@src/scss/images/forTest/delete.png')}
                           onClick={() => {
                             setAudioFile(null);
                             setAudioDisplay('none');
@@ -269,7 +269,13 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                       </Col>
                       <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
                         <label htmlFor="img">
-                          <img style={{ cursor: 'pointer' }} src="images/forTest/camera.png" width="46" height="46" alt="" />
+                          <img
+                            style={{ cursor: 'pointer' }}
+                            src={require('@src/scss/images/forTest/camera.png')}
+                            width="46"
+                            height="46"
+                            alt=""
+                          />
                         </label>
                         <Input
                           onChange={onImageFileChange}
@@ -300,7 +306,7 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                       <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
                         <img
                           style={{ cursor: 'pointer' }}
-                          src="images/forTest/delete.png"
+                          src={require('@src/scss/images/forTest/delete.png')}
                           onClick={() => {
                             setImgSrcList([]);
                             setImageFile([]);
@@ -327,7 +333,13 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                       </Col>
                       <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
                         <label htmlFor="video">
-                          <img style={{ cursor: 'pointer' }} src="images/forTest/video.png" width="46" height="46" alt="" />
+                          <img
+                            style={{ cursor: 'pointer' }}
+                            src={require('@src/scss/images/forTest/video.png')}
+                            width="46"
+                            height="46"
+                            alt=""
+                          />
                         </label>
                         <Input
                           onChange={onVideoFileChange}
@@ -356,7 +368,7 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
                       <Col xs={3} style={{ textAlign: 'left', padding: '0 2px 0 12px' }}>
                         <img
                           style={{ zIndex: '1', cursor: 'pointer' }}
-                          src="images/forTest/delete.png"
+                          src={require('@src/scss/images/forTest/delete.png')}
                           onClick={() => {
                             setVideoFile(null);
                             setVideoDisplay('none');

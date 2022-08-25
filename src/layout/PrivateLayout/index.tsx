@@ -3,8 +3,6 @@ import IPageProps from '@src/configs/routerConfig/IPageProps';
 
 const PrivateLayout = (props: any) => {
   const { children, title } = props;
-  console.log(title);
-
   return (
     <div id="body">
       <div className="page-content">

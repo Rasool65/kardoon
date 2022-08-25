@@ -18,7 +18,7 @@ const Routers: FunctionComponent = () => {
         {routes.map((route, index) => {
           return route.type == RouteType.all ? (
             //* all Route
-            <Route key={index} path={route.path} element={<route.component />} />
+            <Route key={index} path={route.path} element={<route.component {...route.props} />} />
           ) : (
             <>
               {routes.map((route, index) => {
@@ -30,7 +30,7 @@ const Routers: FunctionComponent = () => {
                       path={route.path}
                       element={
                         // <PrivateLayout {...route.props}> // problem with menu-main modal
-                        <route.component name={route.name} />
+                        <route.component name={route.name} {...route.props} />
                         // </PrivateLayout>
                       }
                     />

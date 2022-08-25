@@ -25,7 +25,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { IPageListOutputResult } from '@src/models/output/IPageListOutputResult';
 import PrevHeader from '@src/layout/PrevHeader';
 
-const TechnicianMission: FunctionComponent<IPageProps> = () => {
+const TechnicianMission: FunctionComponent<IPageProps> = (props) => {
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const TechnicianId = useSelector((state: RootStateType) => state.authentication.userData?.userId);
   const [loading, setLoading] = useState<boolean>(false);
@@ -105,7 +105,9 @@ const TechnicianMission: FunctionComponent<IPageProps> = () => {
     GetConsumers(TechnicianId!);
     CustomFunctions();
   }, []);
-
+  useEffect(() => {
+    document.title = props.title;
+  }, [props.title]);
   return (
     <>
       <div id="page">

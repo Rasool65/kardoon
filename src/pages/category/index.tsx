@@ -142,12 +142,14 @@ const Category: FunctionComponent<IPageProps> = (props) => {
                         }}
                       >
                         <div className="card-center text-uppercase ps-3">
+                          <img className="color-white mb-0 pb-2 font-11" style={{ width: '100px' }} src={item.logoUrl} />
+
                           <h1 className="color-white fa-5x pb-3">{item.id}</h1>
                           <h6 className="color-white pt-1">{item.name}</h6>
                         </div>
-                        <div className="card-bottom ps-3">
+                        {/* <div className="card-bottom ps-3">
                           <p className="color-white mb-0 pb-2 font-11">{item.logoUrl}</p>
-                        </div>
+                        </div> */}
                         <div className="card-overlay bg-black opacity-90"></div>
                       </div>
                     </div>

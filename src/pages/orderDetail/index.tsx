@@ -1,5 +1,10 @@
 import Form, { AjvError, IChangeEvent, ISubmitEvent, UiSchema } from '@rjsf/core';
-import { APIURL_GET_MISSION_ATTRIBUTES_DETAILS, APIURL_GET_ORDER_DETAILS } from '@src/configs/apiConfig/apiUrls';
+import {
+  APIURL_GET_MISSION_ATTRIBUTES_DETAILS,
+  APIURL_GET_ORDER_DETAILS,
+  APIURL_POST_INVOICE_CHECKOUT,
+  APIURL_POST_INVOICE_CHECKOUT_ALL,
+} from '@src/configs/apiConfig/apiUrls';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import Footer from '@src/layout/Footer';
 import { IOutputResult } from '@src/models/output/IOutputResult';
@@ -15,15 +20,16 @@ import { RootStateType } from '@src/redux/Store';
 import { CustomFunctions } from '@src/utils/custom';
 import { DateHelper } from '@src/utils/dateHelper';
 import { UtilsHelper } from '@src/utils/GeneralHelpers';
-import { FunctionComponent, useEffect, useState, forwardRef } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Spinner } from 'reactstrap';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
 import { URL_MY_ORDERS } from '../../configs/urls';
 import { IAttributesResultModel } from '@src/models/output/missionDetail/IAttributesResultModel';
+import { useToast } from '@src/hooks/useToast';
 
-const OrderDetail: FunctionComponent<IPageProps> = () => {
+const OrderDetail: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
   const search = useLocation().search;
   const id = new URLSearchParams(search).get('id');
@@ -33,12 +39,16 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [formloading, setFormLoading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>();
-  const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const [genForm, setGenForm] = useState<IAttributesResultModel>();
+  const [checkoutLoading, setCheckoutLoading] = useState<boolean>(false);
+  const [checkoutAllLoading, setCheckoutAllLoading] = useState<boolean>(false);
+  const userData = useSelector((state: RootStateType) => state.authentication.userData);
+  const toast = useToast();
   const uiSchema = {
     'ui:readonly': true,
     // 'ui:widget': 'checkboxes',
   };
+
   const GetOrderDetailList = () => {
     setLoading(true);
     httpRequest
@@ -62,11 +72,51 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
         setFormLoading(false);
       });
   };
+  const Checkout = (paymentId: number, consumerPaymentAmount: number) => {
+    const body = {
+      paymentId: paymentId,
+      userId: userData?.userId,
+      consumerPaymentAmount: consumerPaymentAmount,
+    };
+    setCheckoutLoading(true);
+    !loading &&
+      httpRequest
+        .postRequest<IOutputResult<any>>(`${APIURL_POST_INVOICE_CHECKOUT}`, body)
+        .then((result) => {
+          toast.showSuccess(result.data.message);
+          GetOrderDetailList();
+          setCheckoutLoading(false);
+        })
+        .finally(() => {
+          setCheckoutLoading(false);
+        });
+  };
+  const CheckoutAll = (requestNumber: string) => {
+    setCheckoutAllLoading(true);
+    const body = {
+      userId: userData?.userId,
+      requestNumber: requestNumber,
+    };
+    !checkoutAllLoading &&
+      httpRequest
+        .postRequest<IOutputResult<any>>(`${APIURL_POST_INVOICE_CHECKOUT_ALL}`, body)
+        .then((result) => {
+          toast.showSuccess(result.data.message);
+          GetOrderDetailList();
+          setCheckoutAllLoading(false);
+        })
+        .finally(() => {
+          setCheckoutAllLoading(false);
+        });
+  };
 
   useEffect(() => {
     CustomFunctions();
     GetOrderDetailList();
   }, []);
+  useEffect(() => {
+    document.title = props.title;
+  }, [props.title]);
   return (
     <>
       <div id="page">
@@ -247,9 +297,7 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
               <div
                 className="card "
                 style={{
-                  height: '40vh',
                   display: 'flex',
-                  justifyContent: 'center',
                   alignItems: 'center',
                 }}
               >
@@ -263,9 +311,9 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                       orderDetailList.invoice.length &&
                       orderDetailList.invoice.map((invoice: IInvoice, index: number) => {
                         return (
-                          <div className="col-12 justify-content-between">
-                            <div className="col-4">
-                              {index + 1} - {invoice.title}
+                          <div className="justify-content-evenly">
+                            <div>
+                              {index + 1}- {invoice.serviceTypeTitle} {invoice.productName}
                             </div>
                             <div className={invoice.discount ? 'discount' : ''}>
                               {UtilsHelper.threeDigitSeparator(invoice.price)}
@@ -275,12 +323,25 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                             ) : (
                               ''
                             )}
-                            <div className="col-1">
-                              <i className="fa fa-check"></i>
+                            <div>
+                              {invoice.settlementStatus ? <i className="fa fa-check" /> : <i className="fa fa-hourglass" />}
                             </div>
-                            <div className="col-1 " style={{ marginLeft: 'auto' }}>
-                              {invoice.status}
-                              {!invoice.settlementStatus ? <Button>پرداخت</Button> : ''}
+                            <div>
+                              {invoice.settlementStatus ? (
+                                invoice.status
+                              ) : !invoice.settlementStatus ? (
+                                <Button
+                                  onClick={() => {
+                                    Checkout(invoice.paymentId, invoice.priceAfterDiscount!);
+                                  }}
+                                  className="btn btn-success"
+                                  style={{ fontSize: 'inherit' }}
+                                >
+                                  {checkoutLoading ? <Spinner /> : 'پرداخت'}
+                                </Button>
+                              ) : (
+                                ''
+                              )}
                             </div>
                           </div>
                         );
@@ -288,8 +349,17 @@ const OrderDetail: FunctionComponent<IPageProps> = () => {
                   </div>
                 </div>
                 <section className="box4">
-                  <Button className="btn btn-3d btn-m btn-full mb-3 rounded-xs text-uppercase font-700 shadow-s  border-blue-dark bg-blue-light">
-                    تسویه حساب <span className="fa-fw select-all fas"></span>
+                  <Button
+                    onClick={() => CheckoutAll(orderDetailList?.requestNumber!)}
+                    className="btn btn-m btn-full mb-3 rounded-xs text-uppercase font-700 shadow-s border-blue-dark bg-blue-light"
+                  >
+                    {checkoutAllLoading ? (
+                      <Spinner />
+                    ) : (
+                      <>
+                        تسویه حساب <span className="fa-fw select-all fas"></span>
+                      </>
+                    )}
                   </Button>
                 </section>
               </div>

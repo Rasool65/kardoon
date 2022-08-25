@@ -51,7 +51,11 @@ const Main: FunctionComponent<IPageProps> = (props) => {
     GetServices(cityId ? cityId : 0);
     GetAdvertise();
     document.title = props.title;
-  }, []);
+  }, [props.title]);
+
+  // useEffect(() => {
+  //   debugger;
+  // }, []);
 
   useEffect(() => {
     CustomFunctions();
@@ -72,7 +76,7 @@ const Main: FunctionComponent<IPageProps> = (props) => {
         <Footer footerMenuVisible={true} activePage={2} />
 
         <div className="page-content" style={{ paddingBottom: '0' }}>
-          <Header headerTitle={'صفحه اصلی'} />
+          <Header />
 
           {!!advertise &&
             advertise.length > 0 &&

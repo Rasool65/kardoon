@@ -1,10 +1,14 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 import IPageProps from '../../configs/routerConfig/IPageProps';
 import { useTranslation } from 'react-i18next';
 import SelectCity from './SelectCity';
 
 const City: FunctionComponent<IPageProps> = (props) => {
   const { t }: any = useTranslation();
+
+  useEffect(() => {
+    document.title = props.title;
+  }, [props.title]);
 
   return (
     <>

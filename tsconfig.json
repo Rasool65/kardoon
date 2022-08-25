@@ -19,7 +19,7 @@
     "paths": {
       "@src/*": ["./src/*"],
       "@styles/*": ["./src/scss/*"],
-      "@hooks/*": ["./src/utility/hooks/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@configs/*": ["./src/configs/*"],
       "@store/*": ["./src/redux/*"],
       "@components/*": ["./src/components/*"],

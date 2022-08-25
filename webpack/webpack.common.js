@@ -96,7 +96,7 @@ module.exports = {
         // { from: 'public/robots.txt', to: 'robots.txt' },
         { from: 'public/favicon.ico', to: 'favicon.ico' },
         { from: 'public/_manifest.json', to: '_manifest.json' },
-        { from: 'public/assets', to: 'assets' },
+        // { from: 'public/assets', to: 'assets' },
       ],
     }),
   ],

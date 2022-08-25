@@ -42,7 +42,7 @@ const steps: ISteps[] = [
   },
 ];
 
-const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
+const RequestDetail: FunctionComponent<IPageProps> = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useToast();
@@ -88,7 +88,7 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
     for (var i = 0; i < request.length; i++) {
       //formGen
       formData.append(
-        `formGenDetail[${i}]`,
+        `requestDetail[${i}].formGenDetail`,
         request[i].formGenDetail ? JSON.stringify(request[i].formGenDetail?.formData) : 'null'
       );
       //requestDetail
@@ -126,7 +126,9 @@ const RequestDetail: FunctionComponent<IPageProps> = (prop) => {
         });
     }
   };
-
+  useEffect(() => {
+    document.title = props.title;
+  }, [props.title]);
   return (
     <>
       <CurrentStep.Component

@@ -33,7 +33,7 @@ import Action from '@src/pages/technicianMissionDetail/technicianAction';
 
 const routes: IRoute[] = [
   {
-    path: '/',
+    path: URL_MAIN,
     component: Main,
     type: RouteType.all,
     props: {

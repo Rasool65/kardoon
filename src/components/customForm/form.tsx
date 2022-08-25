@@ -15,15 +15,15 @@ const uiSchema: UiSchema = {};
 
 export function Form() {
   const onSubmit = (event: ISubmitEvent<unknown>) => {
-    console.log('submit', event.formData);
+    // console.log('submit', event.formData);
   };
 
   const onChange = (event: IChangeEvent<unknown>) => {
-    console.log('change', event.formData);
+    // console.log('change', event.formData);
   };
 
   const onError = (errors: AjvError[]) => {
-    console.error(errors);
+    // console.error(errors);
   };
 
   return <JSONForm schema={schema} uiSchema={uiSchema} onSubmit={onSubmit} onChange={onChange} onError={onError} />;

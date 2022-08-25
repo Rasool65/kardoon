@@ -1,6 +1,6 @@
 export interface IOrderDetailListResultModel {
-  id?: number;
-  requestNumber?: string;
+  id: number;
+  requestNumber: string;
   presenceTime?: string;
   isUrgent?: boolean;
   shiftTitle?: string;
@@ -30,7 +30,9 @@ export interface ITechnicians {
   mobileNumber?: string;
 }
 export interface IInvoice {
-  title?: string;
+  paymentId: number;
+  serviceTypeTitle?: string;
+  productName?: string;
   price?: number;
   discount?: boolean;
   settlementStatus?: boolean;

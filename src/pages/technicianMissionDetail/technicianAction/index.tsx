@@ -1,9 +1,8 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useLayoutEffect, useState } from 'react';
 import { IPageProps } from '@src/configs/routerConfig/IPageProps';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CustomFunctions } from '@src/utils/custom';
-import { Button, Form, Input, Spinner } from 'reactstrap';
-
+import { Button, Form, FormFeedback, Input, Spinner } from 'reactstrap';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Select from 'react-select';
 import useHttpRequest from '@src/hooks/useHttpRequest';
@@ -11,25 +10,41 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import {
   APIURL_GET_SERVICES_TITLE,
   APIURL_GET_SERVICES_TYPES,
+  APIURL_GET_SOURCE_OF_COST,
+  APIURL_GET_TECHNICIAN_INVOICE,
   APIURL_POST_REQUEST_DETAIL_ACTION,
 } from '@src/configs/apiConfig/apiUrls';
 import { UtilsHelper } from '@src/utils/GeneralHelpers';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-
-import { useToast } from './../../../hooks/useToast';
+import { IInvoiceActionResultModel } from '@src/models/output/missionDetail/IInvoiceActionResultModel';
+import {
+  AddTechnicianActionModelSchema,
+  ITechnicianActionModel,
+} from '@src/models/input/technicianMission/ITechnicianActionModel';
+import { useToast } from '@src/hooks/useToast';
+import { useTranslation } from 'react-i18next';
 
 const Action: FunctionComponent<IPageProps> = (props) => {
   const toast = useToast();
+  const { t }: any = useTranslation();
+  const [input, setInput] = useState<any>({
+    description: false,
+    count: false,
+    price: false,
+    sourceCost: false,
+    discountAmount: false,
+  });
   const navigate = useNavigate();
   const { state }: any = useLocation();
   const [loading, setLoading] = useState<boolean>(false);
   const httpRequest = useHttpRequest();
   const [serviceTypes, setServiceTypes] = useState<any>();
   const [serviceTitle, setServiceTitle] = useState<any>();
+  const [sourceCost, setSourceCost] = useState<any>();
+  const [invoice, setInvoice] = useState<IInvoiceActionResultModel[]>();
   const [price, setPrice] = useState<any>();
-  const [description, setDescription] = useState<string>('');
   const [count, setCount] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<Number>(0);
   const technicianId = useSelector((state: RootStateType) => state.authentication.userData?.userId);
@@ -52,45 +67,69 @@ const Action: FunctionComponent<IPageProps> = (props) => {
         setLoading(false);
       });
   };
+  const GetSourceCost = () => {
+    setLoading(true);
+    httpRequest.getRequest<IOutputResult<any>>(`${APIURL_GET_SOURCE_OF_COST}`).then((result) => {
+      setSourceCost(result.data.data);
+      setLoading(false);
+    });
+  };
+  const GetInvoiceAction = () => {
+    setLoading(true);
+    httpRequest
+      .getRequest<IOutputResult<IInvoiceActionResultModel[]>>(
+        `${APIURL_GET_TECHNICIAN_INVOICE}?TechnicianId=${technicianId}&RequestDetailId=${state.requestDetailId}`
+      )
+      .then((result) => {
+        setInvoice(result.data.data);
+        setLoading(false);
+      });
+  };
 
-  // const {
-  //   register,
-  //   control,
-  //   setError,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm<ITechnicianActionModel>({ mode: 'onChange', resolver: yupResolver(AddTechnicianActionModelSchema) });
+  const {
+    register,
+    control,
+    setError,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ITechnicianActionModel>({ mode: 'onChange', resolver: yupResolver(AddTechnicianActionModelSchema) });
 
-  const Submit = (e: any) => {
-    e.preventDefault();
-    debugger;
+  const onSubmit = (data: ITechnicianActionModel) => {
     const body = {
       id: state.requestDetailId,
       technicianId: technicianId,
-      price: parseInt(e.target.price.value),
-      action: parseInt(e.target.serviceTitle.value),
-      count: parseInt(e.target.count.value),
-      serviceTypeId: parseInt(e.target.serviceType.value),
-      description: e.target.description.value,
+      price: data.price,
+      action: data.action?.value,
+      sourceCost: data.sourceCost.value,
+      count: data.count,
+      serviceTypeId: data.serviceTypeId.value,
+      // discountAmount: data.discountAmount,
+      description: data.description,
     };
+
     setLoading(true);
-    !loading &&
-      httpRequest
-        .postRequest<IOutputResult<any>>(`${APIURL_POST_REQUEST_DETAIL_ACTION}`, body)
-        .then((result) => {
-          toast.showSuccess(result.data.message);
-          setLoading(false);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+    !loading && data;
+    httpRequest
+      .postRequest<IOutputResult<any>>(`${APIURL_POST_REQUEST_DETAIL_ACTION}`, body)
+      .then((result) => {
+        toast.showSuccess(result.data.message);
+        GetInvoiceAction();
+        setLoading(false);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
+    GetInvoiceAction();
+    GetSourceCost();
     GetServiceType();
-    document.title = props.title;
     CustomFunctions();
   }, []);
+  useEffect(() => {
+    document.title = props.title;
+  }, [props.title]);
   return (
     <>
       <div id="page">
@@ -109,71 +148,246 @@ const Action: FunctionComponent<IPageProps> = (props) => {
             <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
           </div>
         </div>
-        <Form onSubmit={(e: any) => Submit(e)}>
-          <div className="d-flex m-2" style={{ justifyContent: 'space-around' }}>
-            <Select
-              isLoading={loading}
-              name="serviceType"
-              className="select-city select-width-action m-2"
-              options={serviceTypes}
-              placeholder={'نوع خدمات'}
-              onChange={(e: any) => {
-                setServiceTitle(null);
-                GetServiceTitle(e?.value);
-              }}
-            />
-            <Select
-              isLoading={loading}
-              name="serviceTitle"
-              options={serviceTitle}
-              onChange={(e: any) => setPrice(e.price)}
-              className="select-city select-width-action m-2 "
-              placeholder={'عنوان خدمات'}
-            />
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <div className=" d-flex m-2 justify-content-evenly">
+            <div className="m-2">
+              <Controller
+                name="serviceTypeId"
+                control={control}
+                render={({ field }) => (
+                  <>
+                    <Select
+                      isClearable
+                      isLoading={loading}
+                      id="form1a"
+                      options={serviceTypes}
+                      className="select-city select-width-action m-2"
+                      placeholder={'نوع خدمت'}
+                      {...field}
+                      onChange={(e: any) => {
+                        field.onChange(e);
+                        setServiceTitle(null);
+                        GetServiceTitle(e?.value);
+                      }}
+                    />
+                    <FormFeedback className="d-block">{errors?.serviceTypeId?.value?.message}</FormFeedback>
+                  </>
+                )}
+              />
+            </div>
+            <div className="m-2">
+              <Controller
+                name="action"
+                control={control}
+                render={({ field }) => (
+                  <>
+                    <Select
+                      isClearable
+                      isLoading={loading}
+                      id="form1a"
+                      options={serviceTitle}
+                      className="select-city select-width-action m-2"
+                      placeholder={'گروه خدمات'}
+                      {...field}
+                      onChange={(e: any) => {
+                        field.onChange(e);
+                        setPrice(e.price);
+                      }}
+                    />
+                    <FormFeedback className="d-block">{errors?.action?.value?.message}</FormFeedback>
+                  </>
+                )}
+              />
+            </div>
           </div>
-          <div className="m-2 p-3">
-            <Input
-              // onChange={(e: any) => setDescription(e.target.value)}
+          <div className="m-3">
+            <div className={`input-style has-borders no-icon mb-4 ${input.introductionCode ? 'input-style-active' : ''}`}>
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <>
+                    <Input
+                      id="form1a"
+                      onFocus={() => setInput({ description: true })}
+                      style={{ backgroundPosition: 'left' }}
+                      className="form-control validate-text"
+                      type="textarea"
+                      placeholder={'شرح اقدام'}
+                      autoComplete="off"
+                      invalid={errors?.description && true}
+                      {...field}
+                    />
+                    <label htmlFor="form4" className="color-highlight">
+                      {'شرح اقدام'}
+                    </label>
+                    <i className={`fa fa-times disabled  color-red-dark ${input.introductionCode ? 'disabled' : ''}`} />
+                    <em className={`${input.introductionCode ? 'disabled' : ''}`}>({t('Required')})</em>
+                    <FormFeedback>{errors?.description?.message}</FormFeedback>
+                  </>
+                )}
+              />
+            </div>
+          </div>
+          <div className="d-flex m-2">
+            <div>
+              <Controller
+                name="sourceCost"
+                control={control}
+                render={({ field }) => (
+                  <>
+                    <Select
+                      isClearable
+                      isLoading={loading}
+                      id="form1a"
+                      options={sourceCost}
+                      className="select-city select-width-action m-2"
+                      placeholder={'منبع هزینه'}
+                      {...field}
+                    />
+                    <FormFeedback className="d-block">{errors?.sourceCost?.value?.message}</FormFeedback>
+                  </>
+                )}
+              />
+            </div>
 
-              name="description"
-              type="textarea"
-              style={{ height: '15vh' }}
-              placeholder="شرح"
-            />
+            <div
+              style={{ marginTop: '8px', marginRight: '15px', width: '80px' }}
+              className={`input-style has-borders no-icon  mb-4 ${input.count ? 'input-style-active' : ''}`}
+            >
+              <Controller
+                name="count"
+                control={control}
+                render={({ field }) => (
+                  <>
+                    <Input
+                      id="form1a"
+                      onFocus={() => setInput({ count: true })}
+                      style={{ backgroundPosition: 'left' }}
+                      className="form-control validate-text"
+                      type="number"
+                      placeholder={'تعداد'}
+                      autoComplete="off"
+                      invalid={errors?.count && true}
+                      {...field}
+                      onChange={(e: any) => {
+                        field.onChange(e);
+                        setTotalPrice(e.target.value * price);
+                        setCount(e.target.value);
+                      }}
+                    />
+                    <label htmlFor="form4" className="color-highlight">
+                      {'تعداد'}
+                    </label>
+                    <i className={`fa fa-times disabled  color-red-dark ${input.count ? 'disabled' : ''}`} />
+                    <em className={`${input.count ? 'disabled' : ''}`}>({t('Required')})</em>
+                    <FormFeedback>{errors?.count?.message}</FormFeedback>
+                  </>
+                )}
+              />
+            </div>
+
+            <div
+              style={{ marginTop: '8px', marginRight: '15px' }}
+              className={`input-style has-borders no-icon  mb-4 ${input.price ? 'input-style-active' : ''}`}
+            >
+              <Controller
+                name="price"
+                control={control}
+                render={({ field }) => (
+                  <>
+                    <Input
+                      id="form1a"
+                      onFocus={() => setInput({ price: true })}
+                      style={{ backgroundPosition: 'left' }}
+                      className="form-control validate-text"
+                      type="text"
+                      placeholder={UtilsHelper.threeDigitSeparator(price)}
+                      autoComplete="off"
+                      invalid={errors?.price && true}
+                      // {...field}
+                      onChange={(e: any) => {
+                        field.onChange(e);
+                        setTotalPrice(e.target.value * count), setPrice(e.target.value);
+                      }}
+                    />
+                    <label htmlFor="form4" className="color-highlight">
+                      {'قیمت'}
+                    </label>
+                    <i className={`fa fa-times disabled  color-red-dark ${input.price ? 'disabled' : ''}`} />
+                    <em className={`${input.price ? 'disabled' : ''}`}>({t('Required')})</em>
+                    <FormFeedback>{errors?.price?.message}</FormFeedback>
+                  </>
+                )}
+              />
+            </div>
           </div>
-          <div className="d-flex m-3" style={{ justifyContent: 'space-around' }}>
-            <Input
-              className="m-2 p-3"
-              name="price"
-              type="text"
-              onChange={(e: any) => {
-                setTotalPrice(e.target.value * count), setPrice(e.target.value);
-              }}
-              defaultValue={UtilsHelper.threeDigitSeparator(price)}
-              placeholder="مبلغ هزینه"
-            />
-            <Input
-              className="m-2 p-3"
-              type="number"
-              name="count"
-              defaultValue={0}
-              onChange={(e: any) => {
-                setTotalPrice(e.target.value * price);
-                setCount(e.target.value);
-              }}
-              placeholder="تعداد"
-            />
-          </div>
-          <div className="d-flex m-3" style={{ justifyContent: 'center' }}>
-            <label className="m-2 select-width-action">جمع مبلغ کل</label>
-            <label className="m-2 select-width-action">{UtilsHelper.threeDigitSeparator(totalPrice)}</label>
+          <div className="d-flex m-3" style={{ justifyContent: 'space-evenly', alignItems: 'baseline' }}>
+            <div>
+              <label className="m-2 select-width-action">قیمت کل</label>
+              <label className="m-2 select-width-action">{UtilsHelper.threeDigitSeparator(totalPrice)}</label>
+            </div>
+            <div>
+              <label>کد تخفیف</label>
+              <Input
+                style={{ width: '150px' }}
+                className="m-2 p-3"
+                name="discount"
+                type="text"
+                readOnly
+                defaultValue={0}
+                placeholder="تخفیف"
+              />
+            </div>
+            <div>
+              <label className="m-2 select-width-action">مالیات</label>
+              <label className="m-2 select-width-action">
+                {UtilsHelper.threeDigitSeparator((parseInt(totalPrice.toString()) * 9) / 100)}
+              </label>
+            </div>
           </div>
           <div className="d-flex " style={{ justifyContent: 'space-around' }}>
-            <Button type="submit" style={{ width: '90%', height: '50px' }} className="btn btn-success m-2">
-              {loading ? <Spinner /> : 'افزودن'}
+            <Button type="submit" style={{ width: '90%', height: '50px' }} className="btn btn-info m-2">
+              {loading ? <Spinner /> : '+ افزودن'}
             </Button>
           </div>
         </Form>
+      </div>
+      {/* invoice */}
+      <div
+        className="card "
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <div className="area-1 m-3">
+          <div className="m-2" style={{ alignItems: 'inherit' }}>
+            <i className="fa fa-list"></i>
+            <h5 className="m-1">شرح اقدامات</h5>
+          </div>
+          <div className="">
+            {invoice &&
+              invoice.length &&
+              invoice.map((invoice: IInvoiceActionResultModel, index: number) => {
+                return (
+                  <div className="justify-content-evenly">
+                    <div>
+                      {index + 1}- {invoice.serviceTypeTitle} {invoice.productName}
+                    </div>
+                    <div className={invoice.discount ? 'discount' : ''}>{UtilsHelper.threeDigitSeparator(invoice.price)}</div>
+                    {invoice.discount ? (
+                      <div className="p-1">{UtilsHelper.threeDigitSeparator(invoice.priceAfterDiscount)}</div>
+                    ) : (
+                      ''
+                    )}
+                    <div>{invoice.settlementStatus ? <i className="fa fa-check" /> : <i className="fa fa-hourglass" />}</div>
+                    <div>{invoice.status}</div>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
       </div>
     </>
   );

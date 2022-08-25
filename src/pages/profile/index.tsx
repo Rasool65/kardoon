@@ -57,7 +57,6 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
   } = useForm<IUpdateProfileModel>({ mode: 'onChange', resolver: yupResolver(UpdateProfileModelSchema) });
 
   const onSubmit = (data: IUpdateProfileModel) => {
-    debugger;
     const body = {
       userName: userData?.userName,
       firstName: data.firstName,
@@ -90,6 +89,10 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
     CustomFunctions();
     GetIntroductions();
   }, []);
+  useEffect(() => {
+    document.title = props.title;
+  }, [props.title]);
+
   return (
     <>
       <div id="page">
