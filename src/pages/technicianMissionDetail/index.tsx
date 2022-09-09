@@ -9,16 +9,8 @@ import {
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import Footer from '@src/layout/Footer';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import { IEStatusId, IOrderListResultModel } from '@src/models/output/order/IOrderListResultModel';
-import {
-  IInvoice,
-  IOrderDetailListResultModel,
-  IProblemList,
-  IDetails,
-  ITechnicians,
-} from '@src/models/output/orderDetail/IOrderDetailListResultModel';
+import { IProblemList } from '@src/models/output/orderDetail/IOrderDetailListResultModel';
 import { RootStateType } from '@src/redux/Store';
-import { CustomFunctions } from '@src/utils/custom';
 import { DateHelper } from '@src/utils/dateHelper';
 import { UtilsHelper } from '@src/utils/GeneralHelpers';
 import { FunctionComponent, useEffect, useState, forwardRef } from 'react';
@@ -31,6 +23,8 @@ import { IMissionDetailResultModel } from '@src/models/output/missionDetail/IMis
 import Select from 'react-select';
 import { IAttributesResultModel } from '@src/models/output/missionDetail/IAttributesResultModel';
 import { useToast } from './../../hooks/useToast';
+import { CustomFunctions } from './template';
+import PrevHeader from '@src/layout/PrevHeader';
 
 const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -40,6 +34,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   const [missionDetail, setMissionDetail] = useState<IMissionDetailResultModel>();
   const [genForm, setGenForm] = useState<IAttributesResultModel>();
   const [imageModalVisible, setImageModalVisible] = useState<boolean>(false);
+  const [selectDisabled, setSelectDisabled] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
@@ -52,6 +47,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
       )
       .then((result) => {
         setMissionDetail(result.data.data);
+        result.data.data.statusId == 3 || result.data.data.statusId == 4 ? setSelectDisabled(true) : setSelectDisabled(false);
         setLoading(false);
       });
   };
@@ -84,10 +80,10 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
       });
   };
   const option = [
-    {
-      label: 'باز',
-      value: 0,
-    },
+    // {
+    //   label: 'باز',
+    //   value: 0,
+    // },
     {
       label: 'در حال انجام',
       value: 1,
@@ -118,14 +114,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
       <div id="page">
         {/* <Footer footerMenuVisible={true} activePage={1} /> */}
         <div className="page-content">
-          <div className="page-title page-title-small">
-            <h2>
-              <a href="#" onClick={() => navigate(-1)}>
-                <i className="fa fa-arrow-right mx-2"></i>
-                بازگشت
-              </a>
-            </h2>
-          </div>
+          <PrevHeader />
           <div className="card header-card shape-rounded" data-card-height="150">
             <div className="card-overlay bg-highlight opacity-95"></div>
             <div className="card-overlay dark-mode-tint"></div>
@@ -147,9 +136,15 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                     {DateHelper.isoDateTopersian(missionDetail?.presenceDateTime)}-{missionDetail?.presenceShift}
                   </p>
                 </div>
-                <div className=" details-bar">
+                <div className="details-bar">
+                  <p>نام مشتری:</p>
+                  <p>
+                    {missionDetail?.consumerFirstName} {missionDetail?.consumerLastName}
+                  </p>
+                </div>
+                <div className="details-bar">
                   <p>آدرس:</p>
-                  <p>{missionDetail?.address}</p>
+                  <p className="m-1">{missionDetail?.address}</p>
                 </div>
               </div>
               <div className="div-2">
@@ -168,6 +163,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                   </span>
                   {missionDetail?.statusTitle && (
                     <Select
+                      isDisabled={selectDisabled}
                       isLoading={loading}
                       className="select-city"
                       options={option}
@@ -194,20 +190,24 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                     </div>
                   </div>
 
-                  <div className="d-flex justify-content-center m-3">
-                    <audio src={missionDetail?.audioMessage} controls />
-                  </div>
+                  {missionDetail?.audioMessage && (
+                    <div className="d-flex justify-content-center m-3">
+                      <audio src={missionDetail?.audioMessage} controls />
+                    </div>
+                  )}
 
                   <div style={{ display: 'block' }}>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                      <video
-                        width="320"
-                        height="240"
-                        controls
-                        style={{ display: 'flex', alignContent: 'center' }}
-                        src={missionDetail?.videoMessage}
-                      />
-                    </div>
+                    {missionDetail?.videoMessage && (
+                      <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <video
+                          width="320"
+                          height="240"
+                          controls
+                          style={{ display: 'flex', alignContent: 'center' }}
+                          src={missionDetail?.videoMessage}
+                        />
+                      </div>
+                    )}
                     <div style={{ display: 'flex', justifyContent: 'inherit', flexWrap: 'wrap' }}>
                       {missionDetail?.imageMessage &&
                         missionDetail?.imageMessage.length > 0 &&
@@ -238,20 +238,24 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                     }}
                   >
                     <span className="contact">
-                      <i
-                        className="fa-solid fa-location-crosshairs"
-                        onClick={() =>
-                          navigate(`${URL_TECHNICIAN_MISSION_DETAIL_ACTION}`, {
-                            state: {
-                              requestDetailId: missionDetail?.requestDetailId,
-                              productCategoryId: missionDetail?.productCategoryId,
-                            },
-                          })
-                        }
-                      />
+                      {loading ? (
+                        <Spinner />
+                      ) : (
+                        <i
+                          className="fa-solid fa-location-crosshairs"
+                          onClick={() =>
+                            navigate(`${URL_TECHNICIAN_MISSION_DETAIL_ACTION}`, {
+                              state: {
+                                requestDetailId: missionDetail?.requestDetailId,
+                                productCategoryId: missionDetail?.productCategoryId,
+                              },
+                            })
+                          }
+                        />
+                      )}
                     </span>
                     <span className="contact">
-                      <i className="fa fa-phone" />
+                      <i className="fa fa-phone" onClick={() => window.open(`tel:${missionDetail?.consumerPhoneNumber}`)} />
                     </span>
                     {/* <span className="contact">
                       <i className="fa fa-paperclip" />
@@ -261,9 +265,6 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                     </span> */}
                   </div>
                 </div>
-                <Button className="btn btn-success" style={{ marginBottom: '100px', width: '90%' }}>
-                  ذخیره
-                </Button>
               </div>
             </div>
           </div>

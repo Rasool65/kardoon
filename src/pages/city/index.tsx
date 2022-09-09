@@ -2,6 +2,7 @@ import { FunctionComponent, useEffect } from 'react';
 import IPageProps from '../../configs/routerConfig/IPageProps';
 import { useTranslation } from 'react-i18next';
 import SelectCity from './SelectCity';
+import { customFunction } from './template';
 
 const City: FunctionComponent<IPageProps> = (props) => {
   const { t }: any = useTranslation();
@@ -9,6 +10,10 @@ const City: FunctionComponent<IPageProps> = (props) => {
   useEffect(() => {
     document.title = props.title;
   }, [props.title]);
+
+  useEffect(() => {
+    customFunction();
+  }, []);
 
   return (
     <>

@@ -22,6 +22,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { CustomFunctions } from '@src/utils/custom';
 import { IIntroductionResultModel } from '@src/models/output/profile/IIntroductionResultModel';
+import { init_template } from './template';
 
 const Profile: FunctionComponent<IPageProps> = (props) => {
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
@@ -86,8 +87,8 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
   };
 
   useEffect(() => {
-    CustomFunctions();
     GetIntroductions();
+    init_template();
   }, []);
   useEffect(() => {
     document.title = props.title;

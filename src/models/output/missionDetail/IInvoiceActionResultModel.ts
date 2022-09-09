@@ -1,10 +1,20 @@
 export interface IInvoiceActionResultModel {
   paymentId: number;
-  serviceTypeTitle?: string;
+  serviceTypeTitle?: string; // نوع خدمت
+  actionTitle?: string; // گروه خدمات
+  description?: string; // شرح اقدامات
   productName?: string;
   price?: number;
   discount?: boolean;
   settlementStatus?: boolean;
   priceAfterDiscount: number;
-  status?: string;
+  status?: string; // نقدی | اعتباری | گارانتی
+  paymentUrl?: string;
+  paymentType?: string;
+  costSource?: number;
+}
+
+export enum ECostSource {
+  'مشتری' = 0,
+  'گارانتی' = 1,
 }

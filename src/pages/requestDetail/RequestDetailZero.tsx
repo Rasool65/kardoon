@@ -8,9 +8,9 @@ import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IRequestDetailPageProp } from './IRequestDetailProp';
-import { CustomFunctions } from '@src/utils/custom';
 import type { JSONSchema7 } from 'json-schema';
 import { APIURL_GET_PRODUCTS_ATTRIBUTES } from '@src/configs/apiConfig/apiUrls';
+import { init_template } from './template';
 
 const RequestDetailZero: FunctionComponent<IRequestDetailPageProp> = ({ handleClickNextToFirst }) => {
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
@@ -45,7 +45,7 @@ const RequestDetailZero: FunctionComponent<IRequestDetailPageProp> = ({ handleCl
   useEffect(() => {
     // GetFormUI();
     GetFormSchema();
-    CustomFunctions();
+    init_template();
   }, []);
 
   const onSubmit = (data: ISubmitEvent<unknown>) => {

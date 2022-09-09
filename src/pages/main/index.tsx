@@ -3,20 +3,22 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
 import FooterCard from '@src/layout/FooterCard';
 import Footer from '@src/layout/Footer';
-import Header from './Header';
+import Header from '../../layout/Header';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IServicesResultModel } from '@src/models/output/services/IServicesResultModel';
 import { APIURL_GET_ADVERTISE, APIURL_GET_SERVICES } from '@src/configs/apiConfig/apiUrls';
 import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseResultModel';
 import { useTranslation } from 'react-i18next';
-import { CustomFunctions } from '@src/utils/custom';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-import MainMenuModal from './MainMenuModal';
+
 import { URL_CATEGORIES } from '@src/configs/urls';
 import { Spinner } from 'reactstrap';
 import { URL_CITY } from './../../configs/urls';
+import { init_template } from './template';
+import MainMenuModal from '@src/layout/MainMenuModal';
+import { CustomFunctions } from '@src/utils/custom';
 
 const Main: FunctionComponent<IPageProps> = (props) => {
   const [services, setServices] = useState<any>();
@@ -53,12 +55,9 @@ const Main: FunctionComponent<IPageProps> = (props) => {
     document.title = props.title;
   }, [props.title]);
 
-  // useEffect(() => {
-  //   debugger;
-  // }, []);
-
   useEffect(() => {
-    CustomFunctions();
+    // CustomFunctions();
+    init_template();
   }, [advertise, services]);
 
   return (
@@ -75,9 +74,8 @@ const Main: FunctionComponent<IPageProps> = (props) => {
         ></div> */}
         <Footer footerMenuVisible={true} activePage={2} />
 
+        <Header headerTitle={props.title} />
         <div className="page-content" style={{ paddingBottom: '0' }}>
-          <Header />
-
           {!!advertise &&
             advertise.length > 0 &&
             advertise.map((items: IAdvertiseResultModel[], index: number) => {
@@ -143,8 +141,8 @@ const Main: FunctionComponent<IPageProps> = (props) => {
                 >
                   <img key={id} src={item.backgroundUrl} className="card-image" alt={item.title} />
                   <div className="card-top">
-                    <img src={item.icon} alt="logo" className="fa-3x float-start ms-3 mt-3" />
-                    {/* <i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3"/> */}
+                    <img width={100} src={item.icon} alt="logo" />
+                    {/* <i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3" /> */}
                   </div>
                   <div className="card-bottom">
                     <div className="float-end me-3">

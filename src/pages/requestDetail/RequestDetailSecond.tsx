@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import EditAddressModal from './EditAddressModal';
 import { DateHelper } from '@src/utils/dateHelper';
 import { useNavigate } from 'react-router-dom';
+import { init_template } from './template';
 
 const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handleClickMore, handleSubmit, isLoading }) => {
   // const toast = useToast();
@@ -82,7 +83,7 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
 
   useEffect(() => {
     GetAddresses();
-    CustomFunctions();
+    init_template();
   }, []);
 
   const { optionGroups, valueGroups } = shiftTime;

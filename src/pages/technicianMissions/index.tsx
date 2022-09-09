@@ -10,7 +10,6 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IMissionsResultModel, ITechnicianMissionList } from '@src/models/output/mission/IMissionResultModel';
 import { IServicesResultModel } from '@src/models/output/services/IServicesResultModel';
 import { RootStateType } from '@src/redux/Store';
-import { CustomFunctions } from '@src/utils/custom';
 import { DateHelper } from '@src/utils/dateHelper';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -24,6 +23,7 @@ import { ITechnicianConsumerResultModel } from '@src/models/output/mission/ITech
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { IPageListOutputResult } from '@src/models/output/IPageListOutputResult';
 import PrevHeader from '@src/layout/PrevHeader';
+import { init_template } from './template';
 
 const TechnicianMission: FunctionComponent<IPageProps> = (props) => {
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
@@ -33,7 +33,6 @@ const TechnicianMission: FunctionComponent<IPageProps> = (props) => {
   const [services, setServices] = useState<any>();
   const [consumers, setConsumers] = useState<any>();
   const [productTypes, setProductTypes] = useState<any>();
-  const [missions, setMissions] = useState<IMissionsResultModel>();
   const [technicianMissionList, setTechnicianMissionList] = useState<ITechnicianMissionList[]>([]);
   const [withoutFilter, setWithout] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(false);
@@ -100,10 +99,16 @@ const TechnicianMission: FunctionComponent<IPageProps> = (props) => {
   };
 
   useEffect(() => {
+    setPageNumber(1);
+    setHasMore(true);
+    setWithout(true);
+    handleSubmit(true, 1);
+  }, []);
+  useEffect(() => {
     GetProductsType();
     GetServices(cityId!);
     GetConsumers(TechnicianId!);
-    CustomFunctions();
+    init_template();
   }, []);
   useEffect(() => {
     document.title = props.title;
@@ -115,12 +120,16 @@ const TechnicianMission: FunctionComponent<IPageProps> = (props) => {
         <div className="page-content" style={{ marginTop: '100px' }}>
           <div className="accordion mt-4" id="accordion-1">
             <div className="card card-style shadow-0 bg-highlight mb-1">
-              <button className="btn accordion-btn color-white no-effect" data-bs-toggle="collapse" data-bs-target="#collapse5">
+              <button
+                className="btn accordion-btn color-white no-effect collapsed"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapse5"
+              >
                 <i className="fa fa-star me-2"></i>
                 وضعیت سفارش <i className="fa fa-chevron-down font-10 accordion-icon"></i>
               </button>
 
-              <div id="collapse5" className="collapse bg-theme show" data-bs-parent="" style={{ backgroundColor: 'white' }}>
+              <div id="collapse5" className="bg-theme collapse" data-bs-parent="" style={{ backgroundColor: 'white' }}>
                 <div className="pt-3 pb-3">
                   <p className="mb-0">
                     <Row className="m-2 justify-content-around">
@@ -229,7 +238,6 @@ const TechnicianMission: FunctionComponent<IPageProps> = (props) => {
                         onClick={() => {
                           setPageNumber(1);
                           setHasMore(true);
-                          // setMissions(undefined);
                           setWithout(true);
                           handleSubmit(true, 1);
                         }}
@@ -243,7 +251,6 @@ const TechnicianMission: FunctionComponent<IPageProps> = (props) => {
                         onClick={() => {
                           setPageNumber(1);
                           setHasMore(true);
-                          // setMissions(undefined);
                           setWithout(false);
                           handleSubmit(false, 1);
                         }}

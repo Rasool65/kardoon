@@ -1,11 +1,9 @@
-import { FunctionComponent, useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import IPageProps from '../../configs/routerConfig/IPageProps';
+import { FunctionComponent, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { APIURL_GET_CITIES, APIURL_GET_Cities, APIURL_GET_PROVINES } from '@src/configs/apiConfig/apiUrls';
 import { useTranslation } from 'react-i18next';
-import { ICountryDivisionResultModel } from '@src/models/output/countryDivision/ICountryDivisionResultModel';
 import Select from 'react-select';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
@@ -21,6 +19,7 @@ const SelectCity: FunctionComponent = (props) => {
   const auth = useSelector((state: RootStateType) => state.authentication.isAuthenticate);
   const [result, setResult] = useState<any>();
   const httpRequest = useHttpRequest();
+  const [open, setOpen] = useState<boolean>();
   const { t }: any = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -56,12 +55,12 @@ const SelectCity: FunctionComponent = (props) => {
         break;
       case 1:
         GetCitiesList(e[0].value);
+        setOpen(true);
         break;
       case 2:
         auth
           ? UpdateResidenceCity(userData?.userId ? userData.userId : 0, e[1].value)
           : (localStorage.setItem('city', JSON.stringify(e[1])), navigate(URL_MAIN), history.go(0));
-
         break;
     }
   };
@@ -72,6 +71,7 @@ const SelectCity: FunctionComponent = (props) => {
   return (
     <>
       <Select
+        menuIsOpen={open}
         className="select-city"
         options={result}
         isSearchable={true}

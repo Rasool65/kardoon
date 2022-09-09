@@ -1,16 +1,21 @@
-import { FunctionComponent } from 'react';
-import IPageProps from '@src/configs/routerConfig/IPageProps';
-import { URL_PRODUCTS } from '../../configs/urls';
+import SelectCity from '../pages/city/SelectCity';
+import { useSelector } from 'react-redux';
+import { RootStateType } from '@src/redux/Store';
 
-const Header = (props: any) => {
-  const { children } = props;
+const Header = ({ headerTitle }: any) => {
+  const userData = useSelector((state: RootStateType) => state.authentication.userData);
 
+  function checkRole(normalizedName: string) {
+    return userData?.roles ? userData?.roles.some((roleName) => roleName.normalizedName === normalizedName) : false;
+  }
   return (
     <>
       <div className="row" style={{ padding: '0 20px 0 20px', marginTop: '15px', position: 'relative', zIndex: '1' }}>
         <div className="col-1" style={{ padding: '0 0 0 0', textAlign: 'center', width: '30px' }}>
           <img
             // onClick={(e) => showMainMenu(e)}
+            data-menu="menu-main"
+            className="bg-fade-highlight-light shadow-xl preload-img"
             src={require('/src/scss/images/menu.png')}
             style={{ width: '20px', height: '20px', cursor: 'pointer' }}
             alt=""
@@ -18,15 +23,20 @@ const Header = (props: any) => {
         </div>
 
         <div
-          className="col-11"
+          className="col-5"
           style={{
-            padding: '0 5px 0 0',
+            padding: '0 0px 0 0',
             color: 'white',
             fontSize: '15px',
             textAlign: 'right',
           }}
         >
-          {props.headerTitle}
+          {headerTitle}
+        </div>
+
+        <div className="col-6" style={{ padding: '0 0 0 0', textAlign: 'right' }}>
+          {/* <span style={{ marginLeft: '10px', color: '#FFF' }}>شهر</span> */}
+          {!checkRole('TECHNICIAN') && <SelectCity />}
         </div>
       </div>
 

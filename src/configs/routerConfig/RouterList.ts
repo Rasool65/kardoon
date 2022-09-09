@@ -12,6 +12,7 @@ import {
   URL_TECHNICIAN_MISSION,
   URL_TECHNICIAN_MISSION_DETAIL,
   URL_TECHNICIAN_MISSION_DETAIL_ACTION,
+  URL_CHANGE_PASSWORD,
 } from './../urls';
 
 import IRoute from './IRoute';
@@ -30,6 +31,7 @@ import TechnicianProfile from '@src/pages/technicianProfile';
 import TechnicianMission from '@src/pages/technicianMissions';
 import technicianMissionDetail from '@src/pages/technicianMissionDetail';
 import Action from '@src/pages/technicianMissionDetail/technicianAction';
+import ChangePassword from '@src/pages/changePassword';
 
 const routes: IRoute[] = [
   {
@@ -45,7 +47,7 @@ const routes: IRoute[] = [
     component: Login,
     type: RouteType.public,
     props: {
-      title: 'صفحه ورود',
+      title: 'کاردون صفحه ورود',
     },
   },
   {
@@ -142,6 +144,14 @@ const routes: IRoute[] = [
     type: RouteType.private,
     props: {
       title: 'اکشن روی ماموریت',
+    },
+  },
+  {
+    path: URL_CHANGE_PASSWORD,
+    component: ChangePassword,
+    type: RouteType.private,
+    props: {
+      title: 'تغییر کلمه عبور',
     },
   },
 ];

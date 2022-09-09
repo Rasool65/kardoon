@@ -17,7 +17,6 @@ import {
   ITechnicians,
 } from '@src/models/output/orderDetail/IOrderDetailListResultModel';
 import { RootStateType } from '@src/redux/Store';
-import { CustomFunctions } from '@src/utils/custom';
 import { DateHelper } from '@src/utils/dateHelper';
 import { UtilsHelper } from '@src/utils/GeneralHelpers';
 import { FunctionComponent, useEffect, useState } from 'react';
@@ -28,6 +27,7 @@ import { IPageProps } from '../../configs/routerConfig/IPageProps';
 import { URL_MY_ORDERS } from '../../configs/urls';
 import { IAttributesResultModel } from '@src/models/output/missionDetail/IAttributesResultModel';
 import { useToast } from '@src/hooks/useToast';
+import { CustomFunctions } from './template';
 
 const OrderDetail: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -225,19 +225,23 @@ const OrderDetail: FunctionComponent<IPageProps> = (props) => {
                                         })}
                                     </ul>
                                   </div>
-                                  <div>
-                                    <audio src={orderDetail.voiceMessageUrl} controls />
-                                  </div>
-                                  <div style={{ display: 'block' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                      <video
-                                        width="320"
-                                        height="240"
-                                        controls
-                                        style={{ display: 'flex', alignContent: 'center' }}
-                                        src={orderDetail.videoMessageUrl}
-                                      />
+                                  {orderDetail.voiceMessageUrl && (
+                                    <div>
+                                      <audio src={orderDetail.voiceMessageUrl} controls />
                                     </div>
+                                  )}
+                                  <div style={{ display: 'block' }}>
+                                    {orderDetail.videoMessageUrl && (
+                                      <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <video
+                                          width="320"
+                                          height="240"
+                                          controls
+                                          style={{ display: 'flex', alignContent: 'center' }}
+                                          src={orderDetail.videoMessageUrl}
+                                        />
+                                      </div>
+                                    )}
                                     <div style={{ display: 'flex', justifyContent: 'inherit', flexWrap: 'wrap' }}>
                                       {orderDetail.imageUrlList &&
                                         orderDetail.imageUrlList.length > 0 &&
@@ -268,17 +272,17 @@ const OrderDetail: FunctionComponent<IPageProps> = (props) => {
                                         <div>
                                           <div className="col-6">
                                             <p>
-                                              {index + 1}- {technician.name}
+                                              {index + 1}- {technician.firstName} {technician.lastName}
                                             </p>
                                           </div>
                                           <div className="col-6">
                                             <i
                                               className="fa fa-phone"
-                                              onClick={() => window.open(`tel:${technician.mobileNumber}`)}
+                                              onClick={() => window.open(`tel:${technician.phoneNumber}`)}
                                             ></i>
                                             <i
                                               className="fa fa-message"
-                                              onClick={() => window.open(`sms:${technician.mobileNumber}`)}
+                                              onClick={() => window.open(`sms:${technician.phoneNumber}`)}
                                             ></i>
                                           </div>
                                         </div>

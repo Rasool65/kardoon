@@ -12,3 +12,4 @@ export const URL_TECHNICIAN_PROFILE = '/technician-profile';
 export const URL_TECHNICIAN_MISSION = '/technician-mission';
 export const URL_TECHNICIAN_MISSION_DETAIL = '/mission-detail';
 export const URL_TECHNICIAN_MISSION_DETAIL_ACTION = '/mission-detail/action';
+export const URL_CHANGE_PASSWORD = '/change-password';

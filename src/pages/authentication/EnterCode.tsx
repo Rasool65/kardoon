@@ -3,8 +3,8 @@ import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IForgetPasswordResultModel } from '@src/models/output/authentication/IForgetPasswordResultModel';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { GeneralHelpers } from '@src/utils/GeneralHelpers';
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { Button, Col, Container, Row, Spinner } from 'reactstrap';
+import { FunctionComponent, useEffect, useState } from 'react';
+import { Button, Spinner } from 'reactstrap';
 import { IModalModel } from './ModalModel';
 import PinField from 'react-pin-field';
 import { useToast } from '@src/hooks/useToast';
@@ -18,7 +18,6 @@ import manifesJson from '../../../public/_manifest.json';
 const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileNumber, handleEditMobileNo }) => {
   const toast = useToast();
   const { t }: any = useTranslation();
-  const Ref1 = useRef(null);
   const [remainingTimeSeconds, setRemainingTimeSeconds] = useState<number>(30);
   const httpRequest = useHttpRequest();
   const [timer, setTimer] = useState<boolean>(true);
@@ -90,6 +89,7 @@ const EnterCode: FunctionComponent<IModalModel> = ({ showEnterCodeModal, mobileN
                 className="pin-field"
                 style={{ height: '55px' }}
                 length={6}
+                type="number"
                 validate={/^[0-9]$/}
                 onComplete={(e) => LoginWithSMS(e)}
               />

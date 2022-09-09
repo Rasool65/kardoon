@@ -26,8 +26,9 @@ export interface IProblemList {
   label?: string;
 }
 export interface ITechnicians {
-  name?: string;
-  mobileNumber?: string;
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
 }
 export interface IInvoice {
   paymentId: number;

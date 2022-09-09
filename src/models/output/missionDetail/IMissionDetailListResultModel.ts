@@ -13,6 +13,16 @@ export interface IMissionDetailResultModel {
   imageMessage?: string[];
   videoMessage?: string;
   audioMessage?: string;
+  addressOwnerFirstName?: string;
+  addressOwnerLastName?: string;
+  addressOwnerTel?: string;
+  cityName?: string;
+  consumerFirstName?: string;
+  consumerLastName?: string;
+  consumerPhoneNumber?: string;
+  districtName?: string;
+  isUrgent: boolean;
+  regionName?: string;
 }
 export interface IProblemList {
   value?: number;

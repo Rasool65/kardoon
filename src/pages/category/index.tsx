@@ -10,13 +10,15 @@ import { BASE_URL } from '@src/configs/apiConfig/baseUrl';
 import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseResultModel';
 import { useTranslation } from 'react-i18next';
 import { ICategory } from '@src/models/output/productCategory/ICategory';
-import { CustomFunctions } from '@src/utils/custom';
 import { URL_CITY, URL_MAIN, URL_PRODUCTS } from './../../configs/urls';
 
-import Header from './Header';
+// import Header from './Header';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { Spinner } from 'reactstrap';
+import { init_template } from './template';
+import MainMenuModal from '@src/layout/MainMenuModal';
+import Header from '../../layout/Header';
 
 const Category: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -59,19 +61,16 @@ const Category: FunctionComponent<IPageProps> = (props) => {
   }, [props.title]);
 
   useEffect(() => {
-    CustomFunctions();
+    init_template();
   }, [advertise, categories]);
 
   return (
     <>
+      {auth && <MainMenuModal />}
       <div id="page">
         {/* <Footer footerMenuVisible={true} activePage={1} /> */}
-
+        <Header headerTitle={props.title} />
         <div className="page-content" style={{ paddingBottom: '0' }}>
-          <Header
-            // showMainMenu={(e: any) => props.showMainMenu(true)}
-            headerTitle={'دسته بندی ها'}
-          />
           {!!advertise &&
             advertise.length > 0 &&
             advertise.map((items: IAdvertiseResultModel[], index: number) => {

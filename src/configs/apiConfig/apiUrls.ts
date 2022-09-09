@@ -42,7 +42,8 @@ export const APIURL_GET_PREVIOUS_CONSUMER_REQUEST = '/Request/GetPreviousConsume
 export const APIURL_GET_ORDER_DETAILS = '/Request/GetConsumerRequest';
 
 //TECHNICIAN
-export const APIURL_GET_TECHNICIAN_PROFILE = 'http://127.0.0.1:2500/getTechnicianProfile';
+export const APIURL_GET_TECHNICIAN_PROFILE = '/Technician/GetTechnicianProfile';
+export const APIURL_GET_TRANSACTION = '/Financial/GetTechnicianTransactionList';
 export const APIURL_GET_PRODUCT_TYPES = '/ProductCategory/GetAllProductListValue';
 export const APIURL_GET_TECHNICIAN_CONSUMERS = '/Order/GetTechnicianConsumerList';
 export const APIURL_GET_TECHNICIAN_MISSIONS = '/Order/GetTechnicianMissions';
@@ -57,3 +58,5 @@ export const APIURL_GET_TECHNICIAN_INVOICE = '/Order/GetTechnicianInvoiceList';
 export const APIURL_POST_TECHNICIAN_INVOICE_CHECKOUT = '/Financial/TechnicianOrderDetailCashCheckout';
 export const APIURL_POST_INVOICE_CHECKOUT = '/Financial/OrderDetailCashCheckout';
 export const APIURL_POST_INVOICE_CHECKOUT_ALL = '/Financial/RequestCashCheckout';
+//CHANGE PASSWORD
+export const APIURL_CHANGE_PASSWORD = '/UserManagement/ChangeUserPassword';

@@ -89,7 +89,7 @@ const RequestDetail: FunctionComponent<IPageProps> = (props) => {
       //formGen
       formData.append(
         `requestDetail[${i}].formGenDetail`,
-        request[i].formGenDetail ? JSON.stringify(request[i].formGenDetail?.formData) : 'null'
+        request[i].formGenDetail ? JSON.stringify(request[i].formGenDetail?.formData) : '{}'
       );
       //requestDetail
       if (request[i].requestDetail?.serviceTypeId)

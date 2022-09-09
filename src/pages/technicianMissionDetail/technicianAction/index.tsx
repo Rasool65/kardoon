@@ -1,30 +1,35 @@
 import { FunctionComponent, useEffect, useLayoutEffect, useState } from 'react';
+import Num2persian from 'num2persian';
 import { IPageProps } from '@src/configs/routerConfig/IPageProps';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { CustomFunctions } from '@src/utils/custom';
 import { Button, Form, FormFeedback, Input, Spinner } from 'reactstrap';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Select from 'react-select';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
+import ReactTooltip from 'react-tooltip';
+import { RWebShare } from 'react-web-share';
 import {
   APIURL_GET_SERVICES_TITLE,
   APIURL_GET_SERVICES_TYPES,
   APIURL_GET_SOURCE_OF_COST,
   APIURL_GET_TECHNICIAN_INVOICE,
   APIURL_POST_REQUEST_DETAIL_ACTION,
+  APIURL_POST_TECHNICIAN_INVOICE_CHECKOUT,
 } from '@src/configs/apiConfig/apiUrls';
 import { UtilsHelper } from '@src/utils/GeneralHelpers';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-import { IInvoiceActionResultModel } from '@src/models/output/missionDetail/IInvoiceActionResultModel';
+import { ECostSource, IInvoiceActionResultModel } from '@src/models/output/missionDetail/IInvoiceActionResultModel';
 import {
   AddTechnicianActionModelSchema,
+  ISourceCost,
   ITechnicianActionModel,
 } from '@src/models/input/technicianMission/ITechnicianActionModel';
 import { useToast } from '@src/hooks/useToast';
 import { useTranslation } from 'react-i18next';
+import { CustomFunctions } from './../template';
 
 const Action: FunctionComponent<IPageProps> = (props) => {
   const toast = useToast();
@@ -38,8 +43,9 @@ const Action: FunctionComponent<IPageProps> = (props) => {
   });
   const navigate = useNavigate();
   const { state }: any = useLocation();
-  const [loading, setLoading] = useState<boolean>(false);
   const httpRequest = useHttpRequest();
+
+  const [loading, setLoading] = useState<boolean>(false);
   const [serviceTypes, setServiceTypes] = useState<any>();
   const [serviceTitle, setServiceTitle] = useState<any>();
   const [sourceCost, setSourceCost] = useState<any>();
@@ -47,6 +53,7 @@ const Action: FunctionComponent<IPageProps> = (props) => {
   const [price, setPrice] = useState<any>();
   const [count, setCount] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<Number>(0);
+  const [checkoutLoading, setCheckoutLoading] = useState<boolean>(false);
   const technicianId = useSelector((state: RootStateType) => state.authentication.userData?.userId);
 
   const GetServiceType = () => {
@@ -86,6 +93,26 @@ const Action: FunctionComponent<IPageProps> = (props) => {
       });
   };
 
+  const Checkout = (paymentId: number, consumerPaymentAmount: number) => {
+    const body = {
+      paymentId: paymentId,
+      technicianId: technicianId,
+      consumerPaymentAmount: consumerPaymentAmount,
+      userId: technicianId,
+    };
+    setCheckoutLoading(true);
+    !loading &&
+      httpRequest
+        .postRequest<IOutputResult<any>>(`${APIURL_POST_TECHNICIAN_INVOICE_CHECKOUT}`, body)
+        .then((result) => {
+          toast.showSuccess(result.data.message);
+          GetInvoiceAction();
+          setCheckoutLoading(false);
+        })
+        .finally(() => {
+          setCheckoutLoading(false);
+        });
+  };
   const {
     register,
     control,
@@ -103,6 +130,7 @@ const Action: FunctionComponent<IPageProps> = (props) => {
       sourceCost: data.sourceCost.value,
       count: data.count,
       serviceTypeId: data.serviceTypeId.value,
+      userId: technicianId,
       // discountAmount: data.discountAmount,
       description: data.description,
     };
@@ -167,7 +195,7 @@ const Action: FunctionComponent<IPageProps> = (props) => {
                       onChange={(e: any) => {
                         field.onChange(e);
                         setServiceTitle(null);
-                        GetServiceTitle(e?.value);
+                        e.value && GetServiceTitle(e?.value);
                       }}
                     />
                     <FormFeedback className="d-block">{errors?.serviceTypeId?.value?.message}</FormFeedback>
@@ -234,6 +262,7 @@ const Action: FunctionComponent<IPageProps> = (props) => {
               <Controller
                 name="sourceCost"
                 control={control}
+                defaultValue={{ label: 'مشتری', value: 0 }}
                 render={({ field }) => (
                   <>
                     <Select
@@ -271,9 +300,9 @@ const Action: FunctionComponent<IPageProps> = (props) => {
                       invalid={errors?.count && true}
                       {...field}
                       onChange={(e: any) => {
-                        field.onChange(e);
-                        setTotalPrice(e.target.value * price);
-                        setCount(e.target.value);
+                        e.target.value
+                          ? (field.onChange(e), setTotalPrice(e.target.value * price), setCount(e.target.value))
+                          : setCount(0);
                       }}
                     />
                     <label htmlFor="form4" className="color-highlight">
@@ -307,8 +336,9 @@ const Action: FunctionComponent<IPageProps> = (props) => {
                       invalid={errors?.price && true}
                       // {...field}
                       onChange={(e: any) => {
-                        field.onChange(e);
-                        setTotalPrice(e.target.value * count), setPrice(e.target.value);
+                        e.target.value
+                          ? (field.onChange(e), setTotalPrice(e.target.value * count), setPrice(e.target.value))
+                          : setPrice(0);
                       }}
                     />
                     <label htmlFor="form4" className="color-highlight">
@@ -327,7 +357,8 @@ const Action: FunctionComponent<IPageProps> = (props) => {
               <label className="m-2 select-width-action">قیمت کل</label>
               <label className="m-2 select-width-action">{UtilsHelper.threeDigitSeparator(totalPrice)}</label>
             </div>
-            <div>
+            <div>{Num2persian(Number(totalPrice) / 10)} تومان</div>
+            {/* <div>
               <label>کد تخفیف</label>
               <Input
                 style={{ width: '150px' }}
@@ -338,13 +369,13 @@ const Action: FunctionComponent<IPageProps> = (props) => {
                 defaultValue={0}
                 placeholder="تخفیف"
               />
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <label className="m-2 select-width-action">مالیات</label>
               <label className="m-2 select-width-action">
                 {UtilsHelper.threeDigitSeparator((parseInt(totalPrice.toString()) * 9) / 100)}
               </label>
-            </div>
+            </div> */}
           </div>
           <div className="d-flex " style={{ justifyContent: 'space-around' }}>
             <Button type="submit" style={{ width: '90%', height: '50px' }} className="btn btn-info m-2">
@@ -371,9 +402,22 @@ const Action: FunctionComponent<IPageProps> = (props) => {
               invoice.length &&
               invoice.map((invoice: IInvoiceActionResultModel, index: number) => {
                 return (
-                  <div className="justify-content-evenly">
-                    <div>
-                      {index + 1}- {invoice.serviceTypeTitle} {invoice.productName}
+                  <div className="justify-content-between ">
+                    <div className="flex-column" style={{ width: '50%' }}>
+                      <div>
+                        {/* {index + 1}- {invoice.serviceTypeTitle} /{invoice.productName} */}
+                        {index + 1}- {invoice.serviceTypeTitle}
+                        <i
+                          className="fa-solid fa-circle-info m-1"
+                          style={{ color: 'red' }}
+                          data-tip
+                          data-for={`registerTip${index}`}
+                        ></i>
+                      </div>
+                      <div>{invoice.actionTitle}</div>
+                      <ReactTooltip id={`registerTip${index}`} place="top" effect="solid">
+                        {invoice.description}
+                      </ReactTooltip>
                     </div>
                     <div className={invoice.discount ? 'discount' : ''}>{UtilsHelper.threeDigitSeparator(invoice.price)}</div>
                     {invoice.discount ? (
@@ -382,7 +426,33 @@ const Action: FunctionComponent<IPageProps> = (props) => {
                       ''
                     )}
                     <div>{invoice.settlementStatus ? <i className="fa fa-check" /> : <i className="fa fa-hourglass" />}</div>
-                    <div>{invoice.status}</div>
+                    <div>
+                      {invoice.settlementStatus ? (
+                        <div style={{ marginLeft: '60px' }}>{invoice.paymentType}</div>
+                      ) : invoice.costSource == 1 ? (
+                        <div style={{ marginLeft: '60px' }}>{ECostSource[invoice.costSource]}</div>
+                      ) : (
+                        <>
+                          <Button
+                            className="btn btn-success"
+                            onClick={() => {
+                              Checkout(invoice.paymentId, invoice.priceAfterDiscount);
+                            }}
+                          >
+                            {checkoutLoading ? <Spinner /> : 'تسویه'}
+                          </Button>
+                          {/* <RWebShare
+                            data={{
+                              text: `لینک پرداخت هزینه بابت ${invoice.actionTitle} `,
+                              url: `${invoice.paymentUrl}`,
+                              title: 'کاردون',
+                            }}
+                          > */}
+                          <i className="fa-sharp fa-solid fa-share-nodes" style={{ marginRight: '10px' }} />
+                          {/* </RWebShare> */}
+                        </>
+                      )}
+                    </div>
                   </div>
                 );
               })}

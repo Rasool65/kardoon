@@ -8,13 +8,15 @@ import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { APIURL_GET_HIERARCHICAL_DEVICE_TYPE } from '@src/configs/apiConfig/apiUrls';
 import { useTranslation } from 'react-i18next';
-import { CustomFunctions } from '@src/utils/custom';
 import { IProductsResultModel } from './../../models/output/products/IProductsResultModel';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { URL_CITY, URL_MAIN, URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '@src/configs/urls';
 import { IProductTypeResultModel } from '@src/models/output/products/IProductTypeResultModel';
 import { Spinner } from 'reactstrap';
+import { init_template } from './template';
+import Header from '@src/layout/Header';
+import MainMenuModal from '@src/layout/MainMenuModal';
 
 const Products: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ const Products: FunctionComponent<IPageProps> = (props) => {
   }, [props.title]);
 
   useEffect(() => {
-    CustomFunctions();
+    init_template();
   }, [products]);
 
   const RecursiveComponent = ({ recProduct }: { recProduct: IProductsResultModel }) => {
@@ -103,7 +105,9 @@ const Products: FunctionComponent<IPageProps> = (props) => {
   };
   return (
     <>
+      {auth && <MainMenuModal />}
       <div id="page">
+        <Header headerTitle={props.title} />
         {/* <Footer footerMenuVisible={true} activePage={1} /> */}
         <div className="page-content" style={{ paddingBottom: '0' }}>
           <div className="card card-style">

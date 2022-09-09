@@ -1,12 +1,20 @@
-import { URL_LOGIN, URL_MY_ORDERS, URL_TECHNICIAN_MISSION, URL_TECHNICIAN_PROFILE } from '@src/configs/urls';
+import {
+  URL_CHANGE_PASSWORD,
+  URL_LOGIN,
+  URL_MAIN,
+  URL_MY_ORDERS,
+  URL_TECHNICIAN_MISSION,
+  URL_TECHNICIAN_PROFILE,
+} from '@src/configs/urls';
 import { handleLogout } from '@src/redux/reducers/authenticationReducer';
-import { CustomFunctions } from '@src/utils/custom';
 import { FunctionComponent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import SelectCity from '../city/SelectCity';
-import { IModalModel } from './../authentication/ModalModel';
+
 import { RootStateType } from '@src/redux/Store';
+import { init_template } from '@src/pages/main/template';
+import { IModalModel } from '@src/pages/authentication/ModalModel';
+import SelectCity from '@src/pages/city/SelectCity';
 
 const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any) => {
   const dispatch = useDispatch();
@@ -18,7 +26,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
   }
 
   useEffect(() => {
-    CustomFunctions();
+    init_template();
   }, [mainMenuVisible]);
   return (
     <div
@@ -56,7 +64,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           href="#"
           // onClick={(e) => goToUserProfile(e)}
         >
-          <img className="rounded-circle bg-highlight" width="80" src="images/avatars/5s.png" alt="Avatar" />
+          <img className="rounded-circle bg-highlight" width="80" src={require('/src/scss/images/avatars/5s.png')} alt="Avatar" />
         </a>
         <h1 className="pt-3 font-800 font-28 text-uppercase">کاردون</h1>
         <p className="font-11 mt-n2">
@@ -65,11 +73,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
       </div>
       <div className="menu-items">
         <h5 className="text-uppercase opacity-20 font-12 pr-3">منوی کاردون</h5>
-        <a
-          id="nav-welcome"
-          href="#"
-          // onClick={(e) => goToHome(e)}
-        >
+        <a className="close-menu" id="nav-welcome" href="#" onClick={() => navigate(URL_MAIN)}>
           <i
             data-feather="home"
             data-feather-line="1"
@@ -79,6 +83,18 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           />
           <span>صفحه اصلی</span>
           <em className="badge bg-highlight color-white">HOT</em>
+          <i className="fa fa-circle" />
+        </a>
+        <a className="close-menu" href="#" onClick={() => navigate(URL_CHANGE_PASSWORD)}>
+          <i className="fa fa-key font-16 color-red-dark"></i>
+          <span>تغییر کلمه عبور</span>
+          <em className="badge bg-highlight color-white"></em>
+          <i className="fa fa-circle" />
+        </a>
+        <a className="close-menu" href="#" onClick={() => navigate('URL_NOTIFY')}>
+          <i className="fa fa-comment font-16 color-green-dark"></i>
+          <span>لیست اعلان ها</span>
+          <em className="badge bg-highlight color-white"></em>
           <i className="fa fa-circle" />
         </a>
         {/* <a
@@ -96,7 +112,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           <span>آدرس های من</span>
           <i className="fa fa-circle" />
         </a> */}
-        <a id="nav-pages" href="#" onClick={() => navigate(URL_MY_ORDERS)}>
+        <a id="nav-pages" className="close-menu" href="#" onClick={() => navigate(URL_MY_ORDERS)}>
           <i
             data-feather="file"
             data-feather-line="1"
@@ -125,7 +141,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
               <span>پروفایل تکنسین</span>
               <i className="fa fa-circle" />
             </a>
-            <a id="nav-features" href="#" onClick={() => navigate(URL_TECHNICIAN_MISSION)}>
+            <a id="nav-features" href="#" className="close-menu" onClick={() => navigate(URL_TECHNICIAN_MISSION)}>
               <i
                 data-feather="heart"
                 data-feather-line="1"
@@ -161,7 +177,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           <strong className="badge bg-highlight color-white">1</strong>
           <i className="fa fa-circle" />
       </a> */}
-        <a id="nav-settings" href="settings.html">
+        <a className="close-menu" id="nav-settings" href="settings.html">
           <i
             data-feather="settings"
             data-feather-line="1"

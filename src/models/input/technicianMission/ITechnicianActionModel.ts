@@ -42,7 +42,7 @@ interface IService {
   value: number;
   label: string;
 }
-interface ISourceCost {
+export interface ISourceCost {
   value: number;
   label: string;
 }

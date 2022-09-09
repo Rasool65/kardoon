@@ -1,10 +1,12 @@
 export interface ITechnicianProfileResultModel {
-  avatarUrl?: string;
-  fullName?: string;
-  mobileNumber?: string;
-  status?: boolean;
-  incomeMoney?: string;
-  customerSatisfaction?: string;
-  successfulMissions?: number;
-  workDays?: number;
+  technicianId: number;
+  firstName: string;
+  lastName: string;
+  isActive: boolean;
+  mobile: string;
+  walletBalance: number;
+  dayInKardoon: string;
+  successfullMission: string;
+  customerSatisfaction: string;
+  avatarUrl: string;
 }

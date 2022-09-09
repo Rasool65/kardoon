@@ -11,7 +11,6 @@ import PrevHeader from '@src/layout/PrevHeader';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IEStatusId, IOrderListResultModel, IOrderRequestDetail } from '@src/models/output/order/IOrderListResultModel';
 import { RootStateType } from '@src/redux/Store';
-import { CustomFunctions } from '@src/utils/custom';
 import { DateHelper } from '@src/utils/dateHelper';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -19,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Spinner } from 'reactstrap';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
 import { URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '../../configs/urls';
+import { init_template } from './template';
 
 const Order: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const Order: FunctionComponent<IPageProps> = (props) => {
   };
 
   useEffect(() => {
-    CustomFunctions();
+    init_template();
     GetCurrentOrders();
   }, []);
   useEffect(() => {

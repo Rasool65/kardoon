@@ -10,7 +10,7 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import { APIURL_LOGIN } from '@src/configs/apiConfig/apiUrls';
 import { ILoginResultModel } from '@src/models/output/authentication/ILoginResultModel';
 import { handleLogin } from '@src/redux/reducers/authenticationReducer';
-import { URL_MAIN, URL_USER_PROFILE, URL_CITY } from './../../configs/urls';
+import { URL_MAIN, URL_USER_PROFILE, URL_CITY, URL_TECHNICIAN_PROFILE } from './../../configs/urls';
 import { useTokenAuthentication } from '@src/hooks/useTokenAuthentication';
 import { useToast } from '@src/hooks/useToast';
 import FooterCard from '@src/layout/FooterCard';
@@ -19,8 +19,9 @@ import PasswordMessage from './PasswordMessage';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import EnterCode from './EnterCode';
-import { CustomFunctions } from '@src/utils/custom';
 import manifestJson from '../../../public/_manifest.json';
+import { init_template } from './template';
+import { URL_TECHNICIAN_MISSION } from '@src/configs/urls';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -55,9 +56,18 @@ const Login: FunctionComponent<IPageProps> = (props) => {
       httpRequest
         .postRequest<IOutputResult<ILoginResultModel>>(APIURL_LOGIN, body)
         .then((result) => {
-          dispatch(handleLogin(result));
-          toast.showSuccess(result.data.message);
-          result.data.data.user.profile.residenceCityId ? navigate(URL_MAIN) : navigate(URL_CITY);
+          setLoading(false);
+
+          result.data.data.user.roles.some((roleName) => roleName.normalizedName === 'TECHNICIAN')
+            ? (dispatch(handleLogin(result)),
+              toast.showSuccess(result.data.message),
+              result.data.data.user.profile.residenceCityId
+                ? navigate(`${URL_TECHNICIAN_PROFILE}/?id=${result.data.data.user.userId}`)
+                : navigate(URL_CITY))
+            : toast.showError('دسترسی برای مشتریان موقتأ بسته شده است');
+        })
+        .catch(() => {
+          setLoading(false);
         })
         .finally(() => {
           setLoading(false);
@@ -72,14 +82,14 @@ const Login: FunctionComponent<IPageProps> = (props) => {
     document.title = props.title;
   }, [props.title]);
   useEffect(() => {
-    CustomFunctions();
+    init_template();
   }, []);
   return (
     <>
       <div id="page">
         <div className="page-content" style={{ paddingBottom: '0' }}>
           <div
-            // onClick={(e) => this.loginWithoutUsername(e)}
+            onClick={() => navigate(URL_MAIN)}
             className="page-title page-title-small pointer"
             style={{ color: '#FFF', width: 'fit-content', fontSize: '16px' }}
           >
@@ -107,7 +117,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                           style={{ backgroundPosition: 'left' }}
                           className="form-control validate-name"
                           autoFocus
-                          type="text"
+                          type="number"
                           placeholder={t('EnterMobile')}
                           autoComplete="off"
                           invalid={errors.username && true}

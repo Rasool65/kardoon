@@ -8,13 +8,13 @@ import { RootStateType } from '@src/redux/Store';
 import { Controller, useForm } from 'react-hook-form';
 import { IRequestDetailPageProp } from './IRequestDetailProp';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { CustomFunctions } from '@src/utils/custom';
 import { IRequestDetail, RequestDetailModelSchema } from '@src/models/input/requestDetail/IRequestDetail';
 import { useRecorder } from '@src/hooks/useRecorder';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IProductProblemsResultModel } from '@src/models/output/requestDetail/IProductProblemsResultModel';
 import { APIURL_GET_PROBLEM_LIST } from '@src/configs/apiConfig/apiUrls';
+import { init_template } from './template';
 
 const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleClickNextToSecond, handleClickMore }) => {
   let { audioData, audioURL, isRecording, startRecording, stopRecording } = useRecorder();
@@ -68,7 +68,7 @@ const RequestDetailFirst: FunctionComponent<IRequestDetailPageProp> = ({ handleC
 
   useEffect(() => {
     GetProblems();
-    CustomFunctions();
+    init_template();
   }, []);
 
   useEffect(() => {
