@@ -8,8 +8,7 @@ export interface ILoginModel {
   username: string;
   password: string;
 }
-// const mobileRegExp = /^09(1[0-9]|3[0-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}$/;
-export const mobileRegExp = /^09-?[0-9]{9}$/;
+export const mobileRegExp = /(^09[0-9]{9}$)|(^\u06F0\u06F9[\u06F0-\u06F9]{9})$/;
 
 export const LoginModelSchema: yup.SchemaOf<ILoginModel> = yup.object({
   client_id: yup.string(),

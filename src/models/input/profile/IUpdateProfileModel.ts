@@ -21,15 +21,26 @@ interface IIntroductionInfo {
 
 const checkCodeMelli = (meli_code: any) => {
   if (
-    meli_code == '1111111111' ||
-    meli_code == '2222222222' ||
-    meli_code == '3333333333' ||
-    meli_code == '4444444444' ||
-    meli_code == '5555555555' ||
-    meli_code == '6666666666' ||
-    meli_code == '7777777777' ||
-    meli_code == '8888888888' ||
-    meli_code == '9999999999'
+    [
+      '1111111111',
+      '2222222222',
+      '3333333333',
+      '4444444444',
+      '5555555555',
+      '6666666666',
+      '7777777777',
+      '8888888888',
+      '9999999999',
+    ].includes(meli_code)
+    // meli_code == '1111111111' ||
+    // meli_code == '2222222222' ||
+    // meli_code == '3333333333' ||
+    // meli_code == '4444444444' ||
+    // meli_code == '5555555555' ||
+    // meli_code == '6666666666' ||
+    // meli_code == '7777777777' ||
+    // meli_code == '8888888888' ||
+    // meli_code == '9999999999'
   ) {
     return false;
   } else {

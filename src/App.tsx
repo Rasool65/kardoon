@@ -30,7 +30,7 @@ export const SignalR = () => {
 const App: FunctionComponent = () => {
   return (
     <>
-      {/* <SignalR /> */}
+      {/* <SignalR /> //with vibration */}
       <Routers />
     </>
   );

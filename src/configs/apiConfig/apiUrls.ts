@@ -58,5 +58,9 @@ export const APIURL_GET_TECHNICIAN_INVOICE = '/Order/GetTechnicianInvoiceList';
 export const APIURL_POST_TECHNICIAN_INVOICE_CHECKOUT = '/Financial/TechnicianOrderDetailCashCheckout';
 export const APIURL_POST_INVOICE_CHECKOUT = '/Financial/OrderDetailCashCheckout';
 export const APIURL_POST_INVOICE_CHECKOUT_ALL = '/Financial/RequestCashCheckout';
+export const APIURL_GET_REQUEST_STATUS_LIST = '/BaseInformation/GetRequestDetailStatusList';
+//TECHNICIAN MISSION ACTION
+export const APIURL_POST_TRACKING = '/Order/AddTracking';
+export const APIURL_GET_TRACKING_LIST = '/Order/GetTracking';
 //CHANGE PASSWORD
 export const APIURL_CHANGE_PASSWORD = '/UserManagement/ChangeUserPassword';

@@ -143,7 +143,7 @@ const TechnicianMission: FunctionComponent<IPageProps> = (props) => {
                           id="check1"
                         />
                         <label className="form-check-label" htmlFor="check1">
-                          درحال انجام
+                          تخصیص یافته{' '}
                         </label>
                         <i className="icon-check-1 fa fa-square color-gray-dark font-16"></i>
                         <i className="icon-check-2 fa fa-check-square font-16 color-highlight"></i>
@@ -158,7 +158,7 @@ const TechnicianMission: FunctionComponent<IPageProps> = (props) => {
                           id="check2"
                         />
                         <label className="form-check-label" htmlFor="check2">
-                          معلق{' '}
+                          منتظر لغو{' '}
                         </label>
                         <i className="icon-check-1 fa fa-square color-gray-dark font-16"></i>
                         <i className="icon-check-2 fa fa-check-square font-16 color-highlight"></i>
@@ -308,7 +308,12 @@ const TechnicianMission: FunctionComponent<IPageProps> = (props) => {
                               <span className={IEStatusId[mission.statusId!]}>{mission.statusTitle}</span>
                             </div>
                           </div>
-                          <div>{mission.address}</div>
+                          <div className="justify-content-between" style={{ marginTop: '15px' }}>
+                            <div>{mission.address}</div>
+                            <div>
+                              {mission.consumerFirstName} {mission.consumerLastName}
+                            </div>
+                          </div>
                           <i className="fa fa-chevron-down font-10 accordion-icon"></i>
                         </button>
                         <div

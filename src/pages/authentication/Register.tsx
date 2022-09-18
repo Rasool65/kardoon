@@ -61,14 +61,14 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal, handleReg
               <Controller
                 name="mobile"
                 control={control}
-                render={({ field }:any) => (
+                render={({ field }: any) => (
                   <>
                     <Input
                       id="form1a"
                       onFocus={() => setInput({ mobile: true })}
-                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px'}}
+                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
                       className="form-control validate-text"
-                      type="text"
+                      type="number"
                       placeholder={t('EnterMobile')}
                       autoComplete="off"
                       invalid={errors.mobile && true}
@@ -138,12 +138,12 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal, handleReg
               <Controller
                 name="firstName"
                 control={control}
-                render={({ field }:any) => (
+                render={({ field }: any) => (
                   <>
                     <Input
                       id="form1a"
                       onFocus={() => setInput({ firstName: true })}
-                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px'}}
+                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
                       className="form-control validate-name"
                       type="text"
                       placeholder={t('EnterName')}
@@ -167,12 +167,12 @@ const Register: FunctionComponent<IModalModel> = ({ showRegisterModal, handleReg
               <Controller
                 name="lastName"
                 control={control}
-                render={({ field }:any) => (
+                render={({ field }: any) => (
                   <>
                     <Input
                       id="form1a"
                       onFocus={() => setInput({ lastName: true })}
-                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px'}}
+                      style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
                       className="form-control validate-name"
                       type="text"
                       placeholder={t('EnterFamily')}

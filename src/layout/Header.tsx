@@ -5,9 +5,9 @@ import { RootStateType } from '@src/redux/Store';
 const Header = ({ headerTitle }: any) => {
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
 
-  function checkRole(normalizedName: string) {
-    return userData?.roles ? userData?.roles.some((roleName) => roleName.normalizedName === normalizedName) : false;
-  }
+  // function checkRole(normalizedName: string) {
+  //   return userData?.roles ? userData?.roles.some((roleName) => roleName.normalizedName === normalizedName) : false;
+  // }
   return (
     <>
       <div className="row" style={{ padding: '0 20px 0 20px', marginTop: '15px', position: 'relative', zIndex: '1' }}>
@@ -36,7 +36,7 @@ const Header = ({ headerTitle }: any) => {
 
         <div className="col-6" style={{ padding: '0 0 0 0', textAlign: 'right' }}>
           {/* <span style={{ marginLeft: '10px', color: '#FFF' }}>شهر</span> */}
-          {!checkRole('TECHNICIAN') && <SelectCity />}
+          <SelectCity />
         </div>
       </div>
 

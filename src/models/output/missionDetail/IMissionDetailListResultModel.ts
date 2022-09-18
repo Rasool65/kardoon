@@ -32,3 +32,9 @@ export interface IStatus {
   value?: number;
   label?: string;
 }
+
+export interface IStatusMission {
+  value?: number;
+  label?: string;
+  causeList?: IStatus[];
+}

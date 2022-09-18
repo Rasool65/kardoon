@@ -122,8 +122,11 @@ const TechnicianProfile: FunctionComponent<IPageProps> = (props) => {
               <div className="">
                 <div>
                   <div className="">کیف پول</div>
-                  <div className="">
-                    {UtilsHelper.threeDigitSeparator(profile?.walletBalance ? profile?.walletBalance : '0')} تومان
+                  <div>
+                    <span dir="ltr" className="m-2">
+                      {UtilsHelper.threeDigitSeparator(profile?.walletBalance ? profile?.walletBalance : '0')}
+                    </span>
+                    <span className="m-2"> ریال </span>
                   </div>
                 </div>
               </div>

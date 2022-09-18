@@ -73,7 +73,7 @@ const PasswordMessage: FunctionComponent<IModalModel> = ({ showForgetPasswordMod
                       onFocus={() => setInput({ mobile: true })}
                       style={{ backgroundPosition: 'left', marginTop: '0', height: '53px' }}
                       className="form-control validate-text"
-                      type="text"
+                      type="number"
                       placeholder={t('EnterMobile')}
                       autoComplete="off"
                       invalid={errors.mobileNumber && true}

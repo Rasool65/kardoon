@@ -7,8 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Select from 'react-select';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import ReactTooltip from 'react-tooltip';
 import { RWebShare } from 'react-web-share';
+import { UncontrolledTooltip } from 'reactstrap';
 import {
   APIURL_GET_SERVICES_TITLE,
   APIURL_GET_SERVICES_TYPES,
@@ -82,15 +82,16 @@ const Action: FunctionComponent<IPageProps> = (props) => {
     });
   };
   const GetInvoiceAction = () => {
-    setLoading(true);
-    httpRequest
-      .getRequest<IOutputResult<IInvoiceActionResultModel[]>>(
-        `${APIURL_GET_TECHNICIAN_INVOICE}?TechnicianId=${technicianId}&RequestDetailId=${state.requestDetailId}`
-      )
-      .then((result) => {
-        setInvoice(result.data.data);
-        setLoading(false);
-      });
+    state.requestDetailId &&
+      (setLoading(true),
+      httpRequest
+        .getRequest<IOutputResult<IInvoiceActionResultModel[]>>(
+          `${APIURL_GET_TECHNICIAN_INVOICE}?TechnicianId=${technicianId}&RequestDetailId=${state.requestDetailId}`
+        )
+        .then((result) => {
+          setInvoice(result.data.data);
+          setLoading(false);
+        }));
   };
 
   const Checkout = (paymentId: number, consumerPaymentAmount: number) => {
@@ -116,12 +117,25 @@ const Action: FunctionComponent<IPageProps> = (props) => {
   const {
     register,
     control,
-    setError,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<ITechnicianActionModel>({ mode: 'onChange', resolver: yupResolver(AddTechnicianActionModelSchema) });
 
+  const resetForm = () => {
+    setCount(0);
+    setTotalPrice(0);
+    reset({
+      action: { label: '', value: 0 },
+      sourceCost: { label: '', value: 0 },
+      count: 0,
+      serviceTypeId: { label: '', value: 0 },
+      description: '',
+    });
+    setPrice(undefined);
+  };
   const onSubmit = (data: ITechnicianActionModel) => {
+    setLoading(true);
     const body = {
       id: state.requestDetailId,
       technicianId: technicianId,
@@ -135,18 +149,18 @@ const Action: FunctionComponent<IPageProps> = (props) => {
       description: data.description,
     };
 
-    setLoading(true);
-    !loading && data;
-    httpRequest
-      .postRequest<IOutputResult<any>>(`${APIURL_POST_REQUEST_DETAIL_ACTION}`, body)
-      .then((result) => {
-        toast.showSuccess(result.data.message);
-        GetInvoiceAction();
-        setLoading(false);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    !loading &&
+      httpRequest
+        .postRequest<IOutputResult<any>>(`${APIURL_POST_REQUEST_DETAIL_ACTION}`, body)
+        .then((result) => {
+          resetForm();
+          toast.showSuccess(result.data.message);
+          GetInvoiceAction();
+          setLoading(false);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
   };
 
   useEffect(() => {
@@ -407,17 +421,12 @@ const Action: FunctionComponent<IPageProps> = (props) => {
                       <div>
                         {/* {index + 1}- {invoice.serviceTypeTitle} /{invoice.productName} */}
                         {index + 1}- {invoice.serviceTypeTitle}
-                        <i
-                          className="fa-solid fa-circle-info m-1"
-                          style={{ color: 'red' }}
-                          data-tip
-                          data-for={`registerTip${index}`}
-                        ></i>
+                        <i className="fa-solid fa-circle-info m-1" style={{ color: 'red' }} id={`registerTip${index}`}></i>
                       </div>
                       <div>{invoice.actionTitle}</div>
-                      <ReactTooltip id={`registerTip${index}`} place="top" effect="solid">
+                      <UncontrolledTooltip placement="top" target={`registerTip${index}`}>
                         {invoice.description}
-                      </ReactTooltip>
+                      </UncontrolledTooltip>
                     </div>
                     <div className={invoice.discount ? 'discount' : ''}>{UtilsHelper.threeDigitSeparator(invoice.price)}</div>
                     {invoice.discount ? (

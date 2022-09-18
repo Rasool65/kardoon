@@ -22,6 +22,7 @@ import EnterCode from './EnterCode';
 import manifestJson from '../../../public/_manifest.json';
 import { init_template } from './template';
 import { URL_TECHNICIAN_MISSION } from '@src/configs/urls';
+import { UtilsHelper } from '@src/utils/GeneralHelpers';
 
 const Login: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
     const body = {
       ClientId: manifestJson.clientId,
       ClientSecret: manifestJson.clientSecret,
-      UserName: data.username,
+      UserName: UtilsHelper.fixFarsiForSearch(data.username),
       Password: data.password,
     };
     if (data && !loading) {
@@ -57,7 +58,6 @@ const Login: FunctionComponent<IPageProps> = (props) => {
         .postRequest<IOutputResult<ILoginResultModel>>(APIURL_LOGIN, body)
         .then((result) => {
           setLoading(false);
-
           result.data.data.user.roles.some((roleName) => roleName.normalizedName === 'TECHNICIAN')
             ? (dispatch(handleLogin(result)),
               toast.showSuccess(result.data.message),

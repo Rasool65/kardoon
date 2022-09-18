@@ -5,6 +5,8 @@ export interface IMissionsResultModel {
 
 export interface ITechnicianMissionList {
   requestDetailId?: number;
+  consumerFirstName?: string;
+  consumerLastName?: string;
   address?: string;
   serviceTypeTitle?: string;
   productTitle?: string;

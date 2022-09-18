@@ -30,6 +30,7 @@ const ChangePassword: FunctionComponent<IPageProps> = (props) => {
     confirmPassword: false,
   });
   const {
+    reset,
     control,
     setError,
     handleSubmit,
@@ -50,12 +51,10 @@ const ChangePassword: FunctionComponent<IPageProps> = (props) => {
         .postRequest<IOutputResult<IChangePasswordModel>>(APIURL_CHANGE_PASSWORD, body)
         .then((result) => {
           setLoading(false);
-          toast.showSuccess(result.data.message);
+          result.data.isSuccess ? toast.showSuccess(result.data.message) : toast.showError(result.data.message);
+          reset({ confirmPassword: '', newPassword: '', oldPassword: '' });
         })
         .catch(() => {
-          setLoading(false);
-        })
-        .finally(() => {
           setLoading(false);
         });
     }
@@ -106,8 +105,8 @@ const ChangePassword: FunctionComponent<IPageProps> = (props) => {
                           autoComplete="off"
                           invalid={errors.oldPassword && true}
                           {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
+                          onFocus={(e) => {
+                            // field.onChange(e);
                             setInput({ oldPassword: true });
                           }}
                         />
@@ -135,14 +134,13 @@ const ChangePassword: FunctionComponent<IPageProps> = (props) => {
                         <Input
                           className="form-control validate-password"
                           style={{ backgroundPosition: 'left' }}
-                          autoFocus
                           type="password"
                           placeholder={t('رمز عبور جدید را وارد نمایید')}
                           autoComplete="off"
                           invalid={errors.newPassword && true}
                           {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
+                          onFocus={(e) => {
+                            // field.onChange(e);
                             setInput({ newPassword: true });
                           }}
                         />
@@ -170,14 +168,13 @@ const ChangePassword: FunctionComponent<IPageProps> = (props) => {
                         <Input
                           className="form-control validate-password"
                           style={{ backgroundPosition: 'left' }}
-                          autoFocus
                           type="password"
                           placeholder={t('تکرار رمز عبور جدید را وارد نمایید')}
                           autoComplete="off"
                           invalid={errors.confirmPassword && true}
                           {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
+                          onFocus={(e) => {
+                            // field.onChange(e);
                             setInput({ confirmPassword: true });
                           }}
                         />
