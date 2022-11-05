@@ -1,10 +1,10 @@
-import Form, { AjvError, IChangeEvent, ISubmitEvent, UiSchema } from '@rjsf/core';
-import type { JSONSchema7 } from 'json-schema';
+import Form from '@rjsf/core';
 import {
   APIURL_GET_MISSION_ATTRIBUTES_DETAILS,
   APIURL_GET_MISSION_DETAILS,
   APIURL_GET_REQUEST_STATUS_LIST,
   APIURL_GET_TRACKING_LIST,
+  APIURL_POST_TECHNICIAN_MEDIA_FILES,
   APIURL_POST_TRACKING,
   APIURL_UPDATE_REQUEST_DETAIL_STATUS,
 } from '@src/configs/apiConfig/apiUrls';
@@ -20,7 +20,7 @@ import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Spinner, Input, FormFeedback, Container, Row, Col } from 'reactstrap';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
-import { URL_MY_ORDERS, URL_TECHNICIAN_MISSION_DETAIL_ACTION } from '../../configs/urls';
+import { URL_MY_ORDERS, URL_TECHNICIAN_MISSION_DETAIL_ACTION, URL_TECHNICIAN_REQUEST } from '../../configs/urls';
 import { IMissionDetailResultModel, IStatusMission } from '@src/models/output/missionDetail/IMissionDetailListResultModel';
 import Select from 'react-select';
 import { IAttributesResultModel } from '@src/models/output/missionDetail/IAttributesResultModel';
@@ -30,8 +30,9 @@ import PrevHeader from '@src/layout/PrevHeader';
 import { IFollowUpList } from '@src/models/output/missionDetail/IFollowUpList';
 import { useRecorder } from '@src/hooks/useRecorder';
 import FollowUpModal from './FollowUpModal';
-import SuspendCouseModal from './SuspendCauseModal';
+import SuspendCauseModal from './SuspendCauseModal';
 import ProgressCauseModal from './ProgressCauseModal';
+import ConfirmModal from './ConfirmModal';
 
 const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   let { audioData, audioURL, isRecording, startRecording, stopRecording } = useRecorder();
@@ -48,12 +49,13 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   const [progressReasonModalVisible, setProgressReasonModalVisible] = useState<boolean>(false);
   const [suspendCauseList, setSuspendCasueList] = useState<number[]>([]);
   const [progressCauseList, setProgressCasueList] = useState<number[]>([]);
-
   const [backgroundDimmer, setBackgroundDimmer] = useState<boolean>(false);
   const [selectDisabled, setSelectDisabled] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
   const [showButton, setShowButton] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [statusValue, setStatusValue] = useState<number>();
   const [followUpDescription, setFollowUpDescription] = useState<string>();
   const [followUpList, setFollowUpList] = useState<IFollowUpList[]>();
   const [audioDisplay, setAudioDisplay] = useState<string>('none');
@@ -92,7 +94,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
     });
   };
   // const onSubmit = (data: ISubmitEvent<unknown>) => {
-  //   // Call Update Genform for technician
+  // Call Update Genform for technician
   // };
   const AddFollowUp = () => {
     if (followUpDescription == '') return toast.showError('توضیحات نمی تواند خالی باشد'), setLoading(false);
@@ -119,24 +121,37 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   };
 
   const submitTechnicianMedia = () => {
+    setLoading(true);
     const data = new FormData();
-    audioFile ? data.append('audio', audioFile) : data.append('audio', '');
-    videoFile ? data.append('video', videoFile) : data.append('video', '');
+    data.append('technicianId', userData!.userId!.toString());
+    data.append('requestDetailId', id!.toString());
+    audioFile ? data.append('audioMessage', audioFile) : data.append('audioMessage', '');
+    videoFile ? data.append('videoMessage', videoFile) : data.append('videoMessage', '');
     imageFile
       ? imageFile.forEach((imageFile: any) => {
-          data.append('image', imageFile);
+          data.append('imageMessage', imageFile);
         })
-      : data.append('image', '');
-
+      : data.append('imageMessage', '');
     httpRequestMedia
-      .postRequest<IOutputResult<any>>(`${'API MEDIA'}`, data)
+      .postRequest<IOutputResult<any>>(`${APIURL_POST_TECHNICIAN_MEDIA_FILES}`, data)
       .then((result) => {
         toast.showSuccess(result.data.message);
         setLoading(false);
+        ClearMediaFiles();
       })
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const ClearMediaFiles = () => {
+    setAudioFile(null);
+    setAudioDisplay('none');
+    setImgSrcList([]);
+    setImageFile([]);
+    setImageDisplay('none');
+    setVideoFile(null);
+    setVideoDisplay('none');
   };
   const GetFollowUp = () => {
     setLoading(true);
@@ -181,6 +196,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
     GetFollowUp();
     CustomFunctions();
   }, []);
+
   useEffect(() => {
     setAudioFile(audioData);
   }, [audioData]);
@@ -221,11 +237,12 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
           setSuspendReasonModalVisible(false);
           setFollowUpModalVisible(false);
           setImageModalVisible(false);
+          setConfirmModalVisible(false);
         }}
       ></div>
       <div id="page">
         {/* <Footer footerMenuVisible={true} activePage={1} /> */}
-        <div className="page-content">
+        <div className="page-content technician-mission-page">
           <PrevHeader />
           <div className="card header-card shape-rounded" data-card-height="150">
             <div className="card-overlay bg-highlight opacity-95"></div>
@@ -234,15 +251,15 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
           </div>
         </div>
 
-        <div>
+        <div className="technician-mission-page">
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <div className="section-1">
               <div className=" div-1">
-                <div className=" details-bar">
+                <div className="details-bar">
                   <p>شماره درخواست:</p>
                   <p>{missionDetail?.requestNumber}</p>
                 </div>
-                <div className=" details-bar">
+                <div className="details-bar">
                   <p>زمان مراجعه:</p>
                   <p>
                     {DateHelper.isoDateTopersian(missionDetail?.presenceDateTime)}-{missionDetail?.presenceShift}
@@ -266,7 +283,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    width: '85%',
+                    // width: '85%',
                     padding: '10px 0',
                   }}
                 >
@@ -275,6 +292,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                   </span>
                   {missionDetail?.statusTitle && (
                     <Select
+                      isSearchable={false}
                       isDisabled={selectDisabled}
                       isLoading={loading}
                       className="select-city"
@@ -283,7 +301,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                       onChange={(e) => {
                         if (e?.value == 2) setSuspendReasonModalVisible(true), setBackgroundDimmer(true);
                         else if (e?.value == 5) setProgressReasonModalVisible(true), setBackgroundDimmer(true);
-                        else UpdateStatus(e?.value!);
+                        else setBackgroundDimmer(true), setConfirmModalVisible(true), setStatusValue(e?.value!);
                       }}
                     />
                   )}
@@ -315,6 +333,12 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                           })}
                       </ul>
                     </div>
+                    {missionDetail?.description && (
+                      <div>
+                        <p> توضیحات :</p>
+                        {missionDetail?.description}
+                      </div>
+                    )}
                   </div>
 
                   {missionDetail?.audioMessage && (
@@ -353,7 +377,45 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                         })}
                     </div>
                   </div>
+                  {/* Technician Media list */}
+                  {/* <div>
+                      {missionDetail?.audioMessage && (
+                    <div className="d-flex justify-content-center m-3">
+                      <audio src={missionDetail?.audioMessage} controls />
+                    </div>
+                  )}
 
+                  <div style={{ display: 'block' }}>
+                    {missionDetail?.videoMessage && (
+                      <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <video
+                          width="320"
+                          height="240"
+                          controls
+                          style={{ display: 'flex', alignContent: 'center' }}
+                          src={missionDetail?.videoMessage}
+                        />
+                      </div>
+                    )}
+                    <div style={{ display: 'flex', justifyContent: 'inherit', flexWrap: 'wrap' }}>
+                      {missionDetail?.imageMessage &&
+                        missionDetail?.imageMessage.length > 0 &&
+                        missionDetail?.imageMessage.map((imageAddress: string, index: number) => {
+                          return (
+                            <img
+                              style={{ maxWidth: '85px', cursor: 'pointer' }}
+                              className="m-2"
+                              onClick={() => {
+                                setImageUrl(imageAddress);
+                                setImageModalVisible(true);
+                              }}
+                              src={imageAddress}
+                            />
+                          );
+                        })}
+                    </div>
+                  </div>
+                      </div> */}
                   <div
                     style={{
                       padding: '20px 0',
@@ -367,18 +429,18 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                     {/* Action */}
                     <span className="contact">
                       {loading ? (
-                        <Spinner />
+                        <Spinner style={{ width: '1rem', height: '1rem' }} />
                       ) : (
                         <i
                           className="fa-solid fa-location-crosshairs"
-                          onClick={() =>
+                          onClick={() => {
                             navigate(`${URL_TECHNICIAN_MISSION_DETAIL_ACTION}`, {
                               state: {
                                 requestDetailId: missionDetail?.requestDetailId,
                                 productCategoryId: missionDetail?.productCategoryId,
                               },
-                            })
-                          }
+                            });
+                          }}
                         />
                       )}
                     </span>
@@ -387,7 +449,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                       <i className="fa fa-phone" onClick={() => window.open(`tel:${missionDetail?.consumerPhoneNumber}`)} />
                     </span>
                     {/* Images */}
-                    {/* <span className="contact">
+                    <span className="contact">
                       <label htmlFor="img" style={{ cursor: 'pointer' }}>
                         <i className="fa fa-camera" />
                       </label>
@@ -399,9 +461,9 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                         capture="user"
                         accept="image/*"
                       />
-                    </span> */}
+                    </span>
                     {/* Video */}
-                    {/* <span className="contact">
+                    <span className="contact">
                       <label htmlFor="video" style={{ cursor: 'pointer' }}>
                         <i className="fa fa-video" />
                       </label>
@@ -413,9 +475,9 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                         capture="user"
                         accept="video/*"
                       />
-                    </span> */}
+                    </span>
                     {/* Voice */}
-                    {/* <span className="contact" hidden={isRecording}>
+                    <span className="contact" hidden={isRecording}>
                       <i
                         className="fa fa-microphone"
                         onClick={() => {
@@ -423,15 +485,15 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                           setAudioDisplay('initial');
                         }}
                       />
-                    </span> */}
-                    {/* <span className="contact" hidden={!isRecording}>
+                    </span>
+                    <span className="contact" hidden={!isRecording}>
                       <i
                         className="fa fa-stop"
                         onClick={() => {
                           stopRecording();
                         }}
                       />
-                    </span> */}
+                    </span>
                     {/* Message FollowUp */}
                     <span className="contact">
                       <i
@@ -439,6 +501,22 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                         onClick={() => {
                           setFollowUpModalVisible(true);
                           setBackgroundDimmer(true);
+                        }}
+                      />
+                    </span>
+                    <span className="contact">
+                      <i
+                        className="fa fa-file"
+                        onClick={() => {
+                          navigate(`${URL_TECHNICIAN_REQUEST}`, {
+                            state: {
+                              requestDetailId: missionDetail?.requestDetailId,
+                              productCategoryId: missionDetail?.productCategoryId,
+                              consumerFullName: missionDetail?.consumerFirstName + ' ' + missionDetail?.consumerLastName,
+                              consumerAddress: missionDetail?.address,
+                              requestNumber: missionDetail?.requestNumber,
+                            },
+                          });
                         }}
                       />
                     </span>
@@ -537,7 +615,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                   }}
                   className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700 m-1"
                 >
-                  ذخیره{' '}
+                  {loading ? <Spinner /> : ' افزودن فایل های بیشتر'}
                 </Button>
               </div>
             </div>
@@ -546,13 +624,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
             followUpList.length > 0 &&
             followUpList.map((item: IFollowUpList, index: number) => {
               return (
-                <div
-                  className="card card-style"
-                  style={{
-                    padding: '5px 10px 5px 10px',
-                    margin: '15px',
-                  }}
-                >
+                <div className="section-1 w100-40">
                   <div className="row mb-2">
                     <div className="col-6">تاریخ و زمان</div>
                     <div className="col-6" style={{ textAlign: 'left' }}>
@@ -575,7 +647,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
           onChange={(e: any) => setFollowUpDescription(e.currentTarget.value)}
         />
 
-        <SuspendCouseModal
+        <SuspendCauseModal
           suspendReasonModalVisible={suspendReasonModalVisible}
           missionDetail={missionDetail}
           statusList={statusList}
@@ -615,6 +687,16 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
           data-menu-height="cover"
           data-menu-width="cover"
           onClick={() => setImageModalVisible(false)}
+        />
+
+        <ConfirmModal
+          confirmModalVisible={confirmModalVisible}
+          accept={() => {
+            setConfirmModalVisible(false), setBackgroundDimmer(false), UpdateStatus(statusValue!);
+          }}
+          reject={() => {
+            setConfirmModalVisible(false), setBackgroundDimmer(false);
+          }}
         />
       </div>
     </>

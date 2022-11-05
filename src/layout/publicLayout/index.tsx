@@ -16,16 +16,16 @@ const PublicLayout = (props: any) => {
           <a href="index.html" className="header-title">
             AZURES
           </a>
-          <a href="#" data-menu="menu-main" className="header-icon header-icon-1">
+          <a style={{ cursor: 'pointer' }} data-menu="menu-main" className="header-icon header-icon-1">
             <i className="fas fa-bars"></i>
           </a>
-          <a href="#" data-toggle-theme className="header-icon header-icon-2 show-on-theme-dark">
+          <a style={{ cursor: 'pointer' }} data-toggle-theme className="header-icon header-icon-2 show-on-theme-dark">
             <i className="fas fa-sun"></i>
           </a>
-          <a href="#" data-toggle-theme className="header-icon header-icon-2 show-on-theme-light">
+          <a style={{ cursor: 'pointer' }} data-toggle-theme className="header-icon header-icon-2 show-on-theme-light">
             <i className="fas fa-moon"></i>
           </a>
-          <a href="#" data-menu="menu-highlights" className="header-icon header-icon-3">
+          <a style={{ cursor: 'pointer' }} data-menu="menu-highlights" className="header-icon header-icon-3">
             <i className="fas fa-brush"></i>
           </a>
         </div>
@@ -86,7 +86,7 @@ const PublicLayout = (props: any) => {
           <div className="page-title page-title-large">
             <h2 data-username="Enabled!" className="greeting-text"></h2>
             <a
-              href="#"
+              style={{ cursor: 'pointer' }}
               data-menu="menu-main"
               className="bg-fade-highlight-light shadow-xl preload-img"
               data-src="images/avatars/5s.png"
@@ -142,13 +142,16 @@ const PublicLayout = (props: any) => {
           <div className="content mt-0">
             <div className="row">
               <div className="col-6">
-                <a href="#" className="btn btn-full btn-m rounded-s text-uppercase font-700 shadow-xl bg-highlight">
+                <a
+                  style={{ cursor: 'pointer' }}
+                  className="btn btn-full btn-m rounded-s text-uppercase font-700 shadow-xl bg-highlight"
+                >
                   Purchase
                 </a>
               </div>
               <div className="col-6">
                 <a
-                  href="#"
+                  style={{ cursor: 'pointer' }}
                   className="btn btn-full btn-border btn-m rounded-s text-uppercase font-700 shadow-l border-highlight color-highlight"
                 >
                   Contact US
@@ -159,7 +162,7 @@ const PublicLayout = (props: any) => {
 
           <div className="content mb-2">
             <h5 className="float-start font-16 font-500">Quality Features</h5>
-            <a className="float-end font-12 color-highlight mt-n1" href="#">
+            <a className="float-end font-12 color-highlight mt-n1" style={{ cursor: 'pointer' }}>
               View All
             </a>
             <div className="clearfix"></div>
@@ -364,7 +367,10 @@ const PublicLayout = (props: any) => {
                 responsive and provides great solutions.
               </p>
               <p className="opacity-50 color-white">Envato Customer</p>
-              <a href="#" className="btn btn-m rounded-s btn-border color-white border-white text-uppercase font-700">
+              <a
+                style={{ cursor: 'pointer' }}
+                className="btn btn-m rounded-s btn-border color-white border-white text-uppercase font-700"
+              >
                 View Testimonials
               </a>
             </div>
@@ -374,7 +380,7 @@ const PublicLayout = (props: any) => {
           <div className="card card-style">
             <div className="content">
               <h5 className="float-start font-16 font-600">Happy Customers</h5>
-              <a className="float-end font-12 color-highlight mt-n1" href="#">
+              <a className="float-end font-12 color-highlight mt-n1" style={{ cursor: 'pointer' }}>
                 View All
               </a>
               <div className="clearfix"></div>
@@ -417,7 +423,7 @@ const PublicLayout = (props: any) => {
 
           <div className="content mb-3 mt-0">
             <h5 className="float-start font-16 font-500">Products we Love</h5>
-            <a className="float-end font-12 color-highlight mt-n1" href="#">
+            <a className="float-end font-12 color-highlight mt-n1" style={{ cursor: 'pointer' }}>
               View All
             </a>
             <div className="clearfix"></div>
@@ -433,7 +439,10 @@ const PublicLayout = (props: any) => {
                       <div className="card-overlay bg-gradient"></div>
                     </div>
                     <p className="mb-3 ps-2 pe-2 pt-2 font-12">Classic, elegant and powerful. A best seller.</p>
-                    <a href="#" className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700">
+                    <a
+                      style={{ cursor: 'pointer' }}
+                      className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700"
+                    >
                       View
                     </a>
                   </div>
@@ -445,7 +454,10 @@ const PublicLayout = (props: any) => {
                       <div className="card-overlay bg-gradient"></div>
                     </div>
                     <p className="mb-3 ps-2 pe-2 pt-2 font-12">A best seller, elegant multi use design.</p>
-                    <a href="#" className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700">
+                    <a
+                      style={{ cursor: 'pointer' }}
+                      className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700"
+                    >
                       View
                     </a>
                   </div>
@@ -457,7 +469,10 @@ const PublicLayout = (props: any) => {
                       <div className="card-overlay bg-gradient"></div>
                     </div>
                     <p className="mb-3 ps-2 pe-2 pt-2 font-12">Modern sidebars and a very intuitive interface.</p>
-                    <a href="#" className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700">
+                    <a
+                      style={{ cursor: 'pointer' }}
+                      className="btn btn-xs bg-highlight btn-center-xs rounded-s shadow-s text-uppercase font-700"
+                    >
                       View
                     </a>
                   </div>
@@ -492,7 +507,10 @@ const PublicLayout = (props: any) => {
               <p className="boxed-text-xl">
                 Fast, easy to use and filled with features. Give your site the Mobile Feeling it deserves.
               </p>
-              <a href="#" className="btn btn-center-xl btn-m text-uppercase font-700 bg-highlight rounded-sm shadow-l">
+              <a
+                style={{ cursor: 'pointer' }}
+                className="btn btn-center-xl btn-m text-uppercase font-700 bg-highlight rounded-sm shadow-l"
+              >
                 Buy now - $25
               </a>
             </div>
@@ -540,11 +558,17 @@ const PublicLayout = (props: any) => {
             <img className="rounded-l mb-3" src="app/icons/icon-128x128.png" alt="img" width="90" />
             <h4 className="mt-3">Azures on your Home Screen</h4>
             <p>Install Azures on your home screen, and access it just like a regular app. It really is that simple!</p>
-            <a href="#" className="pwa-install btn btn-s rounded-s shadow-l text-uppercase font-700 bg-highlight mb-2">
+            <a
+              style={{ cursor: 'pointer' }}
+              className="pwa-install btn btn-s rounded-s shadow-l text-uppercase font-700 bg-highlight mb-2"
+            >
               Add to Home Screen
             </a>
             <br />
-            <a href="#" className="pwa-dismiss close-menu color-gray2-light text-uppercase font-700 opacity-60 font-10">
+            <a
+              style={{ cursor: 'pointer' }}
+              className="pwa-dismiss close-menu color-gray2-light text-uppercase font-700 opacity-60 font-10"
+            >
               Maybe later
             </a>
             <div className="clear"></div>
@@ -566,7 +590,10 @@ const PublicLayout = (props: any) => {
               Home Screen".
             </p>
             <div className="clear"></div>
-            <a href="#" className="pwa-dismiss close-menu color-highlight font-800 opacity-80 text-center text-uppercase">
+            <a
+              style={{ cursor: 'pointer' }}
+              className="pwa-dismiss close-menu color-highlight font-800 opacity-80 text-center text-uppercase"
+            >
               Maybe later
             </a>
             <br />

@@ -19,8 +19,8 @@ export const AddTechnicianActionModelSchema: yup.SchemaOf<ITechnicianActionModel
     label: yup.string().required('انتخاب نوع خدمت اجباریست'),
   }),
   technicianId: yup.number(),
-  price: yup.number().required('مقدار هزینه اجباریست'),
-  count: yup.number().required('تعداد اجباریست'),
+  price: yup.number().required('مقدار هزینه اجباریست').min(1, 'مبلغ نمی تواند صفر باشد '),
+  count: yup.number().required('تعداد اجباریست').min(1, 'تعداد نمی تواند کمتر از یک باشد '),
   description: yup.string().required('توضیحات شرح اقدام اجباریست'),
   action: yup.object({
     price: yup.number().nullable(),

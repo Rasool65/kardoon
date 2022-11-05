@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, generatePath } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { Alert, Button, Col, Container, Form, FormFeedback, Input, Row, Spinner } from 'reactstrap';
@@ -62,9 +62,11 @@ const Login: FunctionComponent<IPageProps> = (props) => {
             ? (dispatch(handleLogin(result)),
               toast.showSuccess(result.data.message),
               result.data.data.user.profile.residenceCityId
-                ? navigate(`${URL_TECHNICIAN_PROFILE}/?id=${result.data.data.user.userId}`)
+                ? //  navigate(generatePath(URL_TECHNICIAN_PROFILE, { id: result.data.data.user.userId.toString() }))
+                  navigate(URL_MAIN)
                 : navigate(URL_CITY))
             : toast.showError('دسترسی برای مشتریان موقتأ بسته شده است');
+          location.reload();
         })
         .catch(() => {
           setLoading(false);
@@ -87,7 +89,7 @@ const Login: FunctionComponent<IPageProps> = (props) => {
   return (
     <>
       <div id="page">
-        <div className="page-content" style={{ paddingBottom: '0' }}>
+        <div className="login-page page-content" style={{ paddingBottom: '0' }}>
           <div
             onClick={() => navigate(URL_MAIN)}
             className="page-title page-title-small pointer"
@@ -156,24 +158,26 @@ const Login: FunctionComponent<IPageProps> = (props) => {
                   // disabled={loading}
                   style={{ width: '100%', marginTop: '30px' }}
                   type="submit"
-                  className="btn btn-primary btn-m mt-4 mb-0 btn-full bg-blue-dark rounded-sm text-uppercase font-900"
+                  className="btn btn-primary btn-m mt-5 mb-0 btn-full bg-blue-dark rounded-sm text-uppercase font-900"
                 >
                   {loading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : t('Login')}
                 </Button>
 
-                <div
-                  className="color-theme pointer"
-                  style={{ marginTop: '15px', maxWidth: 'fit-content' }}
-                  onClick={() => setRegisterModalVisible(!registerModalVisible)}
-                >
-                  {t('Register')}
-                </div>
-                <div
-                  className="color-theme pointer"
-                  style={{ marginTop: '5px', maxWidth: 'fit-content' }}
-                  onClick={() => setForgetPasswordModalVisible(!forgetPasswordModalVisible)}
-                >
-                  {t('LoginWithSMS')}
+                <div className="d-flex align-items-center justify-content-between mt-3">
+                  <div
+                    className="color-theme pointer link-text"
+                    style={{ marginTop: '15px' }}
+                    onClick={() => setRegisterModalVisible(!registerModalVisible)}
+                  >
+                    {t('Register')}
+                  </div>
+                  <div
+                    className="color-theme pointer link-text"
+                    style={{ marginTop: '5px' }}
+                    onClick={() => setForgetPasswordModalVisible(!forgetPasswordModalVisible)}
+                  >
+                    {t('LoginWithSMS')}
+                  </div>
                 </div>
                 <div className="divider mt-4 mb-3" />
                 <div className="footer-title pointer" style={{ fontSize: '14px' }}>

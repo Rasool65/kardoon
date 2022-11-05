@@ -5,4 +5,6 @@ export interface ICategory {
   logoUrl?: string;
   backgroundImageUrl?: string;
   sortOrder?: number;
+  // label?: string;
+  // value: number;
 }

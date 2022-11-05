@@ -4,4 +4,5 @@ export enum ToastType {
   Error,
   Warning,
   Info,
+  Notify,
 }

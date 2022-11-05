@@ -1,4 +1,5 @@
 import { ToastType } from '@src/components/toast/ToastType';
+import { URL_CONVERSATION } from '@src/configs/urls';
 import { toast } from 'react-toastify';
 
 export const useToast = () => {
@@ -21,6 +22,15 @@ export const useToast = () => {
       case ToastType.Error:
         toast.error(message, { position: position });
         break;
+      case ToastType.Notify:
+        toast.info(message, {
+          position: position,
+          progress: 1,
+          onClick: () => {
+            window.open(URL_CONVERSATION, '_self');
+          },
+        });
+        break;
     }
   };
 
@@ -29,6 +39,7 @@ export const useToast = () => {
   const showWarning = (message: string) => showToast(message, ToastType.Warning);
   const showInfo = (message: string) => showToast(message, ToastType.Info);
   const showDefault = (message: string) => showToast(message, ToastType.Default);
+  const showNotify = (message: string) => showToast(message, ToastType.Notify);
 
-  return { showDefault, showToast, showSuccess, showWarning, showInfo, showError };
+  return { showDefault, showToast, showSuccess, showWarning, showInfo, showError, showNotify };
 };

@@ -2,7 +2,18 @@ import { FunctionComponent, useEffect, useLayoutEffect, useState } from 'react';
 import Num2persian from 'num2persian';
 import { IPageProps } from '@src/configs/routerConfig/IPageProps';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, Form, FormFeedback, Input, Spinner } from 'reactstrap';
+import {
+  Button,
+  ButtonDropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Form,
+  FormFeedback,
+  Input,
+  Spinner,
+  UncontrolledDropdown,
+} from 'reactstrap';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Select from 'react-select';
 import useHttpRequest from '@src/hooks/useHttpRequest';
@@ -10,6 +21,7 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import { RWebShare } from 'react-web-share';
 import { UncontrolledTooltip } from 'reactstrap';
 import {
+  APIURL_DELETE_ACTION,
   APIURL_GET_SERVICES_TITLE,
   APIURL_GET_SERVICES_TYPES,
   APIURL_GET_SOURCE_OF_COST,
@@ -30,6 +42,9 @@ import {
 import { useToast } from '@src/hooks/useToast';
 import { useTranslation } from 'react-i18next';
 import { CustomFunctions } from './../template';
+import { URL_TECHNICIAN_FACTOR } from '@src/configs/urls';
+import { APIURL_POST_TECHNICIAN_INVOICE_CHECKOUT_ONLINE } from './../../../configs/apiConfig/apiUrls';
+import RemoveConfirmModal from './RemoveConfirmModal';
 
 const Action: FunctionComponent<IPageProps> = (props) => {
   const toast = useToast();
@@ -52,9 +67,26 @@ const Action: FunctionComponent<IPageProps> = (props) => {
   const [invoice, setInvoice] = useState<IInvoiceActionResultModel[]>();
   const [price, setPrice] = useState<any>();
   const [count, setCount] = useState<number>(0);
+  const [paymentId, setPaymentId] = useState<number>();
   const [totalPrice, setTotalPrice] = useState<Number>(0);
   const [checkoutLoading, setCheckoutLoading] = useState<boolean>(false);
+  const [confirmRemoveModalVisible, setConfirmRemoveModalVisible] = useState<boolean>(false);
+  const [backgroundDimmer, setBackgroundDimmer] = useState<boolean>(false);
   const technicianId = useSelector((state: RootStateType) => state.authentication.userData?.userId);
+
+  const RemoveAction = (id: number) => {
+    const body = {
+      technicianId: technicianId,
+      id: id,
+      actorUserId: technicianId,
+    };
+    setLoading(true);
+    httpRequest.deleteRequest<IOutputResult<any>>(`${APIURL_DELETE_ACTION}`, body).then((result) => {
+      toast.showSuccess(result.data.message);
+      setLoading(false);
+      GetInvoiceAction();
+    });
+  };
 
   const GetServiceType = () => {
     setLoading(true);
@@ -64,6 +96,7 @@ const Action: FunctionComponent<IPageProps> = (props) => {
     });
   };
   const GetServiceTitle = (serviceTypeId: number) => {
+    debugger;
     setLoading(true);
     httpRequest
       .getRequest<IOutputResult<any>>(
@@ -108,6 +141,24 @@ const Action: FunctionComponent<IPageProps> = (props) => {
         .then((result) => {
           toast.showSuccess(result.data.message);
           GetInvoiceAction();
+          setCheckoutLoading(false);
+        })
+        .finally(() => {
+          setCheckoutLoading(false);
+        });
+  };
+  const CheckoutOnline = (paymentId: number, consumerPaymentAmount: number) => {
+    const body = {
+      paymentId: paymentId,
+      consumerPaymentAmount: consumerPaymentAmount,
+      userId: technicianId,
+    };
+    setCheckoutLoading(true);
+    !loading &&
+      httpRequest
+        .postRequest<IOutputResult<any>>(`${APIURL_POST_TECHNICIAN_INVOICE_CHECKOUT_ONLINE}`, body)
+        .then((result) => {
+          window.open(result.data.data, '_self');
           setCheckoutLoading(false);
         })
         .finally(() => {
@@ -174,11 +225,18 @@ const Action: FunctionComponent<IPageProps> = (props) => {
   }, [props.title]);
   return (
     <>
-      <div id="page">
+      <div
+        className={`menu-hider ${backgroundDimmer ? 'menu-active' : ''}`}
+        onClick={() => {
+          setBackgroundDimmer(false);
+          setConfirmRemoveModalVisible(false);
+        }}
+      ></div>
+      <div id="page" className="technician-mission-page">
         <div className="page-content">
           <div className="page-title page-title-small">
             <h2>
-              <a href="#" onClick={() => navigate(-1)}>
+              <a style={{ cursor: 'pointer' }} onClick={() => navigate(-1)}>
                 <i className="fa fa-arrow-right mx-2"></i>
                 بازگشت
               </a>
@@ -190,9 +248,9 @@ const Action: FunctionComponent<IPageProps> = (props) => {
             <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
           </div>
         </div>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className=" d-flex m-2 justify-content-evenly">
-            <div className="m-2">
+        <Form className="cart-box" onSubmit={handleSubmit(onSubmit)}>
+          <div className=" d-flex justify-content-evenly">
+            <div className="half-width">
               <Controller
                 name="serviceTypeId"
                 control={control}
@@ -217,7 +275,7 @@ const Action: FunctionComponent<IPageProps> = (props) => {
                 )}
               />
             </div>
-            <div className="m-2">
+            <div className="half-width">
               <Controller
                 name="action"
                 control={control}
@@ -271,8 +329,8 @@ const Action: FunctionComponent<IPageProps> = (props) => {
               />
             </div>
           </div>
-          <div className="d-flex m-2">
-            <div>
+          <div className="d-flex m-3">
+            <div className="w-50">
               <Controller
                 name="sourceCost"
                 control={control}
@@ -295,8 +353,8 @@ const Action: FunctionComponent<IPageProps> = (props) => {
             </div>
 
             <div
-              style={{ marginTop: '8px', marginRight: '15px', width: '80px' }}
-              className={`input-style has-borders no-icon  mb-4 ${input.count ? 'input-style-active' : ''}`}
+              style={{ marginRight: '15px' }}
+              className={`input-style has-borders no-icon  mb-4 w-25 ${input.count ? 'input-style-active' : ''}`}
             >
               <Controller
                 name="count"
@@ -331,8 +389,8 @@ const Action: FunctionComponent<IPageProps> = (props) => {
             </div>
 
             <div
-              style={{ marginTop: '8px', marginRight: '15px' }}
-              className={`input-style has-borders no-icon  mb-4 ${input.price ? 'input-style-active' : ''}`}
+              style={{ marginRight: '15px' }}
+              className={`input-style has-borders no-icon  mb-4 w-25 ${input.price ? 'input-style-active' : ''}`}
             >
               <Controller
                 name="price"
@@ -344,11 +402,11 @@ const Action: FunctionComponent<IPageProps> = (props) => {
                       onFocus={() => setInput({ price: true })}
                       style={{ backgroundPosition: 'left' }}
                       className="form-control validate-text"
-                      type="text"
+                      type="number"
                       placeholder={UtilsHelper.threeDigitSeparator(price)}
                       autoComplete="off"
                       invalid={errors?.price && true}
-                      // {...field}
+                      {...field}
                       onChange={(e: any) => {
                         e.target.value
                           ? (field.onChange(e), setTotalPrice(e.target.value * count), setPrice(e.target.value))
@@ -400,7 +458,7 @@ const Action: FunctionComponent<IPageProps> = (props) => {
       </div>
       {/* invoice */}
       <div
-        className="card "
+        className=""
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -435,7 +493,7 @@ const Action: FunctionComponent<IPageProps> = (props) => {
                       ''
                     )}
                     <div>{invoice.settlementStatus ? <i className="fa fa-check" /> : <i className="fa fa-hourglass" />}</div>
-                    <div>
+                    <div className="payment-status">
                       {invoice.settlementStatus ? (
                         <div style={{ marginLeft: '60px' }}>{invoice.paymentType}</div>
                       ) : invoice.costSource == 1 ? (
@@ -448,8 +506,35 @@ const Action: FunctionComponent<IPageProps> = (props) => {
                               Checkout(invoice.paymentId, invoice.priceAfterDiscount);
                             }}
                           >
-                            {checkoutLoading ? <Spinner /> : 'تسویه'}
+                            {checkoutLoading ? <Spinner /> : 'نقدی'}
                           </Button>
+                          {/* <Button
+                            className="btn btn-success"
+                            onClick={() => {
+                              CheckoutOnline(invoice.paymentId, invoice.priceAfterDiscount);
+                            }}
+                          >
+                            {checkoutLoading ? <Spinner /> : 'آنلاین'}
+                          </Button> */}
+                          {/* <UncontrolledDropdown>
+                            <DropdownToggle caret>پرداخت</DropdownToggle>
+                            <DropdownMenu>
+                              <DropdownItem
+                                onClick={() => {
+                                  Checkout(invoice.paymentId, invoice.priceAfterDiscount);
+                                }}
+                              >
+                                {checkoutLoading ? <Spinner /> : 'نقدی'}
+                              </DropdownItem>
+                              <DropdownItem
+                                onClick={() => {
+                                  CheckoutOnline(invoice.paymentId, invoice.priceAfterDiscount);
+                                }}
+                              >
+                                {checkoutLoading ? <Spinner /> : 'آنلاین'}
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </UncontrolledDropdown> */}
                           {/* <RWebShare
                             data={{
                               text: `لینک پرداخت هزینه بابت ${invoice.actionTitle} `,
@@ -461,13 +546,49 @@ const Action: FunctionComponent<IPageProps> = (props) => {
                           {/* </RWebShare> */}
                         </>
                       )}
+                      <div>
+                        {invoice.settlementStatus ? (
+                          ''
+                        ) : (
+                          <div
+                            style={{ marginLeft: '10px', cursor: 'pointer', marginRight: '5px' }}
+                            onClick={() => {
+                              setPaymentId(invoice.paymentId);
+                              setConfirmRemoveModalVisible(true);
+                              setBackgroundDimmer(true);
+                            }}
+                            className="fa fa-times color-red-dark"
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
               })}
+            {/* <Button
+              onClick={() => navigate(URL_TECHNICIAN_FACTOR)}
+              className="btn btn-m btn-full mb-3 rounded-xs text-uppercase font-700 shadow-s border-blue-dark bg-blue-light"
+            >
+              {checkoutLoading ? (
+                <Spinner />
+              ) : (
+                <>
+                  مشاهده فاکتور<span className="fa-fw select-all fas"></span>
+                </>
+              )}
+            </Button> */}
           </div>
         </div>
       </div>
+      <RemoveConfirmModal
+        confirmModalVisible={confirmRemoveModalVisible}
+        accept={() => {
+          setConfirmRemoveModalVisible(false), setBackgroundDimmer(false), RemoveAction(paymentId!);
+        }}
+        reject={() => {
+          setConfirmRemoveModalVisible(false), setBackgroundDimmer(false);
+        }}
+      />
     </>
   );
 };

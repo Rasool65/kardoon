@@ -1,5 +1,6 @@
 import {
   URL_CHANGE_PASSWORD,
+  URL_CONVERSATION,
   URL_LOGIN,
   URL_MAIN,
   URL_MY_ORDERS,
@@ -7,10 +8,9 @@ import {
   URL_TECHNICIAN_PROFILE,
 } from '@src/configs/urls';
 import { handleLogout } from '@src/redux/reducers/authenticationReducer';
-import { FunctionComponent, useEffect } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
+import { generatePath, useNavigate } from 'react-router-dom';
 import { RootStateType } from '@src/redux/Store';
 import { init_template } from '@src/pages/main/template';
 import { IModalModel } from '@src/pages/authentication/ModalModel';
@@ -20,6 +20,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
+  const messageCount = useSelector((state: RootStateType) => state.message.newMessageCount);
 
   function checkRole(normalizedName: string) {
     return userData?.roles.some((roleName) => roleName.normalizedName === normalizedName);
@@ -61,7 +62,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
       <SelectCity />
       <div className="menu-logo text-center">
         <a
-          href="#"
+          style={{ cursor: 'pointer' }}
           // onClick={(e) => goToUserProfile(e)}
         >
           <img className="rounded-circle bg-highlight" width="80" src={require('/src/scss/images/avatars/5s.png')} alt="Avatar" />
@@ -73,7 +74,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
       </div>
       <div className="menu-items">
         <h5 className="text-uppercase opacity-20 font-12 pr-3">منوی کاردون</h5>
-        <a className="close-menu" id="nav-welcome" href="#" onClick={() => navigate(URL_MAIN)}>
+        <a className="close-menu" id="nav-welcome" style={{ cursor: 'pointer' }} onClick={() => navigate(URL_MAIN)}>
           <i
             data-feather="home"
             data-feather-line="1"
@@ -85,21 +86,21 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           <em className="badge bg-highlight color-white">HOT</em>
           <i className="fa fa-circle" />
         </a>
-        <a className="close-menu" href="#" onClick={() => navigate(URL_CHANGE_PASSWORD)}>
+        {/* <a className="close-menu" style={{ cursor: 'pointer' }} onClick={() => navigate(URL_CHANGE_PASSWORD)}>
           <i className="fa fa-key font-16 color-red-dark"></i>
           <span>تغییر کلمه عبور</span>
           <em className="badge bg-highlight color-white"></em>
           <i className="fa fa-circle" />
-        </a>
-        <a className="close-menu" href="#" onClick={() => navigate('URL_NOTIFY')}>
+        </a> */}
+        <a className="close-menu" style={{ cursor: 'pointer' }} onClick={() => navigate(URL_CONVERSATION)}>
           <i className="fa fa-comment font-16 color-green-dark"></i>
-          <span>لیست اعلان ها</span>
-          <em className="badge bg-highlight color-white"></em>
+          <span>لیست پیام ها</span>
+          <em className="badge bg-danger color-white">{messageCount > 0 && messageCount}</em>
           <i className="fa fa-circle" />
         </a>
         {/* <a
           id="nav-starters"
-          href="#"
+          style={{cursor:'pointer'}}
          onClick={(e) => navigate('/address')}
         >
           <i
@@ -112,7 +113,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           <span>آدرس های من</span>
           <i className="fa fa-circle" />
         </a> */}
-        <a id="nav-pages" className="close-menu" href="#" onClick={() => navigate(URL_MY_ORDERS)}>
+        <a id="nav-pages" className="close-menu" style={{ cursor: 'pointer' }} onClick={() => navigate(URL_MY_ORDERS)}>
           <i
             data-feather="file"
             data-feather-line="1"
@@ -128,8 +129,9 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
             <a
               id="nav-pages"
               className="close-menu"
-              href="#"
-              onClick={() => navigate(`${URL_TECHNICIAN_PROFILE}?id=${userData?.userId}`)}
+              style={{ cursor: 'pointer' }}
+              // onClick={() => navigate(`${URL_TECHNICIAN_PROFILE}?id=${userData?.userId}`)}
+              onClick={() => navigate(generatePath(URL_TECHNICIAN_PROFILE, { id: userData?.userId.toString() }))}
             >
               <i
                 data-feather="file"
@@ -141,7 +143,12 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
               <span>پروفایل تکنسین</span>
               <i className="fa fa-circle" />
             </a>
-            <a id="nav-features" href="#" className="close-menu" onClick={() => navigate(URL_TECHNICIAN_MISSION)}>
+            <a
+              id="nav-features"
+              style={{ cursor: 'pointer' }}
+              className="close-menu"
+              onClick={() => navigate(URL_TECHNICIAN_MISSION)}
+            >
               <i
                 data-feather="heart"
                 data-feather-line="1"
@@ -165,7 +172,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           <span>تصاویر</span>
           <i className="fa fa-circle" />
         </a> */}
-        {/* <a href="#" data-submenu="sub-contact">
+        {/* <a style={{cursor:'pointer'}} data-submenu="sub-contact">
           <i
             data-feather="mail"
             data-feather-line="1"
@@ -177,7 +184,7 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           <strong className="badge bg-highlight color-white">1</strong>
           <i className="fa fa-circle" />
       </a> */}
-        <a className="close-menu" id="nav-settings" href="settings.html">
+        {/* <a className="close-menu" id="nav-settings" href="settings.html">
           <i
             data-feather="settings"
             data-feather-line="1"
@@ -187,12 +194,13 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
           />
           <span>تنظیمات</span>
           <i className="fa fa-circle" />
-        </a>
+        </a> */}
         <a
-          href="#"
+          style={{ cursor: 'pointer' }}
           className="close-menu"
           onClick={() => {
             dispatch(handleLogout()), navigate(URL_LOGIN);
+            location.reload();
           }}
         >
           <i
@@ -207,19 +215,19 @@ const MainMenuModal: FunctionComponent<IModalModel> = ({ mainMenuVisible }: any)
         </a>
       </div>
       <div className="text-center pt-2" style={{ direction: 'ltr' }}>
-        <a href="#" className="icon icon-xs mr-1 rounded-s bg-facebook">
+        <a style={{ cursor: 'pointer' }} className="socialmedia-icon bg-facebook">
           <i className="fab fa-facebook" />
         </a>
-        <a href="#" className="icon icon-xs mr-1 rounded-s bg-twitter">
+        <a style={{ cursor: 'pointer' }} className="socialmedia-icon bg-twitter">
           <i className="fab fa-twitter" />
         </a>
-        <a href="#" className="icon icon-xs mr-1 rounded-s bg-instagram">
+        <a style={{ cursor: 'pointer' }} className="socialmedia-icon bg-instagram">
           <i className="fab fa-instagram" />
         </a>
-        <a href="#" className="icon icon-xs mr-1 rounded-s bg-linkedin">
+        <a style={{ cursor: 'pointer' }} className="socialmedia-icon bg-linkedin">
           <i className="fab fa-linkedin-in" />
         </a>
-        <a href="#" className="icon icon-xs rounded-s bg-whatsapp">
+        <a style={{ cursor: 'pointer' }} className="socialmedia-icon bg-whatsapp">
           <i className="fab fa-whatsapp" />
         </a>
         <p className="mb-0 pt-3 font-10 opacity-30">تمامی حقوق برای کاردون محفوظ می باشد. ۱۴۰1 – ۲۰۲۲</p>

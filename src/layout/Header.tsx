@@ -10,31 +10,30 @@ const Header = ({ headerTitle }: any) => {
   // }
   return (
     <>
-      <div className="row" style={{ padding: '0 20px 0 20px', marginTop: '15px', position: 'relative', zIndex: '1' }}>
-        <div className="col-1" style={{ padding: '0 0 0 0', textAlign: 'center', width: '30px' }}>
-          <img
-            // onClick={(e) => showMainMenu(e)}
-            data-menu="menu-main"
-            className="bg-fade-highlight-light shadow-xl preload-img"
-            src={require('/src/scss/images/menu.png')}
-            style={{ width: '20px', height: '20px', cursor: 'pointer' }}
-            alt=""
-          />
+      <div className="row menu-bar" style={{ padding: '0 20px 0 20px', marginTop: '15px', position: 'relative', zIndex: '1' }}>
+        <div data-menu="menu-main" style={{ cursor: 'pointer' }} className="col-8 d-flex">
+          <div className="menu-icon" style={{ padding: '0 0 0 0', textAlign: 'center', width: '30px' }}>
+            <img
+              className=""
+              src={require('/src/scss/images/menu-b.png')}
+              style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+              alt=""
+            />
+          </div>
+          <div
+            className="col-5 menu-title"
+            style={{
+              padding: '0 0px 0 0',
+              color: 'white',
+              fontSize: '15px',
+              textAlign: 'right',
+            }}
+          >
+            {headerTitle}
+          </div>
         </div>
 
-        <div
-          className="col-5"
-          style={{
-            padding: '0 0px 0 0',
-            color: 'white',
-            fontSize: '15px',
-            textAlign: 'right',
-          }}
-        >
-          {headerTitle}
-        </div>
-
-        <div className="col-6" style={{ padding: '0 0 0 0', textAlign: 'right' }}>
+        <div className="col-4" style={{ padding: '0 0 0 0', textAlign: 'right' }}>
           {/* <span style={{ marginLeft: '10px', color: '#FFF' }}>شهر</span> */}
           <SelectCity />
         </div>

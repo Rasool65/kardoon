@@ -69,7 +69,7 @@ const ChangePassword: FunctionComponent<IPageProps> = (props) => {
         <div className="page-content">
           <div className="page-title page-title-small">
             <h2>
-              <a href="#" onClick={() => navigate(-1)}>
+              <a style={{ cursor: 'pointer' }} onClick={() => navigate(-1)}>
                 <i className="fa fa-arrow-right mx-2"></i>
                 بازگشت
               </a>

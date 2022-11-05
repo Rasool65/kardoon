@@ -18,16 +18,16 @@ const test: FunctionComponent<IPageProps> = (props) => {
           <a href="index.html" className="header-title">
             AZURES
           </a>
-          <a href="#" data-back-button className="header-icon header-icon-1">
+          <a style={{ cursor: 'pointer' }} data-back-button className="header-icon header-icon-1">
             <i className="fas fa-arrow-right"></i>
           </a>
-          <a href="#" data-toggle-theme className="header-icon header-icon-2 show-on-theme-dark">
+          <a style={{ cursor: 'pointer' }} data-toggle-theme className="header-icon header-icon-2 show-on-theme-dark">
             <i className="fas fa-sun"></i>
           </a>
-          <a href="#" data-toggle-theme className="header-icon header-icon-2 show-on-theme-light">
+          <a style={{ cursor: 'pointer' }} data-toggle-theme className="header-icon header-icon-2 show-on-theme-light">
             <i className="fas fa-moon"></i>
           </a>
-          {/* <a href="#" data-menu="menu-highlights" className="header-icon header-icon-3">
+          {/* <a style={{cursor:'pointer'}} data-menu="menu-highlights" className="header-icon header-icon-3">
             <i className="fas fa-brush"></i>
           </a> */}
         </div>
@@ -86,13 +86,13 @@ const test: FunctionComponent<IPageProps> = (props) => {
         <div className="page-content">
           <div className="page-title page-title-small">
             <h2>
-              <a href="#" data-back-button>
+              <a style={{ cursor: 'pointer' }} data-back-button>
                 <i className="fa fa-arrow-right"></i>
               </a>
               Settings
             </h2>
             <a
-              href="#"
+              style={{ cursor: 'pointer' }}
               data-menu="menu-main"
               className="bg-fade-highlight-light shadow-xl preload-img"
               data-src="images/avatars/5s.png"
@@ -107,31 +107,31 @@ const test: FunctionComponent<IPageProps> = (props) => {
           <div className="card card-style">
             <div className="content mt-0 mb-2">
               <div className="list-group list-custom-large mb-4">
-                <a href="#" data-toggle-theme className="show-on-theme-light">
+                <a style={{ cursor: 'pointer' }} data-toggle-theme className="show-on-theme-light">
                   <i className="fa font-14 fa-moon bg-brown-dark rounded-sm"></i>
                   <span>Dark Mode</span>
                   <strong>Auto Dark Mode Available Too</strong>
                   <i className="fa fa-angle-left me-2"></i>
                 </a>
-                <a href="#" data-toggle-theme className="show-on-theme-dark">
+                <a style={{ cursor: 'pointer' }} data-toggle-theme className="show-on-theme-dark">
                   <i className="fa font-14 fa-lightbulb bg-yellow-dark rounded-sm"></i>
                   <span>Light Mode</span>
                   <strong>Auto Dark Mode Available Too</strong>
                   <i className="fa fa-angle-left me-2"></i>
                 </a>
-                <a href="#" data-menu="menu-highlights">
+                <a style={{ cursor: 'pointer' }} data-menu="menu-highlights">
                   <i className="fa font-14 fa-brush bg-highlight color-white rounded-sm"></i>
                   <span>Color Scheme</span>
                   <strong>A tone of Colors, Just for You</strong>
                   <i className="fa fa-angle-left me-2"></i>
                 </a>
-                <a href="#" data-menu="menu-share">
+                <a style={{ cursor: 'pointer' }} data-menu="menu-share">
                   <i className="fa font-14 fa-share-alt bg-red-dark rounded-sm"></i>
                   <span>Share Azures</span>
                   <strong>Just one tap! We'll do the rest!</strong>
                   <i className="fa fa-angle-left me-2"></i>
                 </a>
-                <a href="#" data-menu="menu-language">
+                <a style={{ cursor: 'pointer' }} data-menu="menu-language">
                   <i className="fa font-14 fa-globe bg-green-dark rounded-sm"></i>
                   <span>Language Picker</span>
                   <strong>A Sample for Demo Purposes</strong>
@@ -152,7 +152,7 @@ const test: FunctionComponent<IPageProps> = (props) => {
               </p>
               <div className="divider mb-1"></div>
               <div className="list-group list-custom-large">
-                <a href="#" data-menu="menu-tips-1" className="border-0">
+                <a style={{ cursor: 'pointer' }} data-menu="menu-tips-1" className="border-0">
                   <i className="fa font-14 fa-gift bg-magenta-light rounded-sm"></i>
                   <span>Tap Here to Start</span>
                   <strong>A few Tips About Azures</strong>
@@ -171,7 +171,7 @@ const test: FunctionComponent<IPageProps> = (props) => {
                 consider it for future updates!
               </p>
               <a
-                href="#"
+                style={{ cursor: 'pointer' }}
                 className="btn btn-m rounded-sm btn-border btn-center-l border-white color-white font-700 text-uppercase mb-4"
               >
                 Request Feature
@@ -220,33 +220,33 @@ const test: FunctionComponent<IPageProps> = (props) => {
               <p className="font-11 mt-n1 color-highlight mb-3">You can direct to multiple languages of your page.</p>
             </div>
             <div className="float-end">
-              <a href="#" className="close-menu">
+              <a style={{ cursor: 'pointer' }} className="close-menu">
                 <i className="fa fa-times-circle color-red-dark pt-3 font-18"></i>
               </a>
             </div>
             <div className="clearfix"></div>
             <div className="list-group list-custom-small">
-              <a href="#">
+              <a style={{ cursor: 'pointer' }}>
                 <img className="me-3 mt-n1" width="20" src="images/flags/United-States.png" />
                 <span>English</span>
                 <i className="fa fa-angle-left"></i>
               </a>
-              <a href="#">
+              <a style={{ cursor: 'pointer' }}>
                 <img className="me-3 mt-n1" width="20" src="images/flags/India.png" />
                 <span>Indian</span>
                 <i className="fa fa-angle-left"></i>
               </a>
-              <a href="#">
+              <a style={{ cursor: 'pointer' }}>
                 <img className="me-3 mt-n1" width="20" src="images/flags/Germany.png" />
                 <span>German</span>
                 <i className="fa fa-angle-left"></i>
               </a>
-              <a href="#">
+              <a style={{ cursor: 'pointer' }}>
                 <img className="me-3 mt-n1" width="20" src="images/flags/Italy.png" />
                 <span>Italian</span>
                 <i className="fa fa-angle-left"></i>
               </a>
-              <a href="#" className="border-0">
+              <a style={{ cursor: 'pointer' }} className="border-0">
                 <img className="me-3 mt-n1" width="20" src="images/flags/Spain.png" />
                 <span>Spanish</span>
                 <i className="fa fa-angle-left"></i>
@@ -290,7 +290,7 @@ const test: FunctionComponent<IPageProps> = (props) => {
           <div className="row mb-0">
             <div className="col-6">
               <a
-                href="#"
+                style={{ cursor: 'pointer' }}
                 className="btn btn-border btn-sm ms-3 rounded-s btn-full shadow-l color-highlight border-highlight close-menu text-uppercase font-700"
               >
                 Close
@@ -299,7 +299,7 @@ const test: FunctionComponent<IPageProps> = (props) => {
             <div className="col-6">
               <a
                 data-menu="menu-tips-2"
-                href="#"
+                style={{ cursor: 'pointer' }}
                 className="btn btn-sm me-3 rounded-s btn-full shadow-l bg-highlight font-700 text-uppercase"
               >
                 1/5 - Next
@@ -342,7 +342,7 @@ const test: FunctionComponent<IPageProps> = (props) => {
           <div className="row mb-0">
             <div className="col-6">
               <a
-                href="#"
+                style={{ cursor: 'pointer' }}
                 className="btn btn-border btn-sm ms-3 rounded-s btn-full shadow-l color-highlight border-highlight close-menu text-uppercase font-700"
               >
                 Close
@@ -351,7 +351,7 @@ const test: FunctionComponent<IPageProps> = (props) => {
             <div className="col-6">
               <a
                 data-menu="menu-tips-3"
-                href="#"
+                style={{ cursor: 'pointer' }}
                 className="btn btn-sm me-3 rounded-s btn-full shadow-l bg-highlight font-700 text-uppercase"
               >
                 2/5 - Next
@@ -394,7 +394,7 @@ const test: FunctionComponent<IPageProps> = (props) => {
           <div className="row mb-0">
             <div className="col-6">
               <a
-                href="#"
+                style={{ cursor: 'pointer' }}
                 className="btn btn-border btn-sm ms-3 rounded-s btn-full shadow-l color-highlight border-highlight close-menu text-uppercase font-700"
               >
                 Close
@@ -403,7 +403,7 @@ const test: FunctionComponent<IPageProps> = (props) => {
             <div className="col-6">
               <a
                 data-menu="menu-tips-4"
-                href="#"
+                style={{ cursor: 'pointer' }}
                 className="btn btn-sm me-3 rounded-s btn-full shadow-l bg-highlight font-700 text-uppercase"
               >
                 3/5 - Next
@@ -446,7 +446,7 @@ const test: FunctionComponent<IPageProps> = (props) => {
           <div className="row mb-0">
             <div className="col-6">
               <a
-                href="#"
+                style={{ cursor: 'pointer' }}
                 className="btn btn-border btn-sm ms-3 rounded-s btn-full shadow-l color-highlight border-highlight close-menu text-uppercase font-700"
               >
                 Close
@@ -455,7 +455,7 @@ const test: FunctionComponent<IPageProps> = (props) => {
             <div className="col-6">
               <a
                 data-menu="menu-tips-5"
-                href="#"
+                style={{ cursor: 'pointer' }}
                 className="btn btn-sm me-3 rounded-s btn-full shadow-l bg-highlight font-700 text-uppercase"
               >
                 4/5 - Next
@@ -496,7 +496,7 @@ const test: FunctionComponent<IPageProps> = (props) => {
             </p>
           </div>
           <a
-            href="#"
+            style={{ cursor: 'pointer' }}
             className="close-menu btn btn-m btn-margins rounded-sm btn-full shadow-l bg-highlight text-uppercase font-700"
           >
             AWesome!

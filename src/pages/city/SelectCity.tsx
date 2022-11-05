@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import { APIURL_GET_CITIES, APIURL_GET_Cities, APIURL_GET_PROVINES } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_GET_CITIES, APIURL_GET_PROVINES } from '@src/configs/apiConfig/apiUrls';
 import { useTranslation } from 'react-i18next';
 import Select from 'react-select';
 import { useSelector, useDispatch } from 'react-redux';

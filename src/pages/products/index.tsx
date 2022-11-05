@@ -106,35 +106,39 @@ const Products: FunctionComponent<IPageProps> = (props) => {
   return (
     <>
       {auth && <MainMenuModal />}
-      <div id="page">
-        <Header headerTitle={props.title} />
-        {/* <Footer footerMenuVisible={true} activePage={1} /> */}
-        <div className="page-content" style={{ paddingBottom: '0' }}>
-          <div className="card card-style">
-            <div className="content">
-              <h4>{t('SelectProduct')}</h4>
-              <p>{t('PleaseSelectProduct')}</p>
+      <div id="page" className='products-page'>
+        
+          <Header headerTitle={props.title} />
+          {/* <Footer footerMenuVisible={true} activePage={1} /> */}
+          <div className='container'>
+            <div className="page-content" style={{ paddingBottom: '0' }}>
+              <div className="card card-style">
+                <div className="content">
+                  <h4>{t('SelectProduct')}</h4>
+                  <p>{t('PleaseSelectProduct')}</p>
+                </div>
+                {loading ? (
+                  <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                    <Spinner />
+                  </div>
+                ) : (
+                  <div className="accordion mt-4" id="accordion-2">
+                    {!!products &&
+                      products.length > 0 &&
+                      products.map((items: IProductsResultModel, index: number) => {
+                        return (
+                          <>
+                            <RecursiveComponent recProduct={items} />
+                          </>
+                        );
+                      })}
+                  </div>
+                )}
+              </div>
+              {/* <FooterCard footerMenuVisible={true} /> */}
             </div>
-            {loading ? (
-              <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                <Spinner />
-              </div>
-            ) : (
-              <div className="accordion mt-4" id="accordion-2">
-                {!!products &&
-                  products.length > 0 &&
-                  products.map((items: IProductsResultModel, index: number) => {
-                    return (
-                      <>
-                        <RecursiveComponent recProduct={items} />
-                      </>
-                    );
-                  })}
-              </div>
-            )}
           </div>
-          {/* <FooterCard footerMenuVisible={true} /> */}
-        </div>
+        
       </div>
     </>
   );

@@ -12,7 +12,7 @@ interface SuspendCouseModalProps {
   loading: boolean;
 }
 
-const SuspendCouseModal: FunctionComponent<SuspendCouseModalProps> = ({
+const SuspendCauseModal: FunctionComponent<SuspendCouseModalProps> = ({
   suspendReasonModalVisible,
   missionDetail,
   statusList,
@@ -35,8 +35,8 @@ const SuspendCouseModal: FunctionComponent<SuspendCouseModalProps> = ({
             isClearable
             className="select-city"
             placeholder="انتخاب دلیل منتظر لغو"
-            isSearchable={true}
-            options={statusList![2].causeList ? statusList![2].causeList : []}
+            isSearchable={false}
+            options={statusList![1].causeList ? statusList![1].causeList : []}
             onChange={onChange}
           />
         )}
@@ -52,4 +52,4 @@ const SuspendCouseModal: FunctionComponent<SuspendCouseModalProps> = ({
   );
 };
 
-export default SuspendCouseModal;
+export default SuspendCauseModal;

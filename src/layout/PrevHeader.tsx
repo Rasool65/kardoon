@@ -1,19 +1,27 @@
 import { FunctionComponent } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { handleShowMessage } from '@src/redux/reducers/messageReducer';
 
 const PrevHeader: FunctionComponent = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <>
       <div className="page-title page-title-small">
         <h2>
-          <a href="#" onClick={() => navigate(-1)}>
+          <a
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              navigate(-1), dispatch(handleShowMessage(true));
+            }}
+          >
             <i className="fa fa-arrow-right mx-2"></i>
             بازگشت
           </a>
         </h2>
         {/* <a
-              href="#"
+              style={{cursor:'pointer'}}
               data-menu="menu-main"
               className="bg-fade-highlight-light shadow-xl preload-img"
               data-src="images/avatars/5s.png"

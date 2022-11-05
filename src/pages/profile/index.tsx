@@ -103,19 +103,20 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
             {/* <HomeHeader showMainMenu={(e) => this.props.showMainMenu(true)} headerTitle={props.title} /> */}
 
             <div className="menu-logo text-center">
-              <img
-                className="rounded-circle bg-highlight pointer"
-                width="130"
-                src={require('/src/scss/images/avatars/5s.png')}
-                //   onClick={(e) => this.showSelectAvatarModal(e)}
-                style={{ border: '2px solid #FFFFFF', padding: '8px' }}
-                alt="menu-logo"
-              />
+
+              <div
+              className='rounded-circle profile-image'
+              style={{ 
+                backgroundImage: 'URL("@src/scss/images/avatars/5s.png")'
+              }}
+              >
+
+              </div>
               <img
                 src={require('/src/scss/images/forTest/edit_logo.svg')}
                 className="pointer"
                 // onClick={(e) => this.showSelectAvatarModal(e)}
-                style={{ width: '28px', height: '28px', position: 'relative', top: '45px', left: '30px' }}
+                style={{ width: '28px', height: '28px'}}
                 alt="edit-logo"
               />
             </div>
@@ -296,8 +297,8 @@ const Profile: FunctionComponent<IPageProps> = (props) => {
                   )}
                 />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Label className="form-label">{t('BirthDate')} </Label>
+              <div className="insert-birthday">
+                <Label className="form-label birthday-lable">{t('BirthDate')} </Label>
                 <Controller
                   name="birthDate"
                   control={control}

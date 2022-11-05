@@ -3,7 +3,7 @@ import { Button, Col, Container, Input, Row, Spinner } from 'reactstrap';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-import { APIURL_GET_ADDRESSES, APIURL_GET_BRANDS, APIURL_POST_DELETE_USER_ADDRESS } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_GET_ADDRESSES, APIURL_POST_DELETE_USER_ADDRESS } from '@src/configs/apiConfig/apiUrls';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IRequestDetailPageProp, IRequestDetailSecond } from './IRequestDetailProp';
 import WeekPicker from '@src/components/weekPicker/WeekPicker';
@@ -296,7 +296,7 @@ const RequestDetailConfirm: FunctionComponent<IRequestDetailPageProp> = ({ handl
                 setConfirmRemoveModalVisible(false);
                 setDimmerBackground(false);
               }}
-              href="#"
+              style={{ cursor: 'pointer' }}
               className="close-menu btn btn-sm btn-full button-s shadow-l rounded-s text-uppercase font-700 bg-red-dark"
             >
               خیر

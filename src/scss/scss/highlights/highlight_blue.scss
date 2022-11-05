@@ -1,9 +1,9 @@
 /* Generating Color Pack*/
 
-$colorHighlightLight: #5D9CEC;
-$colorHighlightDark: #4A89DC;
-$colorHighlightLightRGBA: rgba(93, 156, 236, 0.3);
-$colorHighlightDarkRGBA: rgba(74, 137, 220, 0.7);
+$colorHighlightLight: #d62f64;
+$colorHighlightDark: #cc0041;
+$colorHighlightLightRGBA: #d62f6496;
+$colorHighlightDarkRGBA: #cc004196;
 
 .color-highlight{color:$colorHighlightDark!important;}
 .bg-highlight{background-color:$colorHighlightDark!important; color:#FFF!important;}

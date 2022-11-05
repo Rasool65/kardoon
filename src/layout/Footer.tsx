@@ -11,7 +11,6 @@ const FooterCard: FunctionComponent<IFooterProps> = ({ footerMenuVisible, active
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
 
   const checkRole = (normalizedName: string) => {
-    debugger;
     return userData?.roles ? userData?.roles.some((roleName) => roleName.normalizedName === normalizedName) : false;
   };
   const { t }: any = useTranslation();

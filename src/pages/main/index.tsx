@@ -7,10 +7,10 @@ import Header from '../../layout/Header';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IServicesResultModel } from '@src/models/output/services/IServicesResultModel';
-import { APIURL_GET_ADVERTISE, APIURL_GET_SERVICES } from '@src/configs/apiConfig/apiUrls';
+import { APIURL_GET_ADVERTISE, APIURL_GET_MESSAGE_COUNT, APIURL_GET_SERVICES } from '@src/configs/apiConfig/apiUrls';
 import { IAdvertiseResultModel } from '@src/models/output/advertise/IAdvertiseResultModel';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 
 import { URL_CATEGORIES } from '@src/configs/urls';
@@ -19,6 +19,8 @@ import { URL_CITY } from './../../configs/urls';
 import { init_template } from './template';
 import MainMenuModal from '@src/layout/MainMenuModal';
 import { CustomFunctions } from '@src/utils/custom';
+import { IChatCountResultModel } from '@src/models/output/categoryConversation/IChatCountResultModel';
+import { handleNewMessageCount } from '@src/redux/reducers/messageReducer';
 
 const Main: FunctionComponent<IPageProps> = (props) => {
   const [services, setServices] = useState<any>();
@@ -28,7 +30,16 @@ const Main: FunctionComponent<IPageProps> = (props) => {
   const { t }: any = useTranslation();
   const navigate = useNavigate();
   const auth = useSelector((state: RootStateType) => state.authentication.isAuthenticate);
+  const userData = useSelector((state: RootStateType) => state.authentication.userData);
+  const dispatch = useDispatch();
 
+  const getCountMessage = () => {
+    httpRequest
+      .getRequest<IOutputResult<IChatCountResultModel>>(`${APIURL_GET_MESSAGE_COUNT}?UserId=${userData?.userId}`)
+      .then((result) => {
+        dispatch(handleNewMessageCount(result.data.data.count));
+      });
+  };
   const cityId = auth
     ? useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId)
     : localStorage.getItem('city')
@@ -56,6 +67,10 @@ const Main: FunctionComponent<IPageProps> = (props) => {
   }, [props.title]);
 
   useEffect(() => {
+    auth && getCountMessage();
+  }, []);
+
+  useEffect(() => {
     // CustomFunctions();
     init_template();
   }, [advertise, services]);
@@ -63,7 +78,7 @@ const Main: FunctionComponent<IPageProps> = (props) => {
   return (
     <>
       {auth && <MainMenuModal />}
-      <div id="page">
+      <div id="page" className="main-page">
         {/* <div
           id="menu-main"
           className="menu menu-box-right menu-box-detached rounded-m"
@@ -140,7 +155,7 @@ const Main: FunctionComponent<IPageProps> = (props) => {
                   }
                 >
                   <img key={id} src={item.backgroundUrl} className="card-image" alt={item.title} />
-                  <div className="card-top">
+                  <div className="card-top3">
                     <img width={100} src={item.icon} alt="logo" />
                     {/* <i className="fa fa-coffee color-brown-dark fa-3x float-start ms-3 mt-3" /> */}
                   </div>
@@ -164,7 +179,7 @@ const Main: FunctionComponent<IPageProps> = (props) => {
                 برابر خرابی‌ها و حوادث احتمالی حفاظت کنید. برندهای سامسونگ، ال جی، سونی، بوش، دوو، AEG، کنوود و هر برند معتبر
                 ایرانی و خارجی دیگری را می‌توانید با کاردون گارانتی کنید.
               </p>
-              <a href="#" className="btn btn-s bg-white color-black font-700 btn-center-m">
+              <a style={{ cursor: 'pointer' }} className="btn btn-s bg-white color-black font-700 btn-center-m">
                 ثبت گارانتی محصول
               </a>
             </div>

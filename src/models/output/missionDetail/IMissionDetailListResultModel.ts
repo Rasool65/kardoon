@@ -1,5 +1,6 @@
 export interface IMissionDetailResultModel {
   requestDetailId: number;
+  description?: string;
   requestNumber: string;
   serviceTypeTitle?: string;
   productTypeTitle?: string;

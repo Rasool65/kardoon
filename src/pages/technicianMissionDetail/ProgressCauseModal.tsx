@@ -23,7 +23,7 @@ const ProgressCauseModal: FunctionComponent<ProgressCauseModalProps> = ({
   return (
     <div
       className={`menu menu-box-modal rounded-m ${progressReasonModalVisible ? 'menu-active' : ''}`}
-      data-menu-height="255"
+      data-menu-height="400"
       data-menu-width="340"
     >
       <div className="me-3 ms-3 mt-3">
@@ -35,8 +35,8 @@ const ProgressCauseModal: FunctionComponent<ProgressCauseModalProps> = ({
             isClearable
             className="select-city"
             placeholder="انتخاب دلیل درحال بررسی"
-            isSearchable={true}
-            options={statusList![5].causeList ? statusList![5].causeList : []}
+            isSearchable={false}
+            options={statusList![4].causeList ? statusList![4].causeList : []}
             onChange={onChange}
           />
         )}

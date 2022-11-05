@@ -4,6 +4,7 @@ export interface IMissionsResultModel {
 }
 
 export interface ITechnicianMissionList {
+  guid?: string;
   requestDetailId?: number;
   consumerFirstName?: string;
   consumerLastName?: string;

@@ -419,3 +419,13 @@
   .select-width-action{
     width: 100%;
   }
+
+  .replay-message{
+    background-color: aliceblue;
+    position: fixed;
+    left: 15px;
+    right: 15px;
+    bottom: 60px;
+    z-index: 98;
+    min-height: 60px;
+  }

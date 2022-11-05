@@ -119,18 +119,18 @@ const OrderDetail: FunctionComponent<IPageProps> = (props) => {
   }, [props.title]);
   return (
     <>
-      <div id="page">
+      <div id="page" className='myorders order-details'>
         <Footer footerMenuVisible={true} activePage={1} />
         <div className="page-content">
           <div className="page-title page-title-small">
             <h2>
-              <a href="#" onClick={() => navigate(URL_MY_ORDERS)}>
+              <a style={{ cursor: 'pointer' }} onClick={() => navigate(URL_MY_ORDERS)}>
                 <i className="fa fa-arrow-right mx-2"></i>
                 بازگشت
               </a>
             </h2>
             {/* <a
-              href="#"
+              style={{cursor:'pointer'}}
               data-menu="menu-main"
               className="bg-fade-highlight-light shadow-xl preload-img"
               data-src="images/avatars/5s.png"
@@ -152,12 +152,17 @@ const OrderDetail: FunctionComponent<IPageProps> = (props) => {
               <div className="card card-style header-order">
                 <div className="card-body">
                   <div className="">
-                    <div className=" col-6">شماره درخواست:</div>
-                    <div className=" col-6 justify-content-end">{orderDetailList?.requestNumber}</div>
+                    <div className="w-110">شماره درخواست :</div>
+                    <div  className="w-100-110">{orderDetailList?.requestNumber}</div>
+                  </div>
+                  <div>
+                  <div className="w-50px">آدرس :</div>
+                    <div  className="w-100-50">{orderDetailList?.address}</div>
+
                   </div>
                   <div className="">
-                    <div className=" col-6">{orderDetailList?.address}</div>
-                    <div className=" col-6 justify-content-end">
+                  <div className="w-50px">زمان :</div>
+                    <div  className="w-100-50">
                       {DateHelper.isoDateTopersian(orderDetailList?.presenceTime)}-{orderDetailList?.shiftTitle}
                     </div>
                   </div>
