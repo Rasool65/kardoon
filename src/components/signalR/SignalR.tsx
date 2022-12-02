@@ -2,7 +2,7 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import { useToast } from '@src/hooks/useToast';
-import { API_BASE_URL } from '@src/configs/apiConfig/apiBaseUrl';
+import { API_BASE_URL, API_SIGNALR_URL } from '@src/configs/apiConfig/apiBaseUrl';
 import { APIURL_LISTENING_CHAT } from '@src/configs/apiConfig/apiUrls';
 import { useEffect, useState } from 'react';
 import { handleNewMessage } from './../../redux/reducers/messageReducer';
@@ -17,7 +17,7 @@ export const SignalR = () => {
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl(`https://krdnv07.kardoon.local:8008${APIURL_LISTENING_CHAT}?UserId=${userData?.userId}`, { withCredentials: true })
+      .withUrl(`${API_SIGNALR_URL}${APIURL_LISTENING_CHAT}?UserId=${userData?.userId}`, { withCredentials: false })
       .withAutomaticReconnect()
       .build();
     setConnection(newConnection);

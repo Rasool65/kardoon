@@ -451,7 +451,7 @@ const Action: FunctionComponent<IPageProps> = (props) => {
           </div>
           <div className="d-flex " style={{ justifyContent: 'space-around' }}>
             <Button type="submit" style={{ width: '90%', height: '50px' }} className="btn btn-info m-2">
-              {loading ? <Spinner /> : '+ افزودن'}
+              {loading ? <Spinner /> : 'افزودن اکشن روی ماموریت'}
             </Button>
           </div>
         </Form>

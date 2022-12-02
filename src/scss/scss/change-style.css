@@ -159,14 +159,29 @@ label {
   width: 100%;
 }
 
+#footer-bar {
+  background-color: white !important;
+  border-radius: 0 !important;
+  box-shadow: inset 0px 1px 0px rgba(117, 117, 117, 0.25) !important;
+}
 #footer-bar .pointer {
   filter: grayscale(100);
 }
 #footer-bar .pointer.active-nav {
   filter: grayscale(0);
 }
+#footer-bar .pointer.active-nav svg path {
+  fill: #0a58ca;
+}
+#footer-bar .pointer.active-nav span {
+  color: #0a58ca;
+}
 #footer-bar .pointer.speach-icon {
   filter: grayscale(0);
+}
+
+.footer-bar-5 strong {
+  background-color: rgba(204, 0, 65, 0) !important;
 }
 
 .technician-profile::before {
@@ -411,6 +426,12 @@ label {
   border-radius: 10px !important;
   margin-bottom: 20px !important;
 }
+.technician-mission-page .cart-box .cart-title {
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+  color: #333333;
+}
 .technician-mission-page .cart-box .cart-header {
   display: block !important;
   padding-bottom: 20px;
@@ -531,6 +552,13 @@ label {
   padding: 15px;
   box-shadow: 0px 1px 10px rgba(117, 117, 117, 0.25) !important;
 }
+.cart-box .cart-title, .area-1 .cart-title {
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+  color: #333333;
+  margin-top: 20px;
+}
 
 textarea {
   border: 1px solid #6A6D73 !important;
@@ -646,6 +674,10 @@ hr.dashed {
   border-radius: 20px !important;
 }
 
+.custom-accordion-btn {
+  border-radius: 8px !important;
+}
+
 .page-title.page-title-small {
   z-index: 999;
 }
@@ -694,15 +726,61 @@ a {
 }
 
 .page-title {
+  color: rgb(255, 255, 255) !important;
+  font-size: 19px !important;
+  padding: 20px 25px !important;
+  background-color: #b7003a !important;
+  width: 100% !important;
+}
+
+.page-title {
   background-color: white;
   margin: 23px 0 32px 0;
   padding: 13px 32px;
 }
 .page-title a {
-  color: black !important;
+  color: black;
 }
 .page-title a:hover {
   color: #CC0041;
+}
+
+.page-title h2 a {
+  color: white !important;
+}
+
+.tabs-title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(117, 117, 117, 0.25);
+  padding: 10px 0px 20px 0px;
+  margin: 15px 0 20px 0;
+  justify-content: center;
+}
+.tabs-title button {
+  padding: 15px 50px;
+  background: transparent;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  color: #333333;
+  margin: 0 15px;
+  width: calc(50% - 30px);
+  cursor: pointer;
+}
+.tabs-title button:hover {
+  background: #dc3545 !important;
+}
+@media (max-width: 400px) {
+  .tabs-title button {
+    padding: 15px !important;
+  }
+}
+.tabs-title button.active {
+  background: #CC0041;
+  color: white;
 }
 
 .text-right {
@@ -915,6 +993,9 @@ a {
   height: 25px;
 }
 
+.myorders {
+  padding: 30px 0 60px 0;
+}
 .myorders .card {
   background-color: white !important;
   border-radius: 10px;
@@ -1103,4 +1184,10 @@ a {
 .tabs-title button.active {
   background: #CC0041;
   color: white;
+}
+
+.message-page #chatList {
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 155px 15px 70px 15px !important;
 }/*# sourceMappingURL=change-style.css.map */

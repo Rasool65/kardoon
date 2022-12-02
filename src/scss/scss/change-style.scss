@@ -141,16 +141,39 @@ label{
     }
 }
 #footer-bar{
+    background-color: white !important;
+    border-radius: 0 !important;
+    box-shadow: inset 0px 1px 0px rgb(117 117 117 / 25%) !important;
     .pointer{
         filter: grayscale(100);
         &.active-nav{
             filter: grayscale(0);
+            svg path {
+                fill: #0a58ca;
+            }
+            span{
+                color: #0a58ca;
+            }
         }
         &.speach-icon{
             filter: grayscale(0);
         }
     }
 }
+.footer-bar-5 strong {
+    background-color: #cc004100 !important;
+}
+// #footer-bar{
+//     .pointer{
+//         filter: grayscale(100);
+//         &.active-nav{
+//             filter: grayscale(0);
+//         }
+//         &.speach-icon{
+//             filter: grayscale(0);
+//         }
+//     }
+// }
 
 
 // =============== Technician-Profile Page Style
@@ -404,6 +427,12 @@ label{
         display: none;
     }
     .cart-box{
+        .cart-title{
+            font-weight: 700;
+            font-size: 16px;
+            text-align: center;
+            color: #333333;
+        }
         background: #FFFFFF !important;
         box-shadow: 0px 1px 10px rgba(117, 117, 117, 0.25) !important;
         border-radius: 10px !important;
@@ -556,6 +585,13 @@ label{
     width: calc(100% - 30px);
     padding: 15px;
     box-shadow: 0px 1px 10px rgba(117, 117, 117, 0.25) !important;
+    .cart-title{
+        font-weight: 700;
+        font-size: 16px;
+        text-align: center;
+        color: #333333;
+        margin-top: 20px;
+    }
 }
 textarea{
     border: 1px solid #6A6D73 !important;
@@ -670,6 +706,9 @@ hr.dashed{
 .btn{
     border-radius: 20px !important;
 }
+.custom-accordion-btn{
+    border-radius: 8px !important;
+}
 .page-title.page-title-small {
     z-index: 999;
 }
@@ -711,13 +750,58 @@ a{
     width: 100% !important;
 }
 .page-title{
+    color: rgb(255, 255, 255) !important;
+    font-size: 19px !important;
+    padding: 20px 25px !important;
+    background-color: #b7003a !important;
+    width: 100% !important;
+}
+.page-title{
     background-color: white;
     margin: 23px 0 32px 0;
     padding: 13px 32px;
     a{
-        color: black !important;
+        color: black;
         &:hover{
             color: #CC0041;
+        }
+    }
+}
+
+// =========== Title style
+.page-title h2 a{
+    color: white !important;
+}
+
+// =========== Tabs Style
+.tabs-title{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(117, 117, 117, 0.25);
+    padding: 10px 0px 20px 0px;
+    margin: 15px 0 20px 0;
+    justify-content: center;
+    button{
+        padding: 15px 50px;
+        background: transparent;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 14px;
+        text-align: center;
+        color: #333333;
+        margin: 0 15px;
+        width: calc(50% - 30px);
+        cursor: pointer;
+        &:hover{
+            background: #dc3545 !important;
+        }
+        @media (max-width:400px){
+            padding: 15px !important;
+        }
+        &.active{
+            background: #CC0041;
+            color: white;
         }
     }
 }
@@ -951,6 +1035,7 @@ a{
 
 //=================== My Orders ReDesign
 .myorders{
+    padding: 30px 0 60px 0;
     .card{
         background-color: white !important;
         border-radius: 10px;
@@ -1158,76 +1243,11 @@ a{
 
 
 
-// ============= Under Construction Page
-
-.page-404 , .under-construction{
-    background-color: #91002e;
-    width: 100vw;
-    height: 100vh;
-  
-    .data-box{
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      text-align: center;
-      width: calc(100% - 60px);
-      padding: 30px;
-      img{
-        width: 600px;
-        max-width: 98%;
-      }
-      svg {
-        width: 600px;
-        max-width: 98%;
-      }
-      h1{
-        font-size: 70px;
-        width: 100%;
-      }
-      p{
-        line-height: 30px;
-        color:#ffffff;
-      }
-      .subtitle{
-        line-height: 30px;
-        font-size: 30px;
-        width: 100%;
-      }
-      a{
-        color: #fffe00;
-        width: 100%;
-        &:hover{
-          color: #ff719f;
-        }
-      }
-    }
-  }
-  .under-construction{
-    position: relative;
-    padding-top: 35px;
-    padding-bottom: 35px;
-    &:after{
-      content: '';
-      width: 100%;
-      height: 20px;
-      background-image: url('@src/scss/images/forTest/roban.jpg');
-      background-repeat: repeat-x;
-      position: fixed;
-      top: 0;
-      left: 0;
-      background-size: contain;
-    }
-    &:before{
-      content: '';
-      width: 100%;
-      height: 20px;
-      background-image: url('@src/scss/images/forTest/roban.jpg');
-      background-repeat: repeat-x;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      background-size: contain;
-    }
-  }
+// chatlist new style
+.message-page #chatList {
+    height: 100vh !important;
+    // height: calc(100vh - 200px) !important;
+    margin: 0 !important;
+    // padding: 155px 15px 120px 15px !important;
+    padding: 155px 15px 70px 15px !important;
+}

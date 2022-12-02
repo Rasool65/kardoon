@@ -1,4 +1,4 @@
-import Form from '@rjsf/core';
+import Form, { ISubmitEvent } from '@rjsf/core';
 import {
   APIURL_GET_MISSION_ATTRIBUTES_DETAILS,
   APIURL_GET_MISSION_DETAILS,
@@ -6,10 +6,10 @@ import {
   APIURL_GET_TRACKING_LIST,
   APIURL_POST_TECHNICIAN_MEDIA_FILES,
   APIURL_POST_TRACKING,
+  APIURL_UPDATE_REQUEST_ATTRIBUTES,
   APIURL_UPDATE_REQUEST_DETAIL_STATUS,
 } from '@src/configs/apiConfig/apiUrls';
 import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
-import Footer from '@src/layout/Footer';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IProblemList } from '@src/models/output/orderDetail/IOrderDetailListResultModel';
 import { RootStateType } from '@src/redux/Store';
@@ -33,6 +33,7 @@ import FollowUpModal from './FollowUpModal';
 import SuspendCauseModal from './SuspendCauseModal';
 import ProgressCauseModal from './ProgressCauseModal';
 import ConfirmModal from './ConfirmModal';
+import LoadingComponent from '@src/components/spinner/LoadingComponent';
 
 const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   let { audioData, audioURL, isRecording, startRecording, stopRecording } = useRecorder();
@@ -52,6 +53,8 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   const [backgroundDimmer, setBackgroundDimmer] = useState<boolean>(false);
   const [selectDisabled, setSelectDisabled] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [formLoading, setFormLoading] = useState<boolean>(false);
+  const [missionDetailLoading, setMissionDetailLoading] = useState<boolean>(false);
   const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
   const [showButton, setShowButton] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>();
@@ -69,7 +72,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const toast = useToast();
   const GetMissionDetail = () => {
-    setLoading(true);
+    setMissionDetailLoading(true);
     httpRequest
       .getRequest<IOutputResult<IMissionDetailResultModel>>(
         `${APIURL_GET_MISSION_DETAILS}?TechnicianId=${userData?.userId}&RequestDetailId=${id}`
@@ -77,7 +80,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
       .then((result) => {
         setMissionDetail(result.data.data);
         result.data.data.statusId == 3 || result.data.data.statusId == 4 ? setSelectDisabled(true) : setSelectDisabled(false);
-        setLoading(false);
+        setMissionDetailLoading(false);
       });
   };
   const UpdateStatus = (statusValue: number, causeIdList?: number[]) => {
@@ -93,9 +96,20 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
       setLoading(false);
     });
   };
-  // const onSubmit = (data: ISubmitEvent<unknown>) => {
-  // Call Update Genform for technician
-  // };
+  const onSubmit = (data: ISubmitEvent<unknown>) => {
+    console.log(JSON.stringify(data.formData));
+    const body = {
+      requestDetailId: parseInt(id!),
+      technicianId: userData?.userId,
+      formGeneratorDetail: JSON.stringify(data.formData),
+    };
+    setFormLoading(true);
+    httpRequest.updateRequest<IOutputResult<any>>(`${APIURL_UPDATE_REQUEST_ATTRIBUTES}`, body).then((result) => {
+      FormGenDetail();
+      toast.showSuccess(result.data.message);
+      setFormLoading(false);
+    });
+  };
   const AddFollowUp = () => {
     if (followUpDescription == '') return toast.showError('توضیحات نمی تواند خالی باشد'), setLoading(false);
     const body = {
@@ -165,19 +179,19 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
       });
   };
   const uiSchema = {
-    'ui:readonly': true,
+    'ui:readonly': false,
     // 'ui:widget': 'checkboxes',
   };
 
   const FormGenDetail = () => {
-    setLoading(true);
+    setFormLoading(true);
     httpRequest
       .getRequest<IOutputResult<IAttributesResultModel>>(
         `${APIURL_GET_MISSION_ATTRIBUTES_DETAILS}?RequestDetailId=${id}&UserId=${userData?.userId}`
       )
       .then((result) => {
         setGenForm(result.data.data);
-        setLoading(false);
+        setFormLoading(false);
       });
   };
 
@@ -296,7 +310,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                       isDisabled={selectDisabled}
                       isLoading={loading}
                       className="select-city"
-                      options={statusList}
+                      options={statusList?.filter((x) => x.label !== 'ابطال')}
                       placeholder={missionDetail?.statusTitle}
                       onChange={(e) => {
                         if (e?.value == 2) setSuspendReasonModalVisible(true), setBackgroundDimmer(true);
@@ -309,20 +323,25 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                 <div className="" style={{ width: '90%', padding: '10px 0' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
                     {/* Generate Form here */}
-                    {genForm && (
-                      <>
-                        <Form
-                          children={true}
-                          // onSubmit={onSubmit}
-                          schema={genForm.attributes}
-                          formData={genForm.attributeValues}
-                          uiSchema={uiSchema}
-                        />
-                        {/* <Button className="btn btn-info" style={{ marginTop: '10px', width: '100%' }} type="submit">
-                            بروزرسانی
-                          </Button> */}
-                      </>
+                    {formLoading ? (
+                      <LoadingComponent />
+                    ) : (
+                      genForm && (
+                        <>
+                          <Form
+                            onSubmit={onSubmit}
+                            schema={genForm.attributes}
+                            formData={genForm.attributeValues}
+                            uiSchema={uiSchema}
+                          >
+                            <Button className="btn-info" style={{ marginTop: '10px', width: '100%' }} type="submit">
+                              بروزرسانی اطلاعات
+                            </Button>
+                          </Form>
+                        </>
+                      )
                     )}
+
                     <div>
                       <p style={{ marginBottom: '0' }}>ایرادات</p>
                       <ul>
@@ -428,7 +447,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                   >
                     {/* Action */}
                     <span className="contact">
-                      {loading ? (
+                      {missionDetailLoading ? (
                         <Spinner style={{ width: '1rem', height: '1rem' }} />
                       ) : (
                         <i
@@ -505,20 +524,24 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                       />
                     </span>
                     <span className="contact">
-                      <i
-                        className="fa fa-file"
-                        onClick={() => {
-                          navigate(`${URL_TECHNICIAN_REQUEST}`, {
-                            state: {
-                              requestDetailId: missionDetail?.requestDetailId,
-                              productCategoryId: missionDetail?.productCategoryId,
-                              consumerFullName: missionDetail?.consumerFirstName + ' ' + missionDetail?.consumerLastName,
-                              consumerAddress: missionDetail?.address,
-                              requestNumber: missionDetail?.requestNumber,
-                            },
-                          });
-                        }}
-                      />
+                      {missionDetailLoading ? (
+                        <Spinner style={{ width: '1rem', height: '1rem' }} />
+                      ) : (
+                        <i
+                          className="fa fa-file"
+                          onClick={() => {
+                            navigate(`${URL_TECHNICIAN_REQUEST}`, {
+                              state: {
+                                requestDetailId: missionDetail?.requestDetailId,
+                                productCategoryId: missionDetail?.productCategoryId,
+                                consumerFullName: missionDetail?.consumerFirstName + ' ' + missionDetail?.consumerLastName,
+                                consumerAddress: missionDetail?.address,
+                                requestNumber: missionDetail?.requestNumber,
+                              },
+                            });
+                          }}
+                        />
+                      )}
                     </span>
                   </div>
                 </div>

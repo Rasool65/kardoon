@@ -101,6 +101,7 @@ const TechnicianRequest: FunctionComponent<IPageProps> = (props) => {
     register,
     control,
     reset,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<ITechnicianRequestModel>({ mode: 'onChange', resolver: yupResolver(AddTechnicianRequestModelSchema) });
@@ -114,6 +115,7 @@ const TechnicianRequest: FunctionComponent<IPageProps> = (props) => {
     });
   };
   const onSubmit = (data: ITechnicianRequestModel) => {
+    debugger;
     setLoading(true);
     const body = {
       requestNumber: state.requestNumber,
@@ -211,12 +213,14 @@ const TechnicianRequest: FunctionComponent<IPageProps> = (props) => {
                   <Select
                     isClearable
                     isLoading={loading}
-                    id="form1a"
                     options={services}
+                    id="form1a"
                     className="select-city select-width-action m-2"
                     placeholder={'نوع خدمت'}
                     {...field}
                     onChange={(e: any) => {
+                      setValue('productCategoryId', { value: 0, label: '' });
+                      setValue('productGroup', { value: undefined, label: '' });
                       field.onChange(e);
                       setCategories(null);
                       e.value && GetCategoryList(e?.value), setCategoryId(e?.value);
@@ -243,8 +247,9 @@ const TechnicianRequest: FunctionComponent<IPageProps> = (props) => {
                     placeholder={'گروه محصول'}
                     {...field}
                     onChange={(e: any) => {
+                      setValue('productCategoryId', { value: 0, label: '' });
                       field.onChange(e);
-                      GetProducts(categoryId!, e.value);
+                      GetProducts(e.value, categoryId!);
                     }}
                   />
                   <FormFeedback className="d-block">{errors?.productCategoryId?.value?.message}</FormFeedback>
@@ -269,7 +274,6 @@ const TechnicianRequest: FunctionComponent<IPageProps> = (props) => {
                     {...field}
                     onChange={(e: any) => {
                       field.onChange(e);
-                      // GetProducts(categoryId!, e.value);
                     }}
                   />
                   <FormFeedback className="d-block">{errors?.productCategoryId?.value?.message}</FormFeedback>
@@ -311,7 +315,7 @@ const TechnicianRequest: FunctionComponent<IPageProps> = (props) => {
               style={{ width: '90%', height: '50px' }}
               className="btn btn-success m-2"
             >
-              {loading ? <Spinner /> : '+ ثبت درخواست'}
+              {loading ? <Spinner /> : ' ثبت درخواست جدید برای مشتری'}
             </Button>
           </div>
         </Form>

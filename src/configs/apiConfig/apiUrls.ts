@@ -32,6 +32,7 @@ export const APIURL_PUT_UPDATE_USER_ADDRESS = '/UserManagement/UpdateUserAddress
 //REQUEST DETAIL
 export const APIURL_GET_PROBLEM_LIST = '/ProductCategory/GetProductCategoryProblemList';
 export const APIURL_GET_PRODUCTS_ATTRIBUTES = '/ProductCategory/GetProductAttributes';
+export const APIURL_UPDATE_REQUEST_ATTRIBUTES = '/Request/UpdateRequestDetailAttributes';
 
 //ORDERS
 export const APIURL_GET_CURRENT_CONSUMER_REQUEST = '/Request/GetCurrentConsumerRequestList';
@@ -51,6 +52,7 @@ export const APIURL_GET_TECHNICIAN_MISSIONS = '/Order/GetTechnicianMissions';
 export const APIURL_GET_MISSION_DETAILS = '/Order/GetTechnicianRequestDetail';
 export const APIURL_GET_MISSION_ATTRIBUTES_DETAILS = '/Request/GetRequestDetailAttributeValues';
 export const APIURL_UPDATE_REQUEST_DETAIL_STATUS = '/Order/EditRequestDetailStatus';
+
 export const APIURL_GET_SERVICES_TYPES = '/BaseInformation/ServiceTypeList';
 export const APIURL_GET_SERVICES_TITLE = '/ProductCategory/ProductCategoryActionInfoList';
 
