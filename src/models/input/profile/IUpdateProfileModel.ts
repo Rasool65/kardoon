@@ -6,11 +6,14 @@ export interface IUpdateProfileModel {
   firstName: string;
   lastName: string;
   email: string;
-  isPublicEmail: boolean;
+  isPublicEmail?: boolean;
   birthDate: string;
-  gender: number;
+  gender?: boolean;
   nationalCode: string;
   introductionInfo?: IIntroductionInfo;
+  phoneNumber: string;
+  homeAddress?: string;
+  workAddress?: string;
 }
 interface IIntroductionInfo {
   refkey?: number;
@@ -19,7 +22,8 @@ interface IIntroductionInfo {
   introMethodTitle?: string;
 }
 
-const checkCodeMelli = (meli_code: any) => {
+export const checkCodeMelli = (meli_code: any) => {
+  if (meli_code == undefined) return false;
   if (
     [
       '1111111111',
@@ -61,14 +65,17 @@ export const UpdateProfileModelSchema: yup.SchemaOf<IUpdateProfileModel> = yup.o
   firstName: yup.string().required(t('FirstNameRequired')),
   lastName: yup.string().required(t('LastNameRequired')),
   email: yup.string().required(t('EmailRequired')).email(t('EmailNotMatch')),
+  phoneNumber: yup.string().required('شماره تماس ضروری اجباریست'),
   nationalCode: yup
     .string()
     .required(t('NationalCodeRequired'))
     .length(10, t('NationalCodeLengthInvalid'))
     .test('codeMelliValidation', t('NationalCodeInvalid'), checkCodeMelli),
-  isPublicEmail: yup.boolean().required(t('IsPublicEmailRequired')),
+  isPublicEmail: yup.boolean(),
   birthDate: yup.string().required(t('BirthDateIsRequired')),
-  gender: yup.number().required(t('GenderIsRequired')),
+  homeAddress: yup.string(),
+  workAddress: yup.string(),
+  gender: yup.boolean(),
   introductionInfo: yup.object({
     refkey: yup.number(),
     // introMethodId: yup.number(),

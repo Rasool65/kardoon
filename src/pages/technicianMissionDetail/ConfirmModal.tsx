@@ -1,37 +1,38 @@
 import { FunctionComponent } from 'react';
+import { Button } from 'reactstrap';
 
 interface ConfirmModalProps {
   confirmModalVisible?: boolean;
   accept: any;
   reject: any;
+  closeModal: any;
 }
 
-const ConfirmModal: FunctionComponent<ConfirmModalProps> = ({ confirmModalVisible, accept, reject }) => {
+const ConfirmModal: FunctionComponent<ConfirmModalProps> = ({ confirmModalVisible, accept, reject, closeModal }) => {
   return (
     <>
-      <div
-        className={`menu menu-box-modal rounded-m ${confirmModalVisible ? 'menu-active' : ''}`}
-        data-menu-height="200"
-        data-menu-width="320"
-      >
-        <h1 className="text-center font-700 mt-3 pb-1">تایید تغییر وضعیت</h1>
-        <p className="boxed-text-l">آیا از تغییر وضعیت اطمینان دارید؟</p>
-        <div className="row me-3 ms-3 mb-0">
-          <div className="col-6">
-            <a
-              className="close-menu btn btn-sm btn-full button-s shadow-l rounded-s text-uppercase font-700 bg-green-dark"
-              onClick={accept}
-            >
-              بله
-            </a>
+      <div className={`modal ${confirmModalVisible ? 'd-block' : ''}`}>
+        <div className="modal-content">
+          <div className="modal-header">
+            <h2 className="header pointer" onClick={closeModal}>
+              X
+            </h2>
+            <h1 className="header">تایید تغییر وضعیت</h1>
           </div>
-          <div className="col-6">
-            <a
-              onClick={reject}
-              className="close-menu btn btn-sm btn-full button-s shadow-l rounded-s text-uppercase font-700 bg-red-dark"
-            >
-              خیر
-            </a>
+          <div className="d-flex justify-content-between">
+            <p className="">آیا از تغییر وضعیت اطمینان دارید؟</p>
+          </div>
+          <div className="row">
+            <div className="col-6">
+              <Button className="" onClick={accept}>
+                بله
+              </Button>
+            </div>
+            <div className="col-6">
+              <Button onClick={reject} className="">
+                خیر
+              </Button>
+            </div>
           </div>
         </div>
       </div>

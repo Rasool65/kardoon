@@ -1,5 +1,4 @@
 export interface IFooterProps {
-  footerMenuVisible: boolean;
-  activePage: number;
+  activePage?: number;
 }
 export default IFooterProps;

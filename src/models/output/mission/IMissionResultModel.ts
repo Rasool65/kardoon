@@ -4,12 +4,12 @@ export interface IMissionsResultModel {
 }
 
 export interface ITechnicianMissionList {
-  guid?: string;
   requestDetailId?: number;
   consumerFirstName?: string;
   consumerLastName?: string;
   address?: string;
   serviceTypeTitle?: string;
+  serviceTypeId?: number;
   productTitle?: string;
   presenceShiftId?: number;
   presenceShift?: string;

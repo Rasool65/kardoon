@@ -9,29 +9,26 @@ interface RemoveConfirmModalProps {
 const ConfirmModal: FunctionComponent<RemoveConfirmModalProps> = ({ confirmModalVisible, accept, reject }) => {
   return (
     <>
-      <div
-        className={`menu menu-box-modal rounded-m ${confirmModalVisible ? 'menu-active' : ''}`}
-        data-menu-height="200"
-        data-menu-width="320"
-      >
-        <h1 className="text-center font-700 mt-3 pb-1">تایید ثبت درخواست</h1>
-        <p className="boxed-text-l">آیا از ثبت درخواست جدید برای مشتری اطمینان دارید ؟</p>
-        <div className="row me-3 ms-3 mb-0">
-          <div className="col-6">
-            <a
-              className="close-menu btn btn-sm btn-full button-s shadow-l rounded-s text-uppercase font-700 bg-green-dark"
-              onClick={accept}
-            >
-              بله
-            </a>
+      <div className={`modal ${confirmModalVisible ? 'd-block' : ''}`}>
+        <div className="modal-content">
+          <div className="modal-header">
+            <h2 className="header pointer" onClick={reject}>
+              X
+            </h2>
+            <h1 className="header">تایید ثبت درخواست</h1>
           </div>
-          <div className="col-6">
-            <a
-              onClick={reject}
-              className="close-menu btn btn-sm btn-full button-s shadow-l rounded-s text-uppercase font-700 bg-red-dark"
-            >
-              خیر
-            </a>
+          <p className="boxed-text-l">آیا از ثبت درخواست جدید برای مشتری اطمینان دارید؟</p>
+          <div className="row me-3 ms-3 mb-0">
+            <div className="col-6">
+              <a className="" onClick={accept}>
+                بله
+              </a>
+            </div>
+            <div className="col-6">
+              <a onClick={reject} className="">
+                خیر
+              </a>
+            </div>
           </div>
         </div>
       </div>

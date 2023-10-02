@@ -1,5 +1,9 @@
+import { ITitleResultModel } from '../missionDetail/ITitleResultModel';
+
 export interface IAddressesResultModel {
   refkey?: number;
+  countryId?: number;
+  countryName?: string;
   provinceName?: string;
   provinceId?: number;
   cityId?: number;
@@ -8,7 +12,7 @@ export interface IAddressesResultModel {
   districtName?: string;
   latitude?: number;
   longitude?: number;
-  title?: string;
+  title?: ITitleResultModel;
   regionId?: number;
   regionName?: string;
   homeTel?: string;

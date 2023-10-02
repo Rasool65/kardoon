@@ -1,36 +1,47 @@
 import { Suspense, lazy } from 'react';
 import { Spinner } from 'reactstrap';
 import ReactDOM from 'react-dom/client';
-import { Provider, useSelector } from 'react-redux';
-import Store, { RootStateType } from './redux/Store';
+import { Provider } from 'react-redux';
+import Store from './redux/Store';
 import { ToastContainer } from 'react-toastify';
 import { SignalR } from './components/signalR/SignalR';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './configs/i18n/config';
-import './scss/core.scss';
 import 'react-toastify/dist/ReactToastify.css';
-import './scss/scripts/bootstrap.min.js';
+import '@src/scss/styles/style.scss';
 
 const LazyApp = lazy(() => import('./App'));
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      cacheTime: 1000 * 60 * 10, // 10 min
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 root.render(
-  <Provider store={Store}>
-    <Suspense fallback={<Spinner />}>
-      <LazyApp />
-      <SignalR />
-      <ToastContainer newestOnTop />
-    </Suspense>
-  </Provider>
+  <QueryClientProvider client={queryClient}>
+    <Provider store={Store}>
+      <Suspense fallback={<Spinner />}>
+        <LazyApp />
+        <SignalR />
+        <ToastContainer newestOnTop />
+      </Suspense>
+    </Provider>
+  </QueryClientProvider>
 );
 
-if ('_serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
-      .register('/_service-worker.js')
-      .then((registration) => {
-        console.log('SW registered: ', registration);
+      .register('/serviceWorker.js')
+      .then((result) => {
+        console.log('service worker Registred');
       })
-      .catch((registrationError) => {
-        console.log('SW registration failed: ', registrationError);
+      .catch((result) => {
+        console.log('service worker Erorr:', result);
       });
   });
 }

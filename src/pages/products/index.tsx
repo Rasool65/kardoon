@@ -1,9 +1,6 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import IPageProps from '../../configs/routerConfig/IPageProps';
-import FooterCard from '@src/layout/FooterCard';
-import Footer from '@src/layout/Footer';
-// import Header from './Header';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { APIURL_GET_HIERARCHICAL_DEVICE_TYPE } from '@src/configs/apiConfig/apiUrls';
@@ -11,12 +8,11 @@ import { useTranslation } from 'react-i18next';
 import { IProductsResultModel } from './../../models/output/products/IProductsResultModel';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
-import { URL_CITY, URL_MAIN, URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '@src/configs/urls';
-import { IProductTypeResultModel } from '@src/models/output/products/IProductTypeResultModel';
-import { Spinner } from 'reactstrap';
-import { init_template } from './template';
-import Header from '@src/layout/Header';
-import MainMenuModal from '@src/layout/MainMenuModal';
+import { URL_MAIN, URL_PROVINCE, URL_REQUEST_DETAIL } from '@src/configs/urls';
+import { AccordionBody, AccordionHeader, UncontrolledAccordion } from 'reactstrap';
+import PrevHeader from '@src/layout/Headers/PrevHeader';
+import Footer from '@src/layout/Footer';
+import LoadingComponent from '@src/components/spinner/LoadingComponent';
 
 const Products: FunctionComponent<IPageProps> = (props) => {
   const navigate = useNavigate();
@@ -25,7 +21,7 @@ const Products: FunctionComponent<IPageProps> = (props) => {
     ? useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId)
     : localStorage.getItem('city')
     ? JSON.parse(localStorage.getItem('city')!).value
-    : navigate(URL_CITY);
+    : navigate(URL_PROVINCE);
   const [products, setProducts] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const httpRequest = useHttpRequest();
@@ -54,26 +50,16 @@ const Products: FunctionComponent<IPageProps> = (props) => {
     document.title = props.title;
   }, [props.title]);
 
-  useEffect(() => {
-    init_template();
-  }, [products]);
-
   const RecursiveComponent = ({ recProduct }: { recProduct: IProductsResultModel }) => {
     const hasSubProducts = recProduct.subProducts?.length! > 0;
     return (
       <>
         {hasSubProducts ? (
-          <div className="card card-style shadow-0 bg-highlight mb-1">
-            <button
-              className="btn accordion-btn color-white no-effect"
-              data-bs-toggle="collapse"
-              data-bs-target={`#collapse${recProduct.id}`}
-            >
-              <i className="fa fa-star me-2"></i>
-              {recProduct.name}
-              <i className="fa fa-chevron-down font-10 accordion-icon"></i>
-            </button>
-            <div id={`collapse${recProduct.id}`} className="collapse bg-theme" data-bs-parent="">
+          <UncontrolledAccordion stayOpen>
+            <AccordionHeader targetId={`${recProduct.id}`}>
+              <img src={recProduct.logoUrl} /> {recProduct.name}
+            </AccordionHeader>
+            <AccordionBody accordionId={`${recProduct.id}`}>
               <div className="pt-3 pb-3">
                 <p className="mb-0">
                   {hasSubProducts &&
@@ -82,12 +68,11 @@ const Products: FunctionComponent<IPageProps> = (props) => {
                     ))}
                 </p>
               </div>
-            </div>
-          </div>
+            </AccordionBody>
+          </UncontrolledAccordion>
         ) : (
           <button
-            style={{ width: '100%', marginTop: '30px' }}
-            className="btn btn-m mt-4 mb-0 btn-full bg-green-dark rounded-sm text-uppercase font-900"
+            className="is-child" //style button child
             onClick={() => {
               navigate(URL_REQUEST_DETAIL, {
                 state: {
@@ -97,48 +82,44 @@ const Products: FunctionComponent<IPageProps> = (props) => {
               });
             }}
           >
-            {recProduct.name}
+            <img src={recProduct.logoUrl} style={{ maxWidth: '25px' }} /> {recProduct.name}
           </button>
         )}
       </>
     );
   };
+
   return (
     <>
-      {auth && <MainMenuModal />}
-      <div id="page" className='products-page'>
-        
-          <Header headerTitle={props.title} />
-          {/* <Footer footerMenuVisible={true} activePage={1} /> */}
-          <div className='container'>
-            <div className="page-content" style={{ paddingBottom: '0' }}>
-              <div className="card card-style">
-                <div className="content">
-                  <h4>{t('SelectProduct')}</h4>
-                  <p>{t('PleaseSelectProduct')}</p>
-                </div>
-                {loading ? (
-                  <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                    <Spinner />
-                  </div>
-                ) : (
-                  <div className="accordion mt-4" id="accordion-2">
-                    {!!products &&
-                      products.length > 0 &&
-                      products.map((items: IProductsResultModel, index: number) => {
-                        return (
-                          <>
-                            <RecursiveComponent recProduct={items} />
-                          </>
-                        );
-                      })}
-                  </div>
-                )}
+      <PrevHeader />
+      <Footer />
+      <div>
+        <div className="page-content select-product-page">
+          <div className="container">
+            <h4 className="mt-4">{t('PleaseSelectProduct')}</h4>
+            <div className="card mt-4">
+              <div className="content">
+                {/* <h4>{t('SelectProduct')}</h4>
+                <p>{t('PleaseSelectProduct')}</p> */}
               </div>
-              {/* <FooterCard footerMenuVisible={true} /> */}
+              {loading ? (
+                <LoadingComponent />
+              ) : (
+                <div className=" mt-4">
+                  {!!products &&
+                    products.length > 0 &&
+                    products.map((items: IProductsResultModel, index: number) => {
+                      return (
+                        <>
+                          <RecursiveComponent recProduct={items} />
+                        </>
+                      );
+                    })}
+                </div>
+              )}
             </div>
           </div>
-        
+        </div>
       </div>
     </>
   );

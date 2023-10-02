@@ -79,7 +79,6 @@ const RequestDetail: FunctionComponent<IPageProps> = (props) => {
   const handleSubmit = (body: IRequestDetailSecond) => {
     !body.refkey && toast.showError('آدرس را انتخاب نمایید');
     var formData = new FormData();
-    if (userData?.userId) formData.append('userId', userData.userId?.toString());
     if (body.presenceDate) formData.append('presenceDate', body.presenceDate?.toString());
     if (body.presenceShift) formData.append('presenceShift', body.presenceShift?.toString());
     formData.append('refkey', body.refkey.toString());
@@ -100,8 +99,9 @@ const RequestDetail: FunctionComponent<IPageProps> = (props) => {
         formData.append(`requestDetail[${i}].audioMessage`, request[i].requestDetail?.audioMessage);
 
       if (request[i].requestDetail?.imageMessage != undefined && request[i].requestDetail?.imageMessage?.length! > 0)
-        request[i].requestDetail?.imageMessage?.forEach((imageFile: any) => {
-          formData.append(`requestDetail[${i}].imageMessage`, imageFile);
+        request[i].requestDetail?.imageMessage?.forEach((imageFile: any, index: number) => {
+          formData.append(`requestDetail[${i}].imageMessage[${index}].image`, imageFile);
+          formData.append(`requestDetail[${i}].imageMessage[${index}].imagedescription`, '');
         });
 
       if (request[i].requestDetail?.problemList != undefined && request[i].requestDetail?.problemList?.length! > 0)
@@ -116,10 +116,9 @@ const RequestDetail: FunctionComponent<IPageProps> = (props) => {
       httpRequest
         .postRequest<IOutputResult<ICreateRequestResultModel>>(APIURL_POST_CREATE_REQUEST, formData)
         .then((result) => {
-          toast.showSuccess(result.data.message);
-          dispatch(handleResetRequest());
-          navigate(URL_MAIN);
-          setIsLoading(false);
+          result.data.isSuccess
+            ? (toast.showSuccess(result.data.message), dispatch(handleResetRequest()), navigate(URL_MAIN), setIsLoading(false))
+            : toast.showError(result.data.message);
         })
         .finally(() => {
           setIsLoading(false);

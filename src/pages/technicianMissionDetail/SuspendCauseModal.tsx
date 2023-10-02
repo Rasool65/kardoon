@@ -10,6 +10,7 @@ interface SuspendCouseModalProps {
   onChange: any;
   onClick: any;
   loading: boolean;
+  closeModal: any;
 }
 
 const SuspendCauseModal: FunctionComponent<SuspendCouseModalProps> = ({
@@ -19,21 +20,22 @@ const SuspendCauseModal: FunctionComponent<SuspendCouseModalProps> = ({
   onChange,
   onClick,
   loading,
+  closeModal,
 }) => {
   return (
-    <div
-      className={`menu menu-box-modal rounded-m ${suspendReasonModalVisible ? 'menu-active' : ''}`}
-      data-menu-height="400"
-      data-menu-width="340"
-    >
-      <div className="me-3 ms-3 mt-3">
-        <h2 className="font-500 mb-0 pt-1">منتظر لغو</h2>
-        <p className="font-13 mb-1 pt-1">لطفأ دلیل انتخاب وضعیت منتظر لغو را وارد نمایید</p>
+    <div className={`modal ${suspendReasonModalVisible ? 'd-block' : ''}`}>
+      <div className="modal-content">
+        <div className="modal-header d-flex justify-content-between p-2">
+          <h2 className="header pointer" onClick={closeModal}>
+            X
+          </h2>
+          <h2 className="header">منتظر لغو</h2>
+        </div>
+        <p className="font-13">لطفأ دلیل انتخاب وضعیت منتظر لغو را وارد نمایید</p>
         {missionDetail?.statusTitle && (
           <Select
             isMulti
             isClearable
-            className="select-city"
             placeholder="انتخاب دلیل منتظر لغو"
             isSearchable={false}
             options={statusList![1].causeList ? statusList![1].causeList : []}

@@ -1,150 +1,132 @@
-import {
-  APIURL_GET_CURRENT_CONSUMER_REQUEST,
-  APIURL_GET_PREVIOUS_CONSUMER_REQUEST,
-  APIURL_GET_SERVICES,
-} from '@src/configs/apiConfig/apiUrls';
+import { APIURL_GET_CURRENT_CONSUMER_REQUEST, APIURL_GET_PREVIOUS_CONSUMER_REQUEST } from '@src/configs/apiConfig/apiUrls';
 import useHttpRequest from '@src/hooks/useHttpRequest';
 import Footer from '@src/layout/Footer';
-import FooterCard from '@src/layout/FooterCard';
-import HeaderCard from '@src/layout/HeaderCard';
-import PrevHeader from '@src/layout/PrevHeader';
+import PrevHeader from '@src/layout/Headers/PrevHeader';
 import { IOutputResult } from '@src/models/output/IOutputResult';
-import { IEStatusId, IOrderListResultModel, IOrderRequestDetail } from '@src/models/output/order/IOrderListResultModel';
+import { IEStatusId, IOrderListResultModel } from '@src/models/output/order/IOrderListResultModel';
 import { RootStateType } from '@src/redux/Store';
 import { DateHelper } from '@src/utils/dateHelper';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Button, Spinner } from 'reactstrap';
+import { Spinner } from 'reactstrap';
 import { IPageProps } from '../../configs/routerConfig/IPageProps';
-import { URL_ORDER_DETAIL, URL_REQUEST_DETAIL } from '../../configs/urls';
-import { init_template } from './template';
+import { URL_ORDER_DETAIL } from '../../configs/urls';
+import OrderLoading from './../../loading/orderLoading';
 
 const Order: FunctionComponent<IPageProps> = (props) => {
+  const color = useSelector((state: RootStateType) => state.theme.color);
   const navigate = useNavigate();
   const httpRequest = useHttpRequest();
   const [orderList, setOrderList] = useState<any>([]);
-  const userId = useSelector((state: RootStateType) => state.authentication.userData?.userId);
   const [loading, setLoading] = useState<boolean>(false);
   const [active, setActive] = useState<boolean>(false);
 
   const GetCurrentOrders = () => {
-    setActive(!active);
+    setActive(true);
     setLoading(true);
-    httpRequest
-      .getRequest<IOutputResult<IOrderListResultModel[]>>(`${APIURL_GET_CURRENT_CONSUMER_REQUEST}?UserId=${userId}`)
-      .then((result) => {
-        setOrderList(result.data.data);
-        setLoading(false);
-      });
+    httpRequest.getRequest<IOutputResult<IOrderListResultModel[]>>(`${APIURL_GET_CURRENT_CONSUMER_REQUEST}`).then((result) => {
+      setOrderList(result.data.data);
+      setLoading(false);
+    });
   };
   const GetPreviousOrders = () => {
-    setActive(!active);
+    setActive(false);
     setLoading(true);
-    httpRequest
-      .getRequest<IOutputResult<IOrderListResultModel[]>>(`${APIURL_GET_PREVIOUS_CONSUMER_REQUEST}?UserId=${userId}`)
-      .then((result) => {
-        setOrderList(result.data.data);
-        setLoading(false);
-      });
+    httpRequest.getRequest<IOutputResult<IOrderListResultModel[]>>(`${APIURL_GET_PREVIOUS_CONSUMER_REQUEST}`).then((result) => {
+      setOrderList(result.data.data);
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
-    init_template();
     GetCurrentOrders();
   }, []);
   useEffect(() => {
     document.title = props.title;
   }, [props.title]);
   return (
-    <div id="page" className="myorders">
-      <div className="page-content">
-        <PrevHeader />
-        <Footer footerMenuVisible={true} activePage={1} />
-        <div className="container">
-          <div className="tabs-title">
-            <button className={`btn btn-success ${active && 'active'}`} onClick={GetCurrentOrders}>
-              سفارشات جاری
-            </button>
-            <button className={`btn btn-success float-end ${!active && 'active'}`} onClick={GetPreviousOrders}>
-              سفارشات قبلی
-            </button>
-          </div>
-        </div>
-        <div className="container">
-          <div className="row">
-            {loading ? (
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '120px' }}>
-                <Spinner style={{ width: '5rem', height: '5rem' }} />
-              </div>
-            ) : (
-              orderList &&
-              orderList.length > 0 &&
-              orderList.map((requests: IOrderListResultModel, index: number) => {
-                return (
-                  <>
-                    <div className="col-12 col-md-6 col-lg-4">
-                      <div className="card card-style shadow-0 bg-highlight mb-1">
-                        <button
-                          className="btn accordion-btn custom-accordion-btn  color-white no-effect"
-                          data-bs-toggle="collapse"
-                          data-bs-target={`#collapse${index}`}
-                        >
-                          <div style={{ marginBottom: '20px' }}>
-                            شماره درخواست : <div>{requests.requestNumber}</div>
-                            <div style={{ marginRight: 'auto' }}>{DateHelper.isoDateTopersian(requests.presenceTime)}</div>
-                            {requests.isUrgent ? (
-                              <div style={{ border: '2px solid red', color: 'red', marginRight: '10px' }}>مراجعه فوری</div>
-                            ) : (
-                              ''
-                            )}
-                          </div>
+    <>
+      {loading ? (
+        <OrderLoading />
+      ) : (
+        <div className="page-content order-page mb-5">
+          <PrevHeader />
+          <Footer activePage={1} />
+          <div className="container">
+            <div className="page-tabs">
+              <button className={`primary-btn m-3 w-50 ${active && 'active'}`} onClick={GetCurrentOrders}>
+                سفارشات جاری
+              </button>
+              <button className={`primary-btn m-3 w-50 float-end ${!active && 'active'}`} onClick={GetPreviousOrders}>
+                سفارشات قبلی
+              </button>
+            </div>
 
-                          {requests.requestDetail &&
-                            requests.requestDetail.length > 0 &&
-                            requests.requestDetail.map((requestDetail: IOrderRequestDetail, index: number) => {
-                              return (
-                                <div style={{ marginBottom: '5px' }}>
-                                  <div className="col-7">
-                                    <div>{index + 1}-</div>
-                                    {requestDetail.requestDescription}
-                                  </div>
-                                  <div className="col-5">
-                                    {/* <span className="bg-success">{requestDetail.statusTitle}</span> */}
-                                    <span className={IEStatusId[requestDetail.statusId!]}>{requestDetail.statusTitle}</span>
-                                  </div>
-                                </div>
-                              );
-                            })}
-
-                          <i className="fa fa-chevron-down font-10 accordion-icon"></i>
-                        </button>
+            <div className="row page-tabs-body">
+              {loading ? (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '120px' }}>
+                  <Spinner style={{ width: '5rem', height: '5rem' }} />
+                </div>
+              ) : (
+                orderList &&
+                orderList.length > 0 &&
+                orderList.map((requests: IOrderListResultModel, index: number) => {
+                  return (
+                    <>
+                      <div className="col-md-6">
                         <div
-                          style={{ backgroundColor: 'white' }}
-                          id={`collapse${index}`}
-                          className="collapse bg-theme custom-accordion-open"
-                          data-bs-parent="#accordion-2"
+                          className="mission-card pointer"
+                          onClick={() => navigate(`${URL_ORDER_DETAIL}?id=${requests.requestDetailId}`)}
                         >
-                          <Button
-                            onClick={() => navigate(`${URL_ORDER_DETAIL}?id=${requests.requestNumber}`)}
-                            style={{ width: 'inherit' }}
-                            className="more-detail"
-                          >
-                            جزئیات بیشتر
-                          </Button>
+                          <div className="mission-item ">
+                            <p className="mission-title">{requests.productCategoryTitle + '-' + requests.serviceTypeTitle}</p>
+                            <p className="mission-amount">
+                              {requests.presenceShift?.slice(0, 3)} {DateHelper.isoDateTopersian(requests.presenceDateTime)}
+                            </p>
+                            {requests.isUrgent ? <span className="sos-box">SOS</span> : ''}
+                            <img
+                              className="seemore-btn"
+                              src={require(`@src/scss/images/icons/${color}-info.svg`)}
+                              alt="VectorI344"
+                            />
+                          </div>
+                          <div className="mission-item">
+                            <p className="mission-info">
+                              تکنسین:{' '}
+                              {requests.technicianInfoList &&
+                                requests.technicianInfoList.length > 0 &&
+                                requests.technicianInfoList.map((techFullName: string, index: number) => {
+                                  return (
+                                    <>
+                                      <span>
+                                        {index + 1}-{techFullName}
+                                      </span>
+                                    </>
+                                  );
+                                })}
+                            </p>
+                            <div className="mission-status-box">
+                              {/* <p className="mission-amount">وضعیت:</p> */}
+                              <span className={IEStatusId[requests.statusId!]}>{requests.statusTitle}</span>
+                            </div>
+                          </div>
+                          <div className="d-flex justify-content-between">
+                            <p className="mission-info">
+                              شماره درخواست: <span>{requests.requestNumber}</span>
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </>
-                );
-              })
-            )}
-
-            {/* End loop */}
+                    </>
+                  );
+                })
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

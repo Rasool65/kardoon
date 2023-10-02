@@ -1,6 +1,5 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { customFunction } from '../city/template';
 import { resultCode } from './ResCode';
 import { Spinner } from 'reactstrap';
 import useHttpRequest from '@src/hooks/useHttpRequest';
@@ -23,7 +22,6 @@ const CallBackUrl: FunctionComponent<CallBackUrl> = () => {
   const search = useLocation().search;
   const [timer, setTimer] = useState<boolean>(true);
   const resCode = new URLSearchParams(search).get('ResCode');
-  // const refId = new URLSearchParams(search).get('RefId');
   const paymentId = new URLSearchParams(search).get('SaleOrderId');
   const URL = new URLSearchParams(search).get('DestinationUrl');
 
@@ -54,83 +52,95 @@ const CallBackUrl: FunctionComponent<CallBackUrl> = () => {
   return (
     <>
       {resCode && resCode == '0' ? (
-        <div className="card card-style preload-img" style={{ marginTop: '20px' }}>
-          <div className="card-body text-center">
-            <p className="color-white pt-4">پرداخت موفق</p>
-            <h2 className="color-white mt-n2 mb-3 pb-1">{resultCode[resCode]}</h2>
-            <p className="boxed-text-xl color-white opacity-80 pb-2">
-              در صورتی که بصورت خودکار به صفحه پرداخت منتقل نشده اید روی دکمه زیر کلیک نمایید
-            </p>
-            {
-              <>
-                <h2>در حال بازگشت به صفحه پرداخت... </h2>
-                <h2>{remainingTimeSeconds}</h2>
-              </>
-            }
-            <a
-              onClick={() => {
-                window.open(URL!, '_self');
-              }}
-              style={{ cursor: 'pointer' }}
-              className="btn btn-m rounded-sm btn-border btn-center-l border-white color-white font-700 text-uppercase mb-4"
-            >
-              بازگشت به صفحه پرداخت
-            </a>
-            {timer && (
-              <a
-                onClick={() => {
-                  ShowDetailPayment();
-                }}
-                style={{ cursor: 'pointer' }}
-                className="btn btn-m rounded-sm btn-border btn-center-l border-white color-white font-700 text-uppercase mb-4"
-              >
-                {loading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : 'مشاهده جزییات تراکنش'}
-              </a>
-            )}
+        <div className="container payment-status">
+          <div className="card card-style preload-img succes-message" style={{ marginTop: '20px' }}>
+            <div className=" text-center">
+              <p className="title">پرداخت موفق</p>
+              <h2 className="color-white mt-4 mb-4">{resultCode[resCode]}</h2>
+              <p className="description">در صورتی که بصورت خودکار به صفحه پرداخت منتقل نشده اید روی دکمه زیر کلیک نمایید</p>
+              {
+                <>
+                  <h5 className="wating-text">در حال بازگشت به صفحه پرداخت... </h5>
+                  <div className="time-count">{remainingTimeSeconds}</div>
+                </>
+              }
+              <div className="row">
+                <div className="col-12 col-md-6">
+                  <button
+                    onClick={() => {
+                      window.open(URL!, '_self');
+                    }}
+                    style={{ cursor: 'pointer' }}
+                    className="primery-btn fz-16 mt-0"
+                  >
+                    بازگشت به صفحه پرداخت
+                  </button>
+                </div>
+                <div className="col-12 col-md-6">
+                  {timer && (
+                    <button
+                      onClick={() => {
+                        ShowDetailPayment();
+                      }}
+                      style={{ cursor: 'pointer' }}
+                      className="success-btn fz-16 mt-0"
+                    >
+                      {loading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : 'مشاهده جزییات تراکنش'}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="card-overlay bg-highlight opacity-95"></div>
           </div>
-          <div className="card-overlay bg-highlight opacity-95"></div>
         </div>
       ) : (
-        <div className="card card-style preload-img" style={{ marginTop: '20px' }}>
-          <div className="card-body text-center">
-            <p className="color-white pt-4">پرداخت ناموفق</p>
-            <h2 className="color-white mt-n2 mb-3 pb-1">
+        <div className="container payment-status">
+          <div className="card card-style preload-img unsucces-message" style={{ marginTop: '20px' }}>
+            <div className=" text-center">
+              <p className="title">پرداخت ناموفق</p>
+              <h2 className="color-white mt-n2 mb-3 pb-1">
+                {
+                  //@ts-ignore
+                  resultCode[resCode]
+                }
+              </h2>
+              <p className="description">چنانچه مبلغ از حساب شما کسر شده ، ظرف 24 ساعت آینده ، مبلغ کسر شده واریز خواهد شد.</p>
               {
-                //@ts-ignore
-                resultCode[resCode]
+                <>
+                  <h5 className="wating-text">در حال بازگشت به صفحه پرداخت... </h5>
+                  <div className="time-count">{remainingTimeSeconds}</div>
+                </>
               }
-            </h2>
-            <p className="boxed-text-xl color-white opacity-80 pb-2">
-              چنانچه مبلغ از حساب شما کسر شده ، ظرف 24 ساعت آینده ، مبلغ کسر شده واریز خواهد شد.
-            </p>
-            {
-              <>
-                <h2>در حال بازگشت به صفحه پرداخت... </h2>
-                <h2>{remainingTimeSeconds}</h2>
-              </>
-            }
-            <a
-              onClick={() => {
-                window.open(URL!, '_self');
-              }}
-              style={{ cursor: 'pointer' }}
-              className="btn btn-m rounded-sm btn-border btn-center-l border-white color-white font-700 text-uppercase mb-4"
-            >
-              بازگشت به صفحه پرداخت
-            </a>
-            {timer && (
-              <a
-                onClick={() => {
-                  ShowDetailPayment();
-                }}
-                style={{ cursor: 'pointer' }}
-                className="btn btn-m rounded-sm btn-border btn-center-l border-white color-white font-700 text-uppercase mb-4"
-              >
-                {loading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : 'مشاهده جزییات تراکنش'}
-              </a>
-            )}
+              <div className="row">
+                <div className="col-12 col-lg-6">
+                  <button
+                    onClick={() => {
+                      window.open(URL!, '_self');
+                    }}
+                    style={{ cursor: 'pointer' }}
+                    className="primery-btn fz-16 mt-0"
+                  >
+                    بازگشت به صفحه پرداخت
+                  </button>
+                </div>
+                <div className="col-12 col-lg-6">
+                  {timer && (
+                    <button
+                      onClick={() => {
+                        ShowDetailPayment();
+                      }}
+                      style={{ cursor: 'pointer' }}
+                      className="success-btn fz-16 mt-0"
+                    >
+                      {loading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : 'مشاهده جزییات تراکنش'}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="card-overlay bg-red-light opacity-95"></div>
           </div>
-          <div className="card-overlay bg-red-light opacity-95"></div>
         </div>
       )}
       {/* payment Detail */}

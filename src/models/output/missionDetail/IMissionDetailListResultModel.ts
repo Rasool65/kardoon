@@ -1,6 +1,9 @@
+import { IFiles } from './IInvoiceActionResultModel';
 export interface IMissionDetailResultModel {
+  consumerId: number;
+  userName?: string;
   requestDetailId: number;
-  description?: string;
+  description: string;
   requestNumber: string;
   serviceTypeTitle?: string;
   productTypeTitle?: string;
@@ -24,6 +27,8 @@ export interface IMissionDetailResultModel {
   districtName?: string;
   isUrgent: boolean;
   regionName?: string;
+  files?: IFiles[];
+  orderId: number;
 }
 export interface IProblemList {
   value?: number;

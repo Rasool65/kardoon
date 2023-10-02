@@ -16,22 +16,37 @@ export const SignalR = () => {
   const toast = useToast();
 
   useEffect(() => {
+    connection && connection.stop();
     const newConnection = new HubConnectionBuilder()
-      .withUrl(`${API_SIGNALR_URL}${APIURL_LISTENING_CHAT}?UserId=${userData?.userId}`, { withCredentials: false })
+      .withUrl(`${API_SIGNALR_URL}${APIURL_LISTENING_CHAT}?UserId=${userData?.userId}`, { withCredentials: true })
       .withAutomaticReconnect()
       .build();
     setConnection(newConnection);
-  }, []);
+  }, [userData?.userId]);
 
   useEffect(() => {
-    if (connection) {
+    if (connection && userData?.userId) {
       connection
         .start()
         .then((result) => {
-          console.log('Connected!');
+          console.log('SignalR Connected!');
           connection.on('receiveChat', (data: IMessage) => {
-            show && navigator.vibrate(500) && toast.showNotify(data.message);
+            var options = {
+              body: data.message,
+              icon: 'favicon.ico',
+              // image: '/assets/images/profile-defult-img.png',
+              vibrate: [100, 50, 200],
+            };
+            show && toast.showNotify(data.message);
             dispatch(handleNewMessage(data));
+
+            navigator.serviceWorker.ready.then((result) => {
+              if ('showNotification' in result) {
+                show && result.showNotification(`${data.fromFirstName} ${data.fromLastName}:${data.message}`, options);
+              } else {
+                show && new Notification(`${data.fromFirstName} ${data.fromLastName}:${data.message}`, options);
+              }
+            });
           });
         })
         .catch((e) => console.log('Connection failed: ', e));

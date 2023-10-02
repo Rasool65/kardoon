@@ -1,8 +1,8 @@
 import Form, { AjvError, IChangeEvent, ISubmitEvent, UiSchema } from '@rjsf/core';
 import { FunctionComponent, useEffect, useState } from 'react';
-import { Button, Spinner } from 'reactstrap';
+import { Button } from 'reactstrap';
 import useHttpRequest from '@src/hooks/useHttpRequest';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
@@ -10,16 +10,21 @@ import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IRequestDetailPageProp } from './IRequestDetailProp';
 import type { JSONSchema7 } from 'json-schema';
 import { APIURL_GET_PRODUCTS_ATTRIBUTES } from '@src/configs/apiConfig/apiUrls';
-import { init_template } from './template';
+import LoadingComponent from '@src/components/spinner/LoadingComponent';
+import PrevHeader from '@src/layout/Headers/PrevHeader';
 
 const RequestDetailZero: FunctionComponent<IRequestDetailPageProp> = ({ handleClickNextToFirst }) => {
   const cityId = useSelector((state: RootStateType) => state.authentication.userData?.profile.residenceCityId);
   const httpRequest = useHttpRequest();
+  const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const { t }: any = useTranslation();
   const { state }: any = useLocation();
   const [loading, setLoading] = useState<boolean>(false);
   const [schema, setSchema] = useState<JSONSchema7>();
   // const [Ui, setUi] = useState<UiSchema>();
+  const checkRole = (normalizedName: string) => {
+    return userData?.roles ? userData?.roles.some((roleName) => roleName.normalizedName === normalizedName) : false;
+  };
   const GetFormSchema = () => {
     setLoading(true);
     httpRequest
@@ -27,6 +32,7 @@ const RequestDetailZero: FunctionComponent<IRequestDetailPageProp> = ({ handleCl
         `${APIURL_GET_PRODUCTS_ATTRIBUTES}?CityId=${cityId}&ProductId=${state.ProductId}&ServiceTypeId=${state.ServiceTypeId}`
       )
       .then((result) => {
+        !checkRole('TECHNICIAN') && delete result.data.data.required;
         setSchema(result.data.data);
         !result.data.data && handleClickNextToFirst();
         setLoading(false);
@@ -45,60 +51,44 @@ const RequestDetailZero: FunctionComponent<IRequestDetailPageProp> = ({ handleCl
   useEffect(() => {
     // GetFormUI();
     GetFormSchema();
-    init_template();
   }, []);
 
   const onSubmit = (data: ISubmitEvent<unknown>) => {
     handleClickNextToFirst(data);
   };
 
-  const onChange = (event: IChangeEvent<unknown>) => {
-    // console.log('change', event.formData);
-  };
-
-  const onError = (errors: AjvError[]) => {
-    // console.error(errors);
-  };
   return (
-    <div id="page">
-      {/* <Header/> */}
+    <>
+      <PrevHeader />
       <div
-        className="page-content"
+        className="page-content request-details-1"
         style={{
           paddingBottom: '0px',
         }}
       >
-        <div className="page-title page-title-small pointer" style={{ color: '#FFF', width: 'fit-content', fontSize: '16px' }}>
-          فرم ساز
-        </div>
+        {/* <div className="page-title pointer">فرم ساز</div> */}
 
-        <div className="card header-card shape-rounded" data-card-height="150">
-          <div className="card-overlay bg-highlight opacity-95" />
-          <div className="card-overlay dark-mode-tint" />
-          <div className="card-bg bg-20" />
-        </div>
-
-        <div className="card card-style p-4">
-          {loading ? (
-            <>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '120px' }}>
-                <Spinner style={{ width: '5rem', height: '5rem' }} />
+        <div className="container">
+          <div className="card p-4 mt-4">
+            {loading ? (
+              <>
+                <LoadingComponent />
+              </>
+            ) : (
+              <div>
+                {schema && (
+                  <Form schema={schema} uiSchema={uiSchema} onSubmit={onSubmit}>
+                    <Button className="btn btn-info w-100" type="submit">
+                      ادامه
+                    </Button>
+                  </Form>
+                )}
               </div>
-            </>
-          ) : (
-            <div>
-              {schema && (
-                <Form schema={schema} uiSchema={uiSchema} onSubmit={onSubmit} onChange={onChange} onError={onError}>
-                  <Button className="btn btn-info" style={{ marginTop: '10px', width: '100px' }} type="submit">
-                    ثبت
-                  </Button>
-                </Form>
-              )}
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

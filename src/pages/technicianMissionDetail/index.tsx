@@ -10,6 +10,7 @@ import {
   APIURL_UPDATE_REQUEST_DETAIL_STATUS,
 } from '@src/configs/apiConfig/apiUrls';
 import useHttpRequest, { RequestDataType } from '@src/hooks/useHttpRequest';
+import Footer from '@src/layout/Footer';
 import { IOutputResult } from '@src/models/output/IOutputResult';
 import { IProblemList } from '@src/models/output/orderDetail/IOrderDetailListResultModel';
 import { RootStateType } from '@src/redux/Store';
@@ -24,20 +25,25 @@ import { URL_MY_ORDERS, URL_TECHNICIAN_MISSION_DETAIL_ACTION, URL_TECHNICIAN_REQ
 import { IMissionDetailResultModel, IStatusMission } from '@src/models/output/missionDetail/IMissionDetailListResultModel';
 import Select from 'react-select';
 import { IAttributesResultModel } from '@src/models/output/missionDetail/IAttributesResultModel';
-import { useToast } from './../../hooks/useToast';
-import { CustomFunctions } from './template';
-import PrevHeader from '@src/layout/PrevHeader';
+import { useToast } from '@src/hooks/useToast';
 import { IFollowUpList } from '@src/models/output/missionDetail/IFollowUpList';
 import { useRecorder } from '@src/hooks/useRecorder';
 import FollowUpModal from './FollowUpModal';
 import SuspendCauseModal from './SuspendCauseModal';
 import ProgressCauseModal from './ProgressCauseModal';
 import ConfirmModal from './ConfirmModal';
+import PrevHeader from '@src/layout/Headers/PrevHeader';
 import LoadingComponent from '@src/components/spinner/LoadingComponent';
+import { IFiles } from '@src/models/output/missionDetail/IInvoiceActionResultModel';
+import ShowImageModal from '../../components/showImageModal/ShowImageModal';
+import CallModal from './CallModal';
+import { addTextToImage } from '@src/utils/ImageHelpers';
+import ImageLabelModal from './ImageLabelModal';
 
 const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   let { audioData, audioURL, isRecording, startRecording, stopRecording } = useRecorder();
   const navigate = useNavigate();
+  const color = useSelector((state: RootStateType) => state.theme.color);
   const search = useLocation().search;
   const id = new URLSearchParams(search).get('id');
   const httpRequest = useHttpRequest();
@@ -46,20 +52,26 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   const [genForm, setGenForm] = useState<IAttributesResultModel>();
   const [imageModalVisible, setImageModalVisible] = useState<boolean>(false);
   const [followUpModalVisible, setFollowUpModalVisible] = useState<boolean>(false);
+  const [displayCallModal, setDisplayCallModal] = useState<boolean>(false);
   const [suspendReasonModalVisible, setSuspendReasonModalVisible] = useState<boolean>(false);
   const [progressReasonModalVisible, setProgressReasonModalVisible] = useState<boolean>(false);
   const [suspendCauseList, setSuspendCasueList] = useState<number[]>([]);
   const [progressCauseList, setProgressCasueList] = useState<number[]>([]);
-  const [backgroundDimmer, setBackgroundDimmer] = useState<boolean>(false);
   const [selectDisabled, setSelectDisabled] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [requestLoading, setRequestloading] = useState<boolean>(false);
   const [formLoading, setFormLoading] = useState<boolean>(false);
-  const [missionDetailLoading, setMissionDetailLoading] = useState<boolean>(false);
   const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
   const [showButton, setShowButton] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [imageSrc, setImageSrc] = useState<string>();
+  const [imageDescription, setImageDescription] = useState<string>();
+  const [imageLabel, setImageLabel] = useState<string[]>([]);
+  const [displayImage, setDisplayImage] = useState<boolean>(false);
   const [statusValue, setStatusValue] = useState<number>();
+  const [displayLabelImage, setDisplayLabelImage] = useState<boolean>(false);
   const [followUpDescription, setFollowUpDescription] = useState<string>();
+  const [nextTrackingDateTime, setNextTrackingDateTime] = useState<string>();
   const [followUpList, setFollowUpList] = useState<IFollowUpList[]>();
   const [audioDisplay, setAudioDisplay] = useState<string>('none');
   const [imageDisplay, setImageDisplay] = useState<string>('none');
@@ -72,7 +84,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   const userData = useSelector((state: RootStateType) => state.authentication.userData);
   const toast = useToast();
   const GetMissionDetail = () => {
-    setMissionDetailLoading(true);
+    setRequestloading(true);
     httpRequest
       .getRequest<IOutputResult<IMissionDetailResultModel>>(
         `${APIURL_GET_MISSION_DETAILS}?TechnicianId=${userData?.userId}&RequestDetailId=${id}`
@@ -80,7 +92,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
       .then((result) => {
         setMissionDetail(result.data.data);
         result.data.data.statusId == 3 || result.data.data.statusId == 4 ? setSelectDisabled(true) : setSelectDisabled(false);
-        setMissionDetailLoading(false);
+        setRequestloading(false);
       });
   };
   const UpdateStatus = (statusValue: number, causeIdList?: number[]) => {
@@ -92,12 +104,11 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
     };
     setLoading(true);
     httpRequest.updateRequest<IOutputResult<any>>(`${APIURL_UPDATE_REQUEST_DETAIL_STATUS}`, body).then((result) => {
-      toast.showSuccess(result.data.message);
+      result.data.isSuccess ? toast.showSuccess(result.data.message) : toast.showError(result.data.message);
       setLoading(false);
     });
   };
   const onSubmit = (data: ISubmitEvent<unknown>) => {
-    console.log(JSON.stringify(data.formData));
     const body = {
       requestDetailId: parseInt(id!),
       technicianId: userData?.userId,
@@ -106,32 +117,40 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
     setFormLoading(true);
     httpRequest.updateRequest<IOutputResult<any>>(`${APIURL_UPDATE_REQUEST_ATTRIBUTES}`, body).then((result) => {
       FormGenDetail();
-      toast.showSuccess(result.data.message);
+      result.data.isSuccess ? toast.showSuccess(result.data.message) : toast.showError(result.data.message);
       setFormLoading(false);
     });
   };
+  const handleDisplay = () => {
+    setDisplayImage(!displayImage);
+  };
+  const handleCallModal = () => {
+    setDisplayCallModal(!displayCallModal);
+  };
   const AddFollowUp = () => {
-    if (followUpDescription == '') return toast.showError('توضیحات نمی تواند خالی باشد'), setLoading(false);
-    const body = {
-      technicianId: userData?.userId,
-      requestDetailId: parseInt(id!),
-      description: followUpDescription,
-    };
-    setLoading(true);
-    httpRequest
-      .postRequest<IOutputResult<any>>(`${APIURL_POST_TRACKING}`, body)
-      .then((result) => {
-        toast.showSuccess(result.data.message);
-        setFollowUpModalVisible(false);
-        setSuspendReasonModalVisible(false);
-        setProgressReasonModalVisible(false);
-        setBackgroundDimmer(false);
-        setLoading(false);
-        GetFollowUp();
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    setTimeout(() => {
+      if (followUpDescription == '') return toast.showError('توضیحات نمی تواند خالی باشد'), setLoading(false);
+      const body = {
+        technicianId: userData?.userId,
+        requestDetailId: parseInt(id!),
+        description: followUpDescription,
+        nextTrackingDateTime: nextTrackingDateTime,
+      };
+      setLoading(true);
+      httpRequest
+        .postRequest<IOutputResult<any>>(`${APIURL_POST_TRACKING}`, body)
+        .then((result) => {
+          toast.showSuccess(result.data.message);
+          setFollowUpModalVisible(false);
+          setSuspendReasonModalVisible(false);
+          setProgressReasonModalVisible(false);
+          setLoading(false);
+          GetFollowUp();
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }, 500);
   };
 
   const submitTechnicianMedia = () => {
@@ -142,8 +161,9 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
     audioFile ? data.append('audioMessage', audioFile) : data.append('audioMessage', '');
     videoFile ? data.append('videoMessage', videoFile) : data.append('videoMessage', '');
     imageFile
-      ? imageFile.forEach((imageFile: any) => {
-          data.append('imageMessage', imageFile);
+      ? imageFile.forEach((imageFile: any, index: number) => {
+          data.append(`imageMessage[${index}].image`, imageFile);
+          data.append(`imageMessage[${index}].imagedescription`, imageLabel[index]);
         })
       : data.append('imageMessage', '');
     httpRequestMedia
@@ -152,17 +172,26 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
         toast.showSuccess(result.data.message);
         setLoading(false);
         ClearMediaFiles();
+        GetMissionDetail();
       })
       .finally(() => {
         setLoading(false);
       });
   };
-
+  const closeModal = () => {
+    setProgressReasonModalVisible(false);
+    setSuspendReasonModalVisible(false);
+    setFollowUpModalVisible(false);
+    setImageModalVisible(false);
+    setConfirmModalVisible(false);
+  };
   const ClearMediaFiles = () => {
     setAudioFile(null);
     setAudioDisplay('none');
     setImgSrcList([]);
     setImageFile([]);
+    setImageLabel([]);
+    setImageDescription(undefined);
     setImageDisplay('none');
     setVideoFile(null);
     setVideoDisplay('none');
@@ -184,14 +213,14 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   };
 
   const FormGenDetail = () => {
-    setFormLoading(true);
+    setLoading(true);
     httpRequest
       .getRequest<IOutputResult<IAttributesResultModel>>(
         `${APIURL_GET_MISSION_ATTRIBUTES_DETAILS}?RequestDetailId=${id}&UserId=${userData?.userId}`
       )
       .then((result) => {
         setGenForm(result.data.data);
-        setFormLoading(false);
+        setLoading(false);
       });
   };
 
@@ -208,23 +237,25 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
     GetMissionDetail();
     FormGenDetail();
     GetFollowUp();
-    CustomFunctions();
   }, []);
 
   useEffect(() => {
     setAudioFile(audioData);
   }, [audioData]);
 
-  const onImageFileChange = (e: any) => {
-    const files = e.target.files;
-    files.length > 1 ? setImageFile(files) : setImageFile([...imageFile, files[0]]);
-
+  const onImageFileChange = (files: any) => {
+    // const newFile: any = await addTextToImage(files[0], 'Rasool Aghajani');
+    setImageFile([...imageFile, files]);
     const reader = new FileReader();
     reader.onload = function () {
       setImgSrcList([...imgSrcList, reader.result]);
     };
-    reader.readAsDataURL(files[0]);
+    reader.readAsDataURL(files);
     setImageDisplay('initial');
+  };
+
+  const handleImageLabelModal = () => {
+    setDisplayLabelImage(!displayLabelImage);
   };
 
   const onVideoFileChange = (e: any) => {
@@ -234,6 +265,7 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
     document.querySelector('video')!.src = blobURL;
     setVideoDisplay('flex');
   };
+
   useEffect(() => {
     document.title = props.title;
   }, [props.title]);
@@ -241,125 +273,170 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
   useEffect(() => {
     videoDisplay == 'flex' || audioDisplay == 'initial' || imageDisplay == 'initial' ? setShowButton(true) : setShowButton(false);
   }, [videoDisplay, audioDisplay, imageDisplay]);
+
   return (
     <>
-      <div
-        className={`menu-hider ${backgroundDimmer ? 'menu-active' : ''}`}
-        onClick={() => {
-          setBackgroundDimmer(false);
-          setProgressReasonModalVisible(false);
-          setSuspendReasonModalVisible(false);
-          setFollowUpModalVisible(false);
-          setImageModalVisible(false);
-          setConfirmModalVisible(false);
-        }}
-      ></div>
-      <div id="page">
-        {/* <Footer footerMenuVisible={true} activePage={1} /> */}
-        <div className="page-content technician-mission-page">
-          <PrevHeader />
-          <div className="card header-card shape-rounded" data-card-height="150">
-            <div className="card-overlay bg-highlight opacity-95"></div>
-            <div className="card-overlay dark-mode-tint"></div>
-            <div className="card-bg preload-img" data-src="images/pictures/20s.jpg"></div>
-          </div>
-        </div>
-
-        <div className="technician-mission-page">
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <PrevHeader />
+      <div className="home-container mission-details">
+        <div className="container">
+          <div className="card">
             <div className="section-1">
-              <div className=" div-1">
-                <div className="details-bar">
-                  <p>شماره درخواست:</p>
-                  <p>{missionDetail?.requestNumber}</p>
+              <div className="details-bar">
+                <p>شماره درخواست:</p>
+                <p>{missionDetail?.requestNumber}</p>
+              </div>
+              <div className="details-bar">
+                <p>زمان مراجعه:</p>
+                <p>
+                  {DateHelper.isoDateTopersian(missionDetail?.presenceDateTime)}-{missionDetail?.presenceShift}
+                </p>
+              </div>
+              <div className="details-bar">
+                <p>نام مشتری:</p>
+                <p>
+                  {' '}
+                  {missionDetail?.consumerFirstName} {missionDetail?.consumerLastName}
+                </p>
+              </div>
+              <div className="details-bar">
+                <p>آدرس:</p>
+                <p className="m-1">{missionDetail?.address}</p>
+              </div>
+            </div>
+            <div className="section-2 mt-2">
+              <div className="d-flex justify-content-between align-items-center flex-wrap">
+                <div style={{ whiteSpace: 'nowrap', marginLeft: '15px' }}>
+                  {' '}
+                  {missionDetail?.serviceTypeTitle}-{missionDetail?.productTypeTitle}
                 </div>
-                <div className="details-bar">
-                  <p>زمان مراجعه:</p>
-                  <p>
-                    {DateHelper.isoDateTopersian(missionDetail?.presenceDateTime)}-{missionDetail?.presenceShift}
-                  </p>
-                </div>
-                <div className="details-bar">
-                  <p>نام مشتری:</p>
-                  <p>
-                    {missionDetail?.consumerFirstName} {missionDetail?.consumerLastName}
-                  </p>
-                </div>
-                <div className="details-bar">
-                  <p>آدرس:</p>
-                  <p className="m-1">{missionDetail?.address}</p>
+                <div className="w-100">
+                  <div className="">
+                    {missionDetail?.statusTitle && (
+                      <Select
+                        isSearchable={false}
+                        isDisabled={selectDisabled}
+                        isLoading={loading}
+                        className="select-city"
+                        options={statusList?.filter((x) => x.label !== 'ابطال')}
+                        placeholder={missionDetail?.statusTitle}
+                        onChange={(e) => {
+                          if (e?.value == 2) setSuspendReasonModalVisible(true);
+                          else if (e?.value == 5) setProgressReasonModalVisible(true);
+                          else setConfirmModalVisible(true), setStatusValue(e?.value!);
+                        }}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="div-2">
-                <div
-                  className=""
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    // width: '85%',
-                    padding: '10px 0',
-                  }}
-                >
-                  <span>
-                    {missionDetail?.serviceTypeTitle}-{missionDetail?.productTypeTitle}
-                  </span>
-                  {missionDetail?.statusTitle && (
-                    <Select
-                      isSearchable={false}
-                      isDisabled={selectDisabled}
-                      isLoading={loading}
-                      className="select-city"
-                      options={statusList?.filter((x) => x.label !== 'ابطال')}
-                      placeholder={missionDetail?.statusTitle}
-                      onChange={(e) => {
-                        if (e?.value == 2) setSuspendReasonModalVisible(true), setBackgroundDimmer(true);
-                        else if (e?.value == 5) setProgressReasonModalVisible(true), setBackgroundDimmer(true);
-                        else setBackgroundDimmer(true), setConfirmModalVisible(true), setStatusValue(e?.value!);
-                      }}
-                    />
-                  )}
-                </div>
-                <div className="" style={{ width: '90%', padding: '10px 0' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
-                    {/* Generate Form here */}
-                    {formLoading ? (
-                      <LoadingComponent />
-                    ) : (
-                      genForm && (
-                        <>
-                          <Form
-                            onSubmit={onSubmit}
-                            schema={genForm.attributes}
-                            formData={genForm.attributeValues}
-                            uiSchema={uiSchema}
-                          >
-                            <Button className="btn-info" style={{ marginTop: '10px', width: '100%' }} type="submit">
-                              بروزرسانی اطلاعات
-                            </Button>
-                          </Form>
-                        </>
-                      )
-                    )}
+              {/* Generate Form here */}
+              {formLoading ? (
+                <LoadingComponent />
+              ) : (
+                genForm && (
+                  <>
+                    <Form onSubmit={onSubmit} schema={genForm.attributes} formData={genForm.attributeValues} uiSchema={uiSchema}>
+                      <Button className="btn-info" style={{ marginTop: '10px', width: '100%' }} type="submit">
+                        بروزرسانی اطلاعات
+                      </Button>
+                    </Form>
+                  </>
+                )
+              )}
+              <div className="mission-gallery">
+                {/* File List  */}
+                {missionDetail?.files &&
+                  missionDetail.files.length > 0 &&
+                  missionDetail.files.map((media: IFiles, index: number) => {
+                    return (
+                      <>
+                        {media.fileType == 'Audio' && <audio src={media.fileUrl} controls className="audio-item" />}
+                        {media.fileType == 'Image' && (
+                          <>
+                            <div
+                              className="image-item pointer"
+                              onClick={() => {
+                                setImageSrc(media.fileUrl), setDisplayImage(true), setImageDescription(media.description);
+                              }}
+                              style={{ backgroundImage: `url(${media.fileUrl})` }}
+                            >
+                              {media.description}
+                            </div>
+                          </>
+                        )}
+                        {media.fileType == 'Video' && (
+                          <video
+                            className="video-item"
+                            width="320"
+                            height="240"
+                            controls
+                            // style={{ display: 'flex', alignContent: 'center' }}
+                            src={media?.fileUrl}
+                          />
+                        )}
+                      </>
+                    );
+                  })}
+              </div>
 
-                    <div>
-                      <p style={{ marginBottom: '0' }}>ایرادات</p>
-                      <ul>
-                        {missionDetail?.problemList &&
-                          missionDetail?.problemList.length > 0 &&
-                          missionDetail.problemList.map((problems: IProblemList, index: number) => {
-                            return <li>{problems.label}</li>;
-                          })}
-                      </ul>
-                    </div>
+              <div className="" style={{ width: '100%', padding: '10px 0px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
+                  <div>
+                    <p style={{ marginBottom: '0px' }}>ایرادات</p>
+                    <ul>
+                      {missionDetail?.problemList &&
+                        missionDetail?.problemList.length > 0 &&
+                        missionDetail.problemList.map((problems: IProblemList, index: number) => {
+                          return <li>{problems.label}</li>;
+                        })}
+                    </ul>
                     {missionDetail?.description && (
                       <div>
                         <p> توضیحات :</p>
-                        {missionDetail?.description}
+                        <div className="description">{missionDetail?.description}</div>
                       </div>
                     )}
                   </div>
+                </div>
 
+                {missionDetail?.audioMessage && (
+                  <div className="d-flex justify-content-center m-3">
+                    <audio src={missionDetail?.audioMessage} controls />
+                  </div>
+                )}
+                <div style={{ display: 'block' }}>
+                  {missionDetail?.videoMessage && (
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                      <video
+                        width="320"
+                        height="240"
+                        controls
+                        style={{ display: 'flex', alignContent: 'center' }}
+                        src={missionDetail?.videoMessage}
+                      />
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', justifyContent: 'inherit', flexWrap: 'wrap' }}>
+                    {missionDetail?.imageMessage &&
+                      missionDetail?.imageMessage.length > 0 &&
+                      missionDetail?.imageMessage.map((imageAddress: string, index: number) => {
+                        return (
+                          <img
+                            style={{ maxWidth: '85px', cursor: 'pointer' }}
+                            className="m-2"
+                            onClick={() => {
+                              setImageUrl(imageAddress);
+                              setImageModalVisible(true);
+                            }}
+                            src={imageAddress}
+                          />
+                        );
+                      })}
+                  </div>
+                </div>
+
+                {/* Technician Media list */}
+                {/* <div>
                   {missionDetail?.audioMessage && (
                     <div className="d-flex justify-content-center m-3">
                       <audio src={missionDetail?.audioMessage} controls />
@@ -396,332 +473,301 @@ const technicianMissionDetail: FunctionComponent<IPageProps> = (props) => {
                         })}
                     </div>
                   </div>
-                  {/* Technician Media list */}
-                  {/* <div>
-                      {missionDetail?.audioMessage && (
-                    <div className="d-flex justify-content-center m-3">
-                      <audio src={missionDetail?.audioMessage} controls />
-                    </div>
-                  )}
-
-                  <div style={{ display: 'block' }}>
-                    {missionDetail?.videoMessage && (
-                      <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <video
-                          width="320"
-                          height="240"
-                          controls
-                          style={{ display: 'flex', alignContent: 'center' }}
-                          src={missionDetail?.videoMessage}
-                        />
-                      </div>
-                    )}
-                    <div style={{ display: 'flex', justifyContent: 'inherit', flexWrap: 'wrap' }}>
-                      {missionDetail?.imageMessage &&
-                        missionDetail?.imageMessage.length > 0 &&
-                        missionDetail?.imageMessage.map((imageAddress: string, index: number) => {
-                          return (
-                            <img
-                              style={{ maxWidth: '85px', cursor: 'pointer' }}
-                              className="m-2"
-                              onClick={() => {
-                                setImageUrl(imageAddress);
-                                setImageModalVisible(true);
-                              }}
-                              src={imageAddress}
-                            />
-                          );
-                        })}
-                    </div>
-                  </div>
-                      </div> */}
-                  <div
-                    style={{
-                      padding: '20px 0',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-evenly',
-                      width: '50%',
-                      margin: '0 auto',
-                    }}
-                  >
-                    {/* Action */}
-                    <span className="contact">
-                      {missionDetailLoading ? (
-                        <Spinner style={{ width: '1rem', height: '1rem' }} />
-                      ) : (
-                        <i
-                          className="fa-solid fa-location-crosshairs"
-                          onClick={() => {
-                            navigate(`${URL_TECHNICIAN_MISSION_DETAIL_ACTION}`, {
-                              state: {
-                                requestDetailId: missionDetail?.requestDetailId,
-                                productCategoryId: missionDetail?.productCategoryId,
-                              },
-                            });
-                          }}
-                        />
-                      )}
-                    </span>
-                    {/* Call */}
-                    <span className="contact">
-                      <i className="fa fa-phone" onClick={() => window.open(`tel:${missionDetail?.consumerPhoneNumber}`)} />
-                    </span>
-                    {/* Images */}
-                    <span className="contact">
-                      <label htmlFor="img" style={{ cursor: 'pointer' }}>
-                        <i className="fa fa-camera" />
-                      </label>
-                      <Input
-                        onChange={onImageFileChange}
-                        style={{ display: 'none' }}
-                        id="img"
-                        type="file"
-                        capture="user"
-                        accept="image/*"
-                      />
-                    </span>
-                    {/* Video */}
-                    <span className="contact">
-                      <label htmlFor="video" style={{ cursor: 'pointer' }}>
-                        <i className="fa fa-video" />
-                      </label>
-                      <Input
-                        onChange={onVideoFileChange}
-                        style={{ display: 'none' }}
-                        id="video"
-                        type="file"
-                        capture="user"
-                        accept="video/*"
-                      />
-                    </span>
-                    {/* Voice */}
-                    <span className="contact" hidden={isRecording}>
-                      <i
-                        className="fa fa-microphone"
-                        onClick={() => {
-                          startRecording();
-                          setAudioDisplay('initial');
-                        }}
-                      />
-                    </span>
-                    <span className="contact" hidden={!isRecording}>
-                      <i
-                        className="fa fa-stop"
-                        onClick={() => {
-                          stopRecording();
-                        }}
-                      />
-                    </span>
-                    {/* Message FollowUp */}
-                    <span className="contact">
-                      <i
-                        className="fa fa-message"
-                        onClick={() => {
-                          setFollowUpModalVisible(true);
-                          setBackgroundDimmer(true);
-                        }}
-                      />
-                    </span>
-                    <span className="contact">
-                      {missionDetailLoading ? (
-                        <Spinner style={{ width: '1rem', height: '1rem' }} />
-                      ) : (
-                        <i
-                          className="fa fa-file"
-                          onClick={() => {
-                            navigate(`${URL_TECHNICIAN_REQUEST}`, {
-                              state: {
-                                requestDetailId: missionDetail?.requestDetailId,
-                                productCategoryId: missionDetail?.productCategoryId,
-                                consumerFullName: missionDetail?.consumerFirstName + ' ' + missionDetail?.consumerLastName,
-                                consumerAddress: missionDetail?.address,
-                                requestNumber: missionDetail?.requestNumber,
-                              },
-                            });
-                          }}
-                        />
-                      )}
-                    </span>
-                  </div>
-                </div>
-                {/* Voice */}
-                <div style={{ width: '100%', display: `${audioDisplay}` }}>
-                  <div className="d-flex m-3">
-                    <div className="d-flex" style={{ width: '80%' }}>
-                      {/* {missionDetail?.audioMessage && (
-                        <div className="d-flex justify-content-center m-3">
-                          <audio src={missionDetail?.audioMessage} controls />
-                        </div>
-                      )} */}
-                      <audio
-                        style={{
-                          width: '-webkit-fill-available',
-                        }}
-                        hidden={isRecording}
-                        src={audioURL}
-                        controls
-                      />
-                    </div>
-                    <div className="d-flex justify-content-around" style={{ width: '20%' }}>
-                      <img
-                        hidden={isRecording}
-                        style={{ cursor: 'pointer' }}
-                        src={require('@src/scss/images/forTest/delete.png')}
-                        onClick={() => {
-                          setAudioFile(null);
-                          setAudioDisplay('none');
-                        }}
-                        width="46"
-                        height="46"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </div>
-                {/* Images */}
-                <div style={{ width: '100%', display: `${imageDisplay}` }}>
-                  <div className="d-flex m-3">
-                    <div className="d-flex flex-wrap" style={{ width: '80%' }}>
-                      {imgSrcList &&
-                        imgSrcList.length > 0 &&
-                        imgSrcList.map((item: any, index: number) => {
-                          return <img className="m-1" width="75" height="75" src={item} />;
-                        })}
-                    </div>
-                    <div className="d-flex justify-content-around" style={{ width: '20%' }}>
-                      <img
-                        style={{ cursor: 'pointer' }}
-                        src={require('@src/scss/images/forTest/delete.png')}
-                        onClick={() => {
-                          setImgSrcList([]);
-                          setImageFile([]);
-                          setImageDisplay('none');
-                        }}
-                        width="46"
-                        height="46"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </div>
-                {/* Video */}
-                <div style={{ width: '100%', display: `${videoDisplay}` }}>
-                  <div className="d-flex m-3">
-                    <div className="d-flex" style={{ width: '80%' }}>
-                      <video id="video" style={{ width: 'inherit', height: 'inherit' }} controls>
-                        مرور گر شما از ویدیو پشتیبانی نمیکند
-                      </video>
-                    </div>
-                    <div className="d-flex justify-content-around" style={{ width: '20%' }}>
-                      <img
-                        style={{ zIndex: '1', cursor: 'pointer' }}
-                        src={require('@src/scss/images/forTest/delete.png')}
-                        onClick={() => {
-                          setVideoFile(null);
-                          setVideoDisplay('none');
-                        }}
-                        width="46"
-                        height="46"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </div>
+                </div> */}
               </div>
-              <div className="m-2">
-                <Button
-                  style={{ width: '100%' }}
-                  hidden={!showButton}
-                  onClick={(e) => {
-                    submitTechnicianMedia();
+            </div>
+            <div
+              style={{
+                padding: '20px 0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                width: '100%',
+                maxWidth: '330px',
+                margin: '0 auto',
+                flexWrap: 'wrap',
+              }}
+            >
+              {/* Action */}
+              <span className="upload-icons">
+                {requestLoading ? (
+                  <Spinner style={{ height: '1rem', width: '1rem', top: '10px', left: '10px', position: 'absolute' }} />
+                ) : (
+                  <img
+                    className="pointer"
+                    src={require(`@src/scss/images/icons/${color}-action.svg`)}
+                    onClick={() =>
+                      navigate(`${URL_TECHNICIAN_MISSION_DETAIL_ACTION}`, {
+                        state: {
+                          requestDetailId: missionDetail?.requestDetailId,
+                          productCategoryId: missionDetail?.productCategoryId,
+                          orderId: missionDetail?.orderId,
+                        },
+                      })
+                    }
+                  />
+                )}
+              </span>
+              {/* Call */}
+              <span className="upload-icons">
+                <img
+                  className="pointer"
+                  onClick={() => handleCallModal()}
+                  src={require(`@src/scss/images/icons/${color}-call2.svg`)}
+                  alt="VectorI344"
+                />
+              </span>
+              {/* Images */}
+              <span className="upload-icons">
+                <label onClick={handleImageLabelModal} htmlFor="img" style={{ cursor: 'pointer' }}>
+                  <img className="pointer" src={require(`@src/scss/images/icons/${color}-camera2.svg`)} />
+                </label>
+                {/* <Input onChange={onImageFileChange} style={{ display: 'none' }} id="img" type="file" accept="image/*" /> */}
+              </span>
+              {/* Video */}
+              <span className="upload-icons">
+                <label htmlFor="video" style={{ cursor: 'pointer' }}>
+                  <img className="pointer" src={require(`@src/scss/images/icons/${color}-video2.svg`)} />
+                </label>
+                <Input onChange={onVideoFileChange} style={{ display: 'none' }} id="video" type="file" accept="video/*" />
+              </span>
+              {/* Voice */}
+              <span className="upload-icons" hidden={isRecording}>
+                <img
+                  className="pointer"
+                  src={require(`@src/scss/images/icons/${color}-voice.svg`)}
+                  onClick={() => {
+                    startRecording();
+                    setAudioDisplay('initial');
                   }}
-                  className="btn btn-m btn-full shadow-s rounded-s bg-highlight text-uppercase font-700 m-1"
-                >
-                  {loading ? <Spinner /> : ' افزودن فایل های بیشتر'}
-                </Button>
+                />
+              </span>
+              <span className="record-icon upload-icons" hidden={!isRecording}>
+                <img
+                  className="pointer"
+                  src={require(`@src/scss/images/icons/${color}-stop.svg`)}
+                  onClick={() => {
+                    stopRecording();
+                  }}
+                />
+              </span>
+              {/* Message FollowUp */}
+              <span className="upload-icons">
+                <img
+                  className="pointer"
+                  src={require(`@src/scss/images/icons/${color}-follow-up.svg`)}
+                  onClick={() => {
+                    setFollowUpModalVisible(true);
+                  }}
+                />
+              </span>
+              {/* Request For Consumer */}
+              <span className="upload-icons">
+                {requestLoading ? (
+                  <Spinner style={{ height: '1rem', width: '1rem', top: '10px', left: '10px', position: 'absolute' }} />
+                ) : (
+                  <img
+                    className="pointer"
+                    src={require(`@src/scss/images/icons/${color}-addrequest3.svg`)}
+                    onClick={() => {
+                      navigate(`${URL_TECHNICIAN_REQUEST}`, {
+                        state: {
+                          requestDetailId: missionDetail?.requestDetailId,
+                          productCategoryId: missionDetail?.productCategoryId,
+                          consumerFullName: missionDetail?.consumerFirstName + ' ' + missionDetail?.consumerLastName,
+                          consumerAddress: missionDetail?.address,
+                          requestNumber: missionDetail?.requestNumber,
+                          consumerId: missionDetail?.consumerId,
+                        },
+                      });
+                    }}
+                  />
+                )}
+              </span>
+            </div>
+            {/* Voice */}
+            <div style={{ width: '100%', display: `${audioDisplay}` }}>
+              <div className="d-flex m-3 upload-box">
+                <div className="d-flex" style={{ width: '80%' }}>
+                  {/* {missionDetail?.audioMessage && (
+                            <div className="d-flex justify-content-center m-3">
+                              <audio src={missionDetail?.audioMessage} controls />
+                            </div>
+                          )} */}
+                  <audio
+                    style={{
+                      width: '-webkit-fill-available',
+                    }}
+                    hidden={isRecording}
+                    src={audioURL}
+                    controls
+                  />
+                </div>
+                <div className="d-flex justify-content-around" style={{ width: '20%' }}>
+                  <img
+                    hidden={isRecording}
+                    src={require(`@src/scss/images/icons/${color}-delete.svg`)}
+                    className="delete-icon pointer"
+                    onClick={() => {
+                      setAudioFile(null);
+                      setAudioDisplay('none');
+                    }}
+                    width="46"
+                    height="46"
+                    alt=""
+                  />
+                </div>
               </div>
+            </div>
+            {/* Images */}
+            <div style={{ width: '100%', display: `${imageDisplay}` }}>
+              <div className="d-flex m-3 upload-box">
+                <div className="d-flex flex-wrap" style={{ width: '80%' }}>
+                  {imgSrcList &&
+                    imgSrcList.length > 0 &&
+                    imgSrcList.map((item: any, index: number) => {
+                      return <img className="m-1 pointer" width="75" height="75" src={item} />;
+                    })}
+                </div>
+                <div className="d-flex justify-content-around" style={{ width: '20%' }}>
+                  <img
+                    className="pointer delete-icon"
+                    src={require(`@src/scss/images/icons/${color}-delete.svg`)}
+                    onClick={() => {
+                      setImgSrcList([]);
+                      setImageFile([]);
+                      setImageLabel([]);
+                      setImageDescription(undefined);
+                      setImageDisplay('none');
+                    }}
+                    width="46"
+                    height="46"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Video */}
+            <div style={{ width: '100%', display: `${videoDisplay}` }}>
+              <div className="d-flex m-3 upload-box">
+                <div className="d-flex" style={{ width: '80%' }}>
+                  <video id="video" style={{ width: 'inherit', height: 'inherit' }} controls>
+                    مرور گر شما از ویدیو پشتیبانی نمیکند
+                  </video>
+                </div>
+                <div className="d-flex justify-content-around" style={{ width: '20%' }}>
+                  <img
+                    style={{ zIndex: '1' }}
+                    src={require(`@src/scss/images/icons/${color}-delete.svg`)}
+                    className="delete-icon pointer"
+                    onClick={() => {
+                      setVideoFile(null);
+                      setVideoDisplay('none');
+                    }}
+                    width="46"
+                    height="46"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="m-2">
+              <Button
+                style={{ width: '100%' }}
+                hidden={!showButton}
+                onClick={(e) => {
+                  submitTechnicianMedia();
+                }}
+                className="primary-btn m-1"
+              >
+                {loading ? <Spinner /> : 'آپلود فایل ها'}
+              </Button>
             </div>
           </div>
           {followUpList &&
             followUpList.length > 0 &&
             followUpList.map((item: IFollowUpList, index: number) => {
               return (
-                <div className="section-1 w100-40">
-                  <div className="row mb-2">
-                    <div className="col-6">تاریخ و زمان</div>
-                    <div className="col-6" style={{ textAlign: 'left' }}>
+                <div className="card">
+                  <div className="details-bar">
+                    <p className="white-space-nowrap">تاریخ و زمان</p>
+                    <p className="white-space-nowrap">
+                      {' '}
                       {DateHelper.splitTime(item.createDateTime)} - {DateHelper.isoDateTopersian(item.createDateTime)}
-                    </div>
+                    </p>
                   </div>
-
-                  <div className="row mb-2">
-                    <div className="col-12"> {item.description}</div>
-                  </div>
+                  <div className="mt-4">{item.description}</div>
                 </div>
               );
             })}
         </div>
-
-        <FollowUpModal
-          followUpModalVisible={followUpModalVisible}
-          AddFollowUp={AddFollowUp}
-          loading={loading}
-          onChange={(e: any) => setFollowUpDescription(e.currentTarget.value)}
-        />
-
-        <SuspendCauseModal
-          suspendReasonModalVisible={suspendReasonModalVisible}
-          missionDetail={missionDetail}
-          statusList={statusList}
-          onChange={(e: any) => {
-            setFollowUpDescription((Array.isArray(e) ? e.map((x) => x.label) : []).toString());
-            setSuspendCasueList(Array.isArray(e) ? e.map((x) => x.value) : []);
-          }}
-          onClick={() => {
-            UpdateStatus(2, suspendCauseList), AddFollowUp();
-          }}
-          loading={loading}
-        />
-
-        <ProgressCauseModal
-          missionDetail={missionDetail}
-          statusList={statusList}
-          progressReasonModalVisible={progressReasonModalVisible}
-          onChange={(e: any) => {
-            setFollowUpDescription((Array.isArray(e) ? e.map((x) => x.label) : []).toString());
-            setProgressCasueList(Array.isArray(e) ? e.map((x) => x.value) : []);
-          }}
-          onClick={() => {
-            UpdateStatus(5, progressCauseList);
-            AddFollowUp();
-          }}
-          loading={loading}
-        />
-
-        <div
-          className={`menu menu-box-modal rounded-m ${imageModalVisible ? 'menu-active' : ''}`}
-          style={{
-            backgroundImage: `url("${imageUrl}")`,
-            backgroundRepeat: 'round',
-            backgroundAttachment: 'fixed',
-            backgroundSize: 'cover',
-          }}
-          data-menu-height="cover"
-          data-menu-width="cover"
-          onClick={() => setImageModalVisible(false)}
-        />
-
-        <ConfirmModal
-          confirmModalVisible={confirmModalVisible}
-          accept={() => {
-            setConfirmModalVisible(false), setBackgroundDimmer(false), UpdateStatus(statusValue!);
-          }}
-          reject={() => {
-            setConfirmModalVisible(false), setBackgroundDimmer(false);
-          }}
-        />
       </div>
+      <ShowImageModal display={displayImage} src={imageSrc} handleDisplay={handleDisplay} description={imageDescription} />
+      <FollowUpModal
+        closeModal={closeModal}
+        followUpModalVisible={followUpModalVisible}
+        AddFollowUp={AddFollowUp}
+        loading={loading}
+        onChange={(e: any) => setFollowUpDescription(e.currentTarget.value)}
+        nextTrackingDateTime={(date: any) => {
+          const selectedDate = date.toDate();
+          setNextTrackingDateTime(selectedDate.toISOString());
+        }}
+      />
+      <SuspendCauseModal
+        closeModal={closeModal}
+        suspendReasonModalVisible={suspendReasonModalVisible}
+        missionDetail={missionDetail}
+        statusList={statusList}
+        onChange={(e: any) => {
+          setFollowUpDescription((Array.isArray(e) ? e.map((x) => x.label) : []).toString());
+          setSuspendCasueList(Array.isArray(e) ? e.map((x) => x.value) : []);
+        }}
+        onClick={() => {
+          UpdateStatus(2, suspendCauseList), AddFollowUp();
+        }}
+        loading={loading}
+      />
+
+      <ProgressCauseModal
+        closeModal={closeModal}
+        missionDetail={missionDetail}
+        statusList={statusList}
+        progressReasonModalVisible={progressReasonModalVisible}
+        onChange={(e: any) => {
+          setFollowUpDescription((Array.isArray(e) ? e.map((x) => x.label) : []).toString());
+          setProgressCasueList(Array.isArray(e) ? e.map((x) => x.value) : []);
+        }}
+        onClick={() => {
+          UpdateStatus(5, progressCauseList);
+          AddFollowUp();
+        }}
+        loading={loading}
+      />
+      <ConfirmModal
+        closeModal={closeModal}
+        confirmModalVisible={confirmModalVisible}
+        accept={() => {
+          setConfirmModalVisible(false), UpdateStatus(statusValue!);
+        }}
+        reject={() => {
+          setConfirmModalVisible(false);
+        }}
+      />
+      <CallModal
+        callModalVisible={displayCallModal}
+        closeModal={handleCallModal}
+        phoneNumbers={[missionDetail?.consumerPhoneNumber, missionDetail?.userName]}
+      />
+      <ImageLabelModal
+        labelModalVisible={displayLabelImage}
+        closeModal={() => setDisplayLabelImage(!displayLabelImage)}
+        submit={(imgData: any) => {
+          onImageFileChange(imgData[0]); //file
+          setDisplayLabelImage(!displayLabelImage);
+          setImageLabel([...imageLabel, imgData[1]]); //label
+        }}
+      />
     </>
   );
 };

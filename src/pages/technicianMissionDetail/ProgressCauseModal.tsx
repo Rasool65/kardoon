@@ -10,6 +10,7 @@ interface ProgressCauseModalProps {
   onChange: any;
   onClick: any;
   loading: boolean;
+  closeModal: any;
 }
 
 const ProgressCauseModal: FunctionComponent<ProgressCauseModalProps> = ({
@@ -19,32 +20,29 @@ const ProgressCauseModal: FunctionComponent<ProgressCauseModalProps> = ({
   onChange,
   onClick,
   loading,
+  closeModal,
 }) => {
   return (
-    <div
-      className={`menu menu-box-modal rounded-m ${progressReasonModalVisible ? 'menu-active' : ''}`}
-      data-menu-height="400"
-      data-menu-width="340"
-    >
-      <div className="me-3 ms-3 mt-3">
-        <h2 className="font-500 mb-0 pt-1">در حال بررسی</h2>
+    <div className={`modal ${progressReasonModalVisible ? 'd-block' : ''}`}>
+      <div className="modal-content">
+        <div className="modal-header d-flex justify-content-between p-2">
+          <h2 className="header pointer" onClick={closeModal}>
+            X
+          </h2>
+          <h2 className="header">در حال بررسی</h2>
+        </div>
         <p className="font-13 mb-1 pt-1">لطفأ دلیل انتخاب وضعیت در حال بررسی را وارد نمایید</p>
         {missionDetail?.statusTitle && (
           <Select
             isMulti
             isClearable
-            className="select-city"
             placeholder="انتخاب دلیل درحال بررسی"
             isSearchable={false}
             options={statusList![4].causeList ? statusList![4].causeList : []}
             onChange={onChange}
           />
         )}
-        <Button
-          style={{ width: '100%', marginTop: '10px' }}
-          className="btn btn-full btn-m shadow-l rounded-s bg-highlight text-uppercase font-700 top-20 p-1"
-          onClick={onClick}
-        >
+        <Button style={{ width: '100%', marginTop: '10px' }} className="btn p-1" onClick={onClick}>
           {loading ? <Spinner style={{ width: '1rem', height: '1rem' }} /> : 'ثبت'}
         </Button>
       </div>

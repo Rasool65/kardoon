@@ -7,11 +7,11 @@ import { URL_LOGIN, URL_MAIN } from '@src/configs/urls';
 import { useSelector } from 'react-redux';
 import { RootStateType } from '@src/redux/Store';
 import PrivateLayout from '@src/layout/PrivateLayout';
-import PublicLayout from '@src/layout/publicLayout';
 import NotFound from '@src/pages/notFound';
 
 const Routers: FunctionComponent = () => {
   const authenticationStore = useSelector((state: RootStateType) => state.authentication);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -22,7 +22,6 @@ const Routers: FunctionComponent = () => {
               <Route key={index} path={route.path} element={<route.component {...route.props} />} />
             </>
           ) : (
-            //* all Route
             <>
               {routes.map((route, index) => {
                 return route.type == RouteType.private ? (
@@ -32,7 +31,7 @@ const Routers: FunctionComponent = () => {
                       key={index}
                       path={route.path}
                       element={
-                        // <PrivateLayout {...route.props}> // problem with menu-main modal
+                        // <PrivateLayout {...route.props}>
                         <route.component name={route.name} {...route.props} />
                         // </PrivateLayout>
                       }
